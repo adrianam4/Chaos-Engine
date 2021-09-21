@@ -4,13 +4,6 @@
 #include "Module.h"
 #include "SDL/include/SDL.h"
 
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl2.h"
-#include <stdio.h>
-#include <gl/GL.h>
-#include <SDL_opengl.h>
-
 class Application;
 
 class ModuleWindow : public Module
@@ -23,7 +16,6 @@ public:
 	virtual ~ModuleWindow();
 
 	bool Init();
-	bool Update();
 	bool CleanUp();
 
 	void SetTitle(const char* title);
@@ -34,8 +26,6 @@ public:
 
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
-
-	ImGuiIO io;
 };
 
 #endif // __ModuleWindow_H__
