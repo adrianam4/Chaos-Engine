@@ -78,12 +78,6 @@
     <ClInclude Include="ModulePhysics3D.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_glfw.h">
-      <Filter>Sources\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_opengl2.h">
-      <Filter>Sources\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imgui_internal.h">
       <Filter>Sources\imgui</Filter>
     </ClInclude>
@@ -100,6 +94,12 @@
       <Filter>Sources\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui.h">
+      <Filter>Sources\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl2.h">
+      <Filter>Sources\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_sdl.h">
       <Filter>Sources\imgui</Filter>
     </ClInclude>
   </ItemGroup>
@@ -149,12 +149,6 @@
     <ClCompile Include="ModulePhysics3D.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_glfw.cpp">
-      <Filter>Sources\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_opengl2.cpp">
-      <Filter>Sources\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
       <Filter>Sources\imgui</Filter>
     </ClCompile>
@@ -168,6 +162,12 @@
       <Filter>Sources\imgui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>Sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_sdl.cpp">
+      <Filter>Sources\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl2.cpp">
       <Filter>Sources\imgui</Filter>
     </ClCompile>
   </ItemGroup>
