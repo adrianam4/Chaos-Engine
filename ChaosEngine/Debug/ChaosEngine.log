@@ -1,2 +1,3 @@
-﻿  Main.cpp
+﻿  ModuleWindow.cpp
+C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\ModuleWindow.cpp(35,13): warning C4305: 'return': truncamiento de 'int' a 'bool'
   ChaosEngine.vcxproj -> C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
