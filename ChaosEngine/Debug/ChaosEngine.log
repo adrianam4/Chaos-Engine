@@ -1,1 +1,17 @@
-﻿  ChaosEngine.vcxproj -> C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
+﻿  Application.cpp
+  Color.cpp
+  Light.cpp
+  Main.cpp
+  ModuleAudio.cpp
+  ModuleCamera3D.cpp
+  ModuleInput.cpp
+  ModulePhysics3D.cpp
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\ModulePhysics3D.cpp(16,19): warning C4150: eliminación de puntero a tipo 'DebugDrawer' incompleto; no se ha llamado a un destructor
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\ModulePhysics3D.h(7): message : vea la declaración de 'DebugDrawer'
+  ModuleRenderer3D.cpp
+  ModuleSceneIntro.cpp
+  ModuleWindow.cpp
+  Primitive.cpp
+  Timer.cpp
+  Generando código...
+  ChaosEngine.vcxproj -> C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
