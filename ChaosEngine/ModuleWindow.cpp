@@ -42,7 +42,7 @@ bool ModuleWindow::Init()
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 		SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-		SDL_Window* window = SDL_CreateWindow("Dear ImGui SDL2+OpenGL example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+		window = SDL_CreateWindow("Dear ImGui SDL2+OpenGL example", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
 		gl_context = SDL_GL_CreateContext(window);
 		SDL_GL_MakeCurrent(window, gl_context);
 		SDL_GL_SetSwapInterval(1); // Enable vsync
@@ -130,6 +130,7 @@ update_status ModuleWindow::Update(float dt)
 	// Our state
 	bool show_demo_window = true;
 	bool show_another_window = false;
+	bool show_close_window = true;
 	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 	// Main loop
@@ -191,6 +192,21 @@ update_status ModuleWindow::Update(float dt)
 			if (ImGui::Button("Close Me"))
 				show_another_window = false;
 			ImGui::End();
+		}
+
+		if (show_close_window)
+		{
+			ImGui::Begin("Close Window", &show_close_window);
+			ImGui::Text("This is the window that can close the app!");
+
+			if (ImGui::Button("Close App"))
+				show_close_window = false;
+	
+			ImGui::End();
+		}
+		else
+		{
+			return UPDATE_STOP;
 		}
 
 		// Rendering

@@ -1,15 +1,3 @@
-﻿  Application.cpp
-  Main.cpp
-  ModuleAudio.cpp
-  ModuleCamera3D.cpp
-  ModuleInput.cpp
-  ModulePhysics3D.cpp
-C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\ModulePhysics3D.cpp(24,19): warning C4150: eliminación de puntero a tipo 'DebugDrawer' incompleto; no se ha llamado a un destructor
-C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\ModulePhysics3D.h(9): message : vea la declaración de 'DebugDrawer'
-  ModuleRenderer3D.cpp
-  ModuleSceneIntro.cpp
-  ModuleWindow.cpp
-C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\ModuleWindow.cpp(35,13): warning C4305: 'return': truncamiento de 'int' a 'bool'
-  Timer.cpp
-  Generando código...
-  ChaosEngine.vcxproj -> C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
+﻿  ModuleWindow.cpp
+C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\ModuleWindow.cpp(35,13): warning C4305: 'return': truncamiento de 'int' a 'bool'
+  ChaosEngine.vcxproj -> C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
