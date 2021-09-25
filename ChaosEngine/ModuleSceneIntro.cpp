@@ -1,7 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleSceneIntro.h"
-#include "Primitive.h"
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -17,7 +16,7 @@ ModuleSceneIntro::~ModuleSceneIntro()
 // Load assets
 bool ModuleSceneIntro::Start()
 {
-	LOG("Loading Intro assets");
+	LOGCE("Loading Intro assets");
 	bool ret = true;
 
 	App->camera->Move(vec3(1.0f, 1.0f, 0.0f));
@@ -28,7 +27,7 @@ bool ModuleSceneIntro::Start()
 // Load assets
 bool ModuleSceneIntro::CleanUp()
 {
-	LOG("Unloading Intro scene");
+	LOGCE("Unloading Intro scene");
 
 	return true;
 }
@@ -36,10 +35,6 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update(float dt)
 {
-	Plane p(0, 1, 0, 0);
-	p.axis = true;
-	p.Render();
-
 	return UPDATE_CONTINUE;
 }
 

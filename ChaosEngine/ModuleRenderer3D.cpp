@@ -10,7 +10,6 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl2.h"
 
-
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
@@ -25,15 +24,14 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init()
 {
-	LOG("Creating 3D Renderer context");
+	LOGCE("Creating 3D Renderer context");
 	bool ret = true;
-	
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 
 	if(context == NULL)
 	{
-		LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		LOGCE("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	
@@ -44,13 +42,13 @@ bool ModuleRenderer3D::Init()
 		if (GLEW_OK != err)
 		{
 			/* Problem: glewInit failed, something is seriously wrong. */
-			LOG("Error: %s\n", glewGetErrorString(err));
+			LOGCE("Error: %s\n", glewGetErrorString(err));
 		}
-		LOG("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+		LOGCE("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
 		//Use Vsync
 		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
-			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+			LOGCE("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -75,7 +73,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOGCE("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -87,7 +85,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOGCE("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 		
@@ -101,7 +99,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			LOGCE("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 		
@@ -174,7 +172,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
-	LOG("Destroying 3D Renderer");
+	LOGCE("Destroying 3D Renderer");
 
 	// Cleanup
 	ImGui_ImplOpenGL2_Shutdown();
