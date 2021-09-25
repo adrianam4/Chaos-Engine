@@ -24,20 +24,13 @@
 *.la
 *.a
 *.lib
-!Game/Source/External/SDL/libx86/SDL2.lib
-!Game/Source/External/SDL/libx86/SDL2main.lib
-!Game/Source/External/SDL_image/libx86/SDL2_image.lib
-!Game/Source/External/SDL_mixer/libx86/SDL2_mixer.lib
-!Game/Source/External/EASTL-3.17.06/lib/Debug/EASTL.lib
-!Game/Source/External/EASTL-3.17.06/lib/Release/EASTL.lib
-!Game/Source/External/Optick/lib/debug/OptickCore.lib
-!Game/Source/External/Optick/lib/release/OptickCore.lib
-!Game/Source/External/PhysFS/libx86/physfs.lib
-!Game/Source/External/PhysFS/libx86/physfs.lib
+!ChaosEngine/SDL/libx86/SDL2.lib
+!ChaosEngine/SDL/libx86/SDL2main.lib
+!ChaosEngine/glew/libx86/glew32s.lib
+!ChaosEngine/MathGeoLib/lib/MathGeoLib.lib
 
 # Executables
 *.exe
-!Output/the_hunter_odyssey.exe
 *.out
 *.app
 
@@ -71,8 +64,10 @@ Thumbs.db
 [Bb]uild
 [Bb]in
 [Dd]ebug/
-!Game/Source/External/EASTL-3.17.06/lib/[Dd]ebug/
-!Game/Source/External/Optick/lib/[Dd]ebug/
+!ChaosEngine/[Dd]ebug/
+!ChaosEngine/.vs/
+!ChaosEngine/MathGeoLib/src/
+!ChaosEngine/MathGeoLib/test/
 *.sbr
 *.sdf
 obj/
@@ -83,3 +78,9 @@ ipch/
 *.opensdf
 *.db
 *.opendb
+© 2021 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs

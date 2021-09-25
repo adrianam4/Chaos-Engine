@@ -1,2 +1,60 @@
-﻿  ModuleSceneIntro.cpp
-  ChaosEngine.vcxproj -> C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
+﻿  Application.cpp
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Application.cpp(36,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Application.cpp(50,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Application.cpp(61,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Application.cpp(92,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Application.cpp(100,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Application.cpp(108,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Application.cpp(123,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
+  Color.cpp
+  glmath.cpp
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(12,13): warning C4244: 'return': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(27,17): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(43,34): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(53,10): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(53,26): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(72,13): warning C4244: 'return': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(87,17): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(103,34): warning C4244: 'argumento': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(600,13): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(618,10): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(618,33): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(758,13): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(778,10): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\glmath.cpp(778,33): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_impl_opengl2.cpp
+  imgui_impl_sdl.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  Light.cpp
+  log.cpp
+  Main.cpp
+  ModuleCamera3D.cpp
+  ModuleInput.cpp
+  ModulePhysics3D.cpp
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\ModulePhysics3D.cpp(24,19): warning C4150: eliminación de puntero a tipo 'DebugDrawer' incompleto; no se ha llamado a un destructor
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\ModulePhysics3D.h(8): message : vea la declaración de 'DebugDrawer'
+  ModuleRenderer3D.cpp
+  ModuleSceneIntro.cpp
+  ModuleWindow.cpp
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\ModuleWindow.cpp(35,13): warning C4305: 'return': truncamiento de 'int' a 'bool'
+  Primitive.cpp
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(193,11): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(194,52): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(194,35): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(203,11): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(204,53): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(204,36): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(212,11): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(214,52): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(214,35): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(215,52): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Primitive.cpp(215,35): warning C4244: 'argumento': conversión de 'double' a 'GLfloat'; posible pérdida de datos
+  Generando código...
+  Compilando...
+  Timer.cpp
+  Generando código...
+  ChaosEngine.vcxproj -> C:\Users\david\Documents\GitHub\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
