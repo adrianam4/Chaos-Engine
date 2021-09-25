@@ -28,12 +28,12 @@ Application::Application()
 
 Application::~Application()
 {
-	std::list<Module*>::iterator item = list_modules.begin();
+	std::list<Module*>::iterator item = --list_modules.end();
 
-	while(item != list_modules.end())
+	while(item != list_modules.begin())
 	{
 		delete (*item);
-		*item++;
+		item--;
 	}
 }
 

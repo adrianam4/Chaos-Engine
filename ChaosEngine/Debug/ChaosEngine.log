@@ -1,23 +1,8 @@
 ﻿  Application.cpp
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(36,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
 C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(50,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
 C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(61,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
 C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(92,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
 C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(100,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
 C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(108,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
 C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(123,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
-  Light.cpp
-  Main.cpp
-  ModuleCamera3D.cpp
-  ModuleInput.cpp
-  ModulePhysics3D.cpp
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\ModulePhysics3D.cpp(23,19): warning C4150: eliminación de puntero a tipo 'DebugDrawer' incompleto; no se ha llamado a un destructor
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\ModulePhysics3D.h(7): message : vea la declaración de 'DebugDrawer'
-  ModuleRenderer3D.cpp
-  ModuleSceneIntro.cpp
-  ModuleWindow.cpp
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\ModuleWindow.cpp(35,13): warning C4305: 'return': truncamiento de 'int' a 'bool'
-  Timer.cpp
-  log.cpp
-  Generando código...
   ChaosEngine.vcxproj -> C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
