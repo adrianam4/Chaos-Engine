@@ -1,2 +1,3 @@
-﻿  ModuleEditor.cpp
-  ChaosEngine.vcxproj -> C:\Users\adrianam4\Desktop\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
+﻿LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\davidlm7\Documents\GitHub\Chaos-Engine\ChaosEngine\Debug\glew_static.pdb'; linking object as if no debug info
+  ChaosEngine.vcxproj -> C:\Users\davidlm7\Documents\GitHub\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
