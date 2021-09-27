@@ -5643,15 +5643,49 @@ static void ShowDemoWindowMisc()
 
 void ImGui::ShowAboutWindow(bool* p_open)
 {
-    if (!ImGui::Begin("About Chaos Engine", p_open, ImGuiWindowFlags_AlwaysAutoResize))
+    if (!ImGui::Begin("About", p_open, ImGuiWindowFlags_AlwaysAutoResize))
     {
         ImGui::End();
         return;
     }
     ImGui::Text("Chaos Engine v0.1");
     ImGui::Separator();
-    ImGui::Text("By David Lira and Adrian Aroca for the Game Engines subject.");
-    ImGui::Text("Chaos Engine is licensed under the MIT License, see LICENSE for more information.");
+    ImGui::Text("A trully amazing 3D Game Engine.");
+    ImGui::Text("Created by David Lira and Adrian Aroca for the Game Engines subject.");
+    ImGui::Text("");
+    ImGui::Separator();
+    ImGui::Text("3rd Party Libraries used:");
+    ImGui::Text("");
+    ImGui::Text("- SDL v2.0.4");
+    ImGui::Text("- Glew v7.0");
+    ImGui::Text("- ImGui v1.84.2");
+    ImGui::Text("- MathGeoLib v1.5");
+    ImGui::Text("- OpenGL v4.6");
+    ImGui::Text("");
+    ImGui::Separator();
+    ImGui::Text("License:");
+    ImGui::Text("");
+    ImGui::Text("MIT License");
+    ImGui::Text("");
+    ImGui::Text("Copyright (c) 2021 adrianam4 and davidlira19");
+    ImGui::Text("");
+    ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
+    ImGui::Text("of this software and associated documentation files (the ''Software''), to deal");
+    ImGui::Text("in the Software without restriction, including without limitation the rights");
+    ImGui::Text("to use, copy, modify, merge, publish, distribute, sublicense, and/or sell");
+    ImGui::Text("copies of the Software, and to permit persons to whom the Software is");
+    ImGui::Text("furnished to do so, subject to the following conditions:");
+    ImGui::Text("");
+    ImGui::Text("The above copyright notice and this permission notice shall be included in all");
+    ImGui::Text("copies or substantial portions of the Software.");
+    ImGui::Text("");
+    ImGui::Text("THE SOFTWARE IS PROVIDED ''AS IS'', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR");
+    ImGui::Text("IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,");
+    ImGui::Text("FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE");
+    ImGui::Text("AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER");
+    ImGui::Text("LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,");
+    ImGui::Text("OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE");
+    ImGui::Text("SOFTWARE.");
 
     static bool show_config_info = false;
     ImGui::Checkbox("Config/Build Information", &show_config_info);
