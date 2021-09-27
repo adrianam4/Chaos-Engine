@@ -1,8 +1,2 @@
-﻿  Application.cpp
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(50,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(61,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(92,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(100,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(108,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
-C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Application.cpp(123,3): warning C4834: se descarta el valor devuelto de la función con el atributo "nodiscard"
-  ChaosEngine.vcxproj -> C:\Users\adria\Desktop\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe
+﻿  ModuleEditor.cpp
+  ChaosEngine.vcxproj -> C:\Users\adrianam4\Desktop\Chaos-Engine\ChaosEngine\Debug\ChaosEngine.exe

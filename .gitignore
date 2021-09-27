@@ -26,8 +26,6 @@
 *.lib
 !ChaosEngine/SDL/libx86/SDL2.lib
 !ChaosEngine/SDL/libx86/SDL2main.lib
-!ChaosEngine/glew/libx86/glew32s.lib
-!ChaosEngine/MathGeoLib/lib/MathGeoLib.lib
 
 # Executables
 *.exe
@@ -41,9 +39,6 @@ Thumbs.db
 *.obj
 *.pdb
 *.aps
-# *.user
-# *.vcproj
-# *.vcxproj*
 # *.sln
 *.vspscc
 *_i.c
@@ -66,8 +61,7 @@ Thumbs.db
 [Dd]ebug/
 !ChaosEngine/[Dd]ebug/
 !ChaosEngine/.vs/
-!ChaosEngine/MathGeoLib/src/
-!ChaosEngine/MathGeoLib/test/
+
 *.sbr
 *.sdf
 obj/
