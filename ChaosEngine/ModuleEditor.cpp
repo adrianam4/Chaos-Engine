@@ -20,8 +20,6 @@ bool ModuleEditor::Start()
 {
 	LOGCE("Loading Editor Assets");
 	bool ret = true;
-
-	showcase = true;
 	
 	return ret;
 }
@@ -43,6 +41,9 @@ update_status ModuleEditor::Update(float dt)
 	static bool show_close_window = true;
 	static bool show_about_window = false;
 	static bool open_config_menu = false;
+	static bool fullscreen = false;
+	static bool resizable = false;
+	static bool isActive = false;
 	ImVec4 clear_color = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 	////////////////////////////////////////////////////////////////// MAIN MENU BAR //////////////////////////////////////////////////////////////////
@@ -105,16 +106,35 @@ update_status ModuleEditor::Update(float dt)
 
 	if (ImGui::CollapsingHeader("Application"))
 	{
-		//char title[25];
-		//sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
-		//ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-		//sprintf_s(title, 25, "Millisenconds %0.1f", ms_log[ms_log.size() - 1]);
-		//ImGui::PlotHistogram("##milliseconds", &ms_log[0], ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+		static ImVector<float> fps_log;
+		static ImVector<float> ms_log;
+		char title[25];
+
+		fps_log.push_back(ImGui::GetIO().Framerate);
+		ms_log.push_back(1000 / (ImGui::GetIO().Framerate));
+
+		sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
+		ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+		sprintf_s(title, 25, "Miliseconds %.1f", ms_log[ms_log.size() - 1]);
+		ImGui::PlotHistogram("##miliseconds", &ms_log[0], ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 	}
 
 	if (ImGui::CollapsingHeader("Window"))
 	{
+		if (ImGui::Checkbox("Fullscreen", &fullscreen))
+		{
+			App->window->SetFullscreen(fullscreen);
+		}
 
+		ImGui::SameLine();
+		if (ImGui::Checkbox("Resizable", &resizable))
+		{
+			App->window->SetResizable(resizable);
+		}
+		if (ImGui::IsItemHovered())
+		{
+			ImGui::SetTooltip("Restart to apply");
+		}
 	}
 
 	if (ImGui::CollapsingHeader("File System"))
@@ -129,7 +149,77 @@ update_status ModuleEditor::Update(float dt)
 
 	if (ImGui::CollapsingHeader("Hardware"))
 	{
+		if (ImGui::Checkbox("Active", &isActive))
+		{
 
+		}
+
+		SDL_version compiled;
+		SDL_version linked;
+
+		SDL_VERSION(&compiled);
+		SDL_GetVersion(&linked);
+
+		int cpu_cores = SDL_GetCPUCount();
+		int cpu_cache = SDL_GetCPUCacheLineSize();
+		float ram = SDL_GetSystemRAM() / 1000;
+
+		ImGui::Text("SDL Version: %d.%d.%d", compiled.major, compiled.minor, compiled.patch);
+		ImGui::Separator();
+		ImGui::Text("CPUs: %d (Cache: %d kb)", cpu_cores, cpu_cache);
+		ImGui::Text("System RAM: %.1f Gb", ram);
+		ImGui::Text("Caps: ");
+		ImGui::SameLine();
+		if (SDL_HasRDTSC())
+		{
+			ImGui::Text("RDTSC, ");
+		}
+		ImGui::SameLine();
+		if (SDL_HasMMX())
+		{
+			ImGui::Text("MMX, ");
+		}
+		ImGui::SameLine();
+		if (SDL_HasSSE())
+		{
+			ImGui::Text("SSE, ");
+		}
+		ImGui::SameLine();
+		if (SDL_HasSSE2())
+		{
+			ImGui::Text("SSE2, ");
+		}
+		if (SDL_HasSSE3())
+		{
+			ImGui::Text("SSE3, ");
+		}
+		ImGui::SameLine();
+		if (SDL_HasSSE41())
+		{
+			ImGui::Text("SSE41, ");
+		}
+		ImGui::SameLine();
+		if (SDL_HasSSE42())
+		{
+			ImGui::Text("SSE42, ");
+		}
+		ImGui::SameLine();
+		if (SDL_HasAVX())
+		{
+			ImGui::Text("AVX, ");
+		}
+		ImGui::SameLine();
+		if (SDL_HasAVX2())
+		{
+			ImGui::Text("AVX2, ");
+		}
+		ImGui::Separator();
+		ImGui::Text("GPUs: ");
+		ImGui::Text("Brand: ");
+		ImGui::Text("VRAM Budget: ");
+		ImGui::Text("VRAM Usage: ");
+		ImGui::Text("VRAM Available: ");
+		ImGui::Text("VRAM Reserved: ");
 	}
 
 	ImGui::End();
