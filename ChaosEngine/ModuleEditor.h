@@ -13,5 +13,6 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 
-public:
+private:
+	bool showcase;
 };
