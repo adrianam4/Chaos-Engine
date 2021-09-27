@@ -5643,15 +5643,15 @@ static void ShowDemoWindowMisc()
 
 void ImGui::ShowAboutWindow(bool* p_open)
 {
-    if (!ImGui::Begin("About Dear ImGui", p_open, ImGuiWindowFlags_AlwaysAutoResize))
+    if (!ImGui::Begin("About Chaos Engine", p_open, ImGuiWindowFlags_AlwaysAutoResize))
     {
         ImGui::End();
         return;
     }
-    ImGui::Text("Dear ImGui %s", ImGui::GetVersion());
+    ImGui::Text("Chaos Engine v0.1");
     ImGui::Separator();
-    ImGui::Text("By Omar Cornut and all Dear ImGui contributors.");
-    ImGui::Text("Dear ImGui is licensed under the MIT License, see LICENSE for more information.");
+    ImGui::Text("By David Lira and Adrian Aroca for the Game Engines subject.");
+    ImGui::Text("Chaos Engine is licensed under the MIT License, see LICENSE for more information.");
 
     static bool show_config_info = false;
     ImGui::Checkbox("Config/Build Information", &show_config_info);

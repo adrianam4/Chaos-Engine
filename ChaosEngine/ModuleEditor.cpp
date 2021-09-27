@@ -38,40 +38,78 @@ bool ModuleEditor::CleanUp()
 update_status ModuleEditor::Update(float dt)
 {
 	// Our state
-	bool show_demo_window = true;
-	bool show_another_window = false;
+	static bool show_demo_window = false;
+	static bool show_another_window = false;
 	static bool show_close_window = true;
-	static bool show_about_window = true;
-	static bool open_config_menu = true;
-	ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+	static bool show_about_window = false;
+	static bool open_config_menu = false;
+	ImVec4 clear_color = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
-	// 1. Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-	//if (show_demo_window)
-	//	ImGui::ShowDemoWindow(&show_demo_window);
+	////////////////////////////////////////////////////////////////// MAIN MENU BAR //////////////////////////////////////////////////////////////////
 
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File", &open_config_menu))
 		{
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("View", &open_config_menu))
-		{
-			ImGui::EndMenu();
-		}
-		if (ImGui::BeginMenu("Help", &open_config_menu))
-		{
+			if (ImGui::MenuItem("Quit"))
+			{
+				return UPDATE_STOP;
+			}
 			ImGui::EndMenu();
 		}
 
+
+		if (ImGui::BeginMenu("View", &open_config_menu))
+		{
+			if (ImGui::MenuItem("Configuration"))
+			{
+				open_config_menu = !open_config_menu;
+			}
+			if (ImGui::MenuItem("Console"))
+			{
+				
+			}
+			ImGui::EndMenu();
+		}
+
+
+		if (ImGui::BeginMenu("Help", &open_config_menu))
+		{
+			if (ImGui::MenuItem("ImGui Demo"))
+			{
+				show_demo_window = !show_demo_window;
+			}
+
+			if (ImGui::MenuItem("Documentation"))
+				ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/wiki", NULL, NULL, SW_SHOWNORMAL);
+
+			if (ImGui::MenuItem("Download Latest"))
+				ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/releases", NULL, NULL, SW_SHOWNORMAL);
+
+			if (ImGui::MenuItem("Report a bug"))
+				ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/issues", NULL, NULL, SW_SHOWNORMAL);
+		
+			if (ImGui::MenuItem("About"))
+			{
+				show_about_window = !show_about_window;
+			}
+			ImGui::EndMenu();
+		}
 		ImGui::EndMainMenuBar();
 	}
+
+
+	////////////////////////////////////////////////////////////////// CONFIGURATION WINDOW //////////////////////////////////////////////////////////////////
 
 	ImGui::Begin("Configuration", &open_config_menu);
 
 	if (ImGui::CollapsingHeader("Application"))
 	{
-
+		//char title[25];
+		//sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
+		//ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+		//sprintf_s(title, 25, "Millisenconds %0.1f", ms_log[ms_log.size() - 1]);
+		//ImGui::PlotHistogram("##milliseconds", &ms_log[0], ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 	}
 
 	if (ImGui::CollapsingHeader("Window"))
@@ -95,6 +133,7 @@ update_status ModuleEditor::Update(float dt)
 	}
 
 	ImGui::End();
+
 	//if (!ImGui::Begin("Configuration", &open_config_menu))
 	//{
 	//	ImGui::End();
@@ -136,39 +175,12 @@ update_status ModuleEditor::Update(float dt)
 	//	if (ImGui::Button("Close Me"))
 	//		show_another_window = false;
 	//	ImGui::End();
-	//}
 
-	//if (show_close_window)
-	//{
-	//	ImGui::Begin("Close Window", &show_close_window);
-	//	ImGui::Text("This is the window that can close the app!");
+	if (show_about_window)
+		ImGui::ShowAboutWindow(&show_about_window);
 
-	//	if (ImGui::Button("Close App"))
-	//		show_close_window = false;
-
-	//	ImGui::End();
-	//}
-	//else
-	//{
-	//	return UPDATE_STOP;
-	//}
-
-	//if (show_about_window)
-	//{
-	//	ImGui::Begin("Help", &show_about_window);
-
-	//	if (ImGui::MenuItem("Documentation"))
-	//		ShellExecute(NULL, "open", "https://github.com/d0n3val/Edu-Game-Engine/wiki", NULL, NULL, SW_SHOWNORMAL);
-
-	//	if (ImGui::MenuItem("Download Latest"))
-	//		ShellExecute(NULL, "open", "https://github.com/d0n3val/Edu-Game-Engine/releases", NULL, NULL, SW_SHOWNORMAL);
-
-	//	if (ImGui::MenuItem("Report a bug"))
-	//		ShellExecute(NULL, "open", "https://github.com/d0n3val/Edu-Game-Engine/issues", NULL, NULL, SW_SHOWNORMAL);
-
-	//	ImGui::End();
-	//}
-
+	if (show_demo_window)
+		ImGui::ShowDemoWindow(&show_demo_window);
 
 	return UPDATE_CONTINUE;
 }
