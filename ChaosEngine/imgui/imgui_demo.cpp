@@ -5652,7 +5652,8 @@ void ImGui::ShowAboutWindow(bool* p_open)
     ImGui::Separator();
     ImGui::Text("A trully amazing 3D Game Engine.");
     ImGui::Text("Created by David Lira and Adrian Aroca for the Game Engines subject.");
-    ImGui::Text("");
+    ImGui::Text("David Lira Github: https://github.com/davidlira19");
+    ImGui::Text("Adrian Aroca Github: https://github.com/adrianam4");
     ImGui::Separator();
     ImGui::Text("3rd Party Libraries used:");
     ImGui::Text("");

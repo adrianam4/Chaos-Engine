@@ -46,7 +46,8 @@ update_status ModuleEditor::Update(float dt)
 	static bool resizable = true;
 	static bool borderless = false;
 	static bool dekstop = false;
-	static bool isActive = false;
+	static bool is_active = false;
+	static bool is_active2 = false;
 	ImVec4 clear_color = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 	////////////////////////////////////////////////////////////////// MAIN MENU BAR //////////////////////////////////////////////////////////////////
@@ -129,7 +130,7 @@ update_status ModuleEditor::Update(float dt)
 
 	if (ImGui::CollapsingHeader("Window"))
 	{
-		if (ImGui::Checkbox("Active", &isActive))
+		if (ImGui::Checkbox("Active", &is_active))
 		{
 
 		}
@@ -195,12 +196,24 @@ update_status ModuleEditor::Update(float dt)
 
 	if (ImGui::CollapsingHeader("File System"))
 	{
+		if (ImGui::Checkbox("Active", &is_active2))
+		{
+		}
+
+		ImGui::Text("Base Path: ");
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), SDL_GetBasePath());
+
+		ImGui::Text("Read Paths: ");
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), ".");
+
+		ImGui::Text("Write Path: ");
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), ".");
 
 	}
 
 	if (ImGui::CollapsingHeader("Input"))
 	{
-		if (ImGui::Checkbox("Active", &isActive))
+		if (ImGui::Checkbox("Active", &is_active))
 		{
 
 		}
@@ -252,7 +265,7 @@ update_status ModuleEditor::Update(float dt)
 
 	if (ImGui::CollapsingHeader("Hardware"))
 	{
-		if (ImGui::Checkbox("Active", &isActive))
+		if (ImGui::Checkbox("Active", &is_active))
 		{
 
 		}

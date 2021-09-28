@@ -111,3 +111,4 @@ ipch/
 *.cachefile
 *.VC.db
 *.VC.VC.opendb
+Output/imgui.ini
