@@ -37,3 +37,4 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "Chaos Engine"
+#define ORGANIZATION "UPC CITM"

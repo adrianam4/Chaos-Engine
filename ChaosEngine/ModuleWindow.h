@@ -35,6 +35,9 @@ public:
 	//The surface contained by the window
 	SDL_Surface* screen_surface;
 
+	int width;
+	int height;
+
 private:
 	Uint32 flags;
 

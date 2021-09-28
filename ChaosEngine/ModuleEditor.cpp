@@ -111,10 +111,15 @@ update_status ModuleEditor::Update(float dt)
 	{
 		static ImVector<float> fps_log;
 		static ImVector<float> ms_log;
+		static int maxFPS = 144;
 		char title[25];
 
 		fps_log.push_back(ImGui::GetIO().Framerate);
 		ms_log.push_back(1000 / (ImGui::GetIO().Framerate));
+
+		ImGui::Text("App Name: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", TITLE);
+		ImGui::Text("Organization: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", ORGANIZATION);
+		ImGui::SliderInt("Max FPS", &maxFPS, 0, 144);
 
 		sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
 		ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
@@ -124,6 +129,36 @@ update_status ModuleEditor::Update(float dt)
 
 	if (ImGui::CollapsingHeader("Window"))
 	{
+		if (ImGui::Checkbox("Active", &isActive))
+		{
+
+		}
+		ImGui::Text("Icon: *default*");
+		
+		float brightness = SDL_GetWindowBrightness(App->window->window);
+		ImGui::SliderFloat("Brigthness", &brightness, 0, 1.0f);
+		int width, height;
+		SDL_GetWindowSize(App->window->window,&width,&height); 
+		ImGui::SliderInt("Width",&width, 0, 2560);
+		ImGui::SliderInt("Heigh",&height, 0, 1440);
+		SDL_SetWindowSize(App->window->window, width, height);
+		SDL_SetWindowBrightness(App->window->window, brightness);
+
+		int display_count = 0, display_index = 0, mode_index = 0;
+		SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
+
+		if ((display_count = SDL_GetNumVideoDisplays()) < 1) {
+			SDL_Log("SDL_GetNumVideoDisplays returned: %i", display_count);
+		}
+
+		if (SDL_GetDisplayMode(display_index, mode_index, &mode) != 0) {
+			SDL_Log("SDL_GetDisplayMode failed: %s", SDL_GetError());
+		}
+		SDL_Log("SDL_GetDisplayMode(0, 0, &mode):\t\t%i bpp\t%i x %i",
+			SDL_BITSPERPIXEL(mode.format), mode.w, mode.h);
+		
+		ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", mode.refresh_rate);
+
 		if (ImGui::Checkbox("Fullscreen", &fullscreen))
 		{
 			App->window->SetFullscreen(fullscreen);
@@ -178,20 +213,39 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Separator();
 
 		//Keyboard Info
+		static ImVector<int> keys_id;
+		static ImVector<const char*> keys_state;
+
 		for (int i = 0; i < 300; ++i)
 		{
 			if (App->input->keys[i] == 1)
 			{
 				if (App->input->keyboard[i] == KEY_IDLE)
-					ImGui::Text("Keybr: d - DOWN");
+				{
+					keys_id.push_back(i);
+					keys_state.push_back("DOWN");
+				}
 				else
-					ImGui::Text("Keybr: d - REPEAT");
+				{
+					keys_id.push_back(i);
+					keys_state.push_back("REPEAT");
+					break;
+				}
 			}
 			else
 			{
 				if (App->input->keyboard[i] == KEY_REPEAT || App->input->keyboard[i] == KEY_DOWN)
-					ImGui::Text("Keybr: d - UP");
+				{
+					keys_id.push_back(i);
+					keys_state.push_back("UP");
+				}
 			}
+		}
+
+		for (int i = 0; i < keys_id.Size; i++)
+		{
+			int j = keys_state.Size - i - 1;
+			ImGui::Text("Keybr: %d - %s", keys_id[j],keys_state[j]);
 		}
 
 	}
