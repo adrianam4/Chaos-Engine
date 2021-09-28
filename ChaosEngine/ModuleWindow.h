@@ -25,6 +25,8 @@ public:
 	void SetTitle(const char* title);
 	void SetFullscreen(bool fullscreen);
 	void SetResizable(bool resizable);
+	void SetDekstop(bool dekstop);
+	void SetBorderless(bool borderless);
 
 public:
 	//The window we'll be rendering to

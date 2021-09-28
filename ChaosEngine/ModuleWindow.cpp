@@ -129,3 +129,31 @@ void ModuleWindow::SetResizable(bool resizable)
 		SDL_SetWindowFullscreen(window, flags);
 	}
 }
+
+void ModuleWindow::SetDekstop(bool dekstop)
+{
+	if (dekstop)
+	{
+		flags = SDL_WINDOW_FULLSCREEN_DESKTOP;
+		SDL_SetWindowFullscreen(window, flags);
+	}
+	else
+	{
+		flags = SDL_WINDOW_RESIZABLE;
+		SDL_SetWindowFullscreen(window, flags);
+	}
+}
+
+void ModuleWindow::SetBorderless(bool borderless)
+{
+	if (borderless)
+	{
+		flags = SDL_WINDOW_BORDERLESS;
+		SDL_SetWindowFullscreen(window, flags);
+	}
+	else
+	{
+		flags = SDL_WINDOW_RESIZABLE;
+		SDL_SetWindowFullscreen(window, flags);
+	}
+}
