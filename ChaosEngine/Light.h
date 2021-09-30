@@ -13,7 +13,7 @@ struct Light
 
 	Color ambient;
 	Color diffuse;
-	vec3 position;
+	Vec3 position;
 
 	int ref;
 	bool on;

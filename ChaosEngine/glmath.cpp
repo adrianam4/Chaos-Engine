@@ -57,44 +57,44 @@ vec2 rotate(const vec2 &u, float angle)
 
 // ----------------------------------------------------------------------------------------------------------------------------
 
-vec3 cross(const vec3 &u, const vec3 &v)
+Vec3 cross(const Vec3 &u, const Vec3 &v)
 {
-	return vec3(u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z, u.x * v.y - u.y * v.x);
+	return Vec3(u.y * v.z - u.z * v.y, u.z * v.x - u.x * v.z, u.x * v.y - u.y * v.x);
 }
 
-float dot(const vec3 &u, const vec3 &v)
+float dot(const Vec3 &u, const Vec3 &v)
 {
 	return u.x * v.x + u.y * v.y + u.z * v.z;
 }
 
-float length(const vec3 &u)
+float length(const Vec3 &u)
 {
 	return sqrt(u.x * u.x + u.y * u.y + u.z * u.z);
 }
 
-float length2(const vec3 &u)
+float length2(const Vec3 &u)
 {
 	return u.x * u.x + u.y * u.y + u.z * u.z;
 }
 
-vec3 mix(const vec3 &u, const vec3 &v, float a)
+Vec3 mix(const Vec3 &u, const Vec3 &v, float a)
 {
 	return u * (1.0f - a) + v * a;
 }
 
-vec3 normalize(const vec3 &u)
+Vec3 normalize(const Vec3 &u)
 {
 	return u / sqrt(u.x * u.x + u.y * u.y + u.z * u.z);
 }
 
-vec3 reflect(const vec3 &i, const vec3 &n)
+Vec3 reflect(const Vec3 &i, const Vec3 &n)
 {
 	return i - 2.0f * dot(n, i) * n;
 }
 
-vec3 refract(const vec3 &i, const vec3 &n, float eta)
+Vec3 refract(const Vec3 &i, const Vec3 &n, float eta)
 {
-	vec3 r;
+	Vec3 r;
 
 	float ndoti = dot(n, i), k = 1.0f - eta * eta * (1.0f - ndoti * ndoti);
 
@@ -106,9 +106,9 @@ vec3 refract(const vec3 &i, const vec3 &n, float eta)
 	return r;
 }
 
-vec3 rotate(const vec3 &u, float angle, const vec3 &v)
+Vec3 rotate(const Vec3 &u, float angle, const Vec3 &v)
 {
-	return *(vec3*)&(rotate(angle, v) * vec4(u, 1.0f));
+	return *(Vec3*)&(rotate(angle, v) * vec4(u, 1.0f));
 }
 
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -251,7 +251,7 @@ mat3x3::mat3x3(const mat3x3 &Matrix)
 	}
 }
 
-mat3x3::mat3x3(const vec3 &col1, const vec3 &col2, const vec3 &col3)
+mat3x3::mat3x3(const Vec3 &col1, const Vec3 &col2, const Vec3 &col3)
 {
 	M[0] = col1.x; M[3] = col2.x; M[6] = col3.x;
 	M[1] = col1.y; M[4] = col2.y; M[7] = col3.y;
@@ -316,9 +316,9 @@ mat3x3 operator * (const mat3x3 &Matrix1, const mat3x3 &Matrix2)
 	return Matrix3;
 }
 
-vec3 operator * (const mat3x3 &Matrix, const vec3 &u)
+Vec3 operator * (const mat3x3 &Matrix, const Vec3 &u)
 {
-	vec3 v;
+	Vec3 v;
 
 	v.x = Matrix.M[0] * u.x + Matrix.M[3] * u.y + Matrix.M[6] * u.z;
 	v.y = Matrix.M[1] * u.x + Matrix.M[4] * u.y + Matrix.M[7] * u.z;
@@ -561,11 +561,11 @@ mat4x4& mat4x4::inverse()
 	return *this;
 }
 
-mat4x4& mat4x4::look(const vec3 &eye, const vec3 &center, const vec3 &up)
+mat4x4& mat4x4::look(const Vec3 &eye, const Vec3 &center, const Vec3 &up)
 {
-	vec3 Z = normalize(eye - center);
-	vec3 X = normalize(cross(up, Z));
-	vec3 Y = cross(Z, X);
+	Vec3 Z = normalize(eye - center);
+	Vec3 X = normalize(cross(up, Z));
+	Vec3 Y = cross(Z, X);
 
 	M[0] = X.x;
 	M[1] = Y.x;
@@ -609,11 +609,11 @@ mat4x4& mat4x4::perspective(float fovy, float aspect, float n, float f)
 	return *this;
 }
 
-mat4x4& mat4x4::rotate(float angle, const vec3 &u)
+mat4x4& mat4x4::rotate(float angle, const Vec3 &u)
 {
 	angle = angle / 180.0f * (float)M_PI;
 
-	vec3 v = normalize(u);
+	Vec3 v = normalize(u);
 
 	float c = 1.0f - cos(angle), s = sin(angle);
 
@@ -674,9 +674,9 @@ mat4x4& mat4x4::transpose()
 	return *this;
 }
 
-vec3 mat4x4::translation() const
+Vec3 mat4x4::translation() const
 {
-	return(vec3(M[12], M[13], M[14]));
+	return(Vec3(M[12], M[13], M[14]));
 }
 
 
@@ -713,11 +713,11 @@ mat4x4 inverse(const mat4x4 &Matrix)
 	return Inverse;
 }
 
-mat4x4 look(const vec3 &eye, const vec3 &center, const vec3 &up)
+mat4x4 look(const Vec3 &eye, const Vec3 &center, const Vec3 &up)
 {
-	vec3 Z = normalize(eye - center);
-	vec3 X = normalize(cross(up, Z));
-	vec3 Y = cross(Z, X);
+	Vec3 Z = normalize(eye - center);
+	Vec3 X = normalize(cross(up, Z));
+	Vec3 Y = cross(Z, X);
 
 	mat4x4 View;
 
@@ -767,13 +767,13 @@ mat4x4 perspective(float fovy, float aspect, float n, float f)
 	return Perspective;
 }
 
-mat4x4 rotate(float angle, const vec3 &u)
+mat4x4 rotate(float angle, const Vec3 &u)
 {
 	mat4x4 Rotate;
 
 	angle = angle / 180.0f * (float)M_PI;
 
-	vec3 v = normalize(u);
+	Vec3 v = normalize(u);
 
 	float c = 1.0f - cos(angle), s = sin(angle);
 

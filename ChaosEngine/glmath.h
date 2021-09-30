@@ -145,7 +145,7 @@ vec2 rotate(const vec2 &u, float angle);
 
 // ----------------------------------------------------------------------------------------------------------------------------
 
-class vec3
+class Vec3
 {
 public:
 	union
@@ -163,127 +163,127 @@ public:
 			float r, g, b;
 		};
 	};
-	vec3() : x(0.0f), y(0.0f), z(0.0f)
+	Vec3() : x(0.0f), y(0.0f), z(0.0f)
 	{}
-	~vec3()
+	~Vec3()
 	{}
-	vec3(float num) : x(num), y(num), z(num)
+	Vec3(float num) : x(num), y(num), z(num)
 	{}
-	vec3(float x, float y, float z) : x(x), y(y), z(z)
+	Vec3(float x, float y, float z) : x(x), y(y), z(z)
 	{}
-	vec3(const vec2 &u, float z) : x(u.x), y(u.y), z(z)
+	Vec3(const vec2 &u, float z) : x(u.x), y(u.y), z(z)
 	{}
-	vec3(const vec3 &u) : x(u.x), y(u.y), z(u.z)
+	Vec3(const Vec3 &u) : x(u.x), y(u.y), z(u.z)
 	{}
 	void Set(float x, float y, float z)
 	{
 		this->x = x; this->y = y; this->z = z;
 	}
-	vec3& operator = (const vec3 &u)
+	Vec3& operator = (const Vec3 &u)
 	{
 		x = u.x; y = u.y; z = u.z; return *this;
 	}
-	vec3 operator - ()
+	Vec3 operator - ()
 	{
-		return vec3(-x, -y, -z);
+		return Vec3(-x, -y, -z);
 	}
 	float* operator & ()
 	{
 		return (float*)this;
 	}
-	vec3& operator += (float num)
+	Vec3& operator += (float num)
 	{
 		x += num; y += num; z += num; return *this;
 	}
-	vec3& operator += (const vec3 &u)
+	Vec3& operator += (const Vec3 &u)
 	{
 		x += u.x; y += u.y; z += u.z; return *this;
 	}
-	vec3& operator -= (float num)
+	Vec3& operator -= (float num)
 	{
 		x -= num; y -= num; z -= num; return *this;
 	}
-	vec3& operator -= (const vec3 &u)
+	Vec3& operator -= (const Vec3 &u)
 	{
 		x -= u.x; y -= u.y; z -= u.z; return *this;
 	}
-	vec3& operator *= (float num)
+	Vec3& operator *= (float num)
 	{
 		x *= num; y *= num; z *= num; return *this;
 	}
-	vec3& operator *= (const vec3 &u)
+	Vec3& operator *= (const Vec3 &u)
 	{
 		x *= u.x; y *= u.y; z *= u.z; return *this;
 	}
-	vec3& operator /= (float num)
+	Vec3& operator /= (float num)
 	{
 		x /= num; y /= num; z /= num; return *this;
 	}
-	vec3& operator /= (const vec3 &u)
+	Vec3& operator /= (const Vec3 &u)
 	{
 		x /= u.x; y /= u.y; z /= u.z; return *this;
 	}
-	friend vec3 operator + (const vec3 &u, float num)
+	friend Vec3 operator + (const Vec3 &u, float num)
 	{
-		return vec3(u.x + num, u.y + num, u.z + num);
+		return Vec3(u.x + num, u.y + num, u.z + num);
 	}
-	friend vec3 operator + (float num, const vec3 &u)
+	friend Vec3 operator + (float num, const Vec3 &u)
 	{
-		return vec3(num + u.x, num + u.y, num + u.z);
+		return Vec3(num + u.x, num + u.y, num + u.z);
 	}
-	friend vec3 operator + (const vec3 &u, const vec3 &v)
+	friend Vec3 operator + (const Vec3 &u, const Vec3 &v)
 	{
-		return vec3(u.x + v.x, u.y + v.y, u.z + v.z);
+		return Vec3(u.x + v.x, u.y + v.y, u.z + v.z);
 	}
-	friend vec3 operator - (const vec3 &u, float num)
+	friend Vec3 operator - (const Vec3 &u, float num)
 	{
-		return vec3(u.x - num, u.y - num, u.z - num);
+		return Vec3(u.x - num, u.y - num, u.z - num);
 	}
-	friend vec3 operator - (float num, const vec3 &u)
+	friend Vec3 operator - (float num, const Vec3 &u)
 	{
-		return vec3(num - u.x, num - u.y, num - u.z);
+		return Vec3(num - u.x, num - u.y, num - u.z);
 	}
-	friend vec3 operator - (const vec3 &u, const vec3 &v)
+	friend Vec3 operator - (const Vec3 &u, const Vec3 &v)
 	{
-		return vec3(u.x - v.x, u.y - v.y, u.z - v.z);
+		return Vec3(u.x - v.x, u.y - v.y, u.z - v.z);
 	}
-	friend vec3 operator * (const vec3 &u, float num)
+	friend Vec3 operator * (const Vec3 &u, float num)
 	{
-		return vec3(u.x * num, u.y * num, u.z * num);
+		return Vec3(u.x * num, u.y * num, u.z * num);
 	}
-	friend vec3 operator * (float num, const vec3 &u)
+	friend Vec3 operator * (float num, const Vec3 &u)
 	{
-		return vec3(num * u.x, num * u.y, num * u.z);
+		return Vec3(num * u.x, num * u.y, num * u.z);
 	}
-	friend vec3 operator * (const vec3 &u, const vec3 &v)
+	friend Vec3 operator * (const Vec3 &u, const Vec3 &v)
 	{
-		return vec3(u.x * v.x, u.y * v.y, u.z * v.z);
+		return Vec3(u.x * v.x, u.y * v.y, u.z * v.z);
 	}
-	friend vec3 operator / (const vec3 &u, float num)
+	friend Vec3 operator / (const Vec3 &u, float num)
 	{
-		return vec3(u.x / num, u.y / num, u.z / num);
+		return Vec3(u.x / num, u.y / num, u.z / num);
 	}
-	friend vec3 operator / (float num, const vec3 &u)
+	friend Vec3 operator / (float num, const Vec3 &u)
 	{
-		return vec3(num / u.x, num / u.y, num / u.z);
+		return Vec3(num / u.x, num / u.y, num / u.z);
 	}
-	friend vec3 operator / (const vec3 &u, const vec3 &v)
+	friend Vec3 operator / (const Vec3 &u, const Vec3 &v)
 	{
-		return vec3(u.x / v.x, u.y / v.y, u.z / v.z);
+		return Vec3(u.x / v.x, u.y / v.y, u.z / v.z);
 	}
 };
 
 // ----------------------------------------------------------------------------------------------------------------------------
 
-vec3 cross(const vec3 &u, const vec3 &v);
-float dot(const vec3 &u, const vec3 &v);
-float length(const vec3 &u);
-float length2(const vec3 &u);
-vec3 mix(const vec3 &u, const vec3 &v, float a);
-vec3 normalize(const vec3 &u);
-vec3 reflect(const vec3 &i, const vec3 &n);
-vec3 refract(const vec3 &i, const vec3 &n, float eta);
-vec3 rotate(const vec3 &u, float angle, const vec3 &v);
+Vec3 cross(const Vec3 &u, const Vec3 &v);
+float dot(const Vec3 &u, const Vec3 &v);
+float length(const Vec3 &u);
+float length2(const Vec3 &u);
+Vec3 mix(const Vec3 &u, const Vec3 &v, float a);
+Vec3 normalize(const Vec3 &u);
+Vec3 reflect(const Vec3 &i, const Vec3 &n);
+Vec3 refract(const Vec3 &i, const Vec3 &n, float eta);
+Vec3 rotate(const Vec3 &u, float angle, const Vec3 &v);
 
 // ----------------------------------------------------------------------------------------------------------------------------
 
@@ -315,7 +315,7 @@ public:
 	{}
 	vec4(const vec2 &u, float z, float w) : x(u.x), y(u.y), z(z), w(w)
 	{}
-	vec4(const vec3 &u, float w) : x(u.x), y(u.y), z(u.z), w(w)
+	vec4(const Vec3 &u, float w) : x(u.x), y(u.y), z(u.z), w(w)
 	{}
 	vec4(const vec4 &u) : x(u.x), y(u.y), z(u.z), w(u.w)
 	{}
@@ -453,7 +453,7 @@ public:
 	mat3x3();
 	~mat3x3();
 	mat3x3(const mat3x3 &Matrix);
-	mat3x3(const vec3 &col1, const vec3 &col2, const vec3 &col3);
+	mat3x3(const Vec3 &col1, const Vec3 &col2, const Vec3 &col3);
 	mat3x3(float c1r1, float c1r2, float c1r3, float c2r1, float c2r2, float c2r3, float c3r1, float c3r2, float c3r3);
 	explicit mat3x3(const mat2x2 &Matrix);
 	explicit mat3x3(const mat4x4 &Matrix);
@@ -461,7 +461,7 @@ public:
 	float& operator [] (int i);
 	float* operator & ();
 	friend mat3x3 operator * (const mat3x3 &Matrix1, const mat3x3 &Matrix2);
-	friend vec3 operator * (const mat3x3 &Matrix, const vec3 &u);
+	friend Vec3 operator * (const mat3x3 &Matrix, const Vec3 &u);
 };
 
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -490,14 +490,14 @@ public:
 	friend vec4 operator * (const mat4x4 &Matrix, const vec4 &u);
 
 	mat4x4& inverse();
-	mat4x4& look(const vec3 &eye, const vec3 &center, const vec3 &up);
+	mat4x4& look(const Vec3 &eye, const Vec3 &center, const Vec3 &up);
 	mat4x4& ortho(float left, float right, float bottom, float top, float n, float f);
 	mat4x4& perspective(float fovy, float aspect, float n, float f);
-	mat4x4& rotate(float angle, const vec3 &u);
+	mat4x4& rotate(float angle, const Vec3 &u);
 	mat4x4& scale(float x, float y, float z);
 	mat4x4& translate(float x, float y, float z);
 	mat4x4& transpose();
-	vec3  translation() const;
+	Vec3  translation() const;
 };
 
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -509,10 +509,10 @@ extern mat4x4 IdentityMatrix;
 // ----------------------------------------------------------------------------------------------------------------------------
 
 mat4x4 inverse(const mat4x4 &Matrix);
-mat4x4 look(const vec3 &eye, const vec3 &center, const vec3 &up);
+mat4x4 look(const Vec3 &eye, const Vec3 &center, const Vec3 &up);
 mat4x4 ortho(float left, float right, float bottom, float top, float n, float f);
 mat4x4 perspective(float fovy, float aspect, float n, float f);
-mat4x4 rotate(float angle, const vec3 &u);
+mat4x4 rotate(float angle, const Vec3 &u);
 mat4x4 scale(float x, float y, float z);
 mat4x4 translate(float x, float y, float z);
 mat4x4 transpose(const mat4x4 &Matrix);
