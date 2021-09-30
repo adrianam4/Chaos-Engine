@@ -1,5 +1,5 @@
-#include "Globals.h"
 #include "Application.h"
+#include "Globals.h"
 #include "ModuleEditor.h"
 
 #include "shellapi.h"
@@ -11,15 +11,18 @@
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	consoleBuffer.clear();
 }
 
 ModuleEditor::~ModuleEditor()
-{}
+{
+	consoleBuffer.clear();
+}
 
 // Load assets
 bool ModuleEditor::Start()
 {
-	LOGCE("Loading Editor Assets");
+	App->editor->AddLog("Loading Editor Assets\n");
 	bool ret = true;
 	
 	LoadConfig();
@@ -31,8 +34,8 @@ bool ModuleEditor::Start()
 // Load assets
 bool ModuleEditor::CleanUp()
 {
-	LOGCE("Unloading Editor scene");
-
+	App->editor->AddLog("Unloading Editor scene\n");
+	consoleBuffer.clear();
 	return true;
 }
 
@@ -78,6 +81,16 @@ void ModuleEditor::ComproveScreen()
 		App->window->SetBorderless(borderless);
 	else if (dekstop)
 		App->window->SetDekstop(dekstop);
+}
+
+void ModuleEditor::AddLog(const char* fmt)
+{
+		LOGCE(fmt);
+		va_list args;
+		va_start(args, fmt);
+		consoleBuffer.appendfv(fmt, args);
+		va_end(args);
+		scrollToBottom = true;
 }
 
 // Update: draw background
@@ -173,7 +186,7 @@ update_status ModuleEditor::Update(float dt)
 			fps_log.push_back(ImGui::GetIO().Framerate);
 			ms_log.push_back(1000 / (ImGui::GetIO().Framerate));
 
-			ImGui::Text("App Name: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", TITLE);
+			ImGui::LogText("App Name: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", TITLE);
 			ImGui::Text("Organization: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", ORGANIZATION);
 			ImGui::SliderInt("Max FPS", &maxFPS, 0, 144);
 
@@ -407,11 +420,13 @@ update_status ModuleEditor::Update(float dt)
 	if (show_console_menu)
 	{
 		ImGui::Begin("Console");
-		for (int i = 0; i<App->console.size(); i++)
-		{
-			ImGui::Text("%s", App->console[i]);
-		}
 
+		ImGui::TextUnformatted(consoleBuffer.begin());
+
+		if (scrollToBottom)
+			ImGui::SetScrollHereY(1.0f);
+		
+		scrollToBottom = false;
 		ImGui::End();
 	}
 

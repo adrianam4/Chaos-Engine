@@ -2,6 +2,8 @@
 #include "Module.h"
 #include "Globals.h"
 
+#include "imgui.h"
+
 class ModuleEditor : public Module
 {
 public:
@@ -15,6 +17,7 @@ public:
 	void SaveConfig();
 	void LoadConfig();
 	void ComproveScreen();
+	void AddLog(const char* fmt);
 
 private:
 	int maxFPS;
@@ -25,4 +28,7 @@ private:
 	bool resizable = true;
 	bool borderless = false;
 	bool dekstop = false;
+public:
+	ImGuiTextBuffer consoleBuffer;
+	bool scrollToBottom;
 };

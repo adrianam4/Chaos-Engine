@@ -44,8 +44,6 @@ public:
 	update_status Update();
 	bool CleanUp();
 
-	ImVector<const char*> console;
-
 private:
 
 	void AddModule(Module* mod);

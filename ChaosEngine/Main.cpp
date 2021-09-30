@@ -20,7 +20,7 @@ int main(int argc, char ** argv)
 	Application* App = NULL;
 	///FAIL///
 	LOGCE("Starting game '%s'...", TITLE);
-
+	
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
 
@@ -29,25 +29,24 @@ int main(int argc, char ** argv)
 		switch (state)
 		{
 		case MAIN_CREATION:
-
-			LOGCE("-------------- Application Creation --------------");
 			App = new Application();
-
+			App->editor->AddLog("Starting game 'Chaos Engine'...\n");
+			App->editor->AddLog("-------------- Application Creation --------------\n");
 			state = MAIN_START;
 			break;
 
 		case MAIN_START:
 
-			LOGCE("-------------- Application Init --------------");
+			App->editor->AddLog("-------------- Application Init --------------\n");
 			if (App->Init() == false)
 			{
-				LOGCE("Application Init exits with ERROR");
+				App->editor->AddLog("Application Init exits with ERROR\n");
 				state = MAIN_EXIT;
 			}
 			else
 			{
 				state = MAIN_UPDATE;
-				LOGCE("-------------- Application Update --------------");
+				App->editor->AddLog("-------------- Application Update --------------\n");
 			}
 
 			break;
@@ -58,7 +57,7 @@ int main(int argc, char ** argv)
 
 			if (update_return == UPDATE_ERROR)
 			{
-				LOGCE("Application Update exits with ERROR");
+				App->editor->AddLog("Application Update exits with ERROR\n");
 				state = MAIN_EXIT;
 			}
 
@@ -68,11 +67,10 @@ int main(int argc, char ** argv)
 			break;
 
 		case MAIN_FINISH:
-
-			LOGCE("-------------- Application CleanUp --------------");
+			App->editor->AddLog("-------------- Application CleanUp --------------\n");
 			if (App->CleanUp() == false)
 			{
-				LOGCE("Application CleanUp exits with ERROR");
+				App->editor->AddLog("Application CleanUp exits with ERROR\n");
 			}
 			else
 				main_return = EXIT_SUCCESS;
@@ -84,8 +82,8 @@ int main(int argc, char ** argv)
 		}
 	}
 
+	App->editor->AddLog("Exiting game 'Chaos Engine'...\n");
 	delete App;
-	///FAIL///
-	LOGCE("Exiting game '%s'...\n", TITLE);
+
 	return main_return;
 }

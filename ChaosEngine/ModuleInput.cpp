@@ -19,16 +19,13 @@ ModuleInput::~ModuleInput()
 // Called before render is available
 bool ModuleInput::Init()
 {
-	LOGCE("Init SDL input event system");
-
+	App->editor->AddLog("Init SDL input event system\n");
 	bool ret = true;
 	SDL_Init(0);
 
 	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		///FAIL///
-		LOGCE("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
-
+		App->editor->AddLog("SDL_EVENTS could not initialize! SDL_Error: %s\n");
 		ret = false;
 	}
 
@@ -124,7 +121,7 @@ update_status ModuleInput::PreUpdate(float dt)
 // Called before quitting
 bool ModuleInput::CleanUp()
 {
-	LOGCE("Quitting SDL input event subsystem");
+	App->editor->AddLog("Quitting SDL input event subsystem\n");
 
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;

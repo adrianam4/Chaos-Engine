@@ -24,14 +24,14 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init()
 {
-	LOGCE("Creating 3D Renderer context");
+	App->editor->AddLog("Creating 3D Renderer context\n");
 	bool ret = true;
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 
 	if(context == NULL)
 	{
-		LOGCE("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		App->editor->AddLog("OpenGL context could not be created! SDL_Error: %s\n");
 		ret = false;
 	}
 	
@@ -47,8 +47,10 @@ bool ModuleRenderer3D::Init()
 		LOGCE("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
 		//Use Vsync
-		if(VSYNC && SDL_GL_SetSwapInterval(1) < 0)
-			LOGCE("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
+		{
+			App->editor->AddLog("Warning: Unable to set VSync! SDL Error: %s\n");
+		}
 
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
@@ -172,7 +174,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 // Called before quitting
 bool ModuleRenderer3D::CleanUp()
 {
-	LOGCE("Destroying 3D Renderer");
+	App->editor->AddLog("Destroying 3D Renderer\n");
 
 	// Cleanup
 	ImGui_ImplOpenGL2_Shutdown();
