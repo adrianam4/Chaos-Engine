@@ -12,4 +12,17 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	void SaveConfig();
+	void LoadConfig();
+	void ComproveScreen();
+
+private:
+	int maxFPS;
+	int width;
+	int height;
+	float brightness;
+	bool fullscreen = false;
+	bool resizable = true;
+	bool borderless = false;
+	bool dekstop = false;
 };

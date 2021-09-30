@@ -19,6 +19,9 @@
     <Filter Include="Sources\Imgui">
       <UniqueIdentifier>{f81a7e5f-9d9d-4261-b6ae-8c6e1ead4fa9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Parson">
+      <UniqueIdentifier>{b4188890-79cf-43f8-87f0-8db8d5e52776}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -87,6 +90,9 @@
     <ClInclude Include="ModuleEditor.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Parson\parson.h">
+      <Filter>Sources\Parson</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -151,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="ModuleEditor.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Parson\parson.c">
+      <Filter>Sources\Parson</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
