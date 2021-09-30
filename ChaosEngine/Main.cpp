@@ -17,11 +17,12 @@ enum main_states
 
 int main(int argc, char ** argv)
 {
+	Application* App = NULL;
+	///FAIL///
 	LOGCE("Starting game '%s'...", TITLE);
 
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
-	Application* App = NULL;
 
 	while (state != MAIN_EXIT)
 	{
@@ -31,6 +32,7 @@ int main(int argc, char ** argv)
 
 			LOGCE("-------------- Application Creation --------------");
 			App = new Application();
+
 			state = MAIN_START;
 			break;
 
@@ -83,6 +85,7 @@ int main(int argc, char ** argv)
 	}
 
 	delete App;
+	///FAIL///
 	LOGCE("Exiting game '%s'...\n", TITLE);
 	return main_return;
 }

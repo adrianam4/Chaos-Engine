@@ -10,8 +10,12 @@
 #include "ModuleCamera3D.h"
 #include "ModulePhysics3D.h"
 #include "ModuleEditor.h"
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl2.h"
 #include <iostream>
 #include <list>
+#include <vector>
 
 
 class Application
@@ -39,6 +43,8 @@ public:
 	bool Init();
 	update_status Update();
 	bool CleanUp();
+
+	ImVector<const char*> console;
 
 private:
 
