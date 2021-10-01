@@ -4,10 +4,8 @@ Application::Application()
 {
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
-	scene_intro = new ModuleSceneIntro(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
-	physics = new ModulePhysics3D(this);
 	editor = new ModuleEditor(this);
 
 	// The order of calls is very important!
@@ -18,11 +16,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
-	AddModule(physics);
 	AddModule(editor);
-	
-	// Scenes
-	AddModule(scene_intro);
 
 	// Renderer last!
 	AddModule(renderer3D);
@@ -32,6 +26,7 @@ Application::~Application()
 {
 	std::list<Module*>::iterator item = --list_modules.end();
 
+	//TODO MEMORY LEAK
 	while(item != list_modules.begin())
 	{
 		delete (*item);

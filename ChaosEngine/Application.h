@@ -8,7 +8,6 @@
 #include "ModuleSceneIntro.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
-#include "ModulePhysics3D.h"
 #include "ModuleEditor.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -23,10 +22,8 @@ class Application
 public:
 	ModuleWindow* window;
 	ModuleInput* input;
-	ModuleSceneIntro* scene_intro;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
-	ModulePhysics3D* physics;
 	ModuleEditor* editor;
 
 private:

@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Globals.h"
 #include "ModuleEditor.h"
+#include "Primitive.h"
 
 #include "shellapi.h"
 #include <GL/GL.h>
@@ -24,6 +25,9 @@ bool ModuleEditor::Start()
 {
 	App->editor->AddLog("Loading Editor Assets\n");
 	bool ret = true;
+
+	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));
+	App->camera->LookAt(Vec3(0, 0, 0));
 	
 	LoadConfig();
 	ComproveScreen();
@@ -497,5 +501,9 @@ update_status ModuleEditor::Update(float dt)
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
+	Plane plane(0, 0, 0, 0);
+	plane.axis = true;
+	plane.Render();
+
 	return UPDATE_CONTINUE;
 }
