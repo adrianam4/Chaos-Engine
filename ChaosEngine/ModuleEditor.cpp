@@ -57,7 +57,9 @@ void ModuleEditor::SaveConfig()
 	json_object_set_boolean(json_object(user_data), "Borderless", borderless);
 	json_object_set_boolean(json_object(user_data), "Dekstop", dekstop);
 
-	json_serialize_to_file(user_data, "ConfigFile.json");
+	json_serialize_to_file_pretty(user_data, "ConfigFile.json");
+
+	AddLog("Saved Config Data\n");
 }
 
 void ModuleEditor::LoadConfig()
@@ -73,6 +75,8 @@ void ModuleEditor::LoadConfig()
 	resizable = json_object_get_boolean(json_object(user_data), "Resizable");
 	borderless = json_object_get_boolean(json_object(user_data), "Borderless");
 	dekstop = json_object_get_boolean(json_object(user_data), "Dekstop");
+
+	AddLog("Loaded Config Data\n");
 }
 
 void ModuleEditor::ComproveScreen()
