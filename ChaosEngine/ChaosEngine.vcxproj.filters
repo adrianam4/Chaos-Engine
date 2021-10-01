@@ -60,9 +60,6 @@
     <ClInclude Include="ModulePhysics3D.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_opengl2.h">
-      <Filter>Sources\Imgui</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imgui_impl_sdl.h">
       <Filter>Sources\Imgui</Filter>
     </ClInclude>
@@ -95,6 +92,12 @@
     </ClInclude>
     <ClInclude Include="Primitive.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3.h">
+      <Filter>Sources\Imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
+      <Filter>Sources\Imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +140,6 @@
     <ClCompile Include="imgui\imgui_draw.cpp">
       <Filter>Sources\Imgui</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_opengl2.cpp">
-      <Filter>Sources\Imgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui_impl_sdl.cpp">
       <Filter>Sources\Imgui</Filter>
     </ClCompile>
@@ -166,6 +166,9 @@
     </ClCompile>
     <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
+      <Filter>Sources\Imgui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

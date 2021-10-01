@@ -8,7 +8,7 @@
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl2.h"
+#include "imgui_impl_opengl3.h"
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -65,7 +65,7 @@ bool ModuleRenderer3D::Init()
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplSDL2_InitForOpenGL(App->window->window, context);
-		ImGui_ImplOpenGL2_Init();
+		ImGui_ImplOpenGL3_Init();
 		
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -149,7 +149,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		lights[i].Render();
 
 	// Start the Dear ImGui frame
-	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame();
 	ImGui::NewFrame();
 
@@ -165,7 +165,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);*/
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(App->window->window);
 	
 	return UPDATE_CONTINUE;
@@ -177,7 +177,7 @@ bool ModuleRenderer3D::CleanUp()
 	App->editor->AddLog("Destroying 3D Renderer\n");
 
 	// Cleanup
-	ImGui_ImplOpenGL2_Shutdown();
+	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
