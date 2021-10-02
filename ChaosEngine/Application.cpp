@@ -48,7 +48,6 @@ bool Application::Init()
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOGCE("Application Start --------------\n");
 	
 	item = list_modules.begin();
 

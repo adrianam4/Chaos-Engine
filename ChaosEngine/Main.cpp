@@ -30,6 +30,7 @@ int main(int argc, char ** argv)
 		{
 		case MAIN_CREATION:
 			App = new Application();
+			App->editor->AddLog("-------------- Application Start --------------\n");
 			App->editor->AddLog("Starting game 'Chaos Engine'...\n");
 			App->editor->AddLog("-------------- Application Creation --------------\n");
 			state = MAIN_START;
