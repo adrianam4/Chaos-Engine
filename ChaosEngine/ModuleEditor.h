@@ -28,6 +28,7 @@ private:
 	bool resizable = true;
 	bool borderless = false;
 	bool dekstop = false;
+	bool wireframe;
 public:
 	ImGuiTextBuffer consoleBuffer;
 	bool scrollToBottom;

@@ -56,6 +56,7 @@ void ModuleEditor::SaveConfig()
 	json_object_set_boolean(json_object(user_data), "Resizable", resizable);
 	json_object_set_boolean(json_object(user_data), "Borderless", borderless);
 	json_object_set_boolean(json_object(user_data), "Dekstop", dekstop);
+	json_object_set_boolean(json_object(user_data), "Wireframe", wireframe);
 
 	json_serialize_to_file_pretty(user_data, "ConfigFile.json");
 
@@ -75,6 +76,7 @@ void ModuleEditor::LoadConfig()
 	resizable = json_object_get_boolean(json_object(user_data), "Resizable");
 	borderless = json_object_get_boolean(json_object(user_data), "Borderless");
 	dekstop = json_object_get_boolean(json_object(user_data), "Dekstop");
+	wireframe = json_object_get_boolean(json_object(user_data), "Wireframe");
 
 	AddLog("Loaded Config Data\n");
 }
@@ -148,6 +150,10 @@ update_status ModuleEditor::Update(float dt)
 			if (ImGui::MenuItem("Console"))
 			{
 				show_console_menu = !show_console_menu;
+			}
+			if (ImGui::MenuItem("Enable/Disable Wireframe"))
+			{
+				wireframe = !wireframe;
 			}
 			ImGui::EndMenu();
 		}
@@ -506,8 +512,17 @@ update_status ModuleEditor::Update(float dt)
 update_status ModuleEditor::PostUpdate(float dt)
 {
 	Plane plane(0, 0, 0, 0);
+	Cube cube(1, 1, 1);
+	
 	plane.axis = true;
+	if (wireframe)
+	{
+		cube.wire = true;
+	}
+
 	plane.Render();
+	cube.Render();
+
 
 	return UPDATE_CONTINUE;
 }

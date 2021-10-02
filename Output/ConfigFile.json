@@ -6,5 +6,6 @@
     "Fullscreen": false,
     "Resizable": true,
     "Borderless": false,
-    "Dekstop": false
+    "Dekstop": false,
+    "Wireframe": false
 }
