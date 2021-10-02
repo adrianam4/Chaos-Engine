@@ -93,7 +93,7 @@ void ModuleEditor::ComproveScreen()
 		App->window->SetDekstop(dekstop);
 }
 
-void ModuleEditor::AddLog(const char* fmt)
+void ModuleEditor::AddLog(const char* fmt, ...)
 {
 		LOGCE(fmt);
 		va_list args;

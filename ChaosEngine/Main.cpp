@@ -18,8 +18,6 @@ enum main_states
 int main(int argc, char ** argv)
 {
 	Application* App = NULL;
-	///FAIL///
-	LOGCE("Starting game '%s'...", TITLE);
 	
 	int main_return = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
@@ -31,7 +29,7 @@ int main(int argc, char ** argv)
 		case MAIN_CREATION:
 			App = new Application();
 			App->editor->AddLog("-------------- Application Start --------------\n");
-			App->editor->AddLog("Starting game 'Chaos Engine'...\n");
+			App->editor->AddLog("Starting game '%s'...\n", TITLE);
 			App->editor->AddLog("-------------- Application Creation --------------\n");
 			state = MAIN_START;
 			break;

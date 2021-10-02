@@ -40,19 +40,19 @@ bool ModuleRenderer3D::Init()
 	{
 		GLenum err = glewInit();
 		// … check for errors
-		LOGCE("Using Glew %s", glewGetString(GLEW_VERSION));
+		App->editor->AddLog("Using Glew %s\n", glewGetString(GLEW_VERSION));
 		// Should be 2.0
-		LOGCE("Vendor: %s", glGetString(GL_VENDOR));
-		LOGCE("Renderer: %s", glGetString(GL_RENDERER));
-		LOGCE("OpenGL version supported %s", glGetString(GL_VERSION));
-		LOGCE("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		App->editor->AddLog("Vendor: %s\n", glGetString(GL_VENDOR));
+		App->editor->AddLog("Renderer: %s\n", glGetString(GL_RENDERER));
+		App->editor->AddLog("OpenGL version supported %s\n", glGetString(GL_VERSION));
+		App->editor->AddLog("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		if (GLEW_OK != err)
 		{
 			/* Problem: glewInit failed, something is seriously wrong. */
-			LOGCE("Error: %s\n", glewGetErrorString(err));
+			App->editor->AddLog("Error: %s\n", glewGetErrorString(err));
 		}
-		LOGCE("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+		App->editor->AddLog("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
 		//Use Vsync
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
@@ -83,7 +83,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOGCE("Error initializing OpenGL! %s\n", gluErrorString(error));
+			App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -95,7 +95,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOGCE("Error initializing OpenGL! %s\n", gluErrorString(error));
+			App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 		
@@ -103,11 +103,11 @@ bool ModuleRenderer3D::Init()
 		glClearDepth(1.0f);
 		glClearColor(0.f, 0.f, 0.f, 1.f);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_DEPTH_TEST);
-		glDisable(GL_CULL_FACE);
-		glDisable(GL_LIGHTING);
-		glDisable(GL_COLOR_MATERIAL);
-		glDisable(GL_TEXTURE_2D);
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_CULL_FACE);
+		glEnable(GL_LIGHTING);
+		glEnable(GL_COLOR_MATERIAL);
+		glEnable(GL_TEXTURE_2D);
 		
 		//Initialize clear color
 		glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -116,7 +116,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			LOGCE("Error initializing OpenGL! %s\n", gluErrorString(error));
+			App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 		

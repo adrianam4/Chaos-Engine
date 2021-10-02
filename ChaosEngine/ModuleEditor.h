@@ -17,7 +17,7 @@ public:
 	void SaveConfig();
 	void LoadConfig();
 	void ComproveScreen();
-	void AddLog(const char* fmt);
+	void AddLog(const char* fmt, ...);
 
 private:
 	int maxFPS;
