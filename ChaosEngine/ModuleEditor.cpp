@@ -521,7 +521,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	}
 
 	plane.Render();
-	cube.Render();
+	//cube.Render();
 
 
 	return UPDATE_CONTINUE;

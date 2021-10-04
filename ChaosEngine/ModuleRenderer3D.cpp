@@ -5,6 +5,7 @@
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include <vector>
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -136,6 +137,54 @@ bool ModuleRenderer3D::Init()
 		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
 
 		lights[0].Active(true);
+
+		// Draw Array
+
+		float vertices[] =
+		{ -1, -1, 0,
+		   1, -1, 0,
+		   1, 1, 0,
+		   -1, -1, 0,
+		   1, 1, 0 ,
+		   -1, 1, 0 ,
+		   1, 1, -2 ,
+		   1, -1, -2 ,
+		   -1, -1, -2,
+		   -1, 1, -2,
+		   1, 1, -2,
+			-1, -1, -2,
+			1, -1, 0,
+			1, -1, -2,
+			1, 1, -2,
+			1, -1, 0,
+			1, 1, -2,
+			1, 1, 0,
+			-1, -1, -2,
+			-1, -1, 0,
+			-1, 1, 0,
+			-1, -1, -2,
+			-1, 1, 0,
+			-1, 1, -2,
+			 -1, 1, 0,
+			1, 1, 0,
+			 1, 1, -2,
+			-1, 1, 0,
+			1, 1, -2,
+			-1, 1, -2,
+			1, -1, -2,
+			1, -1, 0,
+			-1, -1, 0,
+			-1, -1, -2,
+			1, -1, -2,
+			-1, -1, 0
+		};
+
+		num_vertices = 36;
+
+		my_id = 0;
+		glGenBuffers(1, (GLuint*)&(my_id));
+		glBindBuffer(GL_ARRAY_BUFFER, my_id);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vertices, GL_STATIC_DRAW);
 	}
 
 	// Projection matrix for
@@ -260,7 +309,87 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
 	glClear(GL_COLOR_BUFFER_BIT);*/
 	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+	
+	//Vertices
+	//const GLfloat v0[] = { -1, -1, 0 };
+	//const GLfloat v1[] = { 1, -1, 0 };
+	//const GLfloat v2[] = { 1, 1, 0 };
+	//const GLfloat v3[] = { -1, 1, 0 };
+	//
+	//const GLfloat v4[] = { -1, -1, -2 };
+	//const GLfloat v5[] = { 1, -1, -2 };
+	//const GLfloat v6[] = { 1, 1, -2 };
+	//const GLfloat v7[] = { -1, 1, -2 };
+
+
+	
+	//Direct Mode
+	//glBegin(GL_TRIANGLES);
+	////FRONT
+	//glVertex3fv(v0);
+	//glVertex3fv(v1);
+	//glVertex3fv(v2);
+
+	//glVertex3fv(v0);
+	//glVertex3fv(v2);
+	//glVertex3fv(v3);
+
+	////BACK
+	//glVertex3fv(v6);
+	//glVertex3fv(v5);
+	//glVertex3fv(v4);
+
+	//glVertex3fv(v7);
+	//glVertex3fv(v6);
+	//glVertex3fv(v4);
+
+	////RIGHT
+	//glVertex3fv(v1);
+	//glVertex3fv(v5);
+	//glVertex3fv(v6);
+
+	//glVertex3fv(v1);
+	//glVertex3fv(v6);
+	//glVertex3fv(v2);
+
+	////LEFT
+	//glVertex3fv(v4);
+	//glVertex3fv(v0);
+	//glVertex3fv(v3);
+
+	//glVertex3fv(v4);
+	//glVertex3fv(v3);
+	//glVertex3fv(v7);
+
+	////TOP
+	//glVertex3fv(v3);
+	//glVertex3fv(v2);
+	//glVertex3fv(v6);
+
+	//glVertex3fv(v3);
+	//glVertex3fv(v6);
+	//glVertex3fv(v7);
+
+	////DOWN
+	//glVertex3fv(v5);
+	//glVertex3fv(v1);
+	//glVertex3fv(v0);
+
+	//glVertex3fv(v4);
+	//glVertex3fv(v5);
+	//glVertex3fv(v0);
+
+	//glEnd();
+	
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, my_id);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	// … bind and use other buffers
+	glDrawArrays(GL_TRIANGLES, 0, num_vertices);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
 	SDL_GL_SwapWindow(App->window->window);
 	
 	return UPDATE_CONTINUE;
