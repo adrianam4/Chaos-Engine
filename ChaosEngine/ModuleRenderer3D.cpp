@@ -385,17 +385,19 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glDisableClientState(GL_VERTEX_ARRAY);*/
 	
 	//-------------------------------------------------- Indices mode ----------------------------------------------------------------------------------------------------
+	
+	//----------CUBE----------
 	static GLfloat vertices[] =
 	{
-		-1, -1, 0,
-		1, -1, 0,
-		1, 1, 0,
-		-1, 1, 0,
+		-1, 0, 0,
+		1, 0, 0,
+		1, 2, 0,
+		-1, 2, 0,
 
-		-1, -1, -2,
-		1, -1, -2,
-		1, 1, -2,
-		-1, 1, -2
+		-1, 0, -2,
+		1, 0, -2,
+		1, 2, -2,
+		-1, 2, -2
 	};
 
 	static GLuint indices[] =
@@ -419,6 +421,37 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
 	glDisableClientState(GL_VERTEX_ARRAY);
+
+	//-----------PYRAMID-----------
+
+	static GLfloat pyramid_vertices[] =
+	{
+		3, 0, 2,
+		4, 0, 3,
+		3, 0, 4,
+		2, 0, 3,
+
+		3, 2, 3
+	};
+
+	static GLuint pyramid_indices[] =
+	{
+		4,1,0, 4,2,1,
+		2,4,3, 3,4,0,
+		0,1,3, 1,2,3
+	};
+
+	static uint my_pyramid_indices = 0;
+	static uint num_pyramid_indices = 18;
+	glGenBuffers(1, (GLuint*)&(my_pyramid_indices));
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_pyramid_indices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)* num_pyramid_indices, pyramid_indices, GL_STATIC_DRAW);
+	glVertexPointer(3, GL_FLOAT, 0, pyramid_vertices);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_pyramid_indices);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glDrawElements(GL_TRIANGLES, num_pyramid_indices, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY); 
     //------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
