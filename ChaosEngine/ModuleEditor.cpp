@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ModuleEditor.h"
 #include "Primitive.h"
+#include "Primitives.h"
 
 #include "shellapi.h"
 #include <GL/GL.h>
@@ -522,7 +523,6 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	plane.Render();
 	//cube.Render();
-
 
 	return UPDATE_CONTINUE;
 }

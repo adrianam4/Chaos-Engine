@@ -387,7 +387,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	//-------------------------------------------------- Indices mode ----------------------------------------------------------------------------------------------------
 	
 	//----------CUBE----------
-	static GLfloat vertices[] =
+	/*static GLfloat vertices[] =
 	{
 		-1, 0, 0,
 		1, 0, 0,
@@ -420,7 +420,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);*/
 
 	//-----------PYRAMID-----------
 
