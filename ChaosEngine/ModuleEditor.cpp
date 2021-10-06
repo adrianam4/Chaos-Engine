@@ -513,16 +513,12 @@ update_status ModuleEditor::Update(float dt)
 update_status ModuleEditor::PostUpdate(float dt)
 {
 	Plane plane(0, 0, 0, 0);
-	Cube cube(1, 1, 1);
-	
-	plane.axis = true;
-	if (wireframe)
-	{
-		cube.wire = true;
-	}
+	MyCube cube;
+	MyPyramid pyramid;
 
 	plane.Render();
-	//cube.Render();
+	cube;
+	pyramid;
 
 	return UPDATE_CONTINUE;
 }
