@@ -512,15 +512,17 @@ update_status ModuleEditor::Update(float dt)
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
-	Plane plane(0, 0, 0, 0);
-	MyCube cube(0,0,6);
-	MyPyramid pyramid(0,0,8);
-	MyCylinder cylinder;
-
-	cylinder.Draw();
-
+	static Plane plane(0, 0, 0, 0);
 	plane.Render();
 
+	static MyCube cube(-5,0,6);
+	cube.DrawCube();
+
+	static MyPyramid pyramid(0,0,8);
+	pyramid.DrawPyramid();
+
+	//static MyCylinder cylinder;
+	//cylinder.Draw();
 
 	return UPDATE_CONTINUE;
 }

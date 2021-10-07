@@ -29,22 +29,30 @@ class MyCube : public Primitives
 {
 public:
 	MyCube(float x, float y, float z);
+	~MyCube();
 	void DrawCube();
 private:
 	uint num_vertices;
 	uint num_indices;
 	uint my_indices;
+	uint bufferCube;
+	std::vector<float> vertices;
+	std::vector<uint> indices;
 };
 
 class MyPyramid : public Primitives
 {
 public:
 	MyPyramid(float x, float y, float z);
+	~MyPyramid();
 	void DrawPyramid();
 private:
 	uint num_pyramid_vertices;
 	uint num_pyramid_indices;
 	uint my_pyramid_indices;
+	uint bufferPyramid;
+	std::vector<float> vertices;
+	std::vector<uint> indices;
 };
 
 class MyCylinder : public Primitives
@@ -73,7 +81,7 @@ private:
 	int stacks;
 	bool smooth;
 
-	uint buffer;
+	uint bufferCylinder;
 };
 //// ============================================
 //class MySphere : public Primitives
