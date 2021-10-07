@@ -72,18 +72,18 @@ MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Pri
 	num_pyramid_vertices = 15;
 	num_pyramid_indices = 18;
 
-	vertices.push_back((0 + x) * X); vertices.push_back((0 + y) * Y); vertices.push_back((-1 + z) * Z);
-	vertices.push_back((1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((0 + z) * Z);
-	vertices.push_back((0 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((1 + z) * Z);
-	vertices.push_back((-1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((0 + z) * Z);
-	vertices.push_back((0 + x) * X);vertices.push_back((2 + y) * Y);vertices.push_back((0 + z) * Z);
+	vertices.push_back((-1 + x) * X); vertices.push_back((0 + y) * Y); vertices.push_back((-1 + z) * Z);
+	vertices.push_back((1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((-1 + z) * Z);
+	vertices.push_back((0 + x) * X); vertices.push_back((2 + y) * Y); vertices.push_back((0 + z) * Z);
+	vertices.push_back((1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((1 + z) * Z);
+	vertices.push_back((-1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((1 + z) * Z);
 
-	indices.push_back(4); indices.push_back(1); indices.push_back(0);
-	indices.push_back(4); indices.push_back(2); indices.push_back(1);
-	indices.push_back(2); indices.push_back(4); indices.push_back(3);
-	indices.push_back(3); indices.push_back(4); indices.push_back(0);
+	indices.push_back(2); indices.push_back(1); indices.push_back(0);
+	indices.push_back(2); indices.push_back(3); indices.push_back(1);
+	indices.push_back(4); indices.push_back(3); indices.push_back(2);
+	indices.push_back(4); indices.push_back(2); indices.push_back(0);
 	indices.push_back(0); indices.push_back(1); indices.push_back(3);
-	indices.push_back(1); indices.push_back(2); indices.push_back(3);
+	indices.push_back(0); indices.push_back(3); indices.push_back(4);
 
 	glGenBuffers(1, &bufferPyramid);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferPyramid);
