@@ -1,6 +1,7 @@
 #pragma once
 #include "glmath.h"
 #include "Color.h"
+#include <vector>
 
 enum PrimitivesTypes
 {
@@ -46,6 +47,34 @@ private:
 	uint my_pyramid_indices;
 };
 
+class MyCylinder : public Primitives
+{
+public:
+	MyCylinder();
+	MyCylinder(float baseRadius, float topRadius, float height, int sectors, int stacks, bool smooth);
+	~MyCylinder();
+	std::vector<float> GetUnitCircleVertices();
+	void BuildVerticalSmooth();
+	void Draw();
+	void Initialize();
+
+private:
+	std::vector<float> unitCircleVertices;
+	std::vector<float> vertices;
+	std::vector<float> normals;
+	std::vector<float> texCoords;
+	std::vector<unsigned int> indices;
+	std::vector<unsigned int> lineIndices;
+
+	float baseRadius;
+	float topRadius;
+	float height;
+	int sectors;
+	int stacks;
+	bool smooth;
+
+	uint buffer;
+};
 //// ============================================
 //class MySphere : public Primitives
 //{

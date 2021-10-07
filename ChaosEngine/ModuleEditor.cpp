@@ -515,6 +515,9 @@ update_status ModuleEditor::PostUpdate(float dt)
 	Plane plane(0, 0, 0, 0);
 	MyCube cube;
 	MyPyramid pyramid;
+	MyCylinder cylinder;
+
+	cylinder.Draw();
 
 	plane.Render();
 
