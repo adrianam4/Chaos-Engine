@@ -28,7 +28,7 @@ protected:
 class MyCube : public Primitives
 {
 public:
-	MyCube();
+	MyCube(float x, float y, float z);
 	void DrawCube();
 private:
 	uint num_vertices;
@@ -39,7 +39,7 @@ private:
 class MyPyramid : public Primitives
 {
 public:
-	MyPyramid();
+	MyPyramid(float x, float y, float z);
 	void DrawPyramid();
 private:
 	uint num_pyramid_vertices;

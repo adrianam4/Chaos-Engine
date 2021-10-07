@@ -513,8 +513,8 @@ update_status ModuleEditor::Update(float dt)
 update_status ModuleEditor::PostUpdate(float dt)
 {
 	Plane plane(0, 0, 0, 0);
-	MyCube cube;
-	MyPyramid pyramid;
+	MyCube cube(0,0,6);
+	MyPyramid pyramid(0,0,8);
 	MyCylinder cylinder;
 
 	cylinder.Draw();

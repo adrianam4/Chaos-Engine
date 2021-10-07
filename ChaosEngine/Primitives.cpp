@@ -15,22 +15,22 @@ PrimitivesTypes Primitives::GetType() const
 }
 
 //// CUBE ============================================
-MyCube::MyCube() : Primitives()
+MyCube::MyCube(float x, float y, float z) : Primitives()
 {
 
 	type = PrimitivesTypes::PRIMITIVE_MYCUBE;
 
 	static GLfloat vertices[] =
 	{
-		-1 - 5, 0, 0,
-		1 - 5, 0, 0,
-		1 - 5, 2, 0,
-		-1 - 5, 2, 0,
+		-1 + x, 0 + y, 0 + z,
+		1 + x, 0 + y, 0 + z,
+		1 + x, 2 + y, 0 + z,
+		-1 + x, 2 + y, 0 + z,
 
-		-1 - 5, 0, -2,
-		1 - 5, 0, -2,
-		1 - 5, 2, -2,
-		-1 - 5, 2, -2
+		-1 + x, 0 + y, -2 + z,
+		1 + x, 0 + y, -2 + z,
+		1 + x, 2 + y, -2 + z,
+		-1 + x, 2 + y, -2 + z
 	};
 
 	static GLuint indices[] =
@@ -67,18 +67,18 @@ void MyCube::DrawCube()
 
 
 //// PYRAMID ============================================
-MyPyramid::MyPyramid() : Primitives()
+MyPyramid::MyPyramid(float x, float y, float z) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYPYRAMID;
 
 	static GLfloat pyramid_vertices[] =
 	{
-		3, 0, 2,
-		4, 0, 3,
-		3, 0, 4,
-		2, 0, 3,
+		0 + x, 0 + y, -1 + z,
+		1 + x, 0 + y, 0 + z,
+		0 + x, 0 + y, 1 + z,
+		-1 + x, 0 + y, 0 + z,
 
-		3, 2, 3
+		0 + x, 2 + y, 0 + z
 	};
 
 	static GLuint pyramid_indices[] =
