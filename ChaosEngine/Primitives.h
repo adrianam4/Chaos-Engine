@@ -28,7 +28,7 @@ protected:
 class MyCube : public Primitives
 {
 public:
-	MyCube(float x, float y, float z);
+	MyCube(float x, float y, float z, float X, float Y, float Z);
 	~MyCube();
 	void DrawCube();
 private:
@@ -43,7 +43,7 @@ private:
 class MyPyramid : public Primitives
 {
 public:
-	MyPyramid(float x, float y, float z);
+	MyPyramid(float x, float y, float z, float X, float Y, float Z);
 	~MyPyramid();
 	void DrawPyramid();
 private:

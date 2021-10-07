@@ -515,10 +515,10 @@ update_status ModuleEditor::PostUpdate(float dt)
 	static Plane plane(0, 0, 0, 0);
 	plane.Render();
 
-	static MyCube cube(-5,0,6);
+	static MyCube cube(0,0,0,2,2,1);
 	cube.DrawCube();
 
-	static MyPyramid pyramid(0,0,8);
+	static MyPyramid pyramid(0,0,2,2,2,2);
 	pyramid.DrawPyramid();
 
 	//static MyCylinder cylinder;
