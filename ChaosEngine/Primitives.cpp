@@ -43,13 +43,22 @@ MyCube::MyCube() : Primitives()
 		5,1,0, 4,5,0
 	};
 
-	static uint my_indices = 0;
-	static uint num_indices = 36;
+	my_indices = 0;
+	num_indices = 36;
 	glGenBuffers(1, (GLuint*)&(my_indices));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * num_indices, indices, GL_STATIC_DRAW);
 	glVertexPointer(3, GL_FLOAT, 0, vertices);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+}
+
+void MyCube::DrawCube()
+{
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_indices);
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
@@ -79,8 +88,8 @@ MyPyramid::MyPyramid() : Primitives()
 		0,1,3, 1,2,3
 	};
 
-	static uint my_pyramid_indices = 0;
-	static uint num_pyramid_indices = 18;
+	my_pyramid_indices = 0;
+	num_pyramid_indices = 18;
 	glGenBuffers(1, (GLuint*)&(my_pyramid_indices));
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_pyramid_indices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * num_pyramid_indices, pyramid_indices, GL_STATIC_DRAW);
@@ -92,7 +101,13 @@ MyPyramid::MyPyramid() : Primitives()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
  
- 
+void MyPyramid::DrawPyramid() 
+{
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, my_pyramid_indices);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glDrawElements(GL_TRIANGLES, num_pyramid_indices, GL_UNSIGNED_INT, NULL);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
  
 //// SPHERE ============================================
 //MySphere::MySphere() : Primitives()

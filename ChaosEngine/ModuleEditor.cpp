@@ -517,8 +517,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 	MyPyramid pyramid;
 
 	plane.Render();
-	cube;
-	pyramid;
+
 
 	return UPDATE_CONTINUE;
 }
