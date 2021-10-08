@@ -1,6 +1,8 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "Primitive.h"
+#include "Primitives.h"
 
 #include "imgui.h"
 
@@ -29,6 +31,10 @@ private:
 	bool borderless = false;
 	bool dekstop = false;
 	bool wireframe;
+	Plane* plane;
+	MyCube* cube;
+	MyPyramid* pyramid;
+	MyCylinder* cylinder;
 public:
 	ImGuiTextBuffer consoleBuffer;
 	bool scrollToBottom;

@@ -290,7 +290,7 @@ void MyCylinder::BuildVerticalSmooth()
 	}
 }
 
-void MyCylinder::Draw()
+void MyCylinder::DrawCylinder()
 {
 	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 	glNormalPointer(GL_FLOAT, 0, normals.data());
@@ -323,12 +323,4 @@ void MyCylinder::Initialize()
 //MySphere::MySphere() : Primitives()
 //{
 //	type = PrimitivesTypes::PRIMITIVE_MYSPHERE;
-//}
-//
-//
-// 
-//// CYLINDER ============================================
-//MyCylinder::MyCylinder() : Primitives()
-//{
-//	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
 //}

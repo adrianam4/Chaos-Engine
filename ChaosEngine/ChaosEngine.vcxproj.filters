@@ -96,6 +96,9 @@
     <ClInclude Include="Primitives.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleLoadGeometry.h">
+      <Filter>Sources\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -162,6 +165,9 @@
       <Filter>Sources\Imgui</Filter>
     </ClCompile>
     <ClCompile Include="Primitives.cpp">
+      <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleLoadGeometry.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>

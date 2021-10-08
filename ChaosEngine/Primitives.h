@@ -63,7 +63,7 @@ public:
 	~MyCylinder();
 	std::vector<float> GetUnitCircleVertices();
 	void BuildVerticalSmooth();
-	void Draw();
+	void DrawCylinder();
 	void Initialize();
 
 private:
