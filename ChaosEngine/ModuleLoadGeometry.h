@@ -2,15 +2,25 @@
 #include "Module.h"
 #include "Globals.h"
 
-class ModuleLoadGeometry : public Module
+class Mesh
 {
 public:
-	ModuleLoadGeometry(Application* app, bool start_enabled = true);
-	~ModuleLoadGeometry();
+	uint id_index = 0; // index in VRAM
+	uint num_index = 0;
+	uint* index = nullptr;
 
-	bool Start();
-	update_status PreUpdate(float dt);
-	update_status Update(float dt);
-	update_status PostUpdate(float dt);
-	bool CleanUp();
+	uint id_vertex = 0; // unique vertex in VRAM
+	uint num_vertex = 0;
+	float* vertex = nullptr;
+};
+
+class LoadGeometry
+{
+public:
+	LoadGeometry(Application* app, bool start_enabled = true);
+	~LoadGeometry();
+	void LoadFile(const char* file_path);
+
+private:
+	Mesh ourMesh;
 };

@@ -1,51 +1,55 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleLoadGeometry.h"
+#include "ModuleEditor.h"
 
 #include "Assimp/include/assimp/cimport.h"
 #include "Assimp/include/assimp/scene.h"
 #include "Assimp/include/assimp/postprocess.h"
 #pragma comment (lib, "Assimp/x86-Release/assimp-vc142-mt.lib")
 
-ModuleLoadGeometry::ModuleLoadGeometry(Application* app, bool start_enabled) : Module(app, start_enabled)
-{
 
-}
-
-ModuleLoadGeometry::~ModuleLoadGeometry()
+LoadGeometry::LoadGeometry(Application* app, bool start_enabled)
 {}
 
-// -----------------------------------------------------------------
-bool ModuleLoadGeometry::Start()
+LoadGeometry::~LoadGeometry()
 {
-	App->editor->AddLog("Loading geometry\n");
-	bool ret = true;
-
-	return ret;
+	LOGCE("Unloading geometry\n");
+	aiDetachAllLogStreams();
 }
 
-// -----------------------------------------------------------------
-update_status ModuleLoadGeometry::PreUpdate(float dt)
+void LoadGeometry::LoadFile(const char* file_path)
 {
-	return UPDATE_CONTINUE;
-}
 
-// -----------------------------------------------------------------
-update_status ModuleLoadGeometry::Update(float dt)
-{
-	return UPDATE_CONTINUE;
-}
+	const aiScene* scene = aiImportFile(file_path, aiProcessPreset_TargetRealtime_MaxQuality);
+	if (scene != nullptr && scene->HasMeshes())
+	{
+		for (int i = 0; i < scene->mNumMeshes; i++)
+		{
+			aiMesh* mesh = scene->mMeshes[i];
+			ourMesh.num_vertex = mesh->mNumVertices;
+			ourMesh.vertex = new float[mesh->mNumVertices * 3];
+			memcpy(ourMesh.vertex, mesh->mVertices, sizeof(float) * mesh->mNumVertices * 3);
+			LOGCE("New mesh with %d vertices", mesh->mNumVertices);
 
-// -----------------------------------------------------------------
-update_status ModuleLoadGeometry::PostUpdate(float dt)
-{
-	return UPDATE_CONTINUE;
-}
-
-// -----------------------------------------------------------------
-bool ModuleLoadGeometry::CleanUp()
-{
-	App->editor->AddLog("Unloading geometry\n");
-
-	return true;
+			if (mesh->HasFaces())
+			{
+				ourMesh.num_index = mesh->mNumFaces * 3;
+				ourMesh.index = new uint[ourMesh.num_index];
+				for (uint i = 0; i < mesh->mNumFaces; ++i)
+				{
+					aiFace& face = mesh->mFaces[i];
+					if (mesh->mFaces[i].mNumIndices != 3)
+					{
+						LOGCE("WARNING, geometry face with != 3 indices!");
+					}
+					else
+						memcpy(&ourMesh.index[i * 3], face.mIndices, 3 * sizeof(uint));
+				}
+			}
+		}
+		aiReleaseImport(scene);
+	}
+	else
+	LOGCE("Error loading scene % s", file_path);
 }
