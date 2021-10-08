@@ -9,7 +9,7 @@
 #pragma comment (lib, "Assimp/x86-Release/assimp-vc142-mt.lib")
 
 
-LoadGeometry::LoadGeometry(Application* app, bool start_enabled)
+LoadGeometry::LoadGeometry()
 {}
 
 LoadGeometry::~LoadGeometry()

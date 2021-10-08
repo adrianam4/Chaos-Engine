@@ -31,7 +31,7 @@ private:
 	bool borderless = false;
 	bool dekstop = false;
 	bool wireframe;
-	Plane* plane;
+	//Plane* plane;
 	MyCube* cube;
 	MyPyramid* pyramid;
 	MyCylinder* cylinder;

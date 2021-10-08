@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
+#include "ModuleLoadGeometry.h"
 
 #define MAX_LIGHTS 8
 
@@ -18,7 +19,7 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-
+	void Draw();
 public:
 
 	Light lights[MAX_LIGHTS];
@@ -26,5 +27,8 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
-	//std::vector<float> vertices;
+	LoadGeometry mesh;
+	uint VAO;
+	uint bufferIndices;
+	uint bufferVertex;
 };

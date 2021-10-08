@@ -25,8 +25,8 @@ bool ModuleEditor::Start()
 	App->editor->AddLog("Loading Editor Assets\n");
 	bool ret = true;
 
-	plane = new Plane(0, 0, 0, 0);
-	plane->axis = true;
+	//plane = new Plane(0, 0, 0, 0);
+	//plane->axis = true;
 	cube = new MyCube(-5, 0, 0, 1, 1, 1);
 	pyramid = new MyPyramid(5, 0, 0, 1, 1, 1);
 	cylinder = new MyCylinder();
@@ -47,7 +47,7 @@ bool ModuleEditor::CleanUp()
 	App->editor->AddLog("Unloading Editor scene\n");
 	consoleBuffer.clear();
 
-	delete plane;
+	//delete plane;
 	delete cube;
 	delete pyramid;
 	delete cylinder;
@@ -523,7 +523,7 @@ update_status ModuleEditor::Update(float dt)
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
-	plane->Render();
+	//plane->Render();
 
 	cube->DrawCube();
 
@@ -531,7 +531,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	//cylinder->DrawCylinder();
 
-	sphere->DrawSphere();
+	//sphere->DrawSphere();
 
 	return UPDATE_CONTINUE;
 }

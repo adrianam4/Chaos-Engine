@@ -2,6 +2,8 @@
 #include "Module.h"
 #include "Globals.h"
 
+#include "MathGeoLib/src/MathGeoLib.h"
+
 class Mesh
 {
 public:
@@ -17,10 +19,10 @@ public:
 class LoadGeometry
 {
 public:
-	LoadGeometry(Application* app, bool start_enabled = true);
+	LoadGeometry();
 	~LoadGeometry();
 	void LoadFile(const char* file_path);
 
-private:
+public:
 	Mesh ourMesh;
 };

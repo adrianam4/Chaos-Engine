@@ -137,6 +137,23 @@ bool ModuleRenderer3D::Init()
 
 		lights[0].Active(true);
 
+		mesh.LoadFile("Assets/lowpolytree.fbx");
+
+		glGenVertexArrays(1, &VAO);
+		glBindVertexArray(VAO);
+
+		glGenBuffers(1, &bufferVertex);
+		glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
+		glBufferData(GL_ARRAY_BUFFER, 3 * mesh.ourMesh.num_vertex * sizeof(float), mesh.ourMesh.vertex, GL_STATIC_DRAW);
+
+		glGenBuffers(1, &bufferIndices);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.ourMesh.num_index * sizeof(mesh.ourMesh.index), mesh.ourMesh.index, GL_STATIC_DRAW);
+
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+
+		glEnableVertexAttribArray(0);
+
 	}
 
 	// Projection matrix for
@@ -255,133 +272,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	// Rendering
 	ImGui::Render();
-	/*glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-	glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
-	glClear(GL_COLOR_BUFFER_BIT);*/
-	//glUseProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-	
 
-	
-	//----------Direct Mode--------------------------------------------------------------------------------------------------------------
-	
-	/*const GLfloat v0[] = {-1, -1, 0};
-	const GLfloat v1[] = { 1, -1, 0 };
-	const GLfloat v2[] = { 1, 1, 0 };
-	const GLfloat v3[] = { -1, 1, 0 };
-	
-	const GLfloat v4[] = { -1, -1, -2 };
-	const GLfloat v5[] = { 1, -1, -2 };
-	const GLfloat v6[] = { 1, 1, -2 };
-	const GLfloat v7[] = { -1, 1, -2 };
-	glBegin(GL_TRIANGLES);
-	//FRONT
-	glVertex3fv(v0);
-	glVertex3fv(v1);
-	glVertex3fv(v2);
-
-	glVertex3fv(v0);
-	glVertex3fv(v2);
-	glVertex3fv(v3);
-
-	//BACK
-	glVertex3fv(v6);
-	glVertex3fv(v5);
-	glVertex3fv(v4);
-
-	glVertex3fv(v7);
-	glVertex3fv(v6);
-	glVertex3fv(v4);
-
-	//RIGHT
-	glVertex3fv(v1);
-	glVertex3fv(v5);
-	glVertex3fv(v6);
-
-	glVertex3fv(v1);
-	glVertex3fv(v6);
-	glVertex3fv(v2);
-
-	//LEFT
-	glVertex3fv(v4);
-	glVertex3fv(v0);
-	glVertex3fv(v3);
-
-	glVertex3fv(v4);
-	glVertex3fv(v3);
-	glVertex3fv(v7);
-
-	//TOP
-	glVertex3fv(v3);
-	glVertex3fv(v2);
-	glVertex3fv(v6);
-
-	glVertex3fv(v3);
-	glVertex3fv(v6);
-	glVertex3fv(v7);
-
-	//DOWN
-	glVertex3fv(v5);
-	glVertex3fv(v1);
-	glVertex3fv(v0);
-
-	glVertex3fv(v4);
-	glVertex3fv(v5);
-	glVertex3fv(v0);
-
-	glEnd();*/
-
-	//----------Array Mode--------------------------------------------------------------------------------------------------------------
-	/*static float vertices[] =
-	{ -1, -1, 0,
-	  1, -1, 0,
-	  1, 1, 0,
-	  -1, -1, 0,
-	  1, 1, 0 ,
-	  -1, 1, 0 ,
-	  1, 1, -2 ,
-	  1, -1, -2 ,
-	   -1, -1, -2,
-	   -1, 1, -2,
-	   1, 1, -2,
-		-1, -1, -2,
-		1, -1, 0,
-		1, -1, -2,
-		1, 1, -2,
-		1, -1, 0,
-		1, 1, -2,
-		1, 1, 0,
-		-1, -1, -2,
-		-1, -1, 0,
-		-1, 1, 0,
-		-1, -1, -2,
-		-1, 1, 0,
-		-1, 1, -2,
-		 -1, 1, 0,
-		1, 1, 0,
-		 1, 1, -2,
-		-1, 1, 0,
-		1, 1, -2,
-		-1, 1, -2,
-		1, -1, -2,
-		1, -1, 0,
-		-1, -1, 0,
-		-1, -1, -2,
-		1, -1, -2,
-		-1, -1, 0
-	};
-
-	static int num_vertices = 36;
-	static uint my_id = 0;
-
-	glGenBuffers(1, (GLuint*)&(my_id));
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * num_vertices * 3, vertices, GL_STATIC_DRAW);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-	glBindBuffer(GL_ARRAY_BUFFER, my_id);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glDrawArrays(GL_TRIANGLES, 0, num_vertices);
-	glDisableClientState(GL_VERTEX_ARRAY);*/
+	Draw();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -419,4 +311,11 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+void ModuleRenderer3D::Draw()
+{
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, mesh.ourMesh.num_index, GL_UNSIGNED_INT, NULL);
+	glBindVertexArray(0);
 }
