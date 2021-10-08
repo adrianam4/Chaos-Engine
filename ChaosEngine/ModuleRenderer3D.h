@@ -20,7 +20,9 @@ public:
 
 	void OnResize(int width, int height);
 	void DrawMesh(LoadGeometry *geometryMesh, uint *VAO);
+	void DrawMesh(LoadGeometry *geometryMesh);
 	void InitMesh(LoadGeometry *geometryMesh, const char* path, uint *VAO ,uint *bufferIndices, uint *bufferVertex);
+	void InitMesh(const char* path);
 public:
 
 	Light lights[MAX_LIGHTS];
@@ -30,6 +32,11 @@ public:
 
 	LoadGeometry *mesh;
 	LoadGeometry *mesh2;
+
+	LoadGeometry *meshDropped;
+	uint dVAO;
+	uint dbufferIndices;
+	uint dbufferVertex;
 
 	//Tree
 	uint VAO;

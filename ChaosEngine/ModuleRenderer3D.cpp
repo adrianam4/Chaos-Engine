@@ -139,6 +139,7 @@ bool ModuleRenderer3D::Init()
 
 		mesh = new LoadGeometry();
 		mesh2 = new LoadGeometry();
+		meshDropped = new LoadGeometry();
 		//mesh.LoadFile("Assets/lowpolytree.fbx");
 		InitMesh(mesh, "Assets/lowpolytree.fbx", &VAO, &bufferIndices, &bufferVertex);
 		InitMesh(mesh2, "Assets/cat.fbx", &VAO2, &bufferIndices2, &bufferVertex2);
@@ -262,8 +263,10 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	// Rendering
 	ImGui::Render();
 
-	DrawMesh(mesh, &VAO);
-	DrawMesh(mesh2, &VAO2);
+	//DrawMesh(mesh, &VAO);
+	//DrawMesh(mesh2, &VAO2);
+
+	DrawMesh(meshDropped);
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -312,6 +315,13 @@ void ModuleRenderer3D::DrawMesh(LoadGeometry *geometryMesh, uint *VAO)
 	glBindVertexArray(0);
 }
 
+void ModuleRenderer3D::DrawMesh(LoadGeometry* geometryMesh)
+{
+	glBindVertexArray(dVAO);
+	glDrawElements(GL_TRIANGLES, geometryMesh->ourMesh.num_index, GL_UNSIGNED_INT, NULL);
+	glBindVertexArray(0);
+}
+
 void ModuleRenderer3D::InitMesh(LoadGeometry *geometryMesh, const char* path,uint *VAO, uint *bufferIndices, uint *bufferVertex)
 {
 	geometryMesh->LoadFile(path);
@@ -326,6 +336,26 @@ void ModuleRenderer3D::InitMesh(LoadGeometry *geometryMesh, const char* path,uin
 	glGenBuffers(1, bufferIndices);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (uint)bufferIndices);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, geometryMesh->ourMesh.num_index * sizeof(geometryMesh->ourMesh.index), geometryMesh->ourMesh.index, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+
+	glEnableVertexAttribArray(0);
+}
+
+void ModuleRenderer3D::InitMesh(const char* path)
+{
+	meshDropped->LoadFile(path);
+
+	glGenVertexArrays(1, &dVAO);
+	glBindVertexArray(dVAO);
+
+	glGenBuffers(1, &dbufferVertex);
+	glBindBuffer(GL_ARRAY_BUFFER, dbufferVertex);
+	glBufferData(GL_ARRAY_BUFFER, 3 * meshDropped->ourMesh.num_vertex * sizeof(float), meshDropped->ourMesh.vertex, GL_STATIC_DRAW);
+
+	glGenBuffers(1, &dbufferIndices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dbufferIndices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshDropped->ourMesh.num_index * sizeof(meshDropped->ourMesh.index), meshDropped->ourMesh.index, GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
 

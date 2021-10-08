@@ -100,6 +100,14 @@ update_status ModuleInput::PreUpdate(float dt)
 			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
 			break;
 
+			case SDL_DROPFILE:
+			{
+				const char* fileDir = e.drop.file;
+				App->renderer3D->InitMesh(fileDir);
+				SDL_free(&fileDir);
+			}
+			break;
+
 			case SDL_QUIT:
 			quit = true;
 			break;
