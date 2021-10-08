@@ -3,6 +3,10 @@
 #include "Color.h"
 #include <vector>
 
+typedef unsigned int GLuint;
+typedef unsigned short GLushort;
+typedef float GLfloat;
+
 enum PrimitivesTypes
 {
 	PRIMITIVE_MYCUBE,
@@ -32,10 +36,10 @@ public:
 	~MyCube();
 	void DrawCube();
 private:
-	uint num_vertices;
-	uint num_indices;
-	uint my_indices;
-	uint bufferCube;
+	uint VAO;
+	uint bufferIndices;
+	uint bufferVertex;
+
 	std::vector<float> vertices;
 	std::vector<uint> indices;
 };
@@ -47,10 +51,10 @@ public:
 	~MyPyramid();
 	void DrawPyramid();
 private:
-	uint num_pyramid_vertices;
-	uint num_pyramid_indices;
-	uint my_pyramid_indices;
-	uint bufferPyramid;
+	uint VAO;
+	uint bufferIndices;
+	uint bufferVertex;
+
 	std::vector<float> vertices;
 	std::vector<uint> indices;
 };
@@ -59,7 +63,7 @@ class MyCylinder : public Primitives
 {
 public:
 	MyCylinder();
-	MyCylinder(float baseRadius, float topRadius, float height, int sectors, int stacks, bool smooth);
+	MyCylinder(float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth);
 	~MyCylinder();
 	std::vector<float> GetUnitCircleVertices();
 	void BuildVerticalSmooth();
@@ -80,19 +84,27 @@ private:
 	int sectors;
 	int stacks;
 	bool smooth;
+	int sectorCount;
+	float radius;
 
-	uint bufferCylinder;
+	uint VAO;
+	uint bufferIndices;
+	uint bufferVertex;
 };
-//// ============================================
-//class MySphere : public Primitives
-//{
-//public:
-//	MySphere();
-//};
-//
-//// ============================================
-//class MyCylinder : public Primitives
-//{
-//public:
-//	MyCylinder();
-//};
+
+class MySphere : public Primitives
+{
+protected:
+	std::vector<GLushort> indices;
+	std::vector<GLfloat> normals;
+	std::vector<GLfloat> texCoords;
+	std::vector<GLfloat> vertices;
+public:
+	MySphere(float radius, uint rings, uint sectors);
+	~MySphere();
+	void DrawSphere();
+private:
+	uint VAO;
+	uint bufferIndices;
+	uint bufferVertex;
+};

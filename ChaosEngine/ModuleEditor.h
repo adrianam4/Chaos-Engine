@@ -35,6 +35,7 @@ private:
 	MyCube* cube;
 	MyPyramid* pyramid;
 	MyCylinder* cylinder;
+	MySphere* sphere;
 public:
 	ImGuiTextBuffer consoleBuffer;
 	bool scrollToBottom;

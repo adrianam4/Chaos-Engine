@@ -37,13 +37,20 @@ MyCube::MyCube(float x, float y, float z, float X, float Y, float Z) : Primitive
 	indices.push_back(3); indices.push_back(2); indices.push_back(6); indices.push_back(3); indices.push_back(6); indices.push_back(7);
 	indices.push_back(5); indices.push_back(1); indices.push_back(0); indices.push_back(4); indices.push_back(5); indices.push_back(0);
 
-	my_indices = 0;
-	num_indices = 36;
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
 
-	glGenBuffers(1, &bufferCube);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferCube);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * num_indices, indices.data(), GL_STATIC_DRAW);
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+	glGenBuffers(1, &bufferVertex);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &bufferIndices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices), indices.data(), GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+
+	glEnableVertexAttribArray(0);
 }
 
 MyCube::~MyCube()
@@ -54,12 +61,9 @@ MyCube::~MyCube()
 
 void MyCube::DrawCube()
 {
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferCube);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glDrawElements(GL_TRIANGLES, num_indices, GL_UNSIGNED_INT, NULL);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+	glBindVertexArray(0);
 }
 
 
@@ -67,10 +71,6 @@ void MyCube::DrawCube()
 MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYPYRAMID;
-
-	my_pyramid_indices = 0;
-	num_pyramid_vertices = 15;
-	num_pyramid_indices = 18;
 
 	vertices.push_back((-1 + x) * X); vertices.push_back((0 + y) * Y); vertices.push_back((-1 + z) * Z);
 	vertices.push_back((1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((-1 + z) * Z);
@@ -85,10 +85,20 @@ MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Pri
 	indices.push_back(0); indices.push_back(1); indices.push_back(3);
 	indices.push_back(0); indices.push_back(3); indices.push_back(4);
 
-	glGenBuffers(1, &bufferPyramid);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferPyramid);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * num_pyramid_indices, indices.data(), GL_STATIC_DRAW);
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &bufferVertex);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &bufferIndices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices), indices.data(), GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+
+	glEnableVertexAttribArray(0);
 }
 
 MyPyramid::~MyPyramid()
@@ -99,34 +109,40 @@ MyPyramid::~MyPyramid()
  
 void MyPyramid::DrawPyramid() 
 {
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferPyramid);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glDrawElements(GL_TRIANGLES, num_pyramid_indices, GL_UNSIGNED_INT, NULL);
-	glDisableClientState(GL_VERTEX_ARRAY);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+	glBindVertexArray(0);
 }
 
 MyCylinder::MyCylinder() : Primitives()
 {
+	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
+
 	baseRadius = 2.0f;
 	topRadius = 2.0f;
 	height = 5.0f;
 	sectors = 16;
+	sectorCount = 16;
 	stacks = 5;
+	radius = topRadius;
+
 	smooth = true;
 
 	Initialize();
 }
 
-MyCylinder::MyCylinder(float baseRadius, float topRadius, float height, int sectors, int stacks, bool smooth) : Primitives()
+MyCylinder::MyCylinder(float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth) : Primitives()
 {
+	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
+
 	this->baseRadius = baseRadius;
 	this->topRadius = topRadius;
 	this->height = height;
 	this->sectors = sectors;
+	this->sectorCount = sectorCounts;
 	this->stacks = stacks;
 	this->smooth = smooth;
+	this->radius = this->topRadius;
 
 	Initialize();
 }
@@ -144,7 +160,6 @@ MyCylinder::~MyCylinder()
 std::vector<float> MyCylinder::GetUnitCircleVertices()
 {
 	const float pi = 3.1415926f;
-	float sectorCount = 16.0f;
 	float sectorStep = 2 * pi / sectorCount;
 	float sectorAngle;
 
@@ -292,35 +307,102 @@ void MyCylinder::BuildVerticalSmooth()
 
 void MyCylinder::DrawCylinder()
 {
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-	glNormalPointer(GL_FLOAT, 0, normals.data());
-	glTexCoordPointer(3, GL_FLOAT, 0, texCoords.data());
-
-	glBindBuffer(GL_VERTEX_ARRAY, bufferCylinder);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	glDrawElements(GL_TRIANGLES, (unsigned int)indices.size(), GL_UNSIGNED_INT, NULL);
-
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+	glBindVertexArray(0);
 }
 
 void MyCylinder::Initialize()
 {
-	glGenBuffers(1, &bufferCylinder);
-	glBindBuffer(GL_VERTEX_ARRAY, bufferCylinder);
 	BuildVerticalSmooth();
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices[0]), indices.data(), GL_STATIC_DRAW);
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-	glNormalPointer(GL_FLOAT, 0, normals.data());
-	glTexCoordPointer(3, GL_FLOAT, 0, texCoords.data());
+
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &bufferVertex);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &bufferIndices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint), indices.data(), GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
+	glEnableVertexAttribArray(0);
 }
- 
-//// SPHERE ============================================
-//MySphere::MySphere() : Primitives()
-//{
-//	type = PrimitivesTypes::PRIMITIVE_MYSPHERE;
-//}
+
+MySphere::MySphere(float radius, uint rings, uint sectors) : Primitives()
+{
+	type = PrimitivesTypes::PRIMITIVE_MYSPHERE;
+
+	float const R = 1. / (float)(rings - 1);
+	float const S = 1. / (float)(sectors - 1);
+	int r, s;
+
+	vertices.resize(rings * sectors * 3);
+	normals.resize(rings * sectors * 3);
+	texCoords.resize(rings * sectors * 3);
+
+	std::vector<GLfloat>::iterator v = vertices.begin();
+	std::vector<GLfloat>::iterator n = normals.begin();
+	std::vector<GLfloat>::iterator t = texCoords.begin();
+	for (r = 0; r < rings; r++)
+	{
+		for (s = 0; s < sectors; s++)
+		{
+			float const y = sin(-M_PI_2 + M_PI * r * R);
+			float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
+			float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
+
+			*t++ = s * S;
+			*t++ = r * R;
+
+			*v++ = x * radius;
+			*v++ = y * radius;
+			*v++ = z * radius;
+
+			*n++ = x;
+			*n++ = y;
+			*n++ = z;
+		}
+	}
+
+	indices.resize(rings * sectors * 4);
+	std::vector<GLushort>::iterator i = indices.begin();
+	for (r = 0; r < rings; r++)
+	{
+		for (s = 0; s < sectors; s++)
+		{
+			*i++ = r * sectors + s;
+			*i++ = r * sectors + (s + 1);
+			*i++ = (r + 1) * sectors + (s + 1);
+			*i++ = (r + 1) * sectors + s;
+		}
+	}
+
+	glGenVertexArrays(1, &VAO);
+	glBindVertexArray(VAO);
+
+	glGenBuffers(1, &bufferVertex);
+	glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &bufferIndices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), indices.data(), GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, 0);
+	glEnableVertexAttribArray(0);
+}
+
+MySphere::~MySphere()
+{
+
+}
+
+void MySphere::DrawSphere()
+{
+	glBindVertexArray(VAO);
+	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, NULL);
+	glBindVertexArray(0);
+}
