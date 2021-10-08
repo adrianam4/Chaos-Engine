@@ -38,13 +38,12 @@ void LoadGeometry::LoadFile(const char* file_path)
 				ourMesh.index = new uint[ourMesh.num_index];
 				for (uint i = 0; i < mesh->mNumFaces; ++i)
 				{
-					aiFace& face = mesh->mFaces[i];
 					if (mesh->mFaces[i].mNumIndices != 3)
 					{
 						LOGCE("WARNING, geometry face with != 3 indices!");
 					}
 					else
-						memcpy(&ourMesh.index[i * 3], face.mIndices, 3 * sizeof(uint));
+						memcpy(&ourMesh.index[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
 				}
 			}
 		}

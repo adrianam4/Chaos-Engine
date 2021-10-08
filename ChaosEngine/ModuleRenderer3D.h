@@ -19,7 +19,8 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-	void Draw();
+	void DrawMesh(LoadGeometry *geometryMesh, uint *VAO);
+	void InitMesh(LoadGeometry *geometryMesh, const char* path, uint *VAO ,uint *bufferIndices, uint *bufferVertex);
 public:
 
 	Light lights[MAX_LIGHTS];
@@ -27,8 +28,16 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
-	LoadGeometry mesh;
+	LoadGeometry *mesh;
+	LoadGeometry *mesh2;
+
+	//Tree
 	uint VAO;
 	uint bufferIndices;
 	uint bufferVertex;
+
+	//Cat
+	uint VAO2;
+	uint bufferIndices2;
+	uint bufferVertex2;
 };

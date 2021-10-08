@@ -137,22 +137,11 @@ bool ModuleRenderer3D::Init()
 
 		lights[0].Active(true);
 
-		mesh.LoadFile("Assets/lowpolytree.fbx");
-
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
-
-		glGenBuffers(1, &bufferVertex);
-		glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
-		glBufferData(GL_ARRAY_BUFFER, 3 * mesh.ourMesh.num_vertex * sizeof(float), mesh.ourMesh.vertex, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &bufferIndices);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.ourMesh.num_index * sizeof(mesh.ourMesh.index), mesh.ourMesh.index, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
-
-		glEnableVertexAttribArray(0);
+		mesh = new LoadGeometry();
+		mesh2 = new LoadGeometry();
+		//mesh.LoadFile("Assets/lowpolytree.fbx");
+		InitMesh(mesh, "Assets/lowpolytree.fbx", &VAO, &bufferIndices, &bufferVertex);
+		InitMesh(mesh2, "Assets/cat.fbx", &VAO2, &bufferIndices2, &bufferVertex2);
 
 	}
 
@@ -273,7 +262,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	// Rendering
 	ImGui::Render();
 
-	Draw();
+	DrawMesh(mesh, &VAO);
+	DrawMesh(mesh2, &VAO2);
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -287,6 +277,8 @@ bool ModuleRenderer3D::CleanUp()
 {
 	App->editor->AddLog("Destroying 3D Renderer\n");
 
+	delete[] mesh;
+	delete[] mesh2;
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -313,9 +305,29 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::Draw()
+void ModuleRenderer3D::DrawMesh(LoadGeometry *geometryMesh, uint *VAO)
 {
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, mesh.ourMesh.num_index, GL_UNSIGNED_INT, NULL);
+	glBindVertexArray(*VAO);
+	glDrawElements(GL_TRIANGLES, geometryMesh->ourMesh.num_index, GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
+}
+
+void ModuleRenderer3D::InitMesh(LoadGeometry *geometryMesh, const char* path,uint *VAO, uint *bufferIndices, uint *bufferVertex)
+{
+	geometryMesh->LoadFile(path);
+
+	glGenVertexArrays(1, VAO);
+	glBindVertexArray(*VAO);
+
+	glGenBuffers(1, bufferVertex);
+	glBindBuffer(GL_ARRAY_BUFFER, (uint)bufferVertex);
+	glBufferData(GL_ARRAY_BUFFER, 3 * geometryMesh->ourMesh.num_vertex * sizeof(float), geometryMesh->ourMesh.vertex, GL_STATIC_DRAW);
+
+	glGenBuffers(1, bufferIndices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (uint)bufferIndices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, geometryMesh->ourMesh.num_index * sizeof(geometryMesh->ourMesh.index), geometryMesh->ourMesh.index, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+
+	glEnableVertexAttribArray(0);
 }
