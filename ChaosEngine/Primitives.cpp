@@ -44,16 +44,9 @@ MyCube::MyCube(float x, float y, float z, float X, float Y, float Z) : Primitive
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	glGenBuffers(1, &bufferVertex);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &bufferIndices);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices), indices.data(), GL_STATIC_DRAW);
+	cubeBuffers = new CreateBuffers(vertices, indices);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
-
 	glEnableVertexAttribArray(0);
 }
 
@@ -99,16 +92,9 @@ MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Pri
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	glGenBuffers(1, &bufferVertex);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &bufferIndices);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices), indices.data(), GL_STATIC_DRAW);
+	pyramidBuffers = new CreateBuffers(vertices, indices);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
-
 	glEnableVertexAttribArray(0);
 }
 
@@ -340,13 +326,7 @@ void MyCylinder::Initialize()
 	glGenVertexArrays(1, &VAO);
 	glBindVertexArray(VAO);
 
-	glGenBuffers(1, &bufferVertex);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &bufferIndices);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(uint), indices.data(), GL_STATIC_DRAW);
+	cylinderBuffer = new CreateBuffers(vertices, indices);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
 	glEnableVertexAttribArray(0);

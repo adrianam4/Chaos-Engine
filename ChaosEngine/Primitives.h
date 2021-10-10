@@ -3,6 +3,8 @@
 #include "Color.h"
 #include <vector>
 
+#include "CreateBuffers.h"
+
 typedef unsigned int GLuint;
 typedef unsigned short GLushort;
 typedef float GLfloat;
@@ -24,6 +26,7 @@ public:
 
 protected:
 	PrimitivesTypes type;
+	uint VAO;
 };
 
 
@@ -36,9 +39,7 @@ public:
 	~MyCube();
 	void DrawCube();
 private:
-	uint VAO;
-	uint bufferIndices;
-	uint bufferVertex;
+	CreateBuffers* cubeBuffers;
 
 	std::vector<float> vertices;
 	std::vector<uint> indices;
@@ -51,9 +52,7 @@ public:
 	~MyPyramid();
 	void DrawPyramid();
 private:
-	uint VAO;
-	uint bufferIndices;
-	uint bufferVertex;
+	CreateBuffers* pyramidBuffers;
 
 	std::vector<float> vertices;
 	std::vector<uint> indices;
@@ -87,9 +86,7 @@ private:
 	int sectorCount;
 	float radius;
 
-	uint VAO;
-	uint bufferIndices;
-	uint bufferVertex;
+	CreateBuffers* cylinderBuffer;
 };
 
 class MySphere : public Primitives

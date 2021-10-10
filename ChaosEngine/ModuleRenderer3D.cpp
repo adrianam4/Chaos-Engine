@@ -263,8 +263,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	// Rendering
 	ImGui::Render();
 
-	//DrawMesh(mesh, &VAO);
-	//DrawMesh(mesh2, &VAO2);
+	DrawMesh(mesh, &VAO);
+	DrawMesh(mesh2, &VAO2);
 
 	DrawMesh(meshDropped);
 

@@ -99,6 +99,9 @@
     <ClInclude Include="ModuleLoadGeometry.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="CreateBuffers.h">
+      <Filter>Sources\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="ModuleLoadGeometry.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateBuffers.cpp">
+      <Filter>Sources\Helpers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
