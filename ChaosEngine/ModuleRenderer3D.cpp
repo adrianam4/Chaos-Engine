@@ -310,6 +310,11 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::DrawMesh(LoadGeometry *geometryMesh, uint *VAO)
 {
+	if (App->editor->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	glBindVertexArray(*VAO);
 	glDrawElements(GL_TRIANGLES, geometryMesh->ourMesh.num_index, GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
@@ -317,6 +322,11 @@ void ModuleRenderer3D::DrawMesh(LoadGeometry *geometryMesh, uint *VAO)
 
 void ModuleRenderer3D::DrawMesh(LoadGeometry* geometryMesh)
 {
+	if (App->editor->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	glBindVertexArray(dVAO);
 	glDrawElements(GL_TRIANGLES, geometryMesh->ourMesh.num_index, GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);

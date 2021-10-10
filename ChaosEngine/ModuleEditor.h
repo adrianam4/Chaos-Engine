@@ -30,7 +30,6 @@ private:
 	bool resizable = true;
 	bool borderless = false;
 	bool dekstop = false;
-	bool wireframe;
 	MyPlane* plane;
 	MyCube* cube;
 	MyPyramid* pyramid;
@@ -38,5 +37,6 @@ private:
 	MySphere* sphere;
 public:
 	ImGuiTextBuffer consoleBuffer;
+	bool wireframe;
 	bool scrollToBottom;
 };

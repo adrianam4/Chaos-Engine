@@ -1,8 +1,12 @@
 #include "Globals.h"
+#include "Application.h"
+#include "ModuleEditor.h"
+#include "Primitives.h"
+
 #include "GL/glew.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
-#include "Primitives.h"
+
 
 // ------------------------------------------------------------
 Primitives::Primitives()
@@ -61,6 +65,13 @@ MyCube::~MyCube()
 
 void MyCube::DrawCube()
 {
+	glLineWidth(5.0f);
+
+	if (App->editor->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
@@ -109,6 +120,11 @@ MyPyramid::~MyPyramid()
  
 void MyPyramid::DrawPyramid() 
 {
+	if (App->editor->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
@@ -307,6 +323,11 @@ void MyCylinder::BuildVerticalSmooth()
 
 void MyCylinder::DrawCylinder()
 {
+	if (App->editor->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
@@ -402,6 +423,11 @@ MySphere::~MySphere()
 
 void MySphere::DrawSphere()
 {
+	if (App->editor->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	glBindVertexArray(VAO);
 	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, NULL);
 	glBindVertexArray(0);
