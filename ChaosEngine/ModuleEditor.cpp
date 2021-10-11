@@ -529,7 +529,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	pyramid->DrawPyramid();
 
-	//cylinder->DrawCylinder();
+	cylinder->DrawCylinder();
 
 	//sphere->DrawSphere();
 

@@ -10,13 +10,13 @@ int close_sdl_rwops(SDL_RWops *rw);
 
 struct aiFileIO;
 //#include ""Bass/include/bass.h""
-//struct BASS_FILEPROCS;
+struct BASS_FILEPROCS;
 
 class ModuleFileSystem : public Module
 {
 public:
 
-	ModuleFileSystem(const char* game_path = nullptr);
+	ModuleFileSystem(const char* game_path, Application* app, bool start_enabled);
 
 	// Destructor
 	~ModuleFileSystem();
