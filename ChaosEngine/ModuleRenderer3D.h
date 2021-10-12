@@ -3,7 +3,10 @@
 #include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
-#include "ModuleLoadGeometry.h"
+#include "Mesh.h"
+#include "Model.h"
+
+#include <vector>
 
 #define MAX_LIGHTS 8
 
@@ -19,10 +22,8 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-	void DrawMesh(LoadGeometry *geometryMesh, uint *VAO);
-	void DrawMesh(LoadGeometry *geometryMesh);
-	void InitMesh(LoadGeometry *geometryMesh, const char* path, uint *VAO ,uint *bufferIndices, uint *bufferVertex);
-	void InitMesh(const char* path);
+	void InitMesh(char* path);
+	void DrawMeshes();
 public:
 
 	Light lights[MAX_LIGHTS];
@@ -30,21 +31,5 @@ public:
 	mat3x3 NormalMatrix;
 	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
 
-	LoadGeometry *mesh;
-	LoadGeometry *mesh2;
-
-	LoadGeometry *meshDropped;
-	uint dVAO;
-	uint dbufferIndices;
-	uint dbufferVertex;
-
-	//Tree
-	uint VAO;
-	uint bufferIndices;
-	uint bufferVertex;
-
-	//Cat
-	uint VAO2;
-	uint bufferIndices2;
-	uint bufferVertex2;
+	std::vector<Model> models;
 };

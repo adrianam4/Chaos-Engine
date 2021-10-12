@@ -102,7 +102,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_DROPFILE:
 			{
-				const char* fileDir = e.drop.file;
+				char* fileDir = e.drop.file;
 				App->renderer3D->InitMesh(fileDir);
 				SDL_free(&fileDir);
 			}

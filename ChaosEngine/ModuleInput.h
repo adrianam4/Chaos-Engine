@@ -1,6 +1,8 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "Mesh.h"
+#include "Model.h"
 
 #define MAX_MOUSE_BUTTONS 5
 

@@ -138,12 +138,8 @@ bool ModuleRenderer3D::Init()
 
 		lights[0].Active(true);
 
-		mesh = new LoadGeometry();
-		mesh2 = new LoadGeometry();
-		meshDropped = new LoadGeometry();
-		//mesh.LoadFile("Assets/lowpolytree.fbx");
-		InitMesh(mesh, "Assets/lowpolytree.fbx", &VAO, &bufferIndices, &bufferVertex);
-		InitMesh(mesh2, "Assets/cat.fbx", &VAO2, &bufferIndices2, &bufferVertex2);
+		InitMesh("Assets/lowpolytree.fbx");
+		InitMesh("Assets/cat.fbx");
 
 	}
 
@@ -264,10 +260,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	// Rendering
 	ImGui::Render();
 
-	DrawMesh(mesh, &VAO);
-	DrawMesh(mesh2, &VAO2);
-
-	DrawMesh(meshDropped);
+	DrawMeshes();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -281,8 +274,6 @@ bool ModuleRenderer3D::CleanUp()
 {
 	App->editor->AddLog("Destroying 3D Renderer\n");
 
-	delete[] mesh;
-	delete[] mesh2;
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
@@ -309,110 +300,15 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::DrawMesh(LoadGeometry *geometryMesh, uint *VAO)
+void ModuleRenderer3D::DrawMeshes()
 {
-	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-
-	if (App->editor->wireframe)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	glBindVertexArray(*VAO);
-	glDrawElements(GL_TRIANGLES, geometryMesh->ourMesh.num_index, GL_UNSIGNED_INT, NULL);
-	glBindVertexArray(0);
-
-	glBegin(GL_LINES);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-	for (int i = 0; i < geometryMesh->ourMesh.num_vertex; i += 9)
+	for (int i = 0; i < models.size(); ++i)
 	{
-		float3 vertex1(geometryMesh->ourMesh.vertex[i],geometryMesh->ourMesh.vertex[i + 1],geometryMesh->ourMesh.vertex[i + 2]);
-		float3 vertex2(geometryMesh->ourMesh.vertex[i + 3],geometryMesh->ourMesh.vertex[i + 4],geometryMesh->ourMesh.vertex[i + 5]);
-		float3 vertex3(geometryMesh->ourMesh.vertex[i + 6],geometryMesh->ourMesh.vertex[i + 7],geometryMesh->ourMesh.vertex[i + 8]);
-		float3 avgVertex((vertex1.x + vertex2.x + vertex3.x) / 3,(vertex1.y + vertex2.y + vertex3.y) / 3 ,(vertex1.z + vertex2.z + vertex3.z) / 3);
-
-		float3 line = -(vertex1 - vertex2);
-		float3 line2 = vertex2 - vertex3;
-
-		float3 normal = math::Cross(line, line2);
-		normal.Normalize();
-
-		glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
-		glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
+		models[i].Draw();
 	}
-	glEnd();
 }
 
-void ModuleRenderer3D::DrawMesh(LoadGeometry* geometryMesh)
+void ModuleRenderer3D::InitMesh(char* path)
 {
-	if (App->editor->wireframe)
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	else
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-	glBindVertexArray(dVAO);
-	glDrawElements(GL_TRIANGLES, geometryMesh->ourMesh.num_index, GL_UNSIGNED_INT, NULL);
-	glBindVertexArray(0);
-
-	glBegin(GL_LINES);
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-	for (int i = 0; i < geometryMesh->ourMesh.num_vertex; i += 9)
-	{
-		float3 vertex1 = { geometryMesh->ourMesh.vertex[i],geometryMesh->ourMesh.vertex[i + 1],geometryMesh->ourMesh.vertex[i + 2] };
-		float3 vertex2 = { geometryMesh->ourMesh.vertex[i + 3],geometryMesh->ourMesh.vertex[i + 4],geometryMesh->ourMesh.vertex[i + 5] };
-		float3 vertex3 = { geometryMesh->ourMesh.vertex[i + 6],geometryMesh->ourMesh.vertex[i + 7],geometryMesh->ourMesh.vertex[i + 8] };
-		float3 avgVertex = { (vertex1.x + vertex2.x + vertex3.x) / 3,(vertex1.y + vertex2.y + vertex3.y) / 3 ,(vertex1.z + vertex2.z + vertex3.z) / 3 };
-
-		float3 line = -(vertex1 - vertex2);
-		float3 line2 = vertex2 - vertex3;
-
-		float3 normal = math::Cross(line, line2);
-		normal.Normalize();
-
-		glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
-		glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
-	}
-	glEnd();
-}
-
-void ModuleRenderer3D::InitMesh(LoadGeometry *geometryMesh, const char* path,uint *VAO, uint *bufferIndices, uint *bufferVertex)
-{
-	geometryMesh->LoadFile(path);
-
-	glGenVertexArrays(1, VAO);
-	glBindVertexArray(*VAO);
-
-	glGenBuffers(1, bufferVertex);
-	glBindBuffer(GL_ARRAY_BUFFER, (uint)bufferVertex);
-	glBufferData(GL_ARRAY_BUFFER, 3 * geometryMesh->ourMesh.num_vertex * sizeof(float), geometryMesh->ourMesh.vertex, GL_STATIC_DRAW);
-
-	glGenBuffers(1, bufferIndices);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, (uint)bufferIndices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, geometryMesh->ourMesh.num_index * sizeof(geometryMesh->ourMesh.index), geometryMesh->ourMesh.index, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
-
-	glEnableVertexAttribArray(0);
-}
-
-void ModuleRenderer3D::InitMesh(const char* path)
-{
-	meshDropped->LoadFile(path);
-
-	glGenVertexArrays(1, &dVAO);
-	glBindVertexArray(dVAO);
-
-	glGenBuffers(1, &dbufferVertex);
-	glBindBuffer(GL_ARRAY_BUFFER, dbufferVertex);
-	glBufferData(GL_ARRAY_BUFFER, 3 * meshDropped->ourMesh.num_vertex * sizeof(float), meshDropped->ourMesh.vertex, GL_STATIC_DRAW);
-
-	glGenBuffers(1, &dbufferIndices);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, dbufferIndices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, meshDropped->ourMesh.num_index * sizeof(meshDropped->ourMesh.index), meshDropped->ourMesh.index, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
-
-	glEnableVertexAttribArray(0);
+	models.push_back(Model(path));
 }

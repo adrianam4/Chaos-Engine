@@ -22,6 +22,9 @@
     <Filter Include="Sources\Parson">
       <UniqueIdentifier>{b4188890-79cf-43f8-87f0-8db8d5e52776}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\FBX">
+      <UniqueIdentifier>{9e5df199-9dca-41a8-a6c8-44459c16bae6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -96,14 +99,17 @@
     <ClInclude Include="Primitives.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleLoadGeometry.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="CreateBuffers.h">
       <Filter>Sources\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Sources\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Sources\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Sources\FBX</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -173,14 +179,17 @@
     <ClCompile Include="Primitives.cpp">
       <Filter>Sources\Modules</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleLoadGeometry.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="CreateBuffers.cpp">
       <Filter>Sources\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Sources\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Sources\FBX</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
