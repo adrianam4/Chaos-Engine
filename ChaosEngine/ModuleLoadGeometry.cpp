@@ -31,7 +31,6 @@ void LoadGeometry::LoadFile(const char* file_path)
 			ourMesh.vertex = new float[mesh->mNumVertices * 3];
 			memcpy(ourMesh.vertex, mesh->mVertices, sizeof(float) * mesh->mNumVertices * 3);
 			LOGCE("New mesh with %d vertices", mesh->mNumVertices);
-
 			if (mesh->HasFaces())
 			{
 				ourMesh.num_index = mesh->mNumFaces * 3;

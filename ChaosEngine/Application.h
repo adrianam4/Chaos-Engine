@@ -32,6 +32,8 @@ private:
 	Timer	ms_timer;
 	float	dt;
 	std::list<Module*> list_modules;
+public:
+	int maxMs;
 
 public:
 

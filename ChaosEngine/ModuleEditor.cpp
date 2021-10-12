@@ -29,7 +29,7 @@ bool ModuleEditor::Start()
 	plane->axis = true;
 	cube = new MyCube(-5, 0, 0, 1, 1, 1);
 	pyramid = new MyPyramid(5, 0, 0, 1, 1, 1);
-	cylinder = new MyCylinder();
+	//cylinder = new MyCylinder();
 	sphere = new MySphere(3,20,20);
 
 	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));
@@ -50,7 +50,7 @@ bool ModuleEditor::CleanUp()
 	//delete plane;
 	delete cube;
 	delete pyramid;
-	delete cylinder;
+	//delete cylinder;
 
 	return true;
 }
@@ -61,6 +61,7 @@ void ModuleEditor::SaveConfig()
 	JSON_Value* user_data = json_value_init_object();
 
 	json_object_set_number(json_object(user_data), "MaxFPS", maxFPS);
+	json_object_set_number(json_object(user_data), "MaxMs", App->maxMs);
 	json_object_set_number(json_object(user_data), "Width", width);
 	json_object_set_number(json_object(user_data), "Height", height);
 	json_object_set_number(json_object(user_data), "Brightness", brightness);
@@ -81,6 +82,7 @@ void ModuleEditor::LoadConfig()
 	JSON_Value* user_data = json_parse_file("ConfigFile.json");
 
 	maxFPS = json_object_get_number(json_object(user_data), "MaxFPS");
+	App->maxMs = json_object_get_number(json_object(user_data), "MaxMs");
 	width = json_object_get_number(json_object(user_data), "Width");
 	height = json_object_get_number(json_object(user_data), "Height");
 	brightness = json_object_get_number(json_object(user_data), "Brightness");
@@ -214,7 +216,13 @@ update_status ModuleEditor::Update(float dt)
 
 			ImGui::InputText("App Name", TITLE, 25);
 			ImGui::InputText("Organization", ORGANIZATION, 25);
-			ImGui::SliderInt("Max FPS", &maxFPS, 0, 144);
+			if (ImGui::SliderInt("Max FPS", &maxFPS, 0, 144))
+			{
+				if (maxFPS > 0)
+					App->maxMs = 1000 / maxFPS;
+				else
+					App->maxMs = 0;
+			}
 
 			sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
 			ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
@@ -529,7 +537,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	pyramid->DrawPyramid();
 
-	cylinder->DrawCylinder();
+	//cylinder->DrawCylinder();
 
 	//sphere->DrawSphere();
 

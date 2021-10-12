@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleRenderer3D.h"
 #include "GL/glew.h"
+#include "MathGeoLib/src/MathGeoLib.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -310,6 +311,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::DrawMesh(LoadGeometry *geometryMesh, uint *VAO)
 {
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -318,6 +321,27 @@ void ModuleRenderer3D::DrawMesh(LoadGeometry *geometryMesh, uint *VAO)
 	glBindVertexArray(*VAO);
 	glDrawElements(GL_TRIANGLES, geometryMesh->ourMesh.num_index, GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
+
+	glBegin(GL_LINES);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	for (int i = 0; i < geometryMesh->ourMesh.num_vertex; i += 9)
+	{
+		float3 vertex1(geometryMesh->ourMesh.vertex[i],geometryMesh->ourMesh.vertex[i + 1],geometryMesh->ourMesh.vertex[i + 2]);
+		float3 vertex2(geometryMesh->ourMesh.vertex[i + 3],geometryMesh->ourMesh.vertex[i + 4],geometryMesh->ourMesh.vertex[i + 5]);
+		float3 vertex3(geometryMesh->ourMesh.vertex[i + 6],geometryMesh->ourMesh.vertex[i + 7],geometryMesh->ourMesh.vertex[i + 8]);
+		float3 avgVertex((vertex1.x + vertex2.x + vertex3.x) / 3,(vertex1.y + vertex2.y + vertex3.y) / 3 ,(vertex1.z + vertex2.z + vertex3.z) / 3);
+
+		float3 line = -(vertex1 - vertex2);
+		float3 line2 = vertex2 - vertex3;
+
+		float3 normal = math::Cross(line, line2);
+		normal.Normalize();
+
+		glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
+		glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
+	}
+	glEnd();
 }
 
 void ModuleRenderer3D::DrawMesh(LoadGeometry* geometryMesh)
@@ -330,6 +354,27 @@ void ModuleRenderer3D::DrawMesh(LoadGeometry* geometryMesh)
 	glBindVertexArray(dVAO);
 	glDrawElements(GL_TRIANGLES, geometryMesh->ourMesh.num_index, GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
+
+	glBegin(GL_LINES);
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+	for (int i = 0; i < geometryMesh->ourMesh.num_vertex; i += 9)
+	{
+		float3 vertex1 = { geometryMesh->ourMesh.vertex[i],geometryMesh->ourMesh.vertex[i + 1],geometryMesh->ourMesh.vertex[i + 2] };
+		float3 vertex2 = { geometryMesh->ourMesh.vertex[i + 3],geometryMesh->ourMesh.vertex[i + 4],geometryMesh->ourMesh.vertex[i + 5] };
+		float3 vertex3 = { geometryMesh->ourMesh.vertex[i + 6],geometryMesh->ourMesh.vertex[i + 7],geometryMesh->ourMesh.vertex[i + 8] };
+		float3 avgVertex = { (vertex1.x + vertex2.x + vertex3.x) / 3,(vertex1.y + vertex2.y + vertex3.y) / 3 ,(vertex1.z + vertex2.z + vertex3.z) / 3 };
+
+		float3 line = -(vertex1 - vertex2);
+		float3 line2 = vertex2 - vertex3;
+
+		float3 normal = math::Cross(line, line2);
+		normal.Normalize();
+
+		glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
+		glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
+	}
+	glEnd();
 }
 
 void ModuleRenderer3D::InitMesh(LoadGeometry *geometryMesh, const char* path,uint *VAO, uint *bufferIndices, uint *bufferVertex)

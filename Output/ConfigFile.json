@@ -1,5 +1,6 @@
 {
-    "MaxFPS": 73,
+    "MaxFPS": 144,
+    "MaxMs": 6,
     "Width": 1092,
     "Height": 534,
     "Brightness": 1,

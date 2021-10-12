@@ -71,6 +71,12 @@ void Application::PrepareUpdate()
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
+	unsigned int lastFrameMs = ms_timer.Read();
+
+	if ((maxMs > 0) && (lastFrameMs < maxMs))
+	{
+		SDL_Delay(maxMs - lastFrameMs);
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules

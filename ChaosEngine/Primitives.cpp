@@ -3,6 +3,9 @@
 #include "ModuleEditor.h"
 #include "Primitives.h"
 
+#include "glmath.h"
+#include "MathGeoLib/src/MathGeoLib.h"
+
 #include "GL/glew.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -58,6 +61,8 @@ MyCube::~MyCube()
 
 void MyCube::DrawCube()
 {
+	glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+
 	glLineWidth(5.0f);
 
 	if (App->editor->wireframe)
@@ -68,6 +73,8 @@ void MyCube::DrawCube()
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 
@@ -106,6 +113,8 @@ MyPyramid::~MyPyramid()
  
 void MyPyramid::DrawPyramid() 
 {
+	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -114,6 +123,8 @@ void MyPyramid::DrawPyramid()
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 MyCylinder::MyCylinder() : Primitives()
@@ -309,6 +320,8 @@ void MyCylinder::BuildVerticalSmooth()
 
 void MyCylinder::DrawCylinder()
 {
+	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -317,6 +330,8 @@ void MyCylinder::DrawCylinder()
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 	glBindVertexArray(0);
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 void MyCylinder::Initialize()
@@ -403,6 +418,8 @@ MySphere::~MySphere()
 
 void MySphere::DrawSphere()
 {
+	glColor4f(0.5f, 0.5f, 0.0f, 1.0f);
+
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
@@ -411,4 +428,6 @@ void MySphere::DrawSphere()
 	glBindVertexArray(VAO);
 	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, NULL);
 	glBindVertexArray(0);
+
+	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 }
