@@ -14,11 +14,8 @@
 class Model
 {
 public:
-	Model() {}
-	Model(char* path)
-	{
-		LoadModel(path);
-	}
+	Model();
+	Model(char* path);
 	void Draw();
 private:
 	//std::vector<Textures> textures_loaded;

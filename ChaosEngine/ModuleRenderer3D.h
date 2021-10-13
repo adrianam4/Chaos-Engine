@@ -1,14 +1,11 @@
 #pragma once
 #include "Module.h"
-#include "Globals.h"
 #include "glmath.h"
 #include "Light.h"
-#include "Mesh.h"
-#include "Model.h"
-
-#include <vector>
 
 #define MAX_LIGHTS 8
+
+class Model;
 
 class ModuleRenderer3D : public Module
 {

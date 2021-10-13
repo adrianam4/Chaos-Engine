@@ -1,5 +1,14 @@
 #include "Model.h"
 
+Model::Model()
+{
+}
+
+Model::Model(char* path)
+{
+	LoadModel(path);
+}
+
 void Model::Draw()
 {
 	for (unsigned int i = 0; i < meshes.size(); ++i)
@@ -57,8 +66,8 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 		if (mesh->mTextureCoords[0])
 		{
-			vertex.texCoords.x = mesh->mTextureCoords[i]->x;
-			vertex.texCoords.y = mesh->mTextureCoords[i]->y;
+			vertex.texCoords.x = mesh->mTextureCoords[0][i].x;
+			vertex.texCoords.y = mesh->mTextureCoords[0][i].y;
 		}
 		else
 		{
