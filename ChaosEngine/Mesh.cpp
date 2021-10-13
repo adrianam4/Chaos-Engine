@@ -37,7 +37,8 @@ void Mesh::Draw()
 	// draw mesh
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	
+	glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINES);
 	for (int i = 0; i < vertices.size(); i += 3)
 	{
 		float3 vertex1(vertices[i].Position.x, vertices[i].Position.y, vertices[i].Position.z);
@@ -48,13 +49,13 @@ void Mesh::Draw()
 		float3 line = -(vertex1 - vertex2);
 		float3 line2 = vertex2 - vertex3;
 
-		float3 normal = math::Cross(line, line2);
+		float3 normal = math::Cross(line2, line);
 		normal.Normalize();
 
 		glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
 		glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
 	}
-
+	glEnd();
 	glBindVertexArray(0);
 }
 
