@@ -38,5 +38,6 @@ private:
 public:
 	ImGuiTextBuffer consoleBuffer;
 	bool wireframe;
+	bool normals;
 	bool scrollToBottom;
 };

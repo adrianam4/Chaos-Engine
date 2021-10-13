@@ -1,3 +1,4 @@
+#include "Application.h"
 #include "Mesh.h"
 
 #include "Glew/include/GL/glew.h"
@@ -37,25 +38,30 @@ void Mesh::Draw()
 	// draw mesh
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
-	glBegin(GL_LINES);
-	for (int i = 0; i < vertices.size(); i += 3)
+
+	if (App->editor->normals)
 	{
-		float3 vertex1(vertices[i].Position.x, vertices[i].Position.y, vertices[i].Position.z);
-		float3 vertex2(vertices[i + 1].Position.x, vertices[i + 1].Position.y, vertices[i + 1].Position.z);
-		float3 vertex3(vertices[i + 2].Position.x, vertices[i + 2].Position.y, vertices[i + 2].Position.z);
-		float3 avgVertex((vertex1.x + vertex2.x + vertex3.x) / 3, (vertex1.y + vertex2.y + vertex3.y) / 3, (vertex1.z + vertex2.z + vertex3.z) / 3);
+		glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
+		glBegin(GL_LINES);
+		for (int i = 0; i < vertices.size(); i += 3)
+		{
+			float3 vertex1(vertices[i].Position.x, vertices[i].Position.y, vertices[i].Position.z);
+			float3 vertex2(vertices[i + 1].Position.x, vertices[i + 1].Position.y, vertices[i + 1].Position.z);
+			float3 vertex3(vertices[i + 2].Position.x, vertices[i + 2].Position.y, vertices[i + 2].Position.z);
+			float3 avgVertex((vertex1.x + vertex2.x + vertex3.x) / 3, (vertex1.y + vertex2.y + vertex3.y) / 3, (vertex1.z + vertex2.z + vertex3.z) / 3);
 
-		float3 line = -(vertex1 - vertex2);
-		float3 line2 = vertex2 - vertex3;
+			float3 line = -(vertex1 - vertex2);
+			float3 line2 = vertex2 - vertex3;
 
-		float3 normal = math::Cross(line2, line);
-		normal.Normalize();
+			float3 normal = math::Cross(line2, line);
+			normal.Normalize();
 
-		glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
-		glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
+			glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
+			glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
+		}
+		glEnd();
 	}
-	glEnd();
+
 	glBindVertexArray(0);
 }
 

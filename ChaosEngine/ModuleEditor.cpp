@@ -70,6 +70,7 @@ void ModuleEditor::SaveConfig()
 	json_object_set_boolean(json_object(user_data), "Borderless", borderless);
 	json_object_set_boolean(json_object(user_data), "Dekstop", dekstop);
 	json_object_set_boolean(json_object(user_data), "Wireframe", wireframe);
+	json_object_set_boolean(json_object(user_data), "Normals", normals);
 
 	json_serialize_to_file_pretty(user_data, "ConfigFile.json");
 
@@ -91,6 +92,7 @@ void ModuleEditor::LoadConfig()
 	borderless = json_object_get_boolean(json_object(user_data), "Borderless");
 	dekstop = json_object_get_boolean(json_object(user_data), "Dekstop");
 	wireframe = json_object_get_boolean(json_object(user_data), "Wireframe");
+	normals = json_object_get_boolean(json_object(user_data), "Normals");
 
 	AddLog("Loaded Config Data\n");
 }
@@ -168,6 +170,10 @@ update_status ModuleEditor::Update(float dt)
 			if (ImGui::MenuItem("Enable/Disable Wireframe"))
 			{
 				wireframe = !wireframe;
+			}
+			if (ImGui::MenuItem("Enable/Disable Normals"))
+			{
+				normals = !normals;
 			}
 			ImGui::EndMenu();
 		}
