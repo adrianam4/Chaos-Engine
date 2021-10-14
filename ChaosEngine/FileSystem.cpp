@@ -25,26 +25,23 @@ FileSystem::FileSystem(const char* game_path)
 		AddPath(game_path);
 
 	// Dump list of paths
-	LOGCE("FileSystem Operations base is [%s] plus:", GetBasePath());
-	LOGCE(GetReadPaths());
+	App->editor->AddLog("FileSystem Operations base is [%s] plus:", GetBasePath());
+	App->editor->AddLog(GetReadPaths());
 
 	// enable us to write in the game's dir area
 	if(PHYSFS_setWriteDir(".") == 0)
-		LOGCE("File System error while creating write dir: %s\n", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while creating write dir: %s\n", PHYSFS_getLastError());
 
 	// Make sure standard paths exist
-	/*const char* dirs[] = {
-		SETTINGS_FOLDER, ASSETS_FOLDER, LIBRARY_FOLDER,
-		LIBRARY_AUDIO_FOLDER, LIBRARY_MESH_FOLDER,
-		LIBRARY_MATERIAL_FOLDER, LIBRARY_SCENE_FOLDER, LIBRARY_MODEL_FOLDER, 
-		LIBRARY_TEXTURES_FOLDER, LIBRARY_ANIMATION_FOLDER, LIBRARY_STATE_MACHINE_FOLDER,
+	const char* dirs[] = {
+		SETTINGS_FOLDER, ASSETS_FOLDER,
 	};
 
 	for (uint i = 0; i < sizeof(dirs)/sizeof(const char*); ++i)
 	{
 		if (PHYSFS_exists(dirs[i]) == 0)
 			PHYSFS_mkdir(dirs[i]);
-	}*/
+	}
 
 	// Generate IO interfaces
 	CreateAssimpIO();
@@ -53,14 +50,14 @@ FileSystem::FileSystem(const char* game_path)
 // Destructor
 FileSystem::~FileSystem()
 {
-	//RELEASE(AssimpIO);
+	RELEASE(AssimpIO);
 	PHYSFS_deinit();
 }
 
 // Called before render is available
 bool FileSystem::Init()
 {
-	LOGCE("Loading File System");
+	App->editor->AddLog("Loading File System");
 	bool ret = true;
 
 	// Ask SDL for a write dir
@@ -83,7 +80,7 @@ bool FileSystem::AddPath(const char* path_or_zip)
 
 	if (PHYSFS_mount(path_or_zip, nullptr, 1) == 0)
 	{
-		LOGCE("File System error while adding a path or zip: %s\n", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while adding a path or zip: %s\n", PHYSFS_getLastError());
 	}
 	else
 		ret = true;
@@ -147,10 +144,10 @@ bool FileSystem::CopyFromOutsideFS(const char * full_path, const char * destinat
 		PHYSFS_close(dest);
 		ret = true;
 
-		LOGCE("File System copied file [%s] to [%s]", full_path, destination);
+		App->editor->AddLog("File System copied file [%s] to [%s]", full_path, destination);
 	}
 	else
-		LOGCE("File System error while copy from [%s] to [%s]", full_path, destination);
+		App->editor->AddLog("File System error while copy from [%s] to [%s]", full_path, destination);
 
 	return ret;
 }
@@ -174,10 +171,10 @@ bool FileSystem::Copy(const char * source, const char * destination)
 		PHYSFS_close(dst);
 		ret = true;
 
-		LOGCE("File System copied file [%s] to [%s]", source, destination);
+		App->editor->AddLog("File System copied file [%s] to [%s]", source, destination);
 	}
 	else
-		LOGCE("File System error while copy from [%s] to [%s]", source, destination);
+		App->editor->AddLog("File System error while copy from [%s] to [%s]", source, destination);
 
 	return ret;
 }
@@ -272,18 +269,18 @@ uint FileSystem::Load(const char* file, char** buffer) const
 			uint readed = (uint) PHYSFS_read(fs_file, *buffer, 1, size);
 			if(readed != size)
 			{
-				LOGCE("File System error while reading from file %s: %s\n", file, PHYSFS_getLastError());
-				//RELEASE(buffer);
+				App->editor->AddLog("File System error while reading from file %s: %s\n", file, PHYSFS_getLastError());
+				RELEASE(buffer);
 			}
 			else
 				ret = readed;
 		}
 
 		if(PHYSFS_close(fs_file) == 0)
-			LOGCE("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
+			App->editor->AddLog("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
 	}
 	else
-		LOGCE("File System error while opening file %s: %s\n", file, PHYSFS_getLastError());
+		App->editor->AddLog("File System error while opening file %s: %s\n", file, PHYSFS_getLastError());
 
 	return ret;
 }
@@ -308,7 +305,7 @@ SDL_RWops* FileSystem::Load(const char* file) const
 
 int close_sdl_rwops(SDL_RWops *rw)
 {
-	//RELEASE_ARRAY(rw->hidden.mem.base);
+	RELEASE(rw->hidden.mem.base);
 	SDL_FreeRW(rw);
 	return 0;
 }
@@ -326,42 +323,40 @@ uint FileSystem::Save(const char* file, const void* buffer, unsigned int size, b
 		uint written = (uint) PHYSFS_write(fs_file, (const void*)buffer, 1, size);
 		if (written != size)
 		{
-			LOGCE("File System error while writing to file %s: %s", file, PHYSFS_getLastError());
+			App->editor->AddLog("File System error while writing to file %s: %s", file, PHYSFS_getLastError());
 		}
 		else
 		{
 			if (append == true)
-			{
-				LOGCE("Added %u data to [%s%s]", size, PHYSFS_getWriteDir(), file);
-				//else if(overwrite == true)
-					//LOG("File [%s%s] overwritten with %u bytes", PHYSFS_getWriteDir(), file, size);
-			}
+				App->editor->AddLog("Added %u data to [%s%s]", size, PHYSFS_getWriteDir(), file);
+			else if(overwrite == true)
+				App->editor->AddLog("File [%s%s] overwritten with %u bytes", PHYSFS_getWriteDir(), file, size);
 			else if(overwrite == false)
-				LOGCE("New file created [%s%s] of %u bytes", PHYSFS_getWriteDir(), file, size);
+				App->editor->AddLog("New file created [%s%s] of %u bytes", PHYSFS_getWriteDir(), file, size);
 
 			ret = written;
 		}
 
 		if(PHYSFS_close(fs_file) == 0)
-			LOGCE("File System error while closing file %s: %s", file, PHYSFS_getLastError());
+			App->editor->AddLog("File System error while closing file %s: %s", file, PHYSFS_getLastError());
 	}
 	else
-		LOGCE("File System error while opening file %s: %s", file, PHYSFS_getLastError());
+		App->editor->AddLog("File System error while opening file %s: %s", file, PHYSFS_getLastError());
 
 	return ret;
 }
 
 bool FileSystem::SaveUnique(string& name, const void * buffer, uint size, const char * path, const char * prefix, const char * extension)
 {
-	char result[250];
-	//MODULE RESOURCES
+	//char result[250];
+	////MODULE RESOURCES
 	//sprintf_s(result, 250, "%s%s_%llu.%s", path, prefix, App->resources->GenerateNewUID(), extension);
-	NormalizePath(result);
-	if (Save(result, buffer, size) > 0)
-	{
-		name = result;
-		return true;
-	}
+	//NormalizePath(result);
+	//if (Save(result, buffer, size) > 0)
+	//{
+	//	name = result;
+	//	return true;
+	//}
 	return false;
 }
 
@@ -373,11 +368,11 @@ bool FileSystem::Remove(const char * file)
 	{
 		if (PHYSFS_delete(file) == 0)
 		{
-			LOGCE("File deleted: [%s]", file);
+			App->editor->AddLog("File deleted: [%s]", file);
 			ret = true;
 		}
 		else
-			LOGCE("File System error while trying to delete [%s]: ", file, PHYSFS_getLastError());
+			App->editor->AddLog("File System error while trying to delete [%s]: ", file, PHYSFS_getLastError());
 	}
 
 	return ret;
@@ -417,7 +412,7 @@ size_t AssimpWrite(aiFile* file, const char* data, size_t size, size_t chunks)
 {
 	PHYSFS_sint64 ret = PHYSFS_write((PHYSFS_File*)file->UserData, (void*)data, size, chunks);
 	if(ret == -1)
-		LOGCE("File System error while WRITE via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while WRITE via assimp: %s", PHYSFS_getLastError());
 
 	return (size_t) ret;
 }
@@ -426,7 +421,7 @@ size_t AssimpRead(aiFile* file, char* data, size_t size, size_t chunks)
 {
 	PHYSFS_sint64 ret = PHYSFS_read((PHYSFS_File*)file->UserData, (void*)data, size, chunks);
 	if(ret == -1)
-		LOGCE("File System error while READ via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while READ via assimp: %s", PHYSFS_getLastError());
 
 	return (size_t) ret;
 }
@@ -435,7 +430,7 @@ size_t AssimpTell(aiFile* file)
 {
 	PHYSFS_sint64 ret = PHYSFS_tell((PHYSFS_File*)file->UserData);
 	if(ret == -1)
-		LOGCE("File System error while TELL via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while TELL via assimp: %s", PHYSFS_getLastError());
 
 	return (size_t) ret;
 }
@@ -444,7 +439,7 @@ size_t AssimpSize(aiFile* file)
 {
 	PHYSFS_sint64 ret = PHYSFS_fileLength((PHYSFS_File*)file->UserData);
 	if(ret == -1)
-		LOGCE("File System error while SIZE via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while SIZE via assimp: %s", PHYSFS_getLastError());
 
 	return (size_t) ret;
 }
@@ -452,7 +447,7 @@ size_t AssimpSize(aiFile* file)
 void AssimpFlush(aiFile* file)
 {
 	if(PHYSFS_flush((PHYSFS_File*)file->UserData) == 0)
-		LOGCE("File System error while FLUSH via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while FLUSH via assimp: %s", PHYSFS_getLastError());
 }
 
 aiReturn AssimpSeek(aiFile* file, size_t pos, aiOrigin from)
@@ -473,7 +468,7 @@ aiReturn AssimpSeek(aiFile* file, size_t pos, aiOrigin from)
 	}
 
 	if(res == 0)
-		LOGCE("File System error while SEEK via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while SEEK via assimp: %s", PHYSFS_getLastError());
 
 	return (res != 0) ? aiReturn_SUCCESS : aiReturn_FAILURE;
 }
@@ -496,12 +491,12 @@ aiFile* AssimpOpen(aiFileIO* io, const char* name, const char* format)
 void AssimpClose(aiFileIO* io, aiFile* file)
 {
 	if (PHYSFS_close((PHYSFS_File*)file->UserData) == 0)
-		LOGCE("File System error while CLOSE via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while CLOSE via assimp: %s", PHYSFS_getLastError());
 }
 
 void FileSystem::CreateAssimpIO()
 {
-	//RELEASE(AssimpIO);
+	RELEASE(AssimpIO);
 
 	AssimpIO = new aiFileIO;
 	AssimpIO->OpenProc = AssimpOpen;
@@ -528,19 +523,19 @@ typedef struct {
 	FILEREADPROC *read;
 	FILESEEKPROC *seek;
 } BASS_FILEPROCS;
-*/
+
 
 void CALLBACK BassClose(void* file)
 {
 	if (PHYSFS_close((PHYSFS_File*)file) == 0)
-		LOGCE("File System error while CLOSE via bass: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while CLOSE via bass: %s", PHYSFS_getLastError());
 }
 
 WORD CALLBACK BassLength(void* file)
 {
 	PHYSFS_sint64 ret = PHYSFS_fileLength((PHYSFS_File*)file);
 	if(ret == -1)
-		LOGCE("File System error while SIZE via bass: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while SIZE via bass: %s", PHYSFS_getLastError());
 
 	return (WORD) ret;
 }
@@ -549,7 +544,7 @@ DWORD CALLBACK BassRead(void *buffer, DWORD len, void* file)
 {
 	PHYSFS_sint64 ret = PHYSFS_read((PHYSFS_File*)file, buffer, 1, len);
 	if(ret == -1)
-		LOGCE("File System error while READ via bass: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while READ via bass: %s", PHYSFS_getLastError());
 
 	return (DWORD) ret;
 }
@@ -558,7 +553,7 @@ BOOL CALLBACK BassSeek(WORD offset, void* file)
 {
 	int res = PHYSFS_seek((PHYSFS_File*)file, offset);
 	if(res == 0)
-		LOGCE("File System error while SEEK via bass: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while SEEK via bass: %s", PHYSFS_getLastError());
 
 	return (BOOL) res;
-}
+}*/
