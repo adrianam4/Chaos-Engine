@@ -1,5 +1,5 @@
-#ifndef __MODULEFILESYSTEM_H__
-#define __MODULEFILESYSTEM_H__
+#ifndef __FILESYSTEM_H__
+#define __FILESYSTEM_H__
 
 #include "Module.h"
 #include <vector>
@@ -12,22 +12,17 @@ struct aiFileIO;
 //#include ""Bass/include/bass.h""
 struct BASS_FILEPROCS;
 
-class ModuleFileSystem : public Module
+class FileSystem
 {
 public:
 
-	ModuleFileSystem(const char* game_path, Application* app, bool start_enabled);
+	FileSystem(const char* game_path);
 
 	// Destructor
-	~ModuleFileSystem();
-
-	// Called before render is available
-	bool Init();
-
-	// Called before quitting
-	bool CleanUp() override;
+	~FileSystem();
 
 	// Utility functions
+	bool Init();
 	bool AddPath(const char* path_or_zip);
 	bool Exists(const char* file) const;
 	bool IsDirectory(const char* file) const;
@@ -64,4 +59,4 @@ private:
 	aiFileIO* AssimpIO = nullptr;
 };
 
-#endif // __MODULEFILESYSTEM_H__
+#endif // __FILESYSTEM_H__

@@ -139,7 +139,6 @@ bool ModuleRenderer3D::Init()
 		lights[0].Active(true);
 
 		InitMesh("Assets/lowpolytree.fbx");
-		InitMesh("Assets/cat.fbx");
 
 	}
 
@@ -273,6 +272,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 bool ModuleRenderer3D::CleanUp()
 {
 	App->editor->AddLog("Destroying 3D Renderer\n");
+
+	models.clear();
 
 	// Cleanup
 	ImGui_ImplOpenGL3_Shutdown();

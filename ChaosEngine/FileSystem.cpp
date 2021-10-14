@@ -1,6 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleFileSystem.h"
+#include "FileSystem.h"
 #include "PhysFS/include/physfs.h"
 #include <assimp/cfileio.h>
 #include <assimp/types.h>
@@ -11,7 +11,7 @@
 
 using namespace std;
 
-ModuleFileSystem::ModuleFileSystem(const char* game_path, Application* app, bool start_enabled) : Module(app, start_enabled)
+FileSystem::FileSystem(const char* game_path)
 {
 	// needs to be created before Init so other modules can use it
 	char* base_path = SDL_GetBasePath();
@@ -51,14 +51,14 @@ ModuleFileSystem::ModuleFileSystem(const char* game_path, Application* app, bool
 }
 
 // Destructor
-ModuleFileSystem::~ModuleFileSystem()
+FileSystem::~FileSystem()
 {
 	//RELEASE(AssimpIO);
 	PHYSFS_deinit();
 }
 
 // Called before render is available
-bool ModuleFileSystem::Init()
+bool FileSystem::Init()
 {
 	LOGCE("Loading File System");
 	bool ret = true;
@@ -76,16 +76,8 @@ bool ModuleFileSystem::Init()
 	return ret;
 }
 
-// Called before quitting
-bool ModuleFileSystem::CleanUp()
-{
-	//LOG("Freeing File System subsystem");
-
-	return true;
-}
-
 // Add a new zip file or folder
-bool ModuleFileSystem::AddPath(const char* path_or_zip)
+bool FileSystem::AddPath(const char* path_or_zip)
 {
 	bool ret = false;
 
@@ -100,23 +92,23 @@ bool ModuleFileSystem::AddPath(const char* path_or_zip)
 }
 
 // Check if a file exists
-bool ModuleFileSystem::Exists(const char* file) const
+bool FileSystem::Exists(const char* file) const
 {
 	return PHYSFS_exists(file) != 0;
 }
 
 // Check if a file is a directory
-bool ModuleFileSystem::IsDirectory(const char* file) const
+bool FileSystem::IsDirectory(const char* file) const
 {
 	return PHYSFS_isDirectory(file) != 0;
 }
 
-void ModuleFileSystem::CreateDirectory(const char* directory)
+void FileSystem::CreateDirectory(const char* directory)
 {
     PHYSFS_mkdir(directory);
 }
 
-void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string> & file_list, vector<string> & dir_list) const
+void FileSystem::DiscoverFiles(const char* directory, vector<string> & file_list, vector<string> & dir_list) const
 {
 	char **rc = PHYSFS_enumerateFiles(directory);
 	char **i;
@@ -134,7 +126,7 @@ void ModuleFileSystem::DiscoverFiles(const char* directory, vector<string> & fil
 	PHYSFS_freeList(rc);
 }
 
-bool ModuleFileSystem::CopyFromOutsideFS(const char * full_path, const char * destination)
+bool FileSystem::CopyFromOutsideFS(const char * full_path, const char * destination)
 {
 	// Only place we acces non virtual filesystem
  	bool ret = false;
@@ -163,7 +155,7 @@ bool ModuleFileSystem::CopyFromOutsideFS(const char * full_path, const char * de
 	return ret;
 }
 
-bool ModuleFileSystem::Copy(const char * source, const char * destination)
+bool FileSystem::Copy(const char * source, const char * destination)
 {
  	bool ret = false;
 
@@ -190,7 +182,7 @@ bool ModuleFileSystem::Copy(const char * source, const char * destination)
 	return ret;
 }
 
-void ModuleFileSystem::SplitFilePath(const char * full_path, std::string * path, std::string * file, std::string * extension) const
+void FileSystem::SplitFilePath(const char * full_path, std::string * path, std::string * file, std::string * extension) const
 {
 	if (full_path != nullptr)
 	{
@@ -233,7 +225,7 @@ char normalize_char(char c)
 	return tolower(c);
 }
 
-void ModuleFileSystem::NormalizePath(char * full_path) const
+void FileSystem::NormalizePath(char * full_path) const
 {
 	int len = strlen(full_path);
 	for (int i = 0; i < len; ++i)
@@ -245,7 +237,7 @@ void ModuleFileSystem::NormalizePath(char * full_path) const
 	}
 }
 
-void ModuleFileSystem::NormalizePath(std::string & full_path) const
+void FileSystem::NormalizePath(std::string & full_path) const
 {
 	for (string::iterator it = full_path.begin(); it != full_path.end(); ++it)
 	{
@@ -256,7 +248,7 @@ void ModuleFileSystem::NormalizePath(std::string & full_path) const
 	}
 }
 
-unsigned int ModuleFileSystem::Load(const char * path, const char * file, char ** buffer) const
+unsigned int FileSystem::Load(const char * path, const char * file, char ** buffer) const
 {
 	string full_path(path);
 	full_path += file;
@@ -264,7 +256,7 @@ unsigned int ModuleFileSystem::Load(const char * path, const char * file, char *
 }
 
 // Read a whole file and put it in a new buffer
-uint ModuleFileSystem::Load(const char* file, char** buffer) const
+uint FileSystem::Load(const char* file, char** buffer) const
 {
 	uint ret = 0;
 
@@ -297,7 +289,7 @@ uint ModuleFileSystem::Load(const char* file, char** buffer) const
 }
 
 // Read a whole file and put it in a new buffer
-SDL_RWops* ModuleFileSystem::Load(const char* file) const
+SDL_RWops* FileSystem::Load(const char* file) const
 {
 	char* buffer;
 	int size = Load(file, &buffer);
@@ -322,7 +314,7 @@ int close_sdl_rwops(SDL_RWops *rw)
 }
 
 // Save a whole buffer to disk
-uint ModuleFileSystem::Save(const char* file, const void* buffer, unsigned int size, bool append) const
+uint FileSystem::Save(const char* file, const void* buffer, unsigned int size, bool append) const
 {
 	unsigned int ret = 0;
 
@@ -359,7 +351,7 @@ uint ModuleFileSystem::Save(const char* file, const void* buffer, unsigned int s
 	return ret;
 }
 
-bool ModuleFileSystem::SaveUnique(string& name, const void * buffer, uint size, const char * path, const char * prefix, const char * extension)
+bool FileSystem::SaveUnique(string& name, const void * buffer, uint size, const char * path, const char * prefix, const char * extension)
 {
 	char result[250];
 	//MODULE RESOURCES
@@ -373,7 +365,7 @@ bool ModuleFileSystem::SaveUnique(string& name, const void * buffer, uint size, 
 	return false;
 }
 
-bool ModuleFileSystem::Remove(const char * file)
+bool FileSystem::Remove(const char * file)
 {
 	bool ret = false;
 
@@ -391,17 +383,17 @@ bool ModuleFileSystem::Remove(const char * file)
 	return ret;
 }
 
-const char * ModuleFileSystem::GetBasePath() const
+const char * FileSystem::GetBasePath() const
 {
 	return PHYSFS_getBaseDir();
 }
 
-const char * ModuleFileSystem::GetWritePath() const
+const char * FileSystem::GetWritePath() const
 {
 	return PHYSFS_getWriteDir();
 }
 
-const char * ModuleFileSystem::GetReadPaths() const
+const char * FileSystem::GetReadPaths() const
 {
 	static char paths[512];
 
@@ -507,7 +499,7 @@ void AssimpClose(aiFileIO* io, aiFile* file)
 		LOGCE("File System error while CLOSE via assimp: %s", PHYSFS_getLastError());
 }
 
-void ModuleFileSystem::CreateAssimpIO()
+void FileSystem::CreateAssimpIO()
 {
 	//RELEASE(AssimpIO);
 
@@ -516,7 +508,7 @@ void ModuleFileSystem::CreateAssimpIO()
 	AssimpIO->CloseProc = AssimpClose;
 }
 
-aiFileIO * ModuleFileSystem::GetAssimpIO()
+aiFileIO * FileSystem::GetAssimpIO()
 {
 	return AssimpIO;
 }
