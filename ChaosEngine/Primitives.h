@@ -5,9 +5,13 @@
 
 #include "CreateBuffers.h"
 
+#define CHECKERS_WIDTH 64
+#define CHECKERS_HEIGHT 64
+
 typedef unsigned int GLuint;
 typedef unsigned short GLushort;
 typedef float GLfloat;
+typedef unsigned char GLubyte;
 
 enum PrimitivesTypes
 {
@@ -38,6 +42,9 @@ public:
 	MyCube(float x, float y, float z, float X, float Y, float Z);
 	~MyCube();
 	void DrawCube();
+	void makeCheckImage();
+	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	GLuint textureId;
 private:
 	CreateBuffers* cubeBuffers;
 

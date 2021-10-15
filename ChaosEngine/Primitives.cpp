@@ -10,7 +10,6 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 
-
 // ------------------------------------------------------------
 Primitives::Primitives()
 {}
@@ -49,6 +48,17 @@ MyCube::MyCube(float x, float y, float z, float X, float Y, float Z) : Primitive
 
 	cubeBuffers = new CreateBuffers(vertices, indices);
 
+	makeCheckImage();
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
 	glEnableVertexAttribArray(0);
 }
@@ -61,7 +71,7 @@ MyCube::~MyCube()
 
 void MyCube::DrawCube()
 {
-	glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+	//lColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 
 	glLineWidth(5.0f);
 
@@ -71,12 +81,34 @@ void MyCube::DrawCube()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
 	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, textureId);
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 	glBindVertexArray(0);
 
 	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
 }
 
+void MyCube::makeCheckImage()
+{
+	int i, j, c;
+
+	for (i = 0; i < CHECKERS_HEIGHT; i++) {
+		for (j = 0; j < CHECKERS_WIDTH; j++) {
+			c = ((((i & 0x8) == 0) ^ ((j & 0x8)) == 0)) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+}
 
 //// PYRAMID ============================================
 MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Primitives()

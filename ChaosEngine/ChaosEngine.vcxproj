@@ -48,7 +48,7 @@
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)PhysFS\include;$(ProjectDir)Assimp\include;$(ProjectDir)Glew\include;$(ProjectDir)imgui;$(ProjectDir)SDL\include;%(AdditionalIncludeDirectories);$(ProjectDir)MathGeoLib\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)PhysFS\include;$(ProjectDir)Assimp\include;$(ProjectDir)Glew\include;$(ProjectDir)imgui;$(ProjectDir)SDL\include;%(AdditionalIncludeDirectories);$(ProjectDir)MathGeoLib\src;$(ProjectDir)DevIL\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WINDOWS_IGNORE_PACKING_MISMATCH;GLEW_STATIC</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -68,7 +68,7 @@
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Assimp\include;$(ProjectDir)Glew\include;$(ProjectDir)PhysFS\include;%(AdditionalIncludeDirectories);$(ProjectDir)MathGeoLib\src</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Assimp\include;$(ProjectDir)Glew\include;$(ProjectDir)PhysFS\include;%(AdditionalIncludeDirectories);$(ProjectDir)MathGeoLib\src;$(ProjectDir)DevIL\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -77,7 +77,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalLibraryDirectories>$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;$(ProjectDir)PhysFS\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;$(ProjectDir)PhysFS\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib;$(ProjectDir)DevIL\libx86</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32s.lib;assimp-vc142-mt.lib;physfs.lib;MathGeoLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
