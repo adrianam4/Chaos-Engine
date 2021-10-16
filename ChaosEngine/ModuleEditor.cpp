@@ -29,7 +29,7 @@ bool ModuleEditor::Start()
 	plane->axis = true;
 	cube = new MyCube(-5, 0, 0, 1, 1, 1);
 	pyramid = new MyPyramid(5, 0, 0, 1, 1, 1);
-	//cylinder = new MyCylinder();
+	cylinder = new MyCylinder();
 	sphere = new MySphere(3,20,20);
 
 	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));

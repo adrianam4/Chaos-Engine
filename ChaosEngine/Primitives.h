@@ -3,8 +3,6 @@
 #include "Color.h"
 #include <vector>
 
-#include "CreateBuffers.h"
-
 #define CHECKERS_WIDTH 64
 #define CHECKERS_HEIGHT 64
 
@@ -30,7 +28,9 @@ public:
 
 protected:
 	PrimitivesTypes type;
-	uint VAO;
+public:
+	unsigned int VBO;
+	unsigned int EBO;
 };
 
 
@@ -46,7 +46,6 @@ public:
 	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	GLuint textureId;
 private:
-	CreateBuffers* cubeBuffers;
 
 	std::vector<float> vertices;
 	std::vector<uint> indices;
@@ -59,7 +58,6 @@ public:
 	~MyPyramid();
 	void DrawPyramid();
 private:
-	CreateBuffers* pyramidBuffers;
 
 	std::vector<float> vertices;
 	std::vector<uint> indices;
@@ -92,8 +90,6 @@ private:
 	bool smooth;
 	int sectorCount;
 	float radius;
-
-	CreateBuffers* cylinderBuffer;
 };
 
 class MySphere : public Primitives
@@ -108,7 +104,6 @@ public:
 	~MySphere();
 	void DrawSphere();
 private:
-	uint VAO;
 	uint bufferIndices;
 	uint bufferVertex;
 };

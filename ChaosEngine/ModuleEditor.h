@@ -33,7 +33,7 @@ private:
 	MyPlane* plane;
 	MyCube* cube;
 	MyPyramid* pyramid;
-	//MyCylinder* cylinder;
+	MyCylinder* cylinder;
 	MySphere* sphere;
 public:
 	ImGuiTextBuffer consoleBuffer;

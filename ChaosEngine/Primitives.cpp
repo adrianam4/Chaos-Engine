@@ -43,24 +43,23 @@ MyCube::MyCube(float x, float y, float z, float X, float Y, float Z) : Primitive
 	indices.push_back(3); indices.push_back(2); indices.push_back(6); indices.push_back(3); indices.push_back(6); indices.push_back(7);
 	indices.push_back(5); indices.push_back(1); indices.push_back(0); indices.push_back(4); indices.push_back(5); indices.push_back(0);
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 
-	cubeBuffers = new CreateBuffers(vertices, indices);
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+	//makeCheckImage();
 
-	makeCheckImage();
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
-	glEnableVertexAttribArray(0);
+	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	//glGenTextures(1, &textureId);
+	//glBindTexture(GL_TEXTURE_2D, textureId);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 }
 
 MyCube::~MyCube()
@@ -79,19 +78,28 @@ void MyCube::DrawCube()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	
-	glBindVertexArray(VAO);
 
-	glBindBuffer(GL_ARRAY_BUFFER, textureId);
-	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	//glBindBuffer(GL_ARRAY_BUFFER, textureId);
+	//glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+	//glBindTexture(GL_TEXTURE_2D, textureId);
 
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
+	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glBindVertexArray(0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindVertexArray(0);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindBuffer(VBO, 0);
+	glBindBuffer(EBO, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+
+
+	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
 }
 
@@ -128,13 +136,13 @@ MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Pri
 	indices.push_back(0); indices.push_back(1); indices.push_back(3);
 	indices.push_back(0); indices.push_back(3); indices.push_back(4);
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 
-	pyramidBuffers = new CreateBuffers(vertices, indices);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
-	glEnableVertexAttribArray(0);
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
 
 MyPyramid::~MyPyramid()
@@ -145,18 +153,23 @@ MyPyramid::~MyPyramid()
  
 void MyPyramid::DrawPyramid() 
 {
-	glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+	//glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
-	glBindVertexArray(0);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindBuffer(VBO, 0);
+	glBindBuffer(EBO, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 MyCylinder::MyCylinder() : Primitives()
@@ -352,31 +365,36 @@ void MyCylinder::BuildVerticalSmooth()
 
 void MyCylinder::DrawCylinder()
 {
-	glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
+	//glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
-	glBindVertexArray(0);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindBuffer(VBO, 0);
+	glBindBuffer(EBO, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 void MyCylinder::Initialize()
 {
 	BuildVerticalSmooth();
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 
-	cylinderBuffer = new CreateBuffers(vertices, indices);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0);
-	glEnableVertexAttribArray(0);
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
 
 MySphere::MySphere(float radius, uint rings, uint sectors) : Primitives()
@@ -428,19 +446,14 @@ MySphere::MySphere(float radius, uint rings, uint sectors) : Primitives()
 		}
 	}
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	glGenBuffers(1, &bufferVertex);
-	glBindBuffer(GL_ARRAY_BUFFER, bufferVertex);
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
 
-	glGenBuffers(1, &bufferIndices);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, bufferIndices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLushort), indices.data(), GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 3, 0);
-	glEnableVertexAttribArray(0);
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+	
 }
 
 MySphere::~MySphere()
@@ -450,16 +463,21 @@ MySphere::~MySphere()
 
 void MySphere::DrawSphere()
 {
-	glColor4f(0.5f, 0.5f, 0.0f, 1.0f);
+	//glColor4f(0.5f, 0.5f, 0.0f, 1.0f);
 
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	glBindVertexArray(VAO);
-	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, NULL);
-	glBindVertexArray(0);
+	glEnableClientState(GL_VERTEX_ARRAY);
 
-	glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, 0);
+	glBindBuffer(VBO, 0);
+	glBindBuffer(EBO, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
