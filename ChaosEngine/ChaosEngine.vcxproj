@@ -55,8 +55,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalLibraryDirectories>$(ProjectDir)PhysFS\libx86;$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;assimp-vc142-mt.lib;physfs.lib;MathGeoLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)PhysFS\libx86;$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib;$(ProjectDir)DevIL\libx86</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32s.lib;assimp-vc142-mt.lib;physfs.lib;MathGeoLib.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -78,7 +78,7 @@
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalLibraryDirectories>$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;$(ProjectDir)PhysFS\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib;$(ProjectDir)DevIL\libx86</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;assimp-vc142-mt.lib;physfs.lib;MathGeoLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glew32s.lib;assimp-vc142-mt.lib;physfs.lib;MathGeoLib.lib;DevIL.lib;ILU.lib;ILUT.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

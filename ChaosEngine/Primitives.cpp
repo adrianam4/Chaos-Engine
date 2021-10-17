@@ -7,9 +7,10 @@
 #include "MathGeoLib/src/MathGeoLib.h"
 
 #include "GL/glew.h"
-#include <gl/GL.h>
-#include <gl/GLU.h>
 
+#include "DevIL/include/IL/il.h"
+#include "DevIL/include/IL/ilu.h"
+#include "DevIL/include/IL/ilut.h"
 // ------------------------------------------------------------
 Primitives::Primitives()
 {}
@@ -43,6 +44,18 @@ MyCube::MyCube(float x, float y, float z, float X, float Y, float Z) : Primitive
 	indices.push_back(3); indices.push_back(2); indices.push_back(6); indices.push_back(3); indices.push_back(6); indices.push_back(7);
 	indices.push_back(5); indices.push_back(1); indices.push_back(0); indices.push_back(4); indices.push_back(5); indices.push_back(0);
 
+	/* NOT CORRECT TEX COORDS */	
+	texCoords.push_back(1); texCoords.push_back(1);
+	texCoords.push_back(0); texCoords.push_back(1);
+	texCoords.push_back(0); texCoords.push_back(0);
+	texCoords.push_back(1); texCoords.push_back(0);
+
+	texCoords.push_back(1); texCoords.push_back(1);
+	texCoords.push_back(0); texCoords.push_back(1);
+	texCoords.push_back(0); texCoords.push_back(0);
+	texCoords.push_back(1); texCoords.push_back(0);
+
+
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
@@ -50,17 +63,43 @@ MyCube::MyCube(float x, float y, float z, float X, float Y, float Z) : Primitive
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
-	
-	makeCheckImage();
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	glGenBuffers(1, &TBO);
+	glBindBuffer(GL_ARRAY_BUFFER, TBO);
+	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
+	ILboolean success;
+	ILuint imageID;
+	int width;
+	int height;
+
+	glGenTextures(1, &_textureId);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
+
+	ilGenImages(1, &imageID);
+	ilBindImage(imageID);
+
+	success = ilLoadImage("Assets/Lenna_(test_image).png");
+
+	width = ilGetInteger(IL_IMAGE_WIDTH);
+	height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+	if (success) 
+	{
+		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		if (!success)
+		{
+			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
+			ilDeleteImages(1, &imageID);
+		}
+	}
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 MyCube::~MyCube()
@@ -86,10 +125,10 @@ void MyCube::DrawCube()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	glBindBuffer(GL_ARRAY_BUFFER, textureId); // TexCoords
+	glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-	glBindTexture(GL_TEXTURE_2D, textureId); // Textures and Indices
+	glBindTexture(GL_TEXTURE_2D, _textureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	
 	//Draw
@@ -104,21 +143,6 @@ void MyCube::DrawCube()
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-}
-
-void MyCube::makeCheckImage()
-{
-	int i, j, c;
-
-	for (i = 0; i < CHECKERS_HEIGHT; i++) {
-		for (j = 0; j < CHECKERS_WIDTH; j++) {
-			c = ((((i & 0x8) == 0) ^ ((j & 0x8)) == 0)) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;
-			checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
 }
 
 //// PYRAMID ============================================
@@ -139,6 +163,13 @@ MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Pri
 	indices.push_back(0); indices.push_back(1); indices.push_back(3);
 	indices.push_back(0); indices.push_back(3); indices.push_back(4);
 
+	/* NOT CORRECT TEX COORDS */
+	texCoords.push_back(0); texCoords.push_back(0);
+	texCoords.push_back(1); texCoords.push_back(0);
+	texCoords.push_back(0.5); texCoords.push_back(1);
+	texCoords.push_back(0); texCoords.push_back(0);
+	texCoords.push_back(1); texCoords.push_back(0);
+
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
@@ -146,6 +177,43 @@ MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Pri
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &TBO);
+	glBindBuffer(GL_ARRAY_BUFFER, TBO);
+	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
+	ILboolean success;
+	ILuint imageID;
+	int width;
+	int height;
+
+	glGenTextures(1, &_textureId);
+	glBindTexture(GL_TEXTURE_2D, _textureId);
+
+	ilGenImages(1, &imageID);
+	ilBindImage(imageID);
+
+	success = ilLoadImage("Assets/Lenna_(test_image).png");
+
+	width = ilGetInteger(IL_IMAGE_WIDTH);
+	height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+	if (success)
+	{
+		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		if (!success)
+		{
+			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
+			ilDeleteImages(1, &imageID);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 MyPyramid::~MyPyramid()
@@ -163,16 +231,32 @@ void MyPyramid::DrawPyramid()
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	//Enable states
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//Buffers
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	glBindBuffer(VBO, 0);
-	glBindBuffer(EBO, 0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, _textureId); // Textures and Indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	//Draw
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+
+	//UnBind Buffers
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 MyCylinder::MyCylinder() : Primitives()

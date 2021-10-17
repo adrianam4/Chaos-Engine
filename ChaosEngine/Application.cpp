@@ -98,6 +98,7 @@ update_status Application::Update()
 
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
+		App->editor->AddLog("Update");
 		ret = (*item)->Update(dt);
 		*item++;
 	}
@@ -106,6 +107,7 @@ update_status Application::Update()
 
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
+		App->editor->AddLog("PostUpdate");
 		ret = (*item)->PostUpdate(dt);
 		*item++;
 	}

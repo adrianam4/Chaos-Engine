@@ -31,6 +31,9 @@ protected:
 public:
 	unsigned int VBO;
 	unsigned int EBO;
+	unsigned int TBO;
+	GLuint textureId;
+	GLuint _textureId;
 };
 
 
@@ -42,13 +45,11 @@ public:
 	MyCube(float x, float y, float z, float X, float Y, float Z);
 	~MyCube();
 	void DrawCube();
-	void makeCheckImage();
-	GLubyte checkImage[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
-	GLuint textureId;
 private:
 
 	std::vector<float> vertices;
 	std::vector<uint> indices;
+	std::vector<float> texCoords;
 };
 
 class MyPyramid : public Primitives
@@ -61,6 +62,7 @@ private:
 
 	std::vector<float> vertices;
 	std::vector<uint> indices;
+	std::vector<float> texCoords;
 };
 
 class MyCylinder : public Primitives

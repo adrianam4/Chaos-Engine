@@ -12,6 +12,10 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
+#include "DevIL/include/IL/il.h"
+#include "DevIL/include/IL/ilu.h"
+#include "DevIL/include/IL/ilut.h"
+
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
@@ -54,6 +58,10 @@ bool ModuleRenderer3D::Init()
 			App->editor->AddLog("Error: %s\n", glewGetErrorString(err));
 		}
 		App->editor->AddLog("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+
+		ilInit();
+		iluInit();
+		ilutRenderer(ILUT_OPENGL);
 
 		//Use Vsync
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
@@ -138,7 +146,7 @@ bool ModuleRenderer3D::Init()
 
 		lights[0].Active(true);
 
-		InitMesh("Assets/lowpolytree.fbx");
+		//InitMesh("Assets/lowpolytree.fbx");
 
 	}
 
@@ -257,9 +265,9 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	// Rendering
-	ImGui::Render();
-
 	DrawMeshes();
+
+	ImGui::Render();
 
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

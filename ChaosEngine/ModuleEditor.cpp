@@ -45,6 +45,26 @@ bool ModuleEditor::CleanUp()
 	App->editor->AddLog("Unloading Editor scene\n");
 	consoleBuffer.clear();
 
+	for (int i = 0; i < cubes.size(); i++)
+	{
+		delete cubes[i];
+	}
+
+	for (int i = 0; i < pyramids.size(); i++)
+	{
+		delete pyramids[i];
+	}
+
+	for (int i = 0; i < spheres.size(); i++)
+	{
+		delete spheres[i];
+	}
+
+	for (int i = 0; i < cylinders.size(); i++)
+	{
+		delete cylinders[i];
+	}
+
 	return true;
 }
 
