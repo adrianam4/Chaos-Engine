@@ -50,16 +50,17 @@ MyCube::MyCube(float x, float y, float z, float X, float Y, float Z) : Primitive
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
-	//makeCheckImage();
+	
+	makeCheckImage();
 
-	//glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	//glGenTextures(1, &textureId);
-	//glBindTexture(GL_TEXTURE_2D, textureId);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &textureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_WIDTH, CHECKERS_HEIGHT, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 }
 
 MyCube::~MyCube()
@@ -70,37 +71,39 @@ MyCube::~MyCube()
 
 void MyCube::DrawCube()
 {
-	//lColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-
-	glLineWidth(5.0f);
+	glLineWidth(3.0f);
 
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, textureId);
-	//glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-	//glBindTexture(GL_TEXTURE_2D, textureId);
-
-	//glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, NULL);
-
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	//glBindVertexArray(0);
+	//Enable states
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//Buffers
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	glBindBuffer(VBO, 0);
-	glBindBuffer(EBO, 0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, textureId); // TexCoords
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, textureId); // Textures and Indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	
+	//Draw
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0); 
+
+	//UnBind Buffers
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
-
-
-	//glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 void MyCube::makeCheckImage()

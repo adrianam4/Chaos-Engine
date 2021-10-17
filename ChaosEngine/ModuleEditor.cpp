@@ -27,10 +27,8 @@ bool ModuleEditor::Start()
 
 	plane = new MyPlane(0, 0, 0, 0);
 	plane->axis = true;
-	cube = new MyCube(-5, 0, 0, 1, 1, 1);
-	pyramid = new MyPyramid(5, 0, 0, 1, 1, 1);
-	cylinder = new MyCylinder();
-	sphere = new MySphere(3,20,20);
+	AddCube(-5, 0, 0, 1, 1, 1);
+	AddPyramid(5, 0, 0, 1, 1, 1);
 
 	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(Vec3(0, 0, 0));
@@ -46,11 +44,6 @@ bool ModuleEditor::CleanUp()
 {
 	App->editor->AddLog("Unloading Editor scene\n");
 	consoleBuffer.clear();
-
-	//delete plane;
-	delete cube;
-	delete pyramid;
-	//delete cylinder;
 
 	return true;
 }
@@ -117,6 +110,34 @@ void ModuleEditor::AddLog(const char* fmt, ...)
 		consoleBuffer.appendfv(fmt, args);
 		va_end(args);
 		scrollToBottom = true;
+}
+
+void ModuleEditor::AddCube(float x, float y, float z, float X, float Y, float Z)
+{
+	MyCube *auxCube;
+	auxCube = new MyCube(x, y, z, X, Y, Z);
+	cubes.push_back(auxCube);
+}
+
+void ModuleEditor::AddPyramid(float x, float y, float z, float X, float Y, float Z)
+{
+	MyPyramid* auxPyramid;
+	auxPyramid = new MyPyramid(x, y, z, X, Y, Z);
+	pyramids.push_back(auxPyramid);
+}
+
+void ModuleEditor::AddSphere(float radius, uint rings, uint sectors)
+{
+	MySphere* auxSphere;
+	auxSphere = new MySphere(2, 20, 20);
+	spheres.push_back(auxSphere);
+}
+
+void ModuleEditor::AddCylinder()
+{
+	MyCylinder* auxCylinder;
+	auxCylinder = new MyCylinder();
+	cylinders.push_back(auxCylinder);
 }
 
 // Update: draw background
@@ -539,13 +560,15 @@ update_status ModuleEditor::PostUpdate(float dt)
 {
 	plane->Render();
 
-	cube->DrawCube();
+	for (int i = 0; i < cubes.size(); i++)
+	{
+		cubes[i]->DrawCube();
+	}
 
-	pyramid->DrawPyramid();
-
-	//cylinder->DrawCylinder();
-
-	//sphere->DrawSphere();
+	for (int i = 0; i < pyramids.size(); i++)
+	{
+		pyramids[i]->DrawPyramid();
+	}
 
 	return UPDATE_CONTINUE;
 }
