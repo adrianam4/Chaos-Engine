@@ -25,6 +25,12 @@
     <Filter Include="Sources\FBX">
       <UniqueIdentifier>{9e5df199-9dca-41a8-a6c8-44459c16bae6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Primitives">
+      <UniqueIdentifier>{a7a634ae-20a2-4f3c-94aa-95b9aa292e00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\File System">
+      <UniqueIdentifier>{8f808f0f-d533-45e3-bbda-0512daf7a1db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -87,29 +93,29 @@
     <ClInclude Include="Parson\parson.h">
       <Filter>Sources\Parson</Filter>
     </ClInclude>
-    <ClInclude Include="Primitive.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imgui_impl_opengl3.h">
       <Filter>Sources\Imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
       <Filter>Sources\Imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Primitives.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="CreateBuffers.h">
-      <Filter>Sources\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="FileSystem.h">
-      <Filter>Sources\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Mesh.h">
       <Filter>Sources\FBX</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
       <Filter>Sources\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitives.h">
+      <Filter>Sources\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitive.h">
+      <Filter>Sources\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="FileSystem.h">
+      <Filter>Sources\File System</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleScene.h">
+      <Filter>Sources\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -170,26 +176,26 @@
     <ClCompile Include="Parson\parson.c">
       <Filter>Sources\Parson</Filter>
     </ClCompile>
-    <ClCompile Include="Primitive.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
       <Filter>Sources\Imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitives.cpp">
-      <Filter>Sources\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="CreateBuffers.cpp">
-      <Filter>Sources\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="FileSystem.cpp">
-      <Filter>Sources\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Sources\FBX</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
       <Filter>Sources\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitives.cpp">
+      <Filter>Sources\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitive.cpp">
+      <Filter>Sources\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="FileSystem.cpp">
+      <Filter>Sources\File System</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Sources\Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

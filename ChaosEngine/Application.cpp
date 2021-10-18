@@ -4,6 +4,7 @@ Application::Application()
 {
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
+	scene = new ModuleScene(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	editor = new ModuleEditor(this);
@@ -16,6 +17,7 @@ Application::Application()
 	AddModule(window);
 	AddModule(camera);
 	AddModule(input);
+	AddModule(scene);
 	AddModule(editor);
 
 	// Renderer last!
@@ -98,7 +100,6 @@ update_status Application::Update()
 
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		App->editor->AddLog("Update");
 		ret = (*item)->Update(dt);
 		*item++;
 	}
@@ -107,7 +108,6 @@ update_status Application::Update()
 
 	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
 	{
-		App->editor->AddLog("PostUpdate");
 		ret = (*item)->PostUpdate(dt);
 		*item++;
 	}
