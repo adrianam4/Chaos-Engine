@@ -31,6 +31,21 @@
     <Filter Include="Sources\File System">
       <UniqueIdentifier>{8f808f0f-d533-45e3-bbda-0512daf7a1db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\GameObject">
+      <UniqueIdentifier>{90101a5f-9bad-42cd-8aa1-dca3708e298d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObject\Components">
+      <UniqueIdentifier>{0bd9b2ed-f442-4b9a-867e-303b7bec3ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObject\Components\Material">
+      <UniqueIdentifier>{85a2db1d-fc99-4d1c-b02e-c6d20ee3380e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObject\Components\Mesh">
+      <UniqueIdentifier>{3d3894a3-2726-4e01-8f7e-714d9353033d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\GameObject\Components\Transform">
+      <UniqueIdentifier>{b00d6b4b-0d11-4e59-84cb-f4db643f097e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -117,6 +132,21 @@
     <ClInclude Include="ModuleScene.h">
       <Filter>Sources\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Sources\GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialComponent.h">
+      <Filter>Sources\GameObject\Components\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>Sources\GameObject\Components\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Sources\GameObject\Components\Transform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -196,6 +226,21 @@
     </ClCompile>
     <ClCompile Include="ModuleScene.cpp">
       <Filter>Sources\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Sources\GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Sources\GameObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialComponent.cpp">
+      <Filter>Sources\GameObject\Components\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Sources\GameObject\Components\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Sources\GameObject\Components\Transform</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

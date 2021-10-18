@@ -1,6 +1,8 @@
 #pragma once
 #include "Module.h"
 #include "glmath.h"
+#include <vector>
+#include "GameObject.h"
 
 class ModuleScene : public Module
 {
@@ -13,4 +15,8 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	
+public:
+	GameObject* CreateGameObject(/*Parameters*/);
+	std::vector<GameObject*> game_objects;
 };

@@ -50,3 +50,8 @@ bool ModuleScene::CleanUp()
 
 	return ret;
 }
+
+GameObject* ModuleScene::CreateGameObject()
+{
+	return nullptr;
+}

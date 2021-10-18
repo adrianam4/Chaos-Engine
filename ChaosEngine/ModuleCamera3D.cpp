@@ -1,7 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleCamera3D.h"
-#include "ModuleInput.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -54,9 +53,6 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed * 2;
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed * 2;
-
-	if (App->input->GetMouseZ() < 0) newPos += Z * speed * 4;
-	if (App->input->GetMouseZ() > 0) newPos -= Z * speed * 4;
 
 	Position += newPos;
 	Reference += newPos;
