@@ -10,6 +10,10 @@ enum class ComponentType
 {
 	TRANSFORM = 1,
 	MESH,
+	CUBE,
+	PYRAMID,
+	SPHERE,
+	CYLINDER,
 	MATERIAL,
 };
 

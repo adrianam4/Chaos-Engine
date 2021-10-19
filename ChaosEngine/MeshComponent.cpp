@@ -1,8 +1,31 @@
+#include "Application.h"
+#include "ModuleRenderer3D.h"
 #include "MeshComponent.h"
 
-ComponentMesh::ComponentMesh()
+ComponentMesh::ComponentMesh(ComponentType mType)
 {
-	type = ComponentType::MESH;
+	type = mType;
+
+	switch (mType)
+	{
+	case ComponentType::MESH:
+		App->renderer3D->InitMesh("Assets/lowpolytree.fbx");
+		break;
+	case ComponentType::CUBE:
+		App->editor->AddCube(-5,0,0,1,1,1);
+		break;
+	case ComponentType::PYRAMID:
+		App->editor->AddPyramid(5,0,0,1,1,1);
+		break;
+	case ComponentType::SPHERE:
+		App->editor->AddSphere(3,20,20);
+		break;
+	case ComponentType::CYLINDER:
+		App->editor->AddCylinder();
+		break;
+	default:
+		break;
+	}
 }
 
 ComponentMesh::~ComponentMesh()

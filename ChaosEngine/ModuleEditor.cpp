@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "Globals.h"
 #include "ModuleEditor.h"
+#include "ModuleScene.h"
 
 #include "shellapi.h"
 #include <GL/GL.h>
@@ -27,8 +28,8 @@ bool ModuleEditor::Start()
 
 	plane = new MyPlane(0, 0, 0, 0);
 	plane->axis = true;
-	AddCube(-5, 0, 0, 1, 1, 1);
-	AddPyramid(5, 0, 0, 1, 1, 1);
+	//AddCube(-5, 0, 0, 1, 1, 1);
+	//AddPyramid(5, 0, 0, 1, 1, 1);
 
 	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(Vec3(0, 0, 0));
@@ -215,6 +216,46 @@ update_status ModuleEditor::Update(float dt)
 			if (ImGui::MenuItem("Enable/Disable Normals"))
 			{
 				normals = !normals;
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("GameObject", &open_config_menu))
+		{
+			if (ImGui::MenuItem("Create Empty"))
+			{
+				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				int last = App->scene->game_objects.size();
+			}
+			if (ImGui::MenuItem("Create Mesh"))
+			{
+				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				int lastComponent = App->scene->game_objects.size() - 1;
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::MESH));
+			}
+			if (ImGui::MenuItem("Create Cube"))
+			{
+				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				int lastComponent = App->scene->game_objects.size() - 1;
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::CUBE));
+			}
+			if (ImGui::MenuItem("Create Pyramid"))
+			{
+				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				int lastComponent = App->scene->game_objects.size() - 1;
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::PYRAMID));
+			}
+			if (ImGui::MenuItem("Create Sphere"))
+			{
+				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				int lastComponent = App->scene->game_objects.size() - 1;
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::SPHERE));
+			}
+			if (ImGui::MenuItem("Create Cylinder"))
+			{
+				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				int lastComponent = App->scene->game_objects.size() - 1;
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::CYLINDER));
 			}
 			ImGui::EndMenu();
 		}
@@ -588,6 +629,16 @@ update_status ModuleEditor::PostUpdate(float dt)
 	for (int i = 0; i < pyramids.size(); i++)
 	{
 		pyramids[i]->DrawPyramid();
+	}
+
+	for (int i = 0; i < spheres.size(); i++)
+	{
+		spheres[i]->DrawSphere();
+	}
+
+	for (int i = 0; i < cylinders.size(); i++)
+	{
+		cylinders[i]->DrawCylinder();
 	}
 
 	return UPDATE_CONTINUE;

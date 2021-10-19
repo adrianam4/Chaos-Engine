@@ -15,43 +15,38 @@ bool ModuleScene::Init()
 {
 	bool ret = true;
 
-
 	return ret;
 }
 
 update_status ModuleScene::PreUpdate(float dt)
 {
-	update_status status = update_status::UPDATE_CONTINUE;
 
 
-	return status;
+	return UPDATE_CONTINUE;
 }
 
 update_status ModuleScene::Update(float dt)
 {
-	update_status status = update_status::UPDATE_CONTINUE;
 
-
-	return status;
+	return UPDATE_CONTINUE;
 }
 
 update_status ModuleScene::PostUpdate(float dt)
 {
-	update_status status = update_status::UPDATE_CONTINUE;
 
 
-	return status;
+	return UPDATE_CONTINUE;
 }
 
 bool ModuleScene::CleanUp()
 {
-	bool ret = true;
 
 
-	return ret;
+	return true;
 }
 
 GameObject* ModuleScene::CreateGameObject()
 {
-	return nullptr;
+	GameObject* auxGameObject = new GameObject();
+	return auxGameObject;
 }

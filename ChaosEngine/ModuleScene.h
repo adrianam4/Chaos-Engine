@@ -17,6 +17,6 @@ public:
 	bool CleanUp();
 	
 public:
-	GameObject* CreateGameObject(/*Parameters*/);
+	GameObject* CreateGameObject();
 	std::vector<GameObject*> game_objects;
 };

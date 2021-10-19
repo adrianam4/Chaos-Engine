@@ -6,10 +6,19 @@
 
 #include "Component.h"
 
+enum class MeshType
+{
+	MODEL = 1,
+	CUBE,
+	PYRAMID,
+	SPHERE,
+	CYLINDER,
+};
+
 class ComponentMesh : public Component
 {
 public:
-	ComponentMesh();
+	ComponentMesh(ComponentType mType);
 	~ComponentMesh();
 
 	void Enable() override;

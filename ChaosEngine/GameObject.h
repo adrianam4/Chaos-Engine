@@ -11,8 +11,10 @@ class GameObject
 public:
 	void Update();
 	Component* CreateComponent(ComponentType type);
-private:
+public:
 	bool active;
 	std::string name;
 	std::vector<Component*> components;
+	std::vector<GameObject*> childrens;
+	GameObject* parent;
 };

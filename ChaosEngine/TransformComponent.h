@@ -3,6 +3,12 @@
 #include "Module.h"
 #include "glmath.h"
 #include <vector>
+#include "MathGeoLib/src/MathGeoLib.h"
+
+#include "assimp/cimport.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postProcess.h"
 
 #include "Component.h"
 
@@ -15,4 +21,8 @@ public:
 	void Enable() override;
 	void Update() override;
 	void Disable() override;
+
+	
+	//mat4x4 transMatrix;
+	//void CalculateTransMatrix(mat4x4 parentsMatrix, mat4x4 localMatrix);
 };
