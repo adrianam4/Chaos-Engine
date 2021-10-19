@@ -4,7 +4,7 @@ ComponentTransform::ComponentTransform()
 {
 	type = ComponentType::TRANSFORM;
 
-	
+	name = "Transform Component";
 }
 
 ComponentTransform::~ComponentTransform()

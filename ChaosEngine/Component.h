@@ -23,6 +23,7 @@ public:
 	ComponentType type;
 	bool active;
 	GameObject* owner;
+	const char* name;
 
 	virtual void Enable() {}
 	virtual void Update() {}

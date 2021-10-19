@@ -11,8 +11,8 @@ Component* GameObject::CreateComponent(ComponentType type)
 	switch (type)
 	{
 	case ComponentType::TRANSFORM:
-		break;
 		component = new ComponentTransform();
+		break;
 	case ComponentType::MESH:
 		component = new ComponentMesh(ComponentType::MESH);
 		break;

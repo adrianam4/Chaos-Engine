@@ -171,6 +171,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool show_about_window = false;
 	static bool open_config_menu = false;
 	static bool show_config_menu = true;
+	static bool show_hierarchy = true;
 	static bool show_console_menu = true;
 	static bool is_active = false;
 	static bool is_active2 = false;
@@ -205,6 +206,10 @@ update_status ModuleEditor::Update(float dt)
 			{
 				show_config_menu = !show_config_menu;
 			}
+			if (ImGui::MenuItem("Hierarchy"))
+			{
+				show_hierarchy = !show_hierarchy;
+			}
 			if (ImGui::MenuItem("Console"))
 			{
 				show_console_menu = !show_console_menu;
@@ -224,38 +229,56 @@ update_status ModuleEditor::Update(float dt)
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject());
-				int last = App->scene->game_objects.size();
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Empty GameObject"));
+				int lastComponent = App->scene->game_objects.size() - 1;
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+				
 			}
 			if (ImGui::MenuItem("Create Mesh"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Mesh"));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::MESH));
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Cube"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Cube"));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::CUBE));
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Pyramid"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Pyramid"));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::PYRAMID));
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Sphere"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Sphere"));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::SPHERE));
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Cylinder"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject());
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Cylinder"));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::CYLINDER));
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
 			}
 			ImGui::EndMenu();
 		}
@@ -288,6 +311,29 @@ update_status ModuleEditor::Update(float dt)
 
 
 	////////////////////////////////////////////////////////////////// CONFIGURATION WINDOW //////////////////////////////////////////////////////////////////
+	if (show_hierarchy)
+	{
+		ImGui::Begin("Hierarchy", &open_config_menu); // ------ BEGIN HIERARCHY
+		ImGui::LabelText("", "Game Objects in Scene: %d", App->scene->game_objects.size());
+		
+		for (int i = 0; i < App->scene->game_objects.size(); i++)
+		{
+			if (ImGui::TreeNode(App->scene->game_objects[i]->name))
+			{
+				for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
+				{
+					if (ImGui::TreeNode(App->scene->game_objects[i]->components[j]->name))
+					{
+						ImGui::TreePop();
+					}
+				}
+				ImGui::TreePop();
+			}
+			ImGui::Separator();
+		}
+		
+		ImGui::End(); // ------ END HIERARCHY
+	}
 
 	if (show_config_menu)
 	{

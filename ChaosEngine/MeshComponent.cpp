@@ -26,6 +26,8 @@ ComponentMesh::ComponentMesh(ComponentType mType)
 	default:
 		break;
 	}
+
+	name = "Mesh Component";
 }
 
 ComponentMesh::~ComponentMesh()

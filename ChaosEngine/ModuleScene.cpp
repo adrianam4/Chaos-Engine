@@ -2,6 +2,11 @@
 #include "Application.h"
 #include "ModuleScene.h"
 
+#include "assimp/cimport.h"
+#include "assimp/Importer.hpp"
+#include "assimp/scene.h"
+#include "assimp/postProcess.h"
+
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 
@@ -14,6 +19,8 @@ ModuleScene::~ModuleScene()
 bool ModuleScene::Init()
 {
 	bool ret = true;
+
+	aiScene scene;
 
 	return ret;
 }
@@ -45,8 +52,9 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
-GameObject* ModuleScene::CreateGameObject()
+GameObject* ModuleScene::CreateGameObject(const char* label)
 {
 	GameObject* auxGameObject = new GameObject();
+	auxGameObject->name = label;
 	return auxGameObject;
 }

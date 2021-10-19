@@ -13,7 +13,7 @@ public:
 	Component* CreateComponent(ComponentType type);
 public:
 	bool active;
-	std::string name;
+	const char* name;
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
 	GameObject* parent;
