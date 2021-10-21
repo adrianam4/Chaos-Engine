@@ -235,7 +235,7 @@ update_status ModuleEditor::Update(float dt)
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Empty GameObject"));
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Empty GameObject", false));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
@@ -243,7 +243,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Mesh"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Mesh"));
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Mesh", false));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::MESH));
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -252,7 +252,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Cube"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Cube"));
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Cube", false));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::CUBE));
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -261,7 +261,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Pyramid"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Pyramid"));
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Pyramid", false));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::PYRAMID));
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -270,7 +270,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Sphere"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Sphere"));
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Sphere", false));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::SPHERE));
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -279,7 +279,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Cylinder"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Cylinder"));
+				App->scene->game_objects.push_back(App->scene->CreateGameObject("Cylinder", false));
 				int lastComponent = App->scene->game_objects.size() - 1;
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::CYLINDER));
 				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -314,7 +314,9 @@ update_status ModuleEditor::Update(float dt)
 		}
 		ImGui::EndMainMenuBar();
 	}
-	////////////////////////////////////////////////////////////////// CONFIGURATION WINDOW //////////////////////////////////////////////////////////////////
+
+	////////////////////////////////////////////////////////////////// HIERARCHY WINDOW //////////////////////////////////////////////////////////////////
+
 	if (show_hierarchy)
 	{
 		ImGui::Begin("Hierarchy", &open_config_menu); // ------ BEGIN HIERARCHY
@@ -324,6 +326,20 @@ update_status ModuleEditor::Update(float dt)
 		{
 			if (ImGui::TreeNode(App->scene->game_objects[i]->name))
 			{
+				if (ImGui::GetIO().MouseReleased)
+				{
+					if (App->scene->game_objects[i]->selected == false)
+					{
+						App->scene->game_objects[i]->selected = true;
+					}
+					App->editor->AddLog("%s is selected\n", App->scene->game_objects[i]->name);
+					if (App->scene->game_objects[i]->selected)
+					{
+						App->scene->game_objects[i]->selected = false;
+					}
+					App->editor->AddLog("%s is unselected\n", App->scene->game_objects[i]->name);
+				}
+
 				for (int j = 0; j < App->scene->game_objects[i]->childrens.size(); j++)
 				{
 					if (App->scene->game_objects[i]->childrens.size() > 0)
@@ -364,6 +380,8 @@ update_status ModuleEditor::Update(float dt)
 		}
 		ImGui::End();
 	}
+
+	////////////////////////////////////////////////////////////////// CONFIGURATION WINDOW //////////////////////////////////////////////////////////////////
 
 	if (show_config_menu)
 	{

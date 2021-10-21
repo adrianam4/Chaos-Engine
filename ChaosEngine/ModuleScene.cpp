@@ -52,11 +52,15 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
-GameObject* ModuleScene::CreateGameObject(const char* label)
+GameObject* ModuleScene::CreateGameObject(const char* label, bool select)
 {
 	GameObject* auxGameObject = new GameObject();
 	auxGameObject->name = label;
+
+	auxGameObject->selected = select;
+
 	auxGameObject->id = lastId + 1;
 	lastId++;
+
 	return auxGameObject;
 }

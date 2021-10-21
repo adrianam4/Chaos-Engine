@@ -14,6 +14,7 @@ public:
 public:
 	uint id;
 	bool active;
+	bool selected;
 	const char* name;
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;

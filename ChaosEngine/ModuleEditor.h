@@ -41,9 +41,11 @@ public:
 	bool wireframe;
 	bool normals;
 	bool scrollToBottom;
+
 	std::vector<MyCube*> cubes;
 	std::vector<MyCylinder*> cylinders;
 	std::vector<MySphere*> spheres;
 	std::vector<MyPyramid*> pyramids;
 	int lastId;
+	bool isSelected;
 };
