@@ -22,7 +22,9 @@ public:
 	void Update() override;
 	void Disable() override;
 
-	
+	float3 position;
+	float3 scale;
+	Quat rotation;
 	//mat4x4 transMatrix;
 	//void CalculateTransMatrix(mat4x4 parentsMatrix, mat4x4 localMatrix);
 };

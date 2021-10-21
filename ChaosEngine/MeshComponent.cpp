@@ -40,6 +40,17 @@ ComponentMesh::ComponentMesh(ComponentType mType)
 	name = "Mesh Component";
 }
 
+ComponentMesh::ComponentMesh(ComponentType mType, char* _name)
+{
+	type = mType;
+
+	App->renderer3D->InitMesh(_name);
+	App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
+	App->editor->lastId++;
+
+	name = "Mesh Component";
+}
+
 ComponentMesh::~ComponentMesh()
 {
 }

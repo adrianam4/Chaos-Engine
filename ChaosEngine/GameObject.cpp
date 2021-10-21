@@ -4,6 +4,15 @@
 #include "TransformComponent.h"
 #include "MaterialComponent.h"
 
+Component* GameObject::CreateComponent(ComponentType type, const char* name)
+{
+	Component* component = nullptr;
+
+	component = new ComponentMesh(ComponentType::MESH, (char*)name);
+		
+	return component;
+}
+
 Component* GameObject::CreateComponent(ComponentType type)
 {
 	Component* component = nullptr;
@@ -34,7 +43,7 @@ Component* GameObject::CreateComponent(ComponentType type)
 	default:
 		break;
 	}
-	
+
 	return component;
 }
 

@@ -103,7 +103,12 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_DROPFILE:
 			{
 				char* fileDir = e.drop.file;
-				App->renderer3D->InitMesh(fileDir);
+				App->scene->game_objects.push_back(App->scene->CreateGameObject(fileDir, false));
+				int lastComponent = App->scene->game_objects.size() - 1;
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::MESH,fileDir));
+				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
 				SDL_free(&fileDir);
 			}
 			break;

@@ -19,6 +19,7 @@ class ComponentMesh : public Component
 {
 public:
 	ComponentMesh(ComponentType mType);
+	ComponentMesh(ComponentType mType, char* name);
 	~ComponentMesh();
 
 	void Enable() override;

@@ -11,6 +11,7 @@ class GameObject
 public:
 	void Update();
 	Component* CreateComponent(ComponentType type);
+	Component* CreateComponent(ComponentType type, const char* name);
 public:
 	uint id;
 	bool active;
