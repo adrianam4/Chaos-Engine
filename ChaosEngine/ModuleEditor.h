@@ -3,6 +3,7 @@
 #include "Globals.h"
 #include "Primitive.h"
 #include "Primitives.h"
+#include "GameObject.h"
 
 #include "imgui.h"
 
@@ -46,6 +47,8 @@ public:
 	std::vector<MyCylinder*> cylinders;
 	std::vector<MySphere*> spheres;
 	std::vector<MyPyramid*> pyramids;
+
+	GameObject* objectSelected;
 	int lastId;
 	bool isSelected;
 };

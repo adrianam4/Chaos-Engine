@@ -13,11 +13,13 @@
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	lastId = -1;
+	objectSelected = nullptr;
 	consoleBuffer.clear();
 }
 
 ModuleEditor::~ModuleEditor()
 {
+	objectSelected = nullptr;
 	consoleBuffer.clear();
 }
 
@@ -187,7 +189,6 @@ update_status ModuleEditor::Update(float dt)
 		LoadConfig();
 		ComproveScreen();
 	}
-
 	////////////////////////////////////////////////////////////////// MAIN MENU BAR //////////////////////////////////////////////////////////////////
 
 	if (ImGui::BeginMainMenuBar())
@@ -326,20 +327,11 @@ update_status ModuleEditor::Update(float dt)
 		{
 			if (ImGui::TreeNode(App->scene->game_objects[i]->name))
 			{
-				if (ImGui::GetIO().MouseReleased)
+				if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
 				{
-					if (App->scene->game_objects[i]->selected == false)
-					{
-						App->scene->game_objects[i]->selected = true;
-					}
-					App->editor->AddLog("%s is selected\n", App->scene->game_objects[i]->name);
-					if (App->scene->game_objects[i]->selected)
-					{
-						App->scene->game_objects[i]->selected = false;
-					}
-					App->editor->AddLog("%s is unselected\n", App->scene->game_objects[i]->name);
+					App->scene->game_objects[i]->selected = !App->scene->game_objects[i]->selected;
 				}
-
+				
 				for (int j = 0; j < App->scene->game_objects[i]->childrens.size(); j++)
 				{
 					if (App->scene->game_objects[i]->childrens.size() > 0)
@@ -364,19 +356,22 @@ update_status ModuleEditor::Update(float dt)
 
 		for (int i = 0; i < App->scene->game_objects.size(); i++)
 		{
-			ImGui::TextColored(ImVec4(255, 255, 0, 255), App->scene->game_objects[i]->name);
-			ImGui::Separator();
-			for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
+			if (App->scene->game_objects[i]->selected)
 			{
-				if (ImGui::TreeNode(App->scene->game_objects[i]->components[j]->name))
+				ImGui::TextColored(ImVec4(255, 255, 0, 255), App->scene->game_objects[i]->name);
+				ImGui::Separator();
+				for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
 				{
-					if (App->scene->game_objects[i]->components[j]->type != ComponentType::TRANSFORM)
-						ImGui::Checkbox("Active", &App->scene->game_objects[i]->components[j]->active);
-
-
-					ImGui::TreePop();
+					if (ImGui::TreeNode(App->scene->game_objects[i]->components[j]->name))
+					{
+						if (App->scene->game_objects[i]->components[j]->type != ComponentType::TRANSFORM)
+							ImGui::Checkbox("Active", &App->scene->game_objects[i]->components[j]->active);
+							
+						ImGui::TreePop();
+					}
 				}
 			}
+
 		}
 		ImGui::End();
 	}

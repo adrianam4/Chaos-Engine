@@ -9,7 +9,7 @@ ComponentMesh::ComponentMesh(ComponentType mType)
 	switch (mType)
 	{
 	case ComponentType::MESH:
-		App->renderer3D->InitMesh("Assets/lowpolytree.fbx");
+		App->renderer3D->InitMesh("Assets/BakerHouse.fbx");
 		App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
 		App->editor->lastId++;
 		break;
