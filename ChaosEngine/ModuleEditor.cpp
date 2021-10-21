@@ -329,9 +329,9 @@ update_status ModuleEditor::Update(float dt)
 			{
 				if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
 				{
-					App->scene->game_objects[i]->selected = !App->scene->game_objects[i]->selected;
+					objectSelected = App->scene->game_objects[i];
 				}
-				
+
 				for (int j = 0; j < App->scene->game_objects[i]->childrens.size(); j++)
 				{
 					if (App->scene->game_objects[i]->childrens.size() > 0)
@@ -350,28 +350,21 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End(); // ------ END HIERARCHY
 	}
 
-	if (show_inspector && App->scene->game_objects.size() > 0)
+	if (show_inspector && objectSelected != nullptr)
 	{
 		ImGui::Begin("Inspector", &open_config_menu);
 
-		for (int i = 0; i < App->scene->game_objects.size(); i++)
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), objectSelected->name);
+		ImGui::Separator();
+		for (int j = 0; j < objectSelected->components.size(); j++)
 		{
-			if (App->scene->game_objects[i]->selected)
+			if (ImGui::TreeNode(objectSelected->components[j]->name))
 			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), App->scene->game_objects[i]->name);
-				ImGui::Separator();
-				for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
-				{
-					if (ImGui::TreeNode(App->scene->game_objects[i]->components[j]->name))
-					{
-						if (App->scene->game_objects[i]->components[j]->type != ComponentType::TRANSFORM)
-							ImGui::Checkbox("Active", &App->scene->game_objects[i]->components[j]->active);
-							
-						ImGui::TreePop();
-					}
-				}
-			}
+				if (objectSelected->components[j]->type != ComponentType::TRANSFORM)
+					ImGui::Checkbox("Active", &objectSelected->components[j]->active);
 
+				ImGui::TreePop();
+			}
 		}
 		ImGui::End();
 	}
