@@ -22,23 +22,22 @@ PrimitivesTypes Primitives::GetType() const
 }
 
 //// CUBE ============================================
-MyCube::MyCube(float _x, float _y, float _z, float _sX, float _sY, float _sZ) : Primitives()
+MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 {
-	x = _x; sX = _sX;
-	y = _y; sY = _sY;
-	z = _z; sZ = _sZ;
+	position = pos;
+	scale = sca;
 
 	type = PrimitivesTypes::PRIMITIVE_MYCUBE;
 
-	vertices.push_back((-1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((0 + z) * sZ);
-	vertices.push_back((1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((0 + z) * sZ);
-	vertices.push_back((1 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((0 + z) * sZ);
-	vertices.push_back((-1 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((0 + z) * sZ);
+	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
+	vertices.push_back((1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
+	vertices.push_back((1 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
+	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
 
-	vertices.push_back((-1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((-2 + z) * sZ);
-	vertices.push_back((1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((-2 + z) * sZ);
-	vertices.push_back((1 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((-2 + z) * sZ);
-	vertices.push_back((-1 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((-2 + z) * sZ);
+	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((-2 + position.z) * scale.z);
+	vertices.push_back((1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((-2 + position.z) * scale.z);
+	vertices.push_back((1 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((-2 + position.z) * scale.z);
+	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((-2 + position.z) * scale.z);
 	
 	indices.push_back(0); indices.push_back(1); indices.push_back(2); indices.push_back(0); indices.push_back(2); indices.push_back(3);
 	indices.push_back(6); indices.push_back(5); indices.push_back(4); indices.push_back(7); indices.push_back(6); indices.push_back(4);
@@ -149,19 +148,18 @@ void MyCube::DrawCube()
 }
 
 //// PYRAMID ============================================
-MyPyramid::MyPyramid(float _x, float _y, float _z, float _sX, float _sY, float _sZ) : Primitives()
+MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 {
-	x = _x; sX = _sX;
-	y = _y; sY = _sY;
-	z = _z; sZ = _sZ;
-
 	type = PrimitivesTypes::PRIMITIVE_MYPYRAMID;
 
-	vertices.push_back((-1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((-1 + z) * sZ);
-	vertices.push_back((1 + x) * sX);vertices.push_back((0 + y) * sY);vertices.push_back((-1 + z) * sZ);
-	vertices.push_back((0 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((0 + z) * sZ);
-	vertices.push_back((1 + x) * sX);vertices.push_back((0 + y) * sY);vertices.push_back((1 + z) * sZ);
-	vertices.push_back((-1 + x) * sX);vertices.push_back((0 + y) * sY);vertices.push_back((1 + z) * sZ);
+	position = pos;
+	scale = sca;
+
+	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((-1 + position.z) * scale.z);
+	vertices.push_back((1 + position.x) * scale.x);vertices.push_back((0 + position.y) * scale.y);vertices.push_back((-1 + position.z) * scale.z);
+	vertices.push_back((0 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
+	vertices.push_back((1 + position.x) * scale.x);vertices.push_back((0 + position.y) * scale.y);vertices.push_back((1 + position.z) * scale.z);
+	vertices.push_back((-1 + position.x) * scale.x);vertices.push_back((0 + position.y) * scale.y);vertices.push_back((1 + position.z) * scale.z);
 
 	indices.push_back(2); indices.push_back(1); indices.push_back(0);
 	indices.push_back(2); indices.push_back(3); indices.push_back(1);
@@ -266,9 +264,12 @@ void MyPyramid::DrawPyramid()
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
-MyCylinder::MyCylinder() : Primitives()
+MyCylinder::MyCylinder(float3 pos, float3 sca) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
+
+	position = pos;
+	scale = sca;
 
 	baseRadius = 2.0f;
 	topRadius = 2.0f;
@@ -354,9 +355,9 @@ void MyCylinder::BuildVerticalSmooth()
 			float uy = unitVertices[k + 1];
 			float uz = unitVertices[k + 2];
 			// position vector
-			vertices.push_back(ux * radius);             // vx
-			vertices.push_back(uy * radius);             // vy
-			vertices.push_back(h);                       // vz
+			vertices.push_back((ux * radius) + position.x);             // vx
+			vertices.push_back((uy * radius) + position.y);            // vy
+			vertices.push_back(h + position.z);                       // vz
 			// normal vector
 			normals.push_back(ux);                       // nx
 			normals.push_back(uy);                       // ny
@@ -379,7 +380,7 @@ void MyCylinder::BuildVerticalSmooth()
 		float nz = -1 + i * 2;                           // z value of normal; -1 to 1
 
 		// center point
-		vertices.push_back(0);     vertices.push_back(0);     vertices.push_back(h);
+		vertices.push_back(0 + position.x);     vertices.push_back(0 + position.y);     vertices.push_back(h + position.z);
 		normals.push_back(0);      normals.push_back(0);      normals.push_back(nz);
 		texCoords.push_back(0.5f); texCoords.push_back(0.5f);
 
@@ -388,9 +389,9 @@ void MyCylinder::BuildVerticalSmooth()
 			float ux = unitVertices[k];
 			float uy = unitVertices[k + 1];
 			// position vector
-			vertices.push_back(ux * radius);             // vx
-			vertices.push_back(uy * radius);             // vy
-			vertices.push_back(h);                       // vz
+			vertices.push_back(ux * radius + position.x);             // vx
+			vertices.push_back(uy * radius + position.y);             // vy
+			vertices.push_back(h + position.z);                       // vz
 			// normal vector
 			normals.push_back(0);                        // nx
 			normals.push_back(0);                        // ny
@@ -491,9 +492,12 @@ void MyCylinder::Initialize()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
 
-MySphere::MySphere(float radius, uint rings, uint sectors) : Primitives()
+MySphere::MySphere(float3 pos,float3 sca,float radius, uint rings, uint sectors) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYSPHERE;
+
+	position = pos;
+	scale = sca;
 
 	float const R = 1. / (float)(rings - 1);
 	float const S = 1. / (float)(sectors - 1);
@@ -514,16 +518,20 @@ MySphere::MySphere(float radius, uint rings, uint sectors) : Primitives()
 			float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
 			float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
 
+			//TODO: FIX PIXELS
+			//TODO: WHERE DEFINE AND WORK WITH POSITIONS
+			//TODO: HOW DOES MATRIX WORK
+
 			*t++ = s * S;
 			*t++ = r * R;
 
-			*v++ = x * radius;
-			*v++ = y * radius;
-			*v++ = z * radius;
+			*v++ = (x * radius) + position.x;
+			*v++ = (y * radius) + position.y;
+			*v++ = (z * radius) + position.z;
 
-			*n++ = x;
-			*n++ = y;
-			*n++ = z;
+			*n++ = x + position.x;
+			*n++ = y + position.y;
+			*n++ = z + position.z;
 		}
 	}
 

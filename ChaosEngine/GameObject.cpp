@@ -20,7 +20,7 @@ Component* GameObject::CreateComponent(ComponentType type)
 	switch (type)
 	{
 	case ComponentType::TRANSFORM:
-		component = new ComponentTransform();
+		component = new ComponentTransform(float3(0,0,0),float3(1,1,1));
 		break;
 	case ComponentType::MESH:
 		component = new ComponentMesh(ComponentType::MESH);

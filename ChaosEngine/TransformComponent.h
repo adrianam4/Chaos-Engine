@@ -15,12 +15,13 @@
 class ComponentTransform : public Component
 {
 public:
-	ComponentTransform();
+	ComponentTransform(float3 pos, float3 sca);
 	~ComponentTransform();
 
 	void Enable() override;
 	void Update() override;
 	void Disable() override;
+	void OnEditor(int i) override;
 
 	float3 position;
 	float3 scale;

@@ -23,10 +23,10 @@ public:
 
 	void AddLog(const char* fmt, ...);
 
-	void AddCube(float x,float y, float z, float X, float Y, float Z);
-	void AddPyramid(float x, float y, float z, float X, float Y, float Z);
-	void AddSphere(float radius, uint rings, uint sectors);
-	void AddCylinder();
+	void AddCube(float3 pos, float3 sca);
+	void AddPyramid(float3 pos, float3 sca);
+	void AddSphere(float3 pos, float3 sca, float radius, uint rings, uint sectors);
+	void AddCylinder(float3 pos, float3 sca);
 private:
 	int maxFPS;
 	int width;

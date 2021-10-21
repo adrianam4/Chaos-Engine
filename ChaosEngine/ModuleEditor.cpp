@@ -136,31 +136,31 @@ void ModuleEditor::AddLog(const char* fmt, ...)
 		scrollToBottom = true;
 }
 
-void ModuleEditor::AddCube(float x, float y, float z, float X, float Y, float Z)
+void ModuleEditor::AddCube(float3 pos, float3 sca)
 {
 	MyCube *auxCube;
-	auxCube = new MyCube(x, y, z, X, Y, Z);
+	auxCube = new MyCube(pos,sca);
 	cubes.push_back(auxCube);
 }
 
-void ModuleEditor::AddPyramid(float x, float y, float z, float X, float Y, float Z)
+void ModuleEditor::AddPyramid(float3 pos, float3 sca)
 {
 	MyPyramid* auxPyramid;
-	auxPyramid = new MyPyramid(x, y, z, X, Y, Z);
+	auxPyramid = new MyPyramid(pos, sca);
 	pyramids.push_back(auxPyramid);
 }
 
-void ModuleEditor::AddSphere(float radius, uint rings, uint sectors)
+void ModuleEditor::AddSphere(float3 pos, float3 sca, float radius, uint rings, uint sectors)
 {
 	MySphere* auxSphere;
-	auxSphere = new MySphere(2, 20, 20);
+	auxSphere = new MySphere(pos, sca, 2, 20, 20);
 	spheres.push_back(auxSphere);
 }
 
-void ModuleEditor::AddCylinder()
+void ModuleEditor::AddCylinder(float3 pos, float3 sca)
 {
 	MyCylinder* auxCylinder;
-	auxCylinder = new MyCylinder();
+	auxCylinder = new MyCylinder(pos,sca);
 	cylinders.push_back(auxCylinder);
 }
 
@@ -356,12 +356,17 @@ update_status ModuleEditor::Update(float dt)
 
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), objectSelected->name);
 		ImGui::Separator();
-		for (int j = 0; j < objectSelected->components.size(); j++)
+		for (int i = 0; i < objectSelected->components.size(); i++)
 		{
-			if (ImGui::TreeNode(objectSelected->components[j]->name))
+			if (ImGui::TreeNode(objectSelected->components[i]->name))
 			{
-				if (objectSelected->components[j]->type != ComponentType::TRANSFORM)
-					ImGui::Checkbox("Active", &objectSelected->components[j]->active);
+				if (objectSelected->components[i]->type != ComponentType::TRANSFORM)
+					objectSelected->components[i]->OnEditor(i);
+
+				if (objectSelected->components[i]->type == ComponentType::TRANSFORM)
+				{
+					objectSelected->components[i]->OnEditor(i);
+				}
 
 				ImGui::TreePop();
 			}

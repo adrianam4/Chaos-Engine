@@ -25,8 +25,8 @@ public:
 
 	Primitives();
 	PrimitivesTypes	GetType() const;
-	float x, y, z;
-	float sX, sY, sZ;
+	float3 position;
+	float3 scale;
 	uint id;
 protected:
 	PrimitivesTypes type;
@@ -44,7 +44,7 @@ public:
 class MyCube : public Primitives
 {
 public:
-	MyCube(float x, float y, float z, float X, float Y, float Z);
+	MyCube(float3 pos, float3 sca);
 	~MyCube();
 	void DrawCube();
 private:
@@ -57,7 +57,7 @@ private:
 class MyPyramid : public Primitives
 {
 public:
-	MyPyramid(float x, float y, float z, float X, float Y, float Z);
+	MyPyramid(float3 pos, float3 sca);
 	~MyPyramid();
 	void DrawPyramid();
 private:
@@ -70,7 +70,7 @@ private:
 class MyCylinder : public Primitives
 {
 public:
-	MyCylinder();
+	MyCylinder(float3 pos, float3 sca);
 	MyCylinder(float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth);
 	~MyCylinder();
 	std::vector<float> GetUnitCircleVertices();
@@ -104,7 +104,7 @@ protected:
 	std::vector<GLfloat> texCoords;
 	std::vector<GLfloat> vertices;
 public:
-	MySphere(float radius, uint rings, uint sectors);
+	MySphere(float3 pos, float3 sca, float radius, uint rings, uint sectors);
 	~MySphere();
 	void DrawSphere();
 private:

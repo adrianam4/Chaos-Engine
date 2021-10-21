@@ -28,4 +28,5 @@ public:
 	virtual void Enable() {}
 	virtual void Update() {}
 	virtual void Disable() {}
+	virtual void OnEditor(int i) {}
 };
