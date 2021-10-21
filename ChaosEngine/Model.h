@@ -17,6 +17,7 @@ public:
 	Model();
 	Model(char* path);
 	void Draw();
+	uint id;
 private:
 	//std::vector<Textures> textures_loaded;
 	std::vector<Mesh> meshes;

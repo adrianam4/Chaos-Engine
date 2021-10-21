@@ -25,7 +25,9 @@ public:
 
 	Primitives();
 	PrimitivesTypes	GetType() const;
-
+	float x, y, z;
+	float sX, sY, sZ;
+	uint id;
 protected:
 	PrimitivesTypes type;
 public:

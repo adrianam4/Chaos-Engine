@@ -36,14 +36,14 @@ private:
 	bool borderless = false;
 	bool dekstop = false;
 	MyPlane* plane;
-
-	std::vector<MyCube*> cubes;
-	std::vector<MyCylinder*> cylinders;
-	std::vector<MySphere*> spheres;
-	std::vector<MyPyramid*> pyramids;
 public:
 	ImGuiTextBuffer consoleBuffer;
 	bool wireframe;
 	bool normals;
 	bool scrollToBottom;
+	std::vector<MyCube*> cubes;
+	std::vector<MyCylinder*> cylinders;
+	std::vector<MySphere*> spheres;
+	std::vector<MyPyramid*> pyramids;
+	int lastId;
 };

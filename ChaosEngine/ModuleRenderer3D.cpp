@@ -311,9 +311,22 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::DrawMeshes()
 {
-	for (int i = 0; i < models.size(); ++i)
+	for (int i = 0; i < App->scene->game_objects.size(); i++)
 	{
-		models[i].Draw();
+		for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
+		{
+			if (App->scene->game_objects[i]->components[j]->type == ComponentType::MESH && App->scene->game_objects[i]->components[j]->active)
+			{
+				int auxId = App->scene->game_objects[i]->id;
+				for (int k = 0; k < models.size(); k++)
+				{
+					if (models[k].id == auxId)
+					{
+						models[k].Draw();
+					}
+				}
+			}
+		}
 	}
 }
 

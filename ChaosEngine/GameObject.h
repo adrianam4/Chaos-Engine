@@ -12,6 +12,7 @@ public:
 	void Update();
 	Component* CreateComponent(ComponentType type);
 public:
+	uint id;
 	bool active;
 	const char* name;
 	std::vector<Component*> components;

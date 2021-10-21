@@ -9,7 +9,7 @@
 
 ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
-
+	lastId = -1;
 }
 
 ModuleScene::~ModuleScene()
@@ -56,5 +56,7 @@ GameObject* ModuleScene::CreateGameObject(const char* label)
 {
 	GameObject* auxGameObject = new GameObject();
 	auxGameObject->name = label;
+	auxGameObject->id = lastId + 1;
+	lastId++;
 	return auxGameObject;
 }

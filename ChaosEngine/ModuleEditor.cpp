@@ -12,6 +12,7 @@
 
 ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
+	lastId = -1;
 	consoleBuffer.clear();
 }
 
@@ -172,6 +173,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool open_config_menu = false;
 	static bool show_config_menu = true;
 	static bool show_hierarchy = true;
+	static bool show_inspector = true;
 	static bool show_console_menu = true;
 	static bool is_active = false;
 	static bool is_active2 = false;
@@ -209,6 +211,10 @@ update_status ModuleEditor::Update(float dt)
 			if (ImGui::MenuItem("Hierarchy"))
 			{
 				show_hierarchy = !show_hierarchy;
+			}
+			if (ImGui::MenuItem("Inspector"))
+			{
+				show_inspector = !show_inspector;
 			}
 			if (ImGui::MenuItem("Console"))
 			{
@@ -308,8 +314,6 @@ update_status ModuleEditor::Update(float dt)
 		}
 		ImGui::EndMainMenuBar();
 	}
-
-
 	////////////////////////////////////////////////////////////////// CONFIGURATION WINDOW //////////////////////////////////////////////////////////////////
 	if (show_hierarchy)
 	{
@@ -320,11 +324,14 @@ update_status ModuleEditor::Update(float dt)
 		{
 			if (ImGui::TreeNode(App->scene->game_objects[i]->name))
 			{
-				for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
+				for (int j = 0; j < App->scene->game_objects[i]->childrens.size(); j++)
 				{
-					if (ImGui::TreeNode(App->scene->game_objects[i]->components[j]->name))
+					if (App->scene->game_objects[i]->childrens.size() > 0)
 					{
-						ImGui::TreePop();
+						if (ImGui::TreeNode(App->scene->game_objects[i]->childrens[j]->name))
+						{
+							ImGui::TreePop();
+						}
 					}
 				}
 				ImGui::TreePop();
@@ -333,6 +340,29 @@ update_status ModuleEditor::Update(float dt)
 		}
 		
 		ImGui::End(); // ------ END HIERARCHY
+	}
+
+	if (show_inspector && App->scene->game_objects.size() > 0)
+	{
+		ImGui::Begin("Inspector", &open_config_menu);
+
+		for (int i = 0; i < App->scene->game_objects.size(); i++)
+		{
+			ImGui::TextColored(ImVec4(255, 255, 0, 255), App->scene->game_objects[i]->name);
+			ImGui::Separator();
+			for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
+			{
+				if (ImGui::TreeNode(App->scene->game_objects[i]->components[j]->name))
+				{
+					if (App->scene->game_objects[i]->components[j]->type != ComponentType::TRANSFORM)
+						ImGui::Checkbox("Active", &App->scene->game_objects[i]->components[j]->active);
+
+
+					ImGui::TreePop();
+				}
+			}
+		}
+		ImGui::End();
 	}
 
 	if (show_config_menu)
@@ -667,24 +697,59 @@ update_status ModuleEditor::PostUpdate(float dt)
 {
 	plane->Render();
 
-	for (int i = 0; i < cubes.size(); i++)
+	for (int i = 0; i < App->scene->game_objects.size(); i++)
 	{
-		cubes[i]->DrawCube();
-	}
-
-	for (int i = 0; i < pyramids.size(); i++)
-	{
-		pyramids[i]->DrawPyramid();
-	}
-
-	for (int i = 0; i < spheres.size(); i++)
-	{
-		spheres[i]->DrawSphere();
-	}
-
-	for (int i = 0; i < cylinders.size(); i++)
-	{
-		cylinders[i]->DrawCylinder();
+		for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
+		{
+			//Cubes
+			if (App->scene->game_objects[i]->components[j]->type == ComponentType::CUBE && App->scene->game_objects[i]->components[j]->active)
+			{
+				int auxId = App->scene->game_objects[i]->id;
+				for (int k = 0; k < cubes.size(); k++)
+				{
+					if (cubes[k]->id == auxId)
+					{
+						cubes[k]->DrawCube();
+					}
+				}
+			}
+			//Pyranids
+			if (App->scene->game_objects[i]->components[j]->type == ComponentType::PYRAMID && App->scene->game_objects[i]->components[j]->active)
+			{
+				int auxId = App->scene->game_objects[i]->id;
+				for (int k = 0; k < pyramids.size(); k++)
+				{
+					if (pyramids[k]->id == auxId)
+					{
+						pyramids[k]->DrawPyramid();
+					}
+				}
+			}
+			//Cylinders
+			if (App->scene->game_objects[i]->components[j]->type == ComponentType::CYLINDER && App->scene->game_objects[i]->components[j]->active)
+			{
+				int auxId = App->scene->game_objects[i]->id;
+				for (int k = 0; k < cylinders.size(); k++)
+				{
+					if (cylinders[k]->id == auxId)
+					{
+						cylinders[k]->DrawCylinder();
+					}
+				}
+			}
+			//Spheres
+			if (App->scene->game_objects[i]->components[j]->type == ComponentType::SPHERE && App->scene->game_objects[i]->components[j]->active)
+			{
+				int auxId = App->scene->game_objects[i]->id;
+				for (int k = 0; k < spheres.size(); k++)
+				{
+					if (spheres[k]->id == auxId)
+					{
+						spheres[k]->DrawSphere();
+					}
+				}
+			}
+		}
 	}
 
 	return UPDATE_CONTINUE;

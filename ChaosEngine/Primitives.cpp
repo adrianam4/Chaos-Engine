@@ -22,21 +22,24 @@ PrimitivesTypes Primitives::GetType() const
 }
 
 //// CUBE ============================================
-MyCube::MyCube(float x, float y, float z, float X, float Y, float Z) : Primitives()
+MyCube::MyCube(float _x, float _y, float _z, float _sX, float _sY, float _sZ) : Primitives()
 {
+	x = _x; sX = _sX;
+	y = _y; sY = _sY;
+	z = _z; sZ = _sZ;
 
 	type = PrimitivesTypes::PRIMITIVE_MYCUBE;
 
-	vertices.push_back((-1 + x) * X); vertices.push_back((0 + y) * Y); vertices.push_back((0 + z) * Z);
-	vertices.push_back((1 + x) * X); vertices.push_back((0 + y) * Y); vertices.push_back((0 + z) * Z);
-	vertices.push_back((1 + x) * X); vertices.push_back((2 + y) * Y); vertices.push_back((0 + z) * Z);
-	vertices.push_back((-1 + x) * X); vertices.push_back((2 + y) * Y); vertices.push_back((0 + z) * Z);
+	vertices.push_back((-1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((0 + z) * sZ);
+	vertices.push_back((1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((0 + z) * sZ);
+	vertices.push_back((1 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((0 + z) * sZ);
+	vertices.push_back((-1 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((0 + z) * sZ);
 
-	vertices.push_back((-1 + x) * X); vertices.push_back((0 + y) * Y); vertices.push_back((-2 + z) * Z);
-	vertices.push_back((1 + x) * X); vertices.push_back((0 + y) * Y); vertices.push_back((-2 + z) * Z);
-	vertices.push_back((1 + x) * X); vertices.push_back((2 + y) * Y); vertices.push_back((-2 + z) * Z);
-	vertices.push_back((-1 + x) * X); vertices.push_back((2 + y) * Y); vertices.push_back((-2 + z) * Z);
-
+	vertices.push_back((-1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((-2 + z) * sZ);
+	vertices.push_back((1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((-2 + z) * sZ);
+	vertices.push_back((1 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((-2 + z) * sZ);
+	vertices.push_back((-1 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((-2 + z) * sZ);
+	
 	indices.push_back(0); indices.push_back(1); indices.push_back(2); indices.push_back(0); indices.push_back(2); indices.push_back(3);
 	indices.push_back(6); indices.push_back(5); indices.push_back(4); indices.push_back(7); indices.push_back(6); indices.push_back(4);
 	indices.push_back(1); indices.push_back(5); indices.push_back(6); indices.push_back(1); indices.push_back(6); indices.push_back(2);
@@ -146,15 +149,19 @@ void MyCube::DrawCube()
 }
 
 //// PYRAMID ============================================
-MyPyramid::MyPyramid(float x, float y, float z, float X, float Y, float Z) : Primitives()
+MyPyramid::MyPyramid(float _x, float _y, float _z, float _sX, float _sY, float _sZ) : Primitives()
 {
+	x = _x; sX = _sX;
+	y = _y; sY = _sY;
+	z = _z; sZ = _sZ;
+
 	type = PrimitivesTypes::PRIMITIVE_MYPYRAMID;
 
-	vertices.push_back((-1 + x) * X); vertices.push_back((0 + y) * Y); vertices.push_back((-1 + z) * Z);
-	vertices.push_back((1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((-1 + z) * Z);
-	vertices.push_back((0 + x) * X); vertices.push_back((2 + y) * Y); vertices.push_back((0 + z) * Z);
-	vertices.push_back((1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((1 + z) * Z);
-	vertices.push_back((-1 + x) * X);vertices.push_back((0 + y) * Y);vertices.push_back((1 + z) * Z);
+	vertices.push_back((-1 + x) * sX); vertices.push_back((0 + y) * sY); vertices.push_back((-1 + z) * sZ);
+	vertices.push_back((1 + x) * sX);vertices.push_back((0 + y) * sY);vertices.push_back((-1 + z) * sZ);
+	vertices.push_back((0 + x) * sX); vertices.push_back((2 + y) * sY); vertices.push_back((0 + z) * sZ);
+	vertices.push_back((1 + x) * sX);vertices.push_back((0 + y) * sY);vertices.push_back((1 + z) * sZ);
+	vertices.push_back((-1 + x) * sX);vertices.push_back((0 + y) * sY);vertices.push_back((1 + z) * sZ);
 
 	indices.push_back(2); indices.push_back(1); indices.push_back(0);
 	indices.push_back(2); indices.push_back(3); indices.push_back(1);

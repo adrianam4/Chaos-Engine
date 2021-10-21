@@ -19,4 +19,6 @@ public:
 public:
 	GameObject* CreateGameObject(const char* label);
 	std::vector<GameObject*> game_objects;
+private:
+	int lastId;
 };
