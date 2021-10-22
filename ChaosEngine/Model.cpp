@@ -4,20 +4,20 @@ Model::Model()
 {
 }
 
-Model::Model(char* path)
+Model::Model(char* path, GameObject* lastObj)
 {
-	LoadModel(path);
+	LoadModel(path, lastObj);
 }
 
-void Model::Draw()
+void Model::Draw(float* matrix)
 {
 	for (unsigned int i = 0; i < meshes.size(); ++i)
 	{
-		meshes[i].Draw();
+		meshes[i].Draw(matrix);
 	}
 }
 
-void Model::LoadModel(std::string path)
+void Model::LoadModel(std::string path, GameObject* lastObj)
 {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_SplitLargeMeshes | aiProcess_OptimizeMeshes);
@@ -29,10 +29,10 @@ void Model::LoadModel(std::string path)
 	}
 
 	directory = path.substr(0, path.find_last_of('/'));
-	ProcessNode(scene->mRootNode, scene);
+	ProcessNode(scene->mRootNode, scene, lastObj);
 }
 
-void Model::ProcessNode(aiNode* node, const aiScene* scene)
+void Model::ProcessNode(aiNode* node, const aiScene* scene, GameObject* lastObj)
 {
 	// process all the node's meshes
 	for (int i = 0; i < node->mNumMeshes; ++i)
@@ -43,8 +43,31 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene)
 	//then do te same for each of it's children
 	for (int i = 0; i < node->mNumChildren; ++i)
 	{
-		ProcessNode(node->mChildren[i], scene);
+		ProcessNode(node->mChildren[i], scene, lastObj);
 	}
+
+	aiVector3D translation;
+	aiVector3D scale;
+	aiQuaternion rotation;
+
+	node->mTransformation.Decompose(scale, rotation, translation);
+
+	//lastObj->rot = rotation;
+	//lastObj->trans = translation;
+	//lastObj->sca = scale;
+
+	App->scene->game_objects[App->scene->game_objects.size()-1]->rot.w = rotation.w;
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->rot.x = rotation.x;
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->rot.y = rotation.y;
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->rot.z = rotation.z;
+
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->sca.x = scale.x;
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->sca.y = scale.y;
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->sca.z = scale.z;
+
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->trans.x = translation.x;
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->trans.y = translation.y;
+	App->scene->game_objects[App->scene->game_objects.size() - 1]->trans.z = translation.z;
 }
 
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)

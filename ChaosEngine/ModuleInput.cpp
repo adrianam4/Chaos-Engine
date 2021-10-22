@@ -2,6 +2,10 @@
 #include "Application.h"
 #include "ModuleInput.h"
 
+#include "imgui.h"
+#include "imgui_impl_sdl.h"
+#include "imgui_impl_opengl3.h"
+
 #define MAX_KEYS 300
 
 ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
@@ -86,6 +90,7 @@ update_status ModuleInput::PreUpdate(float dt)
 	bool quit = false;
 	while(SDL_PollEvent(&e))
 	{
+		ImGui_ImplSDL2_ProcessEvent(&e);
 		switch(e.type)
 		{
 			case SDL_MOUSEWHEEL:
@@ -112,7 +117,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					j--;
 				}
 
-				if ((aux[0] == 'f' && aux[1] == 'b' && aux[2] == 'x') || (aux[0] == 'o' && aux[1] == 'b' && aux[2] == 'j'))
+				if ((aux[0] == 'f' && aux[1] == 'b' && aux[2] == 'x') || (aux[0] == 'o' && aux[1] == 'b' && aux[2] == 'j') || (aux[0] == 'F' && aux[1] == 'B' && aux[2] == 'X'))
 				{
 					App->scene->game_objects.push_back(App->scene->CreateGameObject(fileDir, false));
 					int lastComponent = App->scene->game_objects.size() - 1;
@@ -124,6 +129,10 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 				if ((aux[0] == 'p' && aux[1] == 'n' && aux[2] == 'g') || (aux[0] == 'd' && aux[1] == 'd' && aux[2] == 's'))
 				{
+					if (App->editor->objectSelected != nullptr)
+					{
+						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL));
+					}
 
 				}
 			}

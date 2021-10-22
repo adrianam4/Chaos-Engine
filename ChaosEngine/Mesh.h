@@ -25,7 +25,7 @@ public:
 	std::vector<float> texCoords;
 
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Textures> textures, std::vector<float> texCoord);
-	void Draw();
+	void Draw(float* matrix);
 private:
 	unsigned int VBO, EBO, TBO, textureId;
 	void setupMesh();

@@ -6,6 +6,8 @@
 #include <vector>
 #include "Component.h"
 
+#include "MathGeoLib/src/MathGeoLib.h"
+
 class GameObject
 {
 public:
@@ -20,4 +22,9 @@ public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
 	GameObject* parent;
+
+	float3 trans;
+	float3 sca;
+	Quat rot;
+	float* matrix;
 };

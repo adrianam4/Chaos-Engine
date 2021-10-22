@@ -19,7 +19,7 @@ public:
 	bool CleanUp();
 
 	void OnResize(int width, int height);
-	void InitMesh(char* path);
+	void InitMesh(char* path, GameObject* selectedObj);
 	void DrawMeshes();
 public:
 

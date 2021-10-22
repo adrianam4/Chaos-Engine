@@ -322,7 +322,7 @@ void ModuleRenderer3D::DrawMeshes()
 				{
 					if (models[k].id == auxId)
 					{
-						models[k].Draw();
+						models[k].Draw(App->scene->game_objects[i]->matrix);
 					}
 				}
 			}
@@ -330,7 +330,7 @@ void ModuleRenderer3D::DrawMeshes()
 	}
 }
 
-void ModuleRenderer3D::InitMesh(char* path)
+void ModuleRenderer3D::InitMesh(char* path, GameObject* lastObj)
 {
-	models.push_back(Model(path));
+	models.push_back(Model(path,lastObj));
 }

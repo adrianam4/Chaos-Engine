@@ -362,13 +362,7 @@ update_status ModuleEditor::Update(float dt)
 		{
 			if (ImGui::TreeNode(objectSelected->components[i]->name))
 			{
-				if (objectSelected->components[i]->type != ComponentType::TRANSFORM)
-					objectSelected->components[i]->OnEditor(i);
-
-				if (objectSelected->components[i]->type == ComponentType::TRANSFORM)
-				{
-					objectSelected->components[i]->OnEditor(i);
-				}
+				objectSelected->components[i]->OnEditor(i);
 
 				ImGui::TreePop();
 			}

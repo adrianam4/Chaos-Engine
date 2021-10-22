@@ -15,7 +15,7 @@
 class ComponentTransform : public Component
 {
 public:
-	ComponentTransform(float3 pos, float3 sca);
+	ComponentTransform(float3 pos, float3 sca, Quat rot);
 	~ComponentTransform();
 
 	void Enable() override;
@@ -26,6 +26,7 @@ public:
 	float3 position;
 	float3 scale;
 	Quat rotation;
+	float4x4 transMatrix;
 	//mat4x4 transMatrix;
 	//void CalculateTransMatrix(mat4x4 parentsMatrix, mat4x4 localMatrix);
 };

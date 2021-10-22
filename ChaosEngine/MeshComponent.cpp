@@ -9,7 +9,7 @@ ComponentMesh::ComponentMesh(ComponentType mType)
 	switch (mType)
 	{
 	case ComponentType::MESH:
-		App->renderer3D->InitMesh("Assets/BakerHouse.fbx");
+		App->renderer3D->InitMesh("Assets/BakerHouse.fbx", App->scene->game_objects[App->scene->game_objects.size() - 1]);
 		App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
 		App->editor->lastId++;
 		break;
@@ -44,7 +44,7 @@ ComponentMesh::ComponentMesh(ComponentType mType, char* _name)
 {
 	type = mType;
 
-	App->renderer3D->InitMesh(_name);
+	App->renderer3D->InitMesh(_name, App->scene->game_objects[App->scene->game_objects.size() - 1]);
 	App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
 	App->editor->lastId++;
 

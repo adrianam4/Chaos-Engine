@@ -20,7 +20,7 @@ Component* GameObject::CreateComponent(ComponentType type)
 	switch (type)
 	{
 	case ComponentType::TRANSFORM:
-		component = new ComponentTransform(float3(0,0,0),float3(1,1,1));
+		component = new ComponentTransform(App->scene->game_objects[App->scene->game_objects.size() - 1]->trans, App->scene->game_objects[App->scene->game_objects.size() - 1]->sca, App->scene->game_objects[App->scene->game_objects.size() - 1]->rot);
 		break;
 	case ComponentType::MESH:
 		component = new ComponentMesh(ComponentType::MESH);
@@ -38,8 +38,8 @@ Component* GameObject::CreateComponent(ComponentType type)
 		component = new ComponentMesh(ComponentType::SPHERE);
 		break;
 	case ComponentType::MATERIAL:
-		break;
 		component = new ComponentMaterial();
+		break;
 	default:
 		break;
 	}

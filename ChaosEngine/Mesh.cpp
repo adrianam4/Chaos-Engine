@@ -17,7 +17,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 	setupMesh();
 }
 
-void Mesh::Draw()
+void Mesh::Draw(float* matrix)
 {
 	// THIS IS FOR DRAWING TEXTURES ----------------------------------------------------- 
 
@@ -45,6 +45,12 @@ void Mesh::Draw()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	if (matrix != nullptr)
+	{
+		glPushMatrix();
+		glMultMatrixf(matrix);
+	}
+
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 8 * sizeof(float), NULL);
@@ -63,6 +69,9 @@ void Mesh::Draw()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	if (matrix != nullptr)
+		glPopMatrix();
 
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
