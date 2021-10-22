@@ -103,13 +103,29 @@ update_status ModuleInput::PreUpdate(float dt)
 			case SDL_DROPFILE:
 			{
 				char* fileDir = e.drop.file;
-				App->scene->game_objects.push_back(App->scene->CreateGameObject(fileDir, false));
-				int lastComponent = App->scene->game_objects.size() - 1;
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::MESH,fileDir));
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
-				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
-				SDL_free(&fileDir);
+				char aux[3];
+				int lastChar = strlen(fileDir) - 1;
+				int j = 2;
+				for (int i = lastChar; i > lastChar - 3; i--)
+				{
+					aux[j] = fileDir[i];
+					j--;
+				}
+
+				if ((aux[0] == 'f' && aux[1] == 'b' && aux[2] == 'x') || (aux[0] == 'o' && aux[1] == 'b' && aux[2] == 'j'))
+				{
+					App->scene->game_objects.push_back(App->scene->CreateGameObject(fileDir, false));
+					int lastComponent = App->scene->game_objects.size() - 1;
+					App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::MESH, fileDir));
+					App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+					App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+					App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
+					SDL_free(&fileDir);
+				}
+				if ((aux[0] == 'p' && aux[1] == 'n' && aux[2] == 'g') || (aux[0] == 'd' && aux[1] == 'd' && aux[2] == 's'))
+				{
+
+				}
 			}
 			break;
 
