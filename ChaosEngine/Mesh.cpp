@@ -70,9 +70,6 @@ void Mesh::Draw(float* matrix)
 	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	if (matrix != nullptr)
-		glPopMatrix();
-
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -99,6 +96,9 @@ void Mesh::Draw(float* matrix)
 		}
 		glEnd();
 	}
+
+	if (matrix != nullptr)
+		glPopMatrix();
 }
 
 void Mesh::setupMesh()

@@ -116,7 +116,6 @@ update_status ModuleInput::PreUpdate(float dt)
 					aux[j] = fileDir[i];
 					j--;
 				}
-
 				if ((aux[0] == 'f' && aux[1] == 'b' && aux[2] == 'x') || (aux[0] == 'o' && aux[1] == 'b' && aux[2] == 'j') || (aux[0] == 'F' && aux[1] == 'B' && aux[2] == 'X'))
 				{
 					App->scene->game_objects.push_back(App->scene->CreateGameObject(fileDir, false));
