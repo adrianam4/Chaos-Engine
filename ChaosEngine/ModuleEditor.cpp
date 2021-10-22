@@ -177,8 +177,10 @@ update_status ModuleEditor::Update(float dt)
 	static bool show_hierarchy = true;
 	static bool show_inspector = true;
 	static bool show_console_menu = true;
-	static bool is_active = false;
-	static bool is_active2 = false;
+	static bool is_active = true;
+	static bool is_active2 = true;
+	static bool is_active3 = true;
+	static bool is_active4 = true;
 	ImVec4 clear_color = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
@@ -378,6 +380,7 @@ update_status ModuleEditor::Update(float dt)
 
 	if (show_config_menu)
 	{
+		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Configuration", &open_config_menu);
 
 		if (ImGui::CollapsingHeader("Application"))
@@ -421,65 +424,69 @@ update_status ModuleEditor::Update(float dt)
 			{
 
 			}
-			ImGui::Text("Icon: *default*");
-
-			ImGui::SliderFloat("Brigthness", &brightness, 0, 1.0f);
-
-			ImGui::SliderInt("Width", &width, 0, 2560);
-			ImGui::SliderInt("Heigh", &height, 0, 1440);
-
-			SDL_SetWindowSize(App->window->window, width, height);
-			SDL_SetWindowBrightness(App->window->window, brightness);
-
-			int display_count = 0, display_index = 0, mode_index = 0;
-			SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
-
-			if ((display_count = SDL_GetNumVideoDisplays()) < 1) {
-				SDL_Log("SDL_GetNumVideoDisplays returned: %i", display_count);
-			}
-
-			if (SDL_GetDisplayMode(display_index, mode_index, &mode) != 0) {
-				SDL_Log("SDL_GetDisplayMode failed: %s", SDL_GetError());
-			}
-			SDL_Log("SDL_GetDisplayMode(0, 0, &mode):\t\t%i bpp\t%i x %i",
-				SDL_BITSPERPIXEL(mode.format), mode.w, mode.h);
-
-			ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", mode.refresh_rate);
-
-			if (!resizable && !dekstop && !fullscreen && !borderless)
-				resizable = true;
-
-			if (ImGui::Checkbox("Fullscreen", &fullscreen))
+			if (is_active)
 			{
-				App->window->SetFullscreen(fullscreen);
-				resizable = false, borderless = false, dekstop = false;
-			}
-			ImGui::SameLine();
-			if (ImGui::Checkbox("Resizable", &resizable))
-			{
-				if (fullscreen || borderless || dekstop)
-				{
-					App->window->SetResizable(resizable);
-					fullscreen = false, borderless = false, dekstop = false;
+
+				ImGui::Text("Icon: *default*");
+
+				ImGui::SliderFloat("Brigthness", &brightness, 0, 1.0f);
+
+				ImGui::SliderInt("Width", &width, 0, 2560);
+				ImGui::SliderInt("Heigh", &height, 0, 1440);
+
+				SDL_SetWindowSize(App->window->window, width, height);
+				SDL_SetWindowBrightness(App->window->window, brightness);
+
+				int display_count = 0, display_index = 0, mode_index = 0;
+				SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
+
+				if ((display_count = SDL_GetNumVideoDisplays()) < 1) {
+					SDL_Log("SDL_GetNumVideoDisplays returned: %i", display_count);
 				}
-				if (!resizable)
-					resizable = true;
-			}
 
-			if (ImGui::Checkbox("Borderless", &borderless))
-			{
-				App->window->SetBorderless(borderless);
-				resizable = false, fullscreen = false, dekstop = false;
-			}
-			ImGui::SameLine();
-			if (ImGui::Checkbox("Full Dekstop", &dekstop))
-			{
-				App->window->SetDekstop(dekstop);
-				fullscreen = false, borderless = false, resizable = false;
-			}
-			if (ImGui::IsItemHovered())
-			{
-				ImGui::SetTooltip("Restart to apply");
+				if (SDL_GetDisplayMode(display_index, mode_index, &mode) != 0) {
+					SDL_Log("SDL_GetDisplayMode failed: %s", SDL_GetError());
+				}
+				SDL_Log("SDL_GetDisplayMode(0, 0, &mode):\t\t%i bpp\t%i x %i",
+					SDL_BITSPERPIXEL(mode.format), mode.w, mode.h);
+
+				ImGui::Text("Refresh rate: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", mode.refresh_rate);
+
+				if (!resizable && !dekstop && !fullscreen && !borderless)
+					resizable = true;
+
+				if (ImGui::Checkbox("Fullscreen", &fullscreen))
+				{
+					App->window->SetFullscreen(fullscreen);
+					resizable = false, borderless = false, dekstop = false;
+				}
+				ImGui::SameLine();
+				if (ImGui::Checkbox("Resizable", &resizable))
+				{
+					if (fullscreen || borderless || dekstop)
+					{
+						App->window->SetResizable(resizable);
+						fullscreen = false, borderless = false, dekstop = false;
+					}
+					if (!resizable)
+						resizable = true;
+				}
+
+				if (ImGui::Checkbox("Borderless", &borderless))
+				{
+					App->window->SetBorderless(borderless);
+					resizable = false, fullscreen = false, dekstop = false;
+				}
+				ImGui::SameLine();
+				if (ImGui::Checkbox("Full Dekstop", &dekstop))
+				{
+					App->window->SetDekstop(dekstop);
+					fullscreen = false, borderless = false, resizable = false;
+				}
+				if (ImGui::IsItemHovered())
+				{
+					ImGui::SetTooltip("Restart to apply");
+				}
 			}
 		}
 
@@ -488,148 +495,155 @@ update_status ModuleEditor::Update(float dt)
 			if (ImGui::Checkbox("Active", &is_active2))
 			{
 			}
+			if (is_active2)
+			{
+				ImGui::Text("Base Path: ");
+				ImGui::TextColored(ImVec4(255, 255, 0, 255), SDL_GetBasePath());
 
-			ImGui::Text("Base Path: ");
-			ImGui::TextColored(ImVec4(255, 255, 0, 255), SDL_GetBasePath());
+				ImGui::Text("Read Paths: ");
+				ImGui::TextColored(ImVec4(255, 255, 0, 255), ".");
 
-			ImGui::Text("Read Paths: ");
-			ImGui::TextColored(ImVec4(255, 255, 0, 255), ".");
-
-			ImGui::Text("Write Path: ");
-			ImGui::TextColored(ImVec4(255, 255, 0, 255), ".");
+				ImGui::Text("Write Path: ");
+				ImGui::TextColored(ImVec4(255, 255, 0, 255), ".");
+			}
 
 		}
 
 		if (ImGui::CollapsingHeader("Input"))
 		{
-			if (ImGui::Checkbox("Active", &is_active))
+			if (ImGui::Checkbox("Active", &is_active3))
 			{
 
 			}
 
-			// Mouse Info
-			ImGui::Text("Mouse Position: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d,%d", App->input->GetMouseX(), App->input->GetMouseY());
-			ImGui::Text("Mouse Motion: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d,%d", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
-			ImGui::Text("Mouse Wheel: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->input->GetMouseZ());
-
-			ImGui::Separator();
-
-			//Keyboard Info
-			static ImVector<int> keys_id;
-			static ImVector<const char*> keys_state;
-
-			for (int i = 0; i < 300; ++i)
+			if (is_active3)
 			{
-				if (App->input->keys[i] == 1)
+				// Mouse Info
+				ImGui::Text("Mouse Position: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d,%d", App->input->GetMouseX(), App->input->GetMouseY());
+				ImGui::Text("Mouse Motion: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d,%d", App->input->GetMouseXMotion(), App->input->GetMouseYMotion());
+				ImGui::Text("Mouse Wheel: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->input->GetMouseZ());
+
+				ImGui::Separator();
+
+				//Keyboard Info
+				static ImVector<int> keys_id;
+				static ImVector<const char*> keys_state;
+
+				for (int i = 0; i < 300; ++i)
 				{
-					if (App->input->keyboard[i] == KEY_IDLE)
+					if (App->input->keys[i] == 1)
 					{
-						keys_id.push_back(i);
-						keys_state.push_back("DOWN");
+						if (App->input->keyboard[i] == KEY_IDLE)
+						{
+							keys_id.push_back(i);
+							keys_state.push_back("DOWN");
+						}
+						else
+						{
+							keys_id.push_back(i);
+							keys_state.push_back("REPEAT");
+							break;
+						}
 					}
 					else
 					{
-						keys_id.push_back(i);
-						keys_state.push_back("REPEAT");
-						break;
+						if (App->input->keyboard[i] == KEY_REPEAT || App->input->keyboard[i] == KEY_DOWN)
+						{
+							keys_id.push_back(i);
+							keys_state.push_back("UP");
+						}
 					}
 				}
-				else
+
+				for (int i = 0; i < keys_id.Size; i++)
 				{
-					if (App->input->keyboard[i] == KEY_REPEAT || App->input->keyboard[i] == KEY_DOWN)
-					{
-						keys_id.push_back(i);
-						keys_state.push_back("UP");
-					}
+					int j = keys_state.Size - i - 1;
+					ImGui::Text("Keybr: %d - %s", keys_id[j], keys_state[j]);
 				}
 			}
-
-			for (int i = 0; i < keys_id.Size; i++)
-			{
-				int j = keys_state.Size - i - 1;
-				ImGui::Text("Keybr: %d - %s", keys_id[j], keys_state[j]);
-			}
-
 		}
 
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
-			if (ImGui::Checkbox("Active", &is_active))
+			if (ImGui::Checkbox("Active", &is_active4))
 			{
 
 			}
 
-			SDL_version compiled;
-			SDL_version linked;
+			if (is_active4)
+			{
+				SDL_version compiled;
+				SDL_version linked;
 
-			SDL_VERSION(&compiled);
-			SDL_GetVersion(&linked);
+				SDL_VERSION(&compiled);
+				SDL_GetVersion(&linked);
 
-			int cpu_cores = SDL_GetCPUCount();
-			int cpu_cache = SDL_GetCPUCacheLineSize();
-			float ram = SDL_GetSystemRAM() / 1000;
+				int cpu_cores = SDL_GetCPUCount();
+				int cpu_cache = SDL_GetCPUCacheLineSize();
+				float ram = SDL_GetSystemRAM() / 1000;
 
-			ImGui::Text("SDL Version: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d.%d.%d", compiled.major, compiled.minor, compiled.patch);
-			ImGui::Separator();
-			ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d (Cache: %d kb)", cpu_cores, cpu_cache);
-			ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "% .1f Gb", ram);
-			ImGui::Text("Caps: ");
-			ImGui::SameLine();
-			if (SDL_HasRDTSC())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "RDTSC, ");
-			}
-			ImGui::SameLine();
-			if (SDL_HasMMX())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "MMX, ");
-			}
-			ImGui::SameLine();
-			if (SDL_HasSSE())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE, ");
-			}
-			ImGui::SameLine();
-			if (SDL_HasSSE2())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE2, ");
-			}
-			if (SDL_HasSSE3())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE3, ");
-			}
-			ImGui::SameLine();
-			if (SDL_HasSSE41())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE41, ");
-			}
-			ImGui::SameLine();
-			if (SDL_HasSSE42())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE42, ");
-			}
-			ImGui::SameLine();
-			if (SDL_HasAVX())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "AVX, ");
-			}
-			ImGui::SameLine();
-			if (SDL_HasAVX2())
-			{
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), "AVX2, ");
-			}
-			ImGui::Separator();
+				ImGui::Text("SDL Version: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d.%d.%d", compiled.major, compiled.minor, compiled.patch);
+				ImGui::Separator();
+				ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d (Cache: %d kb)", cpu_cores, cpu_cache);
+				ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "% .1f Gb", ram);
+				ImGui::Text("Caps: ");
+				ImGui::SameLine();
+				if (SDL_HasRDTSC())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "RDTSC, ");
+				}
+				ImGui::SameLine();
+				if (SDL_HasMMX())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "MMX, ");
+				}
+				ImGui::SameLine();
+				if (SDL_HasSSE())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE, ");
+				}
+				ImGui::SameLine();
+				if (SDL_HasSSE2())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE2, ");
+				}
+				if (SDL_HasSSE3())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE3, ");
+				}
+				ImGui::SameLine();
+				if (SDL_HasSSE41())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE41, ");
+				}
+				ImGui::SameLine();
+				if (SDL_HasSSE42())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "SSE42, ");
+				}
+				ImGui::SameLine();
+				if (SDL_HasAVX())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "AVX, ");
+				}
+				ImGui::SameLine();
+				if (SDL_HasAVX2())
+				{
+					ImGui::TextColored(ImVec4(255, 255, 0, 255), "AVX2, ");
+				}
+				ImGui::Separator();
 
-			const GLubyte* vendor = glGetString(GL_VENDOR);
-			const GLubyte* renderer = glGetString(GL_RENDERER);
-			GLint gpuInfo = 0;
+				const GLubyte* vendor = glGetString(GL_VENDOR);
+				const GLubyte* renderer = glGetString(GL_RENDERER);
+				GLint gpuInfo = 0;
 
-			ImGui::Text("GPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", renderer);
-			ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", vendor);
-			ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
-			ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
-			ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
-			ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
+				ImGui::Text("GPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", renderer);
+				ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", vendor);
+				ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
+				ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
+				ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
+				ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
+			}
 		}
 
 		ImGui::End();
