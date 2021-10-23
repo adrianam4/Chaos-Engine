@@ -3,6 +3,7 @@
 #include "Module.h"
 #include "glmath.h"
 #include <vector>
+#include "MathGeoLib/src/MathGeoLib.h"
 
 class GameObject;
 
@@ -24,6 +25,10 @@ public:
 	bool active;
 	GameObject* owner;
 	const char* name;
+
+	float3 position;
+	float3 scale;
+	Quat rotation;
 
 	virtual void Enable() {}
 	virtual void Update() {}

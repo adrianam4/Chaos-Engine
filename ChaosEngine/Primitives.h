@@ -31,6 +31,8 @@ public:
 	float3 position;
 	float3 scale;
 	uint id;
+	int TransformMatrix();
+	bool found;
 protected:
 	PrimitivesTypes type;
 public:
@@ -75,7 +77,7 @@ class MyCylinder : public Primitives
 {
 public:
 	MyCylinder(float3 pos, float3 sca);
-	MyCylinder(float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth);
+	MyCylinder(float3 pos, float3 sca, float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth);
 	~MyCylinder();
 	std::vector<float> GetUnitCircleVertices();
 	void BuildVerticalSmooth();

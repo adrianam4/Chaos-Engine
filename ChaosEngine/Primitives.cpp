@@ -14,12 +14,33 @@
 // ------------------------------------------------------------
 Primitives::Primitives() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitivesTypes::PRIMITIVE_MYPOINT)
 {
+	found = false;
 }
 
 // ------------------------------------------------------------
 PrimitivesTypes Primitives::GetType() const
 {
 	return type;
+}
+
+int Primitives::TransformMatrix()
+{
+	int i = 0;
+	for (i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		if (App->scene->gameObjects[i]->id == id)
+		{
+			if (App->scene->gameObjects[i]->matrix != nullptr) 
+			{
+				glPushMatrix();
+				glMultMatrixf(App->scene->gameObjects[i]->matrix);
+				found = true;
+
+				return i;
+			}
+
+		}
+	}
 }
 
 //// CUBE ================================================================================================================================================================================
@@ -136,22 +157,7 @@ void MyCube::DrawCube()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	int i;
-	bool found = false;
-	for (i = 0; i < App->scene->gameObjects.size(); i++)
-	{
-		if (App->scene->gameObjects[i]->id == id)
-		{
-			if (App->scene->gameObjects[i]->matrix != nullptr) {
-				glPushMatrix();
-				glMultMatrixf(App->scene->gameObjects[i]->matrix);
-				found = true;
-
-				break;
-			}
-
-		}
-	}
+	int i = TransformMatrix();
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -174,12 +180,9 @@ void MyCube::DrawCube()
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-	if (found) {
-		if (App->scene->gameObjects[i]->matrix != nullptr) {
-			glPopMatrix();
 
-		}
-	}
+	if (found && App->scene->gameObjects[i]->matrix != nullptr)
+		glPopMatrix();
 }
 
 //// PYRAMID ================================================================================================================================================================================
@@ -209,7 +212,6 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	texCoords.push_back(0.5); texCoords.push_back(1);
 	texCoords.push_back(0); texCoords.push_back(0);
 	texCoords.push_back(1); texCoords.push_back(0);
-
 
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = 0;
@@ -290,22 +292,7 @@ void MyPyramid::DrawPyramid()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	int i;
-	bool found = false;
-	for (i = 0; i < App->scene->gameObjects.size(); i++)
-	{
-		if (App->scene->gameObjects[i]->id == id)
-		{
-			if (App->scene->gameObjects[i]->matrix != nullptr) {
-				glPushMatrix();
-				glMultMatrixf(App->scene->gameObjects[i]->matrix);
-				found = true;
-
-				break;
-			}
-
-		}
-	}
+	int i = TransformMatrix();
 
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
@@ -330,12 +317,8 @@ void MyPyramid::DrawPyramid()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	if (found) {
-		if (App->scene->gameObjects[i]->matrix != nullptr) {
-			glPopMatrix();
-
-		}
-	}
+	if (found && App->scene->gameObjects[i]->matrix != nullptr)
+		glPopMatrix();
 
 }
 
@@ -361,9 +344,12 @@ MyCylinder::MyCylinder(float3 pos, float3 sca) : Primitives()
 	Initialize();
 }
 
-MyCylinder::MyCylinder(float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth) : Primitives()
+MyCylinder::MyCylinder(float3 pos, float3 sca, float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
+
+	position = pos;
+	scale = sca;
 
 	this->baseRadius = baseRadius;
 	this->topRadius = topRadius;
@@ -544,21 +530,55 @@ void MyCylinder::DrawCylinder()
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	//Enable states
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	int i = TransformMatrix();
+
+	//Buffers
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-	glBindBuffer(VBO, 0);
-	glBindBuffer(EBO, 0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	//Draw
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+
+	//UnBind Buffers
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	if (found && App->scene->gameObjects[i]->matrix != nullptr)
+		glPopMatrix();
 }
 
 void MyCylinder::Initialize()
 {
 	BuildVerticalSmooth();
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = 0;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = scale.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = scale.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = scale.z;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = position.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = position.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = position.z;
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -567,6 +587,43 @@ void MyCylinder::Initialize()
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &TBO);
+	glBindBuffer(GL_ARRAY_BUFFER, TBO);
+	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
+	ILboolean success;
+	ILuint imageID;
+	int width;
+	int height;
+
+	glGenTextures(1, &aTextureId);
+	glBindTexture(GL_TEXTURE_2D, aTextureId);
+
+	ilGenImages(1, &imageID);
+	ilBindImage(imageID);
+
+	success = ilLoadImage("Assets/Lenna_(test_image).png");
+
+	width = ilGetInteger(IL_IMAGE_WIDTH);
+	height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+	if (success)
+	{
+		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		if (!success)
+		{
+			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
+			ilDeleteImages(1, &imageID);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //// SPHERE ================================================================================================================================================================================
@@ -597,20 +654,16 @@ MySphere::MySphere(float3 pos,float3 sca,float radius, uint rings, uint sectors)
 			float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
 			float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
 
-			//TODO: FIX PIXELS
-			//TODO: WHERE DEFINE AND WORK WITH POSITIONS
-			//TODO: HOW DOES MATRIX WORK
-
 			*t++ = s * S;
 			*t++ = r * R;
 
-			*v++ = (x * radius) + position.x;
-			*v++ = (y * radius) + position.y;
-			*v++ = (z * radius) + position.z;
+			*v++ = (x * radius);
+			*v++ = (y * radius);
+			*v++ = (z * radius);
 
-			*n++ = x + position.x;
-			*n++ = y + position.y;
-			*n++ = z + position.z;
+			*n++ = x;
+			*n++ = y;
+			*n++ = z;
 		}
 	}
 
@@ -627,6 +680,19 @@ MySphere::MySphere(float3 pos,float3 sca,float radius, uint rings, uint sectors)
 		}
 	}
 
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = 0;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = scale.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = scale.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = scale.z;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = position.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = position.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = position.z;
+
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
@@ -634,6 +700,43 @@ MySphere::MySphere(float3 pos,float3 sca,float radius, uint rings, uint sectors)
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &TBO);
+	glBindBuffer(GL_ARRAY_BUFFER, TBO);
+	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
+	ILboolean success;
+	ILuint imageID;
+	int width;
+	int height;
+
+	glGenTextures(1, &aTextureId);
+	glBindTexture(GL_TEXTURE_2D, aTextureId);
+
+	ilGenImages(1, &imageID);
+	ilBindImage(imageID);
+
+	success = ilLoadImage("Assets/Lenna_(test_image).png");
+
+	width = ilGetInteger(IL_IMAGE_WIDTH);
+	height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+	if (success)
+	{
+		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		if (!success)
+		{
+			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
+			ilDeleteImages(1, &imageID);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+	glBindTexture(GL_TEXTURE_2D, 0);
 	
 }
 
@@ -649,16 +752,37 @@ void MySphere::DrawSphere()
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+	//Enable states
 	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	int i = TransformMatrix();
+
+	//Buffers
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, 0);
-	glBindBuffer(VBO, 0);
-	glBindBuffer(EBO, 0);
 
+	glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	//Draw
+	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, 0);
+
+	//UnBind Buffers
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	if (found && App->scene->gameObjects[i]->matrix != nullptr)
+		glPopMatrix();
 }
 
 //// PLANE ================================================================================================================================================================================

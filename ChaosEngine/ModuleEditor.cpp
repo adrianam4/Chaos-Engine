@@ -355,6 +355,14 @@ update_status ModuleEditor::Update(float dt)
 				}
 				ImGui::TreePop();
 			}
+			else
+			{
+				if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
+				{
+					objectSelected = App->scene->gameObjects[i];
+
+				}
+			}
 			ImGui::Separator();
 		}
 		

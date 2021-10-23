@@ -3,7 +3,6 @@
 #include "Module.h"
 #include "glmath.h"
 #include <vector>
-#include "MathGeoLib/src/MathGeoLib.h"
 
 #include "assimp/cimport.h"
 #include "assimp/Importer.hpp"
@@ -23,9 +22,6 @@ public:
 	void Disable() override;
 	void OnEditor(int i) override;
 
-	float3 position;
-	float3 scale;
-	Quat rotation;
 	float4x4 transMatrix;
 	//mat4x4 transMatrix;
 	//void CalculateTransMatrix(mat4x4 parentsMatrix, mat4x4 localMatrix);
