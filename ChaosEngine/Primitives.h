@@ -17,6 +17,9 @@ enum PrimitivesTypes
 	PRIMITIVE_MYSPHERE,
 	PRIMITIVE_MYCYLINDER,
 	PRIMITIVE_MYPYRAMID,
+	PRIMITIVE_MYPLANE,
+	PRIMITIVE_MYPOINT,
+	PRIMITIVE_MYLINE,
 };
 
 class Primitives
@@ -36,11 +39,12 @@ public:
 	unsigned int TBO;
 	GLuint textureId;
 	GLuint _textureId;
+
+	Color color;
+	mat4x4 transform;
+	bool axis, wire;
 };
 
-
-
-// ============================================
 class MyCube : public Primitives
 {
 public:
@@ -110,4 +114,28 @@ public:
 private:
 	uint bufferIndices;
 	uint bufferVertex;
+};
+
+class MyPlane : public Primitives
+{
+public:
+	MyPlane();
+	MyPlane(float x, float y, float z, float d);
+	void InnerRender() const;
+	void DrawPlane() const;
+public:
+	Vec3 normal;
+	float constant;
+};
+
+// ============================================
+class MyLine : public Primitives
+{
+public:
+	MyLine();
+	MyLine(float x, float y, float z);
+	void DrawLine() const;
+public:
+	Vec3 origin;
+	Vec3 destination;
 };

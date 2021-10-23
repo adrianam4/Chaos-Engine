@@ -123,9 +123,6 @@
     <ClInclude Include="Primitives.h">
       <Filter>Sources\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="Primitive.h">
-      <Filter>Sources\Primitives</Filter>
-    </ClInclude>
     <ClInclude Include="FileSystem.h">
       <Filter>Sources\File System</Filter>
     </ClInclude>
@@ -216,9 +213,6 @@
       <Filter>Sources\FBX</Filter>
     </ClCompile>
     <ClCompile Include="Primitives.cpp">
-      <Filter>Sources\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="Primitive.cpp">
       <Filter>Sources\Primitives</Filter>
     </ClCompile>
     <ClCompile Include="FileSystem.cpp">

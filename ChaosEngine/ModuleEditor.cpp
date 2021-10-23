@@ -31,8 +31,6 @@ bool ModuleEditor::Start()
 
 	plane = new MyPlane(0, 0, 0, 0);
 	plane->axis = true;
-	//AddCube(-5, 0, 0, 1, 1, 1);
-	//AddPyramid(5, 0, 0, 1, 1, 1);
 
 	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(Vec3(0, 0, 0));
@@ -715,7 +713,7 @@ update_status ModuleEditor::Update(float dt)
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
-	plane->Render();
+	plane->DrawPlane();
 
 	for (int i = 0; i < App->scene->game_objects.size(); i++)
 	{
@@ -733,7 +731,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 					}
 				}
 			}
-			//Pyramids
+			//Pyranids
 			if (App->scene->game_objects[i]->components[j]->type == ComponentType::PYRAMID && App->scene->game_objects[i]->components[j]->active)
 			{
 				int auxId = App->scene->game_objects[i]->id;

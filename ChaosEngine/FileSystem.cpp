@@ -5,8 +5,6 @@
 #include <assimp/cfileio.h>
 #include <assimp/types.h>
 
-//#include "Leaks.h"
-
 #pragma comment( lib, "PhysFS/libx86/physfs.lib" )
 
 using namespace std;
