@@ -332,6 +332,7 @@ update_status ModuleEditor::Update(float dt)
 				if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
 				{
 					objectSelected = App->scene->game_objects[i];
+
 				}
 
 				for (int j = 0; j < App->scene->game_objects[i]->childrens.size(); j++)
@@ -732,7 +733,7 @@ update_status ModuleEditor::PostUpdate(float dt)
 					}
 				}
 			}
-			//Pyranids
+			//Pyramids
 			if (App->scene->game_objects[i]->components[j]->type == ComponentType::PYRAMID && App->scene->game_objects[i]->components[j]->active)
 			{
 				int auxId = App->scene->game_objects[i]->id;
