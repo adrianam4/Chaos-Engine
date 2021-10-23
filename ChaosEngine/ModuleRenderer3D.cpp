@@ -19,7 +19,7 @@
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleRenderer3D::ModuleRenderer3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {}
 
 // Destructor
@@ -129,8 +129,8 @@ bool ModuleRenderer3D::Init()
 			ret = false;
 		}
 		
-		GLfloat LightModelAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
-		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightModelAmbient);
+		GLfloat lightModelAmbient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+		glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lightModelAmbient);
 		
 		lights[0].ref = GL_LIGHT0;
 		lights[0].ambient.Set(0.25f, 0.25f, 0.25f, 1.0f);
@@ -138,16 +138,13 @@ bool ModuleRenderer3D::Init()
 		lights[0].SetPos(0.0f, 0.0f, 2.5f);
 		lights[0].Init();
 		
-		GLfloat MaterialAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
-		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, MaterialAmbient);
+		GLfloat materialAmbient[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, materialAmbient);
 
-		GLfloat MaterialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, MaterialDiffuse);
+		GLfloat materialDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, materialDiffuse);
 
 		lights[0].Active(true);
-
-		//InitMesh("Assets/lowpolytree.fbx");
-
 	}
 
 	// Projection matrix for
@@ -166,7 +163,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	glLoadMatrixf(App->camera->GetViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(App->camera->Position.x, App->camera->Position.y, App->camera->Position.z);
+	lights[0].SetPos(App->camera->position.x, App->camera->position.y, App->camera->position.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -225,11 +222,11 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	}
 
-	static bool color_material;
+	static bool colorMaterial;
 	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
 	{
-		color_material = !color_material;
-		if (color_material)
+		colorMaterial = !colorMaterial;
+		if (colorMaterial)
 		{
 			glDisable(GL_COLOR_MATERIAL);
 			App->editor->AddLog("GL_COLOR_MATERIAL disabled \n");
@@ -302,8 +299,8 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	ProjectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&ProjectionMatrix);
+	projectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
+	glLoadMatrixf(&projectionMatrix);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -311,18 +308,18 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::DrawMeshes()
 {
-	for (int i = 0; i < App->scene->game_objects.size(); i++)
+	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
-		for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
+		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 		{
-			if (App->scene->game_objects[i]->components[j]->type == ComponentType::MESH && App->scene->game_objects[i]->components[j]->active)
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
 			{
-				int auxId = App->scene->game_objects[i]->id;
+				int auxId = App->scene->gameObjects[i]->id;
 				for (int k = 0; k < models.size(); k++)
 				{
 					if (models[k].id == auxId)
 					{
-						models[k].Draw(App->scene->game_objects[i]->matrix);
+						models[k].Draw(App->scene->gameObjects[i]->matrix);
 					}
 				}
 			}

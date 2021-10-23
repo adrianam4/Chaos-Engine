@@ -4,8 +4,8 @@
 
 struct Vertex
 {
-	float3 Position;
-	float3 Normal;
+	float3 position;
+	float3 normal;
 	float2 texCoords;
 };
 

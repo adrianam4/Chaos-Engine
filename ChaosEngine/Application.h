@@ -29,9 +29,9 @@ public:
 
 private:
 
-	Timer	ms_timer;
+	Timer	msTimer;
 	float	dt;
-	std::list<Module*> list_modules;
+	std::list<Module*> listModules;
 public:
 	int maxMs;
 

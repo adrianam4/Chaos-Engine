@@ -10,7 +10,7 @@
 #include "imgui_impl_opengl3.h"
 #include "Parson/parson.h"
 
-ModuleEditor::ModuleEditor(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	lastId = -1;
 	objectSelected = nullptr;
@@ -95,19 +95,19 @@ void ModuleEditor::SaveConfig()
 void ModuleEditor::LoadConfig()
 {
 	//Reading JSON File
-	JSON_Value* user_data = json_parse_file("ConfigFile.json");
+	JSON_Value* userData = json_parse_file("ConfigFile.json");
 
-	maxFPS = json_object_get_number(json_object(user_data), "MaxFPS");
-	App->maxMs = json_object_get_number(json_object(user_data), "MaxMs");
-	width = json_object_get_number(json_object(user_data), "Width");
-	height = json_object_get_number(json_object(user_data), "Height");
-	brightness = json_object_get_number(json_object(user_data), "Brightness");
-	fullscreen = json_object_get_boolean(json_object(user_data), "Fullscreen");
-	resizable = json_object_get_boolean(json_object(user_data), "Resizable");
-	borderless = json_object_get_boolean(json_object(user_data), "Borderless");
-	dekstop = json_object_get_boolean(json_object(user_data), "Dekstop");
-	wireframe = json_object_get_boolean(json_object(user_data), "Wireframe");
-	normals = json_object_get_boolean(json_object(user_data), "Normals");
+	maxFPS = json_object_get_number(json_object(userData), "MaxFPS");
+	App->maxMs = json_object_get_number(json_object(userData), "MaxMs");
+	width = json_object_get_number(json_object(userData), "Width");
+	height = json_object_get_number(json_object(userData), "Height");
+	brightness = json_object_get_number(json_object(userData), "Brightness");
+	fullscreen = json_object_get_boolean(json_object(userData), "Fullscreen");
+	resizable = json_object_get_boolean(json_object(userData), "Resizable");
+	borderless = json_object_get_boolean(json_object(userData), "Borderless");
+	dekstop = json_object_get_boolean(json_object(userData), "Dekstop");
+	wireframe = json_object_get_boolean(json_object(userData), "Wireframe");
+	normals = json_object_get_boolean(json_object(userData), "Normals");
 
 	AddLog("Loaded Config Data\n");
 }
@@ -166,60 +166,70 @@ void ModuleEditor::AddCylinder(float3 pos, float3 sca)
 update_status ModuleEditor::Update(float dt)
 {
 	// Our state
-	static bool show_demo_window = false;
-	static bool show_another_window = false;
-	static bool show_close_window = true;
-	static bool show_about_window = false;
-	static bool open_config_menu = false;
-	static bool show_config_menu = true;
-	static bool show_hierarchy = true;
-	static bool show_inspector = true;
-	static bool show_console_menu = true;
-	static bool is_active = true;
-	static bool is_active2 = true;
-	static bool is_active3 = true;
-	static bool is_active4 = true;
-	ImVec4 clear_color = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
+	static bool showDemoWindow = false;
+	static bool showAnotherWindow = false;
+	static bool showCloseWindow = true;
+	static bool showAboutWindow = false;
+	static bool openConfigMenu = false;
+	static bool showConfigMenu = true;
+	static bool showHierarchy = true;
+	static bool showInspector = true;
+	static bool showConsoleMenu = true;
+	static bool isActive = true;
+	static bool isActive2 = true;
+	static bool isActive3 = true;
+	static bool isActive4 = true;
+	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
-	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F10))
 		SaveConfig();
 
-	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F11))
 	{
 		LoadConfig();
 		ComproveScreen();
 	}
-	////////////////////////////////////////////////////////////////// MAIN MENU BAR //////////////////////////////////////////////////////////////////
+
+	//////////////////////////////////////////////////////////////////////////////////////////// MAIN MENU BAR ////////////////////////////////////////////////////////////////////////////////////////////
 
 	if (ImGui::BeginMainMenuBar())
 	{
-		if (ImGui::BeginMenu("File", &open_config_menu))
+		if (ImGui::BeginMenu("File", &openConfigMenu))
 		{
 			if (ImGui::MenuItem("Quit"))
 			{
 				return UPDATE_STOP;
 			}
+			if (ImGui::MenuItem("Save"))
+			{
+				SaveConfig();
+			}
+			if (ImGui::MenuItem("Load"))
+			{
+				LoadConfig();
+				ComproveScreen();
+			}
 			ImGui::EndMenu();
 		}
 
 
-		if (ImGui::BeginMenu("View", &open_config_menu))
+		if (ImGui::BeginMenu("View", &openConfigMenu))
 		{
 			if (ImGui::MenuItem("Configuration"))
 			{
-				show_config_menu = !show_config_menu;
+				showConfigMenu = !showConfigMenu;
 			}
 			if (ImGui::MenuItem("Hierarchy"))
 			{
-				show_hierarchy = !show_hierarchy;
+				showHierarchy = !showHierarchy;
 			}
 			if (ImGui::MenuItem("Inspector"))
 			{
-				show_inspector = !show_inspector;
+				showInspector = !showInspector;
 			}
 			if (ImGui::MenuItem("Console"))
 			{
-				show_console_menu = !show_console_menu;
+				showConsoleMenu = !showConsoleMenu;
 			}
 			if (ImGui::MenuItem("Enable/Disable Wireframe"))
 			{
@@ -232,70 +242,70 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("GameObject", &open_config_menu))
+		if (ImGui::BeginMenu("GameObject", &openConfigMenu))
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Empty GameObject", false));
-				int lastComponent = App->scene->game_objects.size() - 1;
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Empty GameObject", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				
 			}
 			if (ImGui::MenuItem("Create Mesh"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Mesh", false));
-				int lastComponent = App->scene->game_objects.size() - 1;
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::MESH));
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
-				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Mesh", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Cube"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Cube", false));
-				int lastComponent = App->scene->game_objects.size() - 1;
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::CUBE));
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
-				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cube", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Pyramid"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Pyramid", false));
-				int lastComponent = App->scene->game_objects.size() - 1;
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::PYRAMID));
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
-				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Pyramid", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Sphere"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Sphere", false));
-				int lastComponent = App->scene->game_objects.size() - 1;
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::SPHERE));
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
-				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Sphere", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Cylinder"))
 			{
-				App->scene->game_objects.push_back(App->scene->CreateGameObject("Cylinder", false));
-				int lastComponent = App->scene->game_objects.size() - 1;
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::CYLINDER));
-				App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
-				App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cylinder", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			ImGui::EndMenu();
 		}
 
 
-		if (ImGui::BeginMenu("Help", &open_config_menu))
+		if (ImGui::BeginMenu("Help", &openConfigMenu))
 		{
 			if (ImGui::MenuItem("ImGui Demo"))
 			{
-				show_demo_window = !show_demo_window;
+				showDemoWindow = !showDemoWindow;
 			}
 
 			if (ImGui::MenuItem("Documentation"))
@@ -309,35 +319,35 @@ update_status ModuleEditor::Update(float dt)
 		
 			if (ImGui::MenuItem("About"))
 			{
-				show_about_window = !show_about_window;
+				showAboutWindow = !showAboutWindow;
 			}
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
 	}
 
-	////////////////////////////////////////////////////////////////// HIERARCHY WINDOW //////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////// HIERARCHY WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
-	if (show_hierarchy)
+	if (showHierarchy)
 	{
-		ImGui::Begin("Hierarchy", &open_config_menu); // ------ BEGIN HIERARCHY
-		ImGui::LabelText("", "Game Objects in Scene: %d", App->scene->game_objects.size());
+		ImGui::Begin("Hierarchy", &openConfigMenu); // ------ BEGIN HIERARCHY
+		ImGui::LabelText("", "Game Objects in Scene: %d", App->scene->gameObjects.size());
 		
-		for (int i = 0; i < App->scene->game_objects.size(); i++)
+		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			if (ImGui::TreeNode(App->scene->game_objects[i]->name))
+			if (ImGui::TreeNode(App->scene->gameObjects[i]->name))
 			{
 				if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
 				{
-					objectSelected = App->scene->game_objects[i];
+					objectSelected = App->scene->gameObjects[i];
 
 				}
 
-				for (int j = 0; j < App->scene->game_objects[i]->childrens.size(); j++)
+				for (int j = 0; j < App->scene->gameObjects[i]->childrens.size(); j++)
 				{
-					if (App->scene->game_objects[i]->childrens.size() > 0)
+					if (App->scene->gameObjects[i]->childrens.size() > 0)
 					{
-						if (ImGui::TreeNode(App->scene->game_objects[i]->childrens[j]->name))
+						if (ImGui::TreeNode(App->scene->gameObjects[i]->childrens[j]->name))
 						{
 							ImGui::TreePop();
 						}
@@ -351,9 +361,9 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End(); // ------ END HIERARCHY
 	}
 
-	if (show_inspector && objectSelected != nullptr)
+	if (showInspector && objectSelected != nullptr)
 	{
-		ImGui::Begin("Inspector", &open_config_menu);
+		ImGui::Begin("Inspector", &openConfigMenu);
 
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), objectSelected->name);
 		ImGui::Separator();
@@ -369,21 +379,21 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 
-	////////////////////////////////////////////////////////////////// CONFIGURATION WINDOW //////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////// CONFIGURATION WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
-	if (show_config_menu)
+	if (showConfigMenu)
 	{
 		ImGui::CloseCurrentPopup();
-		ImGui::Begin("Configuration", &open_config_menu);
+		ImGui::Begin("Configuration", &openConfigMenu);
 
 		if (ImGui::CollapsingHeader("Application"))
 		{
-			static ImVector<float> fps_log;
-			static ImVector<float> ms_log;
+			static ImVector<float> fpsLog;
+			static ImVector<float> msLog;
 			char title[25];
 
-			fps_log.push_back(ImGui::GetIO().Framerate);
-			ms_log.push_back(1000 / (ImGui::GetIO().Framerate));
+			fpsLog.push_back(ImGui::GetIO().Framerate);
+			msLog.push_back(1000 / (ImGui::GetIO().Framerate));
 
 			ImGui::InputText("App Name", TITLE, 25);
 			ImGui::InputText("Organization", ORGANIZATION, 25);
@@ -395,10 +405,10 @@ update_status ModuleEditor::Update(float dt)
 					App->maxMs = 0;
 			}
 
-			sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_log.size() - 1]);
-			ImGui::PlotHistogram("##framerate", &fps_log[0], fps_log.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-			sprintf_s(title, 25, "Miliseconds %.1f", ms_log[ms_log.size() - 1]);
-			ImGui::PlotHistogram("##miliseconds", &ms_log[0], ms_log.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+			sprintf_s(title, 25, "Framerate %.1f", fpsLog[fpsLog.size() - 1]);
+			ImGui::PlotHistogram("##framerate", &fpsLog[0], fpsLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+			sprintf_s(title, 25, "Miliseconds %.1f", msLog[msLog.size() - 1]);
+			ImGui::PlotHistogram("##miliseconds", &msLog[0], msLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 
 			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
 			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
@@ -413,11 +423,11 @@ update_status ModuleEditor::Update(float dt)
 
 		if (ImGui::CollapsingHeader("Window"))
 		{
-			if (ImGui::Checkbox("Active", &is_active))
+			if (ImGui::Checkbox("Active", &isActive))
 			{
 
 			}
-			if (is_active)
+			if (isActive)
 			{
 
 				ImGui::Text("Icon: *default*");
@@ -430,14 +440,14 @@ update_status ModuleEditor::Update(float dt)
 				SDL_SetWindowSize(App->window->window, width, height);
 				SDL_SetWindowBrightness(App->window->window, brightness);
 
-				int display_count = 0, display_index = 0, mode_index = 0;
+				int displayCount = 0, displayIndex = 0, modeIndex = 0;
 				SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
 
-				if ((display_count = SDL_GetNumVideoDisplays()) < 1) {
-					SDL_Log("SDL_GetNumVideoDisplays returned: %i", display_count);
+				if ((displayCount = SDL_GetNumVideoDisplays()) < 1) {
+					SDL_Log("SDL_GetNumVideoDisplays returned: %i", displayCount);
 				}
 
-				if (SDL_GetDisplayMode(display_index, mode_index, &mode) != 0) {
+				if (SDL_GetDisplayMode(displayIndex, modeIndex, &mode) != 0) {
 					SDL_Log("SDL_GetDisplayMode failed: %s", SDL_GetError());
 				}
 				SDL_Log("SDL_GetDisplayMode(0, 0, &mode):\t\t%i bpp\t%i x %i",
@@ -485,10 +495,10 @@ update_status ModuleEditor::Update(float dt)
 
 		if (ImGui::CollapsingHeader("File System"))
 		{
-			if (ImGui::Checkbox("Active", &is_active2))
+			if (ImGui::Checkbox("Active", &isActive2))
 			{
 			}
-			if (is_active2)
+			if (isActive2)
 			{
 				ImGui::Text("Base Path: ");
 				ImGui::TextColored(ImVec4(255, 255, 0, 255), SDL_GetBasePath());
@@ -504,12 +514,12 @@ update_status ModuleEditor::Update(float dt)
 
 		if (ImGui::CollapsingHeader("Input"))
 		{
-			if (ImGui::Checkbox("Active", &is_active3))
+			if (ImGui::Checkbox("Active", &isActive3))
 			{
 
 			}
 
-			if (is_active3)
+			if (isActive3)
 			{
 				// Mouse Info
 				ImGui::Text("Mouse Position: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d,%d", App->input->GetMouseX(), App->input->GetMouseY());
@@ -519,8 +529,8 @@ update_status ModuleEditor::Update(float dt)
 				ImGui::Separator();
 
 				//Keyboard Info
-				static ImVector<int> keys_id;
-				static ImVector<const char*> keys_state;
+				static ImVector<int> keysId;
+				static ImVector<const char*> keysState;
 
 				for (int i = 0; i < 300; ++i)
 				{
@@ -528,13 +538,13 @@ update_status ModuleEditor::Update(float dt)
 					{
 						if (App->input->keyboard[i] == KEY_IDLE)
 						{
-							keys_id.push_back(i);
-							keys_state.push_back("DOWN");
+							keysId.push_back(i);
+							keysState.push_back("DOWN");
 						}
 						else
 						{
-							keys_id.push_back(i);
-							keys_state.push_back("REPEAT");
+							keysId.push_back(i);
+							keysState.push_back("REPEAT");
 							break;
 						}
 					}
@@ -542,28 +552,28 @@ update_status ModuleEditor::Update(float dt)
 					{
 						if (App->input->keyboard[i] == KEY_REPEAT || App->input->keyboard[i] == KEY_DOWN)
 						{
-							keys_id.push_back(i);
-							keys_state.push_back("UP");
+							keysId.push_back(i);
+							keysState.push_back("UP");
 						}
 					}
 				}
 
-				for (int i = 0; i < keys_id.Size; i++)
+				for (int i = 0; i < keysId.Size; i++)
 				{
-					int j = keys_state.Size - i - 1;
-					ImGui::Text("Keybr: %d - %s", keys_id[j], keys_state[j]);
+					int j = keysState.Size - i - 1;
+					ImGui::Text("Keybr: %d - %s", keysId[j], keysState[j]);
 				}
 			}
 		}
 
 		if (ImGui::CollapsingHeader("Hardware"))
 		{
-			if (ImGui::Checkbox("Active", &is_active4))
+			if (ImGui::Checkbox("Active", &isActive4))
 			{
 
 			}
 
-			if (is_active4)
+			if (isActive4)
 			{
 				SDL_version compiled;
 				SDL_version linked;
@@ -571,13 +581,13 @@ update_status ModuleEditor::Update(float dt)
 				SDL_VERSION(&compiled);
 				SDL_GetVersion(&linked);
 
-				int cpu_cores = SDL_GetCPUCount();
-				int cpu_cache = SDL_GetCPUCacheLineSize();
+				int cpuCores = SDL_GetCPUCount();
+				int cpuCache = SDL_GetCPUCacheLineSize();
 				float ram = SDL_GetSystemRAM() / 1000;
 
 				ImGui::Text("SDL Version: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d.%d.%d", compiled.major, compiled.minor, compiled.patch);
 				ImGui::Separator();
-				ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d (Cache: %d kb)", cpu_cores, cpu_cache);
+				ImGui::Text("CPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d (Cache: %d kb)", cpuCores, cpuCache);
 				ImGui::Text("System RAM: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "% .1f Gb", ram);
 				ImGui::Text("Caps: ");
 				ImGui::SameLine();
@@ -642,9 +652,9 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 	
-	////////////////////////////////////////////////////////////////// CONSOLE WINDOW //////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////////////////// CONSOLE WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 	
-	if (show_console_menu)
+	if (showConsoleMenu)
 	{
 		ImGui::Begin("Console");
 
@@ -657,7 +667,7 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 
-	if (show_about_window)
+	if (showAboutWindow)
 	{
 		ImGui::Begin("About");
 
@@ -705,8 +715,8 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
+	if (showDemoWindow)
+		ImGui::ShowDemoWindow(&showDemoWindow);
 
 	return UPDATE_CONTINUE;
 }
@@ -715,14 +725,14 @@ update_status ModuleEditor::PostUpdate(float dt)
 {
 	plane->DrawPlane();
 
-	for (int i = 0; i < App->scene->game_objects.size(); i++)
+	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
-		for (int j = 0; j < App->scene->game_objects[i]->components.size(); j++)
+		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 		{
 			//Cubes
-			if (App->scene->game_objects[i]->components[j]->type == ComponentType::CUBE && App->scene->game_objects[i]->components[j]->active)
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::CUBE && App->scene->gameObjects[i]->components[j]->active)
 			{
-				int auxId = App->scene->game_objects[i]->id;
+				int auxId = App->scene->gameObjects[i]->id;
 				for (int k = 0; k < cubes.size(); k++)
 				{
 					if (cubes[k]->id == auxId)
@@ -732,9 +742,9 @@ update_status ModuleEditor::PostUpdate(float dt)
 				}
 			}
 			//Pyranids
-			if (App->scene->game_objects[i]->components[j]->type == ComponentType::PYRAMID && App->scene->game_objects[i]->components[j]->active)
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::PYRAMID && App->scene->gameObjects[i]->components[j]->active)
 			{
-				int auxId = App->scene->game_objects[i]->id;
+				int auxId = App->scene->gameObjects[i]->id;
 				for (int k = 0; k < pyramids.size(); k++)
 				{
 					if (pyramids[k]->id == auxId)
@@ -744,9 +754,9 @@ update_status ModuleEditor::PostUpdate(float dt)
 				}
 			}
 			//Cylinders
-			if (App->scene->game_objects[i]->components[j]->type == ComponentType::CYLINDER && App->scene->game_objects[i]->components[j]->active)
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::CYLINDER && App->scene->gameObjects[i]->components[j]->active)
 			{
-				int auxId = App->scene->game_objects[i]->id;
+				int auxId = App->scene->gameObjects[i]->id;
 				for (int k = 0; k < cylinders.size(); k++)
 				{
 					if (cylinders[k]->id == auxId)
@@ -756,9 +766,9 @@ update_status ModuleEditor::PostUpdate(float dt)
 				}
 			}
 			//Spheres
-			if (App->scene->game_objects[i]->components[j]->type == ComponentType::SPHERE && App->scene->game_objects[i]->components[j]->active)
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::SPHERE && App->scene->gameObjects[i]->components[j]->active)
 			{
-				int auxId = App->scene->game_objects[i]->id;
+				int auxId = App->scene->gameObjects[i]->id;
 				for (int k = 0; k < spheres.size(); k++)
 				{
 					if (spheres[k]->id == auxId)

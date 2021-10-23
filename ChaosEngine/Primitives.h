@@ -38,7 +38,7 @@ public:
 	unsigned int EBO;
 	unsigned int TBO;
 	GLuint textureId;
-	GLuint _textureId;
+	GLuint aTextureId;
 
 	Color color;
 	mat4x4 transform;
@@ -128,7 +128,6 @@ public:
 	float constant;
 };
 
-// ============================================
 class MyLine : public Primitives
 {
 public:

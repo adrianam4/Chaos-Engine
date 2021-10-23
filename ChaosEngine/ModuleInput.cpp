@@ -8,7 +8,7 @@
 
 #define MAX_KEYS 300
 
-ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
@@ -61,31 +61,31 @@ update_status ModuleInput::PreUpdate(float dt)
 		}
 	}
 
-	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
+	Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
-	mouse_x /= SCREEN_SIZE;
-	mouse_y /= SCREEN_SIZE;
-	mouse_z = 0;
+	mouseX /= SCREEN_SIZE;
+	mouseY /= SCREEN_SIZE;
+	mouseZ = 0;
 
 	for(int i = 0; i < 5; ++i)
 	{
 		if(buttons & SDL_BUTTON(i))
 		{
-			if(mouse_buttons[i] == KEY_IDLE)
-				mouse_buttons[i] = KEY_DOWN;
+			if(mouseButtons[i] == KEY_IDLE)
+				mouseButtons[i] = KEY_DOWN;
 			else
-				mouse_buttons[i] = KEY_REPEAT;
+				mouseButtons[i] = KEY_REPEAT;
 		}
 		else
 		{
-			if(mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
-				mouse_buttons[i] = KEY_UP;
+			if(mouseButtons[i] == KEY_REPEAT || mouseButtons[i] == KEY_DOWN)
+				mouseButtons[i] = KEY_UP;
 			else
-				mouse_buttons[i] = KEY_IDLE;
+				mouseButtons[i] = KEY_IDLE;
 		}
 	}
 
-	mouse_x_motion = mouse_y_motion = 0;
+	mouseXMotion = mouseYMotion = 0;
 
 	bool quit = false;
 	while(SDL_PollEvent(&e))
@@ -94,15 +94,15 @@ update_status ModuleInput::PreUpdate(float dt)
 		switch(e.type)
 		{
 			case SDL_MOUSEWHEEL:
-			mouse_z = e.wheel.y;
+			mouseZ = e.wheel.y;
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / SCREEN_SIZE;
-			mouse_y = e.motion.y / SCREEN_SIZE;
+			mouseX = e.motion.x / SCREEN_SIZE;
+			mouseY = e.motion.y / SCREEN_SIZE;
 
-			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			mouseXMotion = e.motion.xrel / SCREEN_SIZE;
+			mouseYMotion = e.motion.yrel / SCREEN_SIZE;
 			break;
 
 			case SDL_DROPFILE:
@@ -118,12 +118,12 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 				if ((aux[0] == 'f' && aux[1] == 'b' && aux[2] == 'x') || (aux[0] == 'o' && aux[1] == 'b' && aux[2] == 'j') || (aux[0] == 'F' && aux[1] == 'B' && aux[2] == 'X'))
 				{
-					App->scene->game_objects.push_back(App->scene->CreateGameObject(fileDir, false));
-					int lastComponent = App->scene->game_objects.size() - 1;
-					App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::MESH, fileDir));
-					App->scene->game_objects[lastComponent]->components.push_back(App->scene->game_objects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-					App->scene->game_objects[lastComponent]->components[0]->owner = App->scene->game_objects[lastComponent];
-					App->scene->game_objects[lastComponent]->components[1]->owner = App->scene->game_objects[lastComponent];
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(fileDir, false));
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, fileDir));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 					SDL_free(&fileDir);
 				}
 				if ((aux[0] == 'p' && aux[1] == 'n' && aux[2] == 'g') || (aux[0] == 'd' && aux[1] == 'd' && aux[2] == 's'))

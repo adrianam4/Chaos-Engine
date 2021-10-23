@@ -7,7 +7,7 @@
 #include "assimp/scene.h"
 #include "assimp/postProcess.h"
 
-ModuleScene::ModuleScene(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleScene::ModuleScene(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	lastId = -1;
 }

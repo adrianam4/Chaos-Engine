@@ -13,7 +13,8 @@
 #include "DevIL/include/IL/ilut.h"
 // ------------------------------------------------------------
 Primitives::Primitives() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitivesTypes::PRIMITIVE_MYPOINT)
-{}
+{
+}
 
 // ------------------------------------------------------------
 PrimitivesTypes Primitives::GetType() const
@@ -75,8 +76,8 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 	int width;
 	int height;
 
-	glGenTextures(1, &_textureId);
-	glBindTexture(GL_TEXTURE_2D, _textureId);
+	glGenTextures(1, &aTextureId);
+	glBindTexture(GL_TEXTURE_2D, aTextureId);
 
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
@@ -130,7 +131,7 @@ void MyCube::DrawCube()
 	glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-	glBindTexture(GL_TEXTURE_2D, _textureId); // Textures and Indices
+	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	
 	//Draw
@@ -192,8 +193,8 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	int width;
 	int height;
 
-	glGenTextures(1, &_textureId);
-	glBindTexture(GL_TEXTURE_2D, _textureId);
+	glGenTextures(1, &aTextureId);
+	glBindTexture(GL_TEXTURE_2D, aTextureId);
 
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
@@ -247,7 +248,7 @@ void MyPyramid::DrawPyramid()
 	glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
 	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 
-	glBindTexture(GL_TEXTURE_2D, _textureId); // Textures and Indices
+	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	//Draw
@@ -569,8 +570,6 @@ MySphere::~MySphere()
 
 void MySphere::DrawSphere()
 {
-	//glColor4f(0.5f, 0.5f, 0.0f, 1.0f);
-
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else

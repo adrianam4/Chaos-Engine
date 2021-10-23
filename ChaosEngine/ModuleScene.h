@@ -7,7 +7,7 @@
 class ModuleScene : public Module
 {
 public:
-	ModuleScene(Application* app, bool start_enabled = true);
+	ModuleScene(Application* app, bool startEnabled = true);
 	~ModuleScene();
 
 	bool Init();
@@ -18,7 +18,7 @@ public:
 	
 public:
 	GameObject* CreateGameObject(const char* label, bool select);
-	std::vector<GameObject*> game_objects;
+	std::vector<GameObject*> gameObjects;
 private:
 	int lastId;
 };

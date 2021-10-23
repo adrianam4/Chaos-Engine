@@ -26,10 +26,10 @@ Application::Application()
 
 Application::~Application()
 {
-	std::list<Module*>::iterator item = --list_modules.end();
+	std::list<Module*>::iterator item = --listModules.end();
 
 	//TODO MEMORY LEAK
-	while(item != list_modules.begin())
+	while(item != listModules.begin())
 	{
 		delete (*item);
 		item--;
@@ -41,9 +41,9 @@ bool Application::Init()
 	bool ret = true;
 
 	// Call Init() in all modules
-	std::list<Module*>::iterator item = list_modules.begin();
+	std::list<Module*>::iterator item = listModules.begin();
 
-	while(item != list_modules.end() && ret == true)
+	while(item != listModules.end() && ret == true)
 	{
 		ret = (*item)->Init();
 		*item++;
@@ -51,29 +51,29 @@ bool Application::Init()
 
 	// After all Init calls we call Start() in all modules
 	
-	item = list_modules.begin();
+	item = listModules.begin();
 
-	while(item != list_modules.end() && ret == true)
+	while(item != listModules.end() && ret == true)
 	{
 		ret = (*item)->Start();
 		*item++;
 	}
 	
-	ms_timer.Start();
+	msTimer.Start();
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
+	dt = (float)msTimer.Read() / 1000.0f;
+	msTimer.Start();
 }
 
 // ---------------------------------------------
 void Application::FinishUpdate()
 {
-	unsigned int lastFrameMs = ms_timer.Read();
+	unsigned int lastFrameMs = msTimer.Read();
 
 	if ((maxMs > 0) && (lastFrameMs < maxMs))
 	{
@@ -87,26 +87,26 @@ update_status Application::Update()
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
 	
-	std::list<Module*>::iterator item = list_modules.begin();
+	std::list<Module*>::iterator item = listModules.begin();
 
 	
-	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
+	while(item != listModules.end() && ret == UPDATE_CONTINUE)
 	{
 		ret = (*item)->PreUpdate(dt);
 		*item++;
 	}
 
-	item = list_modules.begin();
+	item = listModules.begin();
 
-	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
+	while(item != listModules.end() && ret == UPDATE_CONTINUE)
 	{
 		ret = (*item)->Update(dt);
 		*item++;
 	}
 
-	item = list_modules.begin();
+	item = listModules.begin();
 
-	while(item != list_modules.end() && ret == UPDATE_CONTINUE)
+	while(item != listModules.end() && ret == UPDATE_CONTINUE)
 	{
 		ret = (*item)->PostUpdate(dt);
 		*item++;
@@ -119,9 +119,9 @@ update_status Application::Update()
 bool Application::CleanUp()
 {
 	bool ret = true;
-	std::list<Module*>::iterator item = list_modules.end();
+	std::list<Module*>::iterator item = listModules.end();
 
-	while(item != list_modules.end() && ret == true)
+	while(item != listModules.end() && ret == true)
 	{
 		ret = (*item)->CleanUp();
 		*item++;
@@ -131,5 +131,5 @@ bool Application::CleanUp()
 
 void Application::AddModule(Module* mod)
 {
-	list_modules.push_back(mod);
+	listModules.push_back(mod);
 }

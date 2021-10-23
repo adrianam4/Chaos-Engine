@@ -5,7 +5,6 @@
 #include "SDL/include/SDL.h"
 #include <stdio.h>
 #include <SDL.h>
-//#include <SDL_opengl.h>
 
 class Application;
 
@@ -13,7 +12,7 @@ class ModuleWindow : public Module
 {
 public:
 
-	ModuleWindow(Application* app, bool start_enabled = true);
+	ModuleWindow(Application* app, bool startEnabled = true);
 
 	// Destructor
 	virtual ~ModuleWindow();
@@ -33,14 +32,13 @@ public:
 	SDL_Window* window;
 
 	//The surface contained by the window
-	SDL_Surface* screen_surface;
+	SDL_Surface* screenSurface;
 
 	int width;
 	int height;
 
 private:
 	Uint32 flags;
-
 };
 
 #endif // __ModuleWindow_H__

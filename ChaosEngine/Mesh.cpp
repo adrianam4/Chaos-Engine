@@ -80,9 +80,9 @@ void Mesh::Draw(float* matrix)
 		glBegin(GL_LINES);
 		for (int i = 0; i < vertices.size(); i += 3)
 		{
-			float3 vertex1(vertices[i].Position.x, vertices[i].Position.y, vertices[i].Position.z);
-			float3 vertex2(vertices[i + 1].Position.x, vertices[i + 1].Position.y, vertices[i + 1].Position.z);
-			float3 vertex3(vertices[i + 2].Position.x, vertices[i + 2].Position.y, vertices[i + 2].Position.z);
+			float3 vertex1(vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
+			float3 vertex2(vertices[i + 1].position.x, vertices[i + 1].position.y, vertices[i + 1].position.z);
+			float3 vertex3(vertices[i + 2].position.x, vertices[i + 2].position.y, vertices[i + 2].position.z);
 			float3 avgVertex((vertex1.x + vertex2.x + vertex3.x) / 3, (vertex1.y + vertex2.y + vertex3.y) / 3, (vertex1.z + vertex2.z + vertex3.z) / 3);
 
 			float3 line = -(vertex1 - vertex2);

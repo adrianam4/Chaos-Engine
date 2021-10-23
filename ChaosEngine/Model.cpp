@@ -56,18 +56,18 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, GameObject* lastObj)
 	//lastObj->trans = translation;
 	//lastObj->sca = scale;
 
-	App->scene->game_objects[App->scene->game_objects.size()-1]->rot.w = rotation.w;
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->rot.x = rotation.x;
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->rot.y = rotation.y;
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->rot.z = rotation.z;
+	App->scene->gameObjects[App->scene->gameObjects.size()-1]->rot.w = rotation.w;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = rotation.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = rotation.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = rotation.z;
 
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->sca.x = scale.x;
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->sca.y = scale.y;
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->sca.z = scale.z;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = scale.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = scale.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = scale.z;
 
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->trans.x = translation.x;
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->trans.y = translation.y;
-	App->scene->game_objects[App->scene->game_objects.size() - 1]->trans.z = translation.z;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = translation.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = translation.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = translation.z;
 }
 
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
@@ -80,13 +80,13 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	for (unsigned int i = 0; i < mesh->mNumVertices; ++i)
 	{
 		Vertex vertex;
-		vertex.Position.x = mesh->mVertices[i].x;
-		vertex.Position.y = mesh->mVertices[i].y;
-		vertex.Position.z = mesh->mVertices[i].z;
+		vertex.position.x = mesh->mVertices[i].x;
+		vertex.position.y = mesh->mVertices[i].y;
+		vertex.position.z = mesh->mVertices[i].z;
 
-		vertex.Normal.x = mesh->mNormals[i].x;
-		vertex.Normal.y = mesh->mNormals[i].y;
-		vertex.Normal.z = mesh->mNormals[i].z;
+		vertex.normal.x = mesh->mNormals[i].x;
+		vertex.normal.y = mesh->mNormals[i].y;
+		vertex.normal.z = mesh->mNormals[i].z;
 
 		if (mesh->mTextureCoords[0])
 		{

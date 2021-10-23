@@ -18,7 +18,7 @@ class ModuleInput : public Module
 {
 public:
 	
-	ModuleInput(Application* app, bool start_enabled = true);
+	ModuleInput(Application* app, bool startEnabled = true);
 	~ModuleInput();
 
 	bool Init();
@@ -32,42 +32,41 @@ public:
 
 	KEY_STATE GetMouseButton(int id) const
 	{
-		return mouse_buttons[id];
+		return mouseButtons[id];
 	}
 
 	int GetMouseX() const
 	{
-		return mouse_x;
+		return mouseX;
 	}
 
 	int GetMouseY() const
 	{
-		return mouse_y;
+		return mouseY;
 	}
 
 	int GetMouseZ() const
 	{
-		return mouse_z;
+		return mouseZ;
 	}
 
 	int GetMouseXMotion() const
 	{
-		return mouse_x_motion;
+		return mouseXMotion;
 	}
 
 	int GetMouseYMotion() const
 	{
-		return mouse_y_motion;
+		return mouseYMotion;
 	}
 
 private:
-	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
-	int mouse_x;
-	int mouse_y;
-	int mouse_z;
-	int mouse_x_motion;
-	int mouse_y_motion;
-	//int mouse_z_motion;
+	KEY_STATE mouseButtons[MAX_MOUSE_BUTTONS];
+	int mouseX;
+	int mouseY;
+	int mouseZ;
+	int mouseXMotion;
+	int mouseYMotion;
 public:
 	SDL_Event e;
 	const Uint8* keys;
