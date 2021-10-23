@@ -16,6 +16,7 @@ enum class ComponentType
 	SPHERE,
 	CYLINDER,
 	MATERIAL,
+	EMPTY,
 };
 
 class Component

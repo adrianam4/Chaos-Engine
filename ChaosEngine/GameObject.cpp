@@ -40,6 +40,9 @@ Component* GameObject::CreateComponent(ComponentType type)
 	case ComponentType::MATERIAL:
 		component = new ComponentMaterial();
 		break;
+	case ComponentType::EMPTY:
+		component = new ComponentMesh(ComponentType::EMPTY);
+		break;
 	default:
 		break;
 	}
@@ -50,4 +53,14 @@ Component* GameObject::CreateComponent(ComponentType type)
 void GameObject::Update()
 {
 
+}
+
+int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
+{
+	for (int i = 0; i < gameObject->components.size(); i++)
+	{
+		if (gameObject->components[i]->type == type)
+			return i;
+	}
+	return 0;
 }

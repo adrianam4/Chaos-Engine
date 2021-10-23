@@ -14,6 +14,7 @@ public:
 	void Update();
 	Component* CreateComponent(ComponentType type);
 	Component* CreateComponent(ComponentType type, const char* name);
+	int SearchComponent(GameObject* gameObject, ComponentType type);
 public:
 	uint id;
 	bool active;

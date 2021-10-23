@@ -248,9 +248,10 @@ update_status ModuleEditor::Update(float dt)
 			{
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Empty GameObject", false));
 				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::EMPTY));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Mesh"))
 			{
@@ -682,9 +683,10 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Text("Chaos Engine v0.1");
 		ImGui::Separator();
 		ImGui::Text("A trully amazing 3D Game Engine.");
-		ImGui::Text("Created by David Lira and Adrian Aroca for the Game Engines subject.");
+		ImGui::Text("Created by David Lira, Adrian Aroca and Unai Diaz for the Game Engines subject.");
 		ImGui::Text("David Lira Github: https://github.com/davidlira19");
 		ImGui::Text("Adrian Aroca Github: https://github.com/adrianam4");
+		ImGui::Text("Unai Diaz Github: https://github.com/unaidiaz");
 		ImGui::Separator();
 		ImGui::Text("3rd Party Libraries used:");
 		ImGui::Text("");
@@ -700,7 +702,7 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Text("");
 		ImGui::Text("MIT License");
 		ImGui::Text("");
-		ImGui::Text("Copyright (c) 2021 adrianam4 and davidlira19");
+		ImGui::Text("Copyright (c) 2021 adrianam4, davidlira19 and unaidiaz");
 		ImGui::Text("");
 		ImGui::Text("Permission is hereby granted, free of charge, to any person obtaining a copy");
 		ImGui::Text("of this software and associated documentation files (the ''Software''), to deal");

@@ -2,7 +2,6 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
-#include "TransformComponent.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -96,14 +95,32 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_F))
 	{
-		LookAt(Vec3(0.0f, 0.0f, 0.0f));
+		if (App->editor->objectSelected == NULL)
+		{
+			LookAt(Vec3(0.0f, 0.0f, 0.0f));
+		}
+		else
+		{
+			int id = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::TRANSFORM);
+			LookAt(Vec3(App->editor->objectSelected->components[id]->position.x,
+				App->editor->objectSelected->components[id]->position.y,
+				App->editor->objectSelected->components[id]->position.z));
+		}
 	}
+
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) && App->input->GetKey(SDL_SCANCODE_LALT))
 	{
-		Look(Vec3(5.0f, 5.0f, 5.0f), Vec3(0.0f, 0.0f, 0.0f), true);
-
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && App->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+		if (App->editor->objectSelected == NULL)
 		{
+			LookAt(Vec3(0.0f, 0.0f, 0.0f));
+		}
+		else
+		{
+			int id = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::TRANSFORM);
+			LookAt(Vec3(App->editor->objectSelected->components[id]->position.x,
+				App->editor->objectSelected->components[id]->position.y,
+				App->editor->objectSelected->components[id]->position.z));
+		}
 
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
@@ -128,15 +145,9 @@ update_status ModuleCamera3D::Update(float dt)
 			y = rotate(y, deltaY, x);
 			z = rotate(z, deltaY, x);
 
-			if (y.y < 0.0f)
-			{
-				z = Vec3(0.0f, z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				y = cross(z, x);
-			}
 		}
 
 		position = reference + z * length(position);
-	    }
 	}
 
 	// Recalculate matrix -------------
