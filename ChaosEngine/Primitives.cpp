@@ -58,6 +58,18 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 	texCoords.push_back(0); texCoords.push_back(0);
 	texCoords.push_back(1); texCoords.push_back(0);
 
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = 0;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = 1;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = 1;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = 1;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = pos.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = pos.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = pos.z;
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -124,6 +136,22 @@ void MyCube::DrawCube()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	int i;
+	bool found = false;
+	for (i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		if (App->scene->gameObjects[i]->id == id)
+		{
+			if (App->scene->gameObjects[i]->matrix != nullptr) {
+				glPushMatrix();
+				glMultMatrixf(App->scene->gameObjects[i]->matrix);
+				found = true;
+
+				break;
+			}
+
+		}
+	}
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -146,6 +174,12 @@ void MyCube::DrawCube()
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	if (found) {
+		if (App->scene->gameObjects[i]->matrix != nullptr) {
+			glPopMatrix();
+
+		}
+	}
 }
 
 //// PYRAMID ================================================================================================================================================================================
@@ -175,6 +209,21 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	texCoords.push_back(0.5); texCoords.push_back(1);
 	texCoords.push_back(0); texCoords.push_back(0);
 	texCoords.push_back(1); texCoords.push_back(0);
+
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = 0;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = 1;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = 1;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = 1;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = pos.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = pos.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = pos.z;
+
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -241,6 +290,23 @@ void MyPyramid::DrawPyramid()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	int i;
+	bool found = false;
+	for (i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		if (App->scene->gameObjects[i]->id == id)
+		{
+			if (App->scene->gameObjects[i]->matrix != nullptr) {
+				glPushMatrix();
+				glMultMatrixf(App->scene->gameObjects[i]->matrix);
+				found = true;
+
+				break;
+			}
+
+		}
+	}
+
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -263,6 +329,14 @@ void MyPyramid::DrawPyramid()
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	if (found) {
+		if (App->scene->gameObjects[i]->matrix != nullptr) {
+			glPopMatrix();
+
+		}
+	}
+
 }
 
 //// CYLINDER ================================================================================================================================================================================
