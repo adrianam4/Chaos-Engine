@@ -37,6 +37,9 @@ Component* GameObject::CreateComponent(ComponentType type)
 	case ComponentType::SPHERE:
 		component = new ComponentMesh(ComponentType::SPHERE);
 		break;
+	case ComponentType::PLANE:
+		component = new ComponentMesh(ComponentType::PLANE);
+		break;
 	case ComponentType::MATERIAL:
 		component = new ComponentMaterial();
 		break;

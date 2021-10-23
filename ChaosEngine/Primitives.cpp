@@ -787,6 +787,158 @@ void MySphere::DrawSphere()
 
 //// PLANE ================================================================================================================================================================================
 
+MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
+{
+	position = pos;
+	scale = sca;
+
+	type = PrimitivesTypes::PRIMITIVE_MYPLANE3D;
+
+	vertices.push_back(1 + pos.x);
+	vertices.push_back(pos.y);
+	vertices.push_back(1 + pos.z);
+
+	vertices.push_back(1 + pos.x);
+	vertices.push_back(pos.y);
+	vertices.push_back(pos.z - 1);
+
+	vertices.push_back(pos.x - 1);
+	vertices.push_back(pos.y);
+	vertices.push_back(pos.z - 1);
+
+	vertices.push_back(pos.x - 1);
+	vertices.push_back(pos.y);
+	vertices.push_back(1 + pos.z);
+
+	indices.push_back(3);
+	indices.push_back(0);
+	indices.push_back(1);
+
+	indices.push_back(3);
+	indices.push_back(1);
+	indices.push_back(2);
+
+	texCoords.push_back(1);
+	texCoords.push_back(0);
+
+	texCoords.push_back(1);
+	texCoords.push_back(1);
+
+	texCoords.push_back(0);
+	texCoords.push_back(1);
+
+	texCoords.push_back(0);
+	texCoords.push_back(0);
+
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = 0;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = 0;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = 1;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = 1;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = 1;
+
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = pos.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = pos.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = pos.z;
+
+
+
+
+	glGenBuffers(1, &VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &EBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &TBO);
+	glBindBuffer(GL_ARRAY_BUFFER, TBO);
+	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
+	ILboolean success;
+	ILuint imageID;
+	int width;
+	int height;
+
+	glGenTextures(1, &aTextureId);
+	glBindTexture(GL_TEXTURE_2D, aTextureId);
+
+	ilGenImages(1, &imageID);
+	ilBindImage(imageID);
+
+	success = ilLoadImage("Assets/Lenna_(test_image).png");
+
+	width = ilGetInteger(IL_IMAGE_WIDTH);
+	height = ilGetInteger(IL_IMAGE_HEIGHT);
+
+	if (success)
+	{
+		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
+		if (!success)
+		{
+			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
+			ilDeleteImages(1, &imageID);
+		}
+	}
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+MyPlane3D::~MyPlane3D()
+{
+	vertices.clear();
+	indices.clear();
+}
+void MyPlane3D::DrawPlane()
+{
+	if (App->editor->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	//Enable states
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	int i = TransformMatrix();
+
+	//Buffers
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	//Draw
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+
+	//UnBind Buffers
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//Disable states
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	if (found && App->scene->gameObjects[i]->matrix != nullptr)
+		glPopMatrix();
+}
+
+
 MyPlane::MyPlane() : Primitives(), normal(0, 1, 0), constant(1)
 {
 	type = PrimitivesTypes::PRIMITIVE_MYPLANE;

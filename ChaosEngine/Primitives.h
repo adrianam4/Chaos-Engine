@@ -14,6 +14,7 @@ typedef unsigned char GLubyte;
 enum PrimitivesTypes
 {
 	PRIMITIVE_MYCUBE,
+	PRIMITIVE_MYPLANE3D,
 	PRIMITIVE_MYSPHERE,
 	PRIMITIVE_MYCYLINDER,
 	PRIMITIVE_MYPYRAMID,
@@ -129,6 +130,22 @@ public:
 	Vec3 normal;
 	float constant;
 };
+
+
+class MyPlane3D : public Primitives
+{
+public:
+	MyPlane3D(float3 pos, float3 sca);
+
+	~MyPlane3D();
+	void DrawPlane();
+public:
+	std::vector<GLushort> indices;
+	std::vector<GLfloat> normals;
+	std::vector<GLfloat> texCoords;
+	std::vector<GLfloat> vertices;
+};
+
 
 class MyLine : public Primitives
 {

@@ -26,6 +26,7 @@ public:
 	void AddPyramid(float3 pos, float3 sca);
 	void AddSphere(float3 pos, float3 sca, float radius, uint rings, uint sectors);
 	void AddCylinder(float3 pos, float3 sca);
+	void AddPlane(float3 pos, float3 sca);
 private:
 	int maxFPS;
 	int width;
@@ -46,6 +47,7 @@ public:
 	std::vector<MyCylinder*> cylinders;
 	std::vector<MySphere*> spheres;
 	std::vector<MyPyramid*> pyramids;
+	std::vector<MyPlane3D*> planes;
 
 	GameObject* objectSelected;
 	int lastId;

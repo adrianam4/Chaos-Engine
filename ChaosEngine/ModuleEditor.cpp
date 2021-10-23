@@ -154,7 +154,12 @@ void ModuleEditor::AddSphere(float3 pos, float3 sca, float radius, uint rings, u
 	auxSphere = new MySphere(pos, sca, 2, 20, 20);
 	spheres.push_back(auxSphere);
 }
-
+void ModuleEditor::AddPlane(float3 pos, float3 sca)
+{
+	MyPlane3D* auxPlane;
+	auxPlane = new MyPlane3D(pos, sca);
+	planes.push_back(auxPlane);
+}
 void ModuleEditor::AddCylinder(float3 pos, float3 sca)
 {
 	MyCylinder* auxCylinder;
@@ -294,6 +299,15 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cylinder", false));
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			}
+			if (ImGui::MenuItem("Create Plane"))
+			{
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Plane", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
@@ -787,6 +801,18 @@ update_status ModuleEditor::PostUpdate(float dt)
 					if (spheres[k]->id == auxId)
 					{
 						spheres[k]->DrawSphere();
+					}
+				}
+			}
+			//Planes
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::PLANE && App->scene->gameObjects[i]->components[j]->active)
+			{
+				int auxId = App->scene->gameObjects[i]->id;
+				for (int k = 0; k < planes.size(); k++)
+				{
+					if (planes[k]->id == auxId)
+					{
+						planes[k]->DrawPlane();
 					}
 				}
 			}

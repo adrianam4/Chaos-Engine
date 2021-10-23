@@ -15,6 +15,7 @@ enum class ComponentType
 	PYRAMID,
 	SPHERE,
 	CYLINDER,
+	PLANE,
 	MATERIAL,
 	EMPTY,
 };

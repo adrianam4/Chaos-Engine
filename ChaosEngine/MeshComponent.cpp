@@ -28,6 +28,11 @@ ComponentMesh::ComponentMesh(ComponentType mType)
 		App->editor->spheres[App->editor->spheres.size() - 1]->id = App->editor->lastId + 1;
 		App->editor->lastId++;
 		break;
+	case ComponentType::PLANE:
+		App->editor->AddPlane(float3(0, 0, 0), float3(1, 1, 1));
+		App->editor->planes[App->editor->planes.size() - 1]->id = App->editor->lastId + 1;
+		App->editor->lastId++;
+		break;
 	case ComponentType::CYLINDER:
 		App->editor->AddCylinder(float3(0,0,0),float3(1,1,1));
 		App->editor->cylinders[App->editor->cylinders.size() - 1]->id = App->editor->lastId + 1;
