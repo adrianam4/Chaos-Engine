@@ -331,7 +331,8 @@ update_status ModuleEditor::Update(float dt)
 
 	if (showHierarchy)
 	{
-		ImGui::Begin("Hierarchy", &openConfigMenu); // ------ BEGIN HIERARCHY
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Hierarchy", &showHierarchy);
 		ImGui::LabelText("", "Game Objects in Scene: %d", App->scene->gameObjects.size());
 		
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
@@ -367,12 +368,12 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::Separator();
 		}
 		
-		ImGui::End(); // ------ END HIERARCHY
+		ImGui::End();
 	}
 
 	if (showInspector && objectSelected != nullptr)
 	{
-		ImGui::Begin("Inspector", &openConfigMenu);
+		ImGui::Begin("Inspector", &showInspector);
 
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), objectSelected->name);
 		ImGui::Separator();
@@ -393,7 +394,7 @@ update_status ModuleEditor::Update(float dt)
 	if (showConfigMenu)
 	{
 		ImGui::CloseCurrentPopup();
-		ImGui::Begin("Configuration", &openConfigMenu);
+		ImGui::Begin("Configuration", &showConfigMenu);
 
 		if (ImGui::CollapsingHeader("Application"))
 		{
@@ -665,7 +666,8 @@ update_status ModuleEditor::Update(float dt)
 	
 	if (showConsoleMenu)
 	{
-		ImGui::Begin("Console");
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Console", &showConsoleMenu);
 
 		ImGui::TextUnformatted(consoleBuffer.begin());
 
@@ -678,7 +680,8 @@ update_status ModuleEditor::Update(float dt)
 
 	if (showAboutWindow)
 	{
-		ImGui::Begin("About");
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("About", &showAboutWindow);
 
 		ImGui::Text("Chaos Engine v0.1");
 		ImGui::Separator();
