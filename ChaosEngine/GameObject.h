@@ -12,7 +12,7 @@ class GameObject
 {
 public:
 	void Update();
-	Component* CreateComponent(ComponentType type);
+	Component* CreateComponent(ComponentType type, float3* pos = nullptr, float3* measures = nullptr);
 	Component* CreateComponent(ComponentType type, const char* name);
 	int SearchComponent(GameObject* gameObject, ComponentType type);
 public:

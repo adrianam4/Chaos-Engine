@@ -17,6 +17,7 @@ enum class ComponentType
 	CYLINDER,
 	PLANE,
 	MATERIAL,
+	NONE,
 	EMPTY,
 };
 

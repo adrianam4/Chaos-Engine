@@ -13,7 +13,7 @@ Component* GameObject::CreateComponent(ComponentType type, const char* name)
 	return component;
 }
 
-Component* GameObject::CreateComponent(ComponentType type)
+Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* measures)
 {
 	Component* component = nullptr;
 
@@ -26,19 +26,19 @@ Component* GameObject::CreateComponent(ComponentType type)
 		component = new ComponentMesh(ComponentType::MESH);
 		break;
 	case ComponentType::CUBE:
-		component = new ComponentMesh(ComponentType::CUBE);
+		component = new ComponentMesh(ComponentType::CUBE, pos, measures);
 		break;
 	case ComponentType::CYLINDER:
-		component = new ComponentMesh(ComponentType::CYLINDER);
+		component = new ComponentMesh(ComponentType::CYLINDER, pos);
 		break;
 	case ComponentType::PYRAMID:
-		component = new ComponentMesh(ComponentType::PYRAMID);
+		component = new ComponentMesh(ComponentType::PYRAMID, pos, measures);
 		break;
 	case ComponentType::SPHERE:
-		component = new ComponentMesh(ComponentType::SPHERE);
+		component = new ComponentMesh(ComponentType::SPHERE, pos, measures);
 		break;
 	case ComponentType::PLANE:
-		component = new ComponentMesh(ComponentType::PLANE);
+		component = new ComponentMesh(ComponentType::PLANE, pos);
 		break;
 	case ComponentType::MATERIAL:
 		component = new ComponentMaterial();

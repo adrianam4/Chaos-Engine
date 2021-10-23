@@ -21,11 +21,11 @@ public:
 	void ComproveScreen();
 
 	void AddLog(const char* fmt, ...);
-
+	void DOptionsmenu(ComponentType type);
 	void AddCube(float3 pos, float3 sca);
 	void AddPyramid(float3 pos, float3 sca);
-	void AddSphere(float3 pos, float3 sca, float radius, uint rings, uint sectors);
-	void AddCylinder(float3 pos, float3 sca);
+	void AddSphere(float3 pos, float3 sca);
+	void AddCylinder(float3 pos);
 	void AddPlane(float3 pos, float3 sca);
 private:
 	int maxFPS;
@@ -37,6 +37,10 @@ private:
 	bool borderless = false;
 	bool dekstop = false;
 	MyPlane* plane;
+	ComponentType sowOptionsMenu;
+	float3 position;
+	float3 M;
+	
 public:
 	ImGuiTextBuffer consoleBuffer;
 	bool wireframe;

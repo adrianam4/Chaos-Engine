@@ -148,10 +148,10 @@ void ModuleEditor::AddPyramid(float3 pos, float3 sca)
 	pyramids.push_back(auxPyramid);
 }
 
-void ModuleEditor::AddSphere(float3 pos, float3 sca, float radius, uint rings, uint sectors)
+void ModuleEditor::AddSphere(float3 pos, float3 sca)
 {
 	MySphere* auxSphere;
-	auxSphere = new MySphere(pos, sca, 2, 20, 20);
+	auxSphere = new MySphere(pos, sca);
 	spheres.push_back(auxSphere);
 }
 void ModuleEditor::AddPlane(float3 pos, float3 sca)
@@ -160,13 +160,165 @@ void ModuleEditor::AddPlane(float3 pos, float3 sca)
 	auxPlane = new MyPlane3D(pos, sca);
 	planes.push_back(auxPlane);
 }
-void ModuleEditor::AddCylinder(float3 pos, float3 sca)
+void ModuleEditor::AddCylinder(float3 pos)
 {
 	MyCylinder* auxCylinder;
-	auxCylinder = new MyCylinder(pos,sca);
+	auxCylinder = new MyCylinder(pos);
 	cylinders.push_back(auxCylinder);
 }
+void ModuleEditor::DOptionsmenu(ComponentType type) {
 
+	switch (type)
+	{
+	case ComponentType::CUBE:
+		ImGui::Begin("Options");
+
+		ImGui::Text("Set Position:");
+
+
+		ImGui::DragFloat("X", &position.x);
+
+		ImGui::DragFloat("Y", &position.y);
+
+		ImGui::DragFloat("Z", &position.z);
+
+		ImGui::Text("Set Measures:");
+
+		ImGui::DragFloat("X Size", &M.x);
+
+
+		ImGui::DragFloat("Y Size", &M.y);
+
+
+		ImGui::DragFloat("Z Size", &M.z);
+
+
+		if (ImGui::Button("Create Cube")) {
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cube", false));
+			int lastComponent = App->scene->gameObjects.size() - 1;
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position,&M));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			sowOptionsMenu = ComponentType::NONE;
+		}
+		ImGui::End();
+		break;
+	
+	case ComponentType::PYRAMID:
+		ImGui::Begin("Options");
+
+		ImGui::Text("Set Position:");
+
+		ImGui::DragFloat("X", &position.x);
+		ImGui::DragFloat("Y", &position.y);
+		ImGui::DragFloat("Z", &position.z);
+		ImGui::Text("Set Measures:");
+
+		ImGui::DragFloat("x Size", &M.x);
+
+
+		ImGui::DragFloat("Y Size", &M.y);
+
+
+		ImGui::DragFloat("Z Size", &M.z);
+
+
+		if (ImGui::Button("Create Pyramid")) {
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Pyramid", false));
+			int lastComponent = App->scene->gameObjects.size() - 1;
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID, &position,&M));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			sowOptionsMenu = ComponentType::NONE;
+		}
+		ImGui::End();
+		break;
+	case ComponentType::CYLINDER:
+		ImGui::Begin("Options");
+
+		ImGui::Text("Set Position:");
+
+		ImGui::DragFloat("X", &position.x);
+		ImGui::DragFloat("Y", &position.y);
+		ImGui::DragFloat("Z", &position.z);
+		if (ImGui::Button("Create Cylindrer")) {
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cylinder", false));
+			int lastComponent = App->scene->gameObjects.size() - 1;
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			sowOptionsMenu = ComponentType::NONE;
+		}
+		ImGui::End();
+		break;
+	case ComponentType::SPHERE:
+		ImGui::Begin("Options");
+
+		ImGui::Text("Set Position:");
+
+
+		ImGui::DragFloat("X", &position.x);
+
+		ImGui::DragFloat("Y", &position.y);
+
+
+		ImGui::DragFloat("Z", &position.z);
+
+		ImGui::Text("Set Measures:");
+
+		ImGui::DragFloat("Radius", &M.x);
+
+		ImGui::DragFloat("Rings", &M.y);
+
+		ImGui::DragFloat("Sectors", &M.z);
+
+
+		if (ImGui::Button("Create Sphere")) {
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Sphere", false));
+			int lastComponent = App->scene->gameObjects.size() - 1;
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE, &position, &M));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			sowOptionsMenu = ComponentType::NONE;
+		}
+		ImGui::End();
+		break;
+		
+	case ComponentType::PLANE:
+		ImGui::Begin("Options");
+
+		ImGui::Text("Set Position:");
+
+
+		ImGui::DragFloat("X", &position.x);
+
+		ImGui::DragFloat("Y", &position.y);
+
+
+		ImGui::DragFloat("Z", &position.z);
+
+		ImGui::Text("Set Measures:");
+
+		ImGui::DragFloat("X Size", &M.x);
+
+
+		ImGui::DragFloat("Z Size", &M.z);
+
+
+		if (ImGui::Button("Create Plane")) {
+			//objectManager->SetPlaneProperties(objectManager->Create(shapeType::plane, position), xM, zM);
+			sowOptionsMenu = ComponentType::NONE;
+		}
+		ImGui::End();
+		break;
+	default:
+		break;
+	}
+}
 // Update: draw background
 update_status ModuleEditor::Update(float dt)
 {
@@ -194,7 +346,11 @@ update_status ModuleEditor::Update(float dt)
 		LoadConfig();
 		ComproveScreen();
 	}
+	//////////////////////////////////////////////////////////////////////////////////////////// SHAPES BEGIN OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////
+	if (sowOptionsMenu != ComponentType::NONE) {
+		DOptionsmenu(sowOptionsMenu);
 
+	}
 	//////////////////////////////////////////////////////////////////////////////////////////// MAIN MENU BAR ////////////////////////////////////////////////////////////////////////////////////////////
 
 	if (ImGui::BeginMainMenuBar())
@@ -253,7 +409,7 @@ update_status ModuleEditor::Update(float dt)
 			{
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Empty GameObject", false));
 				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::EMPTY));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::EMPTY, &position));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
@@ -262,52 +418,52 @@ update_status ModuleEditor::Update(float dt)
 			{
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Mesh", false));
 				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, & position));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Cube"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cube", false));
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				sowOptionsMenu = ComponentType::CUBE;
+				position = { 0,0,0 };
+				M.x = 1;
+				M.y = 1;
+				M.z = 1;
+				
 			}
 			if (ImGui::MenuItem("Create Pyramid"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Pyramid", false));
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				sowOptionsMenu = ComponentType::PYRAMID;
+				position = { 0,0,0 };
+				M.x = 1;
+				M.y = 1;
+				M.z = 1;
+				
 			}
 			if (ImGui::MenuItem("Create Sphere"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Sphere", false));
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				sowOptionsMenu = ComponentType::SPHERE;
+				position = { 0,0,0 };
+				M.x = 2;
+				M.y = 20;
+				M.z = 20;
+				
 			}
 			if (ImGui::MenuItem("Create Cylinder"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cylinder", false));
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				sowOptionsMenu = ComponentType::CYLINDER;
+				position = { 0,0,0 };
+				M.x = 1;
+				M.y = 1;
+				M.z = 1;
+				
 			}
 			if (ImGui::MenuItem("Create Plane"))
 			{
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Plane", false));
 				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];

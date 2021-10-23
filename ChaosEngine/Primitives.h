@@ -77,7 +77,7 @@ private:
 class MyCylinder : public Primitives
 {
 public:
-	MyCylinder(float3 pos, float3 sca);
+	MyCylinder(float3 pos);
 	MyCylinder(float3 pos, float3 sca, float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth);
 	~MyCylinder();
 	std::vector<float> GetUnitCircleVertices();
@@ -111,7 +111,7 @@ protected:
 	std::vector<GLfloat> texCoords;
 	std::vector<GLfloat> vertices;
 public:
-	MySphere(float3 pos, float3 sca, float radius, uint rings, uint sectors);
+	MySphere(float3 pos, float3 sca);
 	~MySphere();
 	void DrawSphere();
 private:

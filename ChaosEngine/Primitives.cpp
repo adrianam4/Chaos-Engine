@@ -47,19 +47,19 @@ int Primitives::TransformMatrix()
 MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 {
 	position = pos;
-	scale = sca;
-
+	//scale = sca;
+	scale = { 1,1,1 };
 	type = PrimitivesTypes::PRIMITIVE_MYCUBE;
 
-	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
-	vertices.push_back((1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
-	vertices.push_back((1 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
-	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
+	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
+	vertices.push_back((1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
+	vertices.push_back((1 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
+	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
 
-	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((-2 + position.z) * scale.z);
-	vertices.push_back((1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((-2 + position.z) * scale.z);
-	vertices.push_back((1 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((-2 + position.z) * scale.z);
-	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((-2 + position.z) * scale.z);
+	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((-2 + position.z) * sca.z);
+	vertices.push_back((1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((-2 + position.z) * sca.z);
+	vertices.push_back((1 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((-2 + position.z) * sca.z);
+	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((-2 + position.z) * sca.z);
 	
 	indices.push_back(0); indices.push_back(1); indices.push_back(2); indices.push_back(0); indices.push_back(2); indices.push_back(3);
 	indices.push_back(6); indices.push_back(5); indices.push_back(4); indices.push_back(7); indices.push_back(6); indices.push_back(4);
@@ -191,13 +191,13 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	type = PrimitivesTypes::PRIMITIVE_MYPYRAMID;
 
 	position = pos;
-	scale = sca;
-
-	vertices.push_back((-1 + position.x) * scale.x); vertices.push_back((0 + position.y) * scale.y); vertices.push_back((-1 + position.z) * scale.z);
-	vertices.push_back((1 + position.x) * scale.x);vertices.push_back((0 + position.y) * scale.y);vertices.push_back((-1 + position.z) * scale.z);
-	vertices.push_back((0 + position.x) * scale.x); vertices.push_back((2 + position.y) * scale.y); vertices.push_back((0 + position.z) * scale.z);
-	vertices.push_back((1 + position.x) * scale.x);vertices.push_back((0 + position.y) * scale.y);vertices.push_back((1 + position.z) * scale.z);
-	vertices.push_back((-1 + position.x) * scale.x);vertices.push_back((0 + position.y) * scale.y);vertices.push_back((1 + position.z) * scale.z);
+	//scale = sca;
+	scale = { 1,1,1 };
+	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((-1 + position.z) * sca.z);
+	vertices.push_back((1 + position.x) * sca.x);vertices.push_back((0 + position.y) * sca.y);vertices.push_back((-1 + position.z) * sca.z);
+	vertices.push_back((0 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
+	vertices.push_back((1 + position.x) * sca.x);vertices.push_back((0 + position.y) * sca.y);vertices.push_back((1 + position.z) * sca.z);
+	vertices.push_back((-1 + position.x) * sca.x);vertices.push_back((0 + position.y) * sca.y);vertices.push_back((1 + position.z) * sca.z);
 
 	indices.push_back(2); indices.push_back(1); indices.push_back(0);
 	indices.push_back(2); indices.push_back(3); indices.push_back(1);
@@ -324,12 +324,12 @@ void MyPyramid::DrawPyramid()
 
 //// CYLINDER ================================================================================================================================================================================
 
-MyCylinder::MyCylinder(float3 pos, float3 sca) : Primitives()
+MyCylinder::MyCylinder(float3 pos) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
 
 	position = pos;
-	scale = sca;
+	scale = {1,1,1};
 
 	baseRadius = 2.0f;
 	topRadius = 2.0f;
@@ -349,7 +349,7 @@ MyCylinder::MyCylinder(float3 pos, float3 sca, float baseRadius, float topRadius
 	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
 
 	position = pos;
-	scale = sca;
+	scale = {1,1,1};
 
 	this->baseRadius = baseRadius;
 	this->topRadius = topRadius;
@@ -628,27 +628,27 @@ void MyCylinder::Initialize()
 
 //// SPHERE ================================================================================================================================================================================
 
-MySphere::MySphere(float3 pos,float3 sca,float radius, uint rings, uint sectors) : Primitives()
+MySphere::MySphere(float3 pos,float3 sca) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYSPHERE;
-
+	
 	position = pos;
 	scale = sca;
 
-	float const R = 1. / (float)(rings - 1);
-	float const S = 1. / (float)(sectors - 1);
+	float const R = 1. / (float)(sca.y - 1);
+	float const S = 1. / (float)(sca.z - 1);
 	int r, s;
 
-	vertices.resize(rings * sectors * 3);
-	normals.resize(rings * sectors * 3);
-	texCoords.resize(rings * sectors * 3);
+	vertices.resize(sca.y * sca.z * 3);
+	normals.resize(sca.y * sca.z * 3);
+	texCoords.resize(sca.y * sca.z * 3);
 
 	std::vector<GLfloat>::iterator v = vertices.begin();
 	std::vector<GLfloat>::iterator n = normals.begin();
 	std::vector<GLfloat>::iterator t = texCoords.begin();
-	for (r = 0; r < rings; r++)
+	for (r = 0; r < sca.y; r++)
 	{
-		for (s = 0; s < sectors; s++)
+		for (s = 0; s < sca.z; s++)
 		{
 			float const y = sin(-M_PI_2 + M_PI * r * R);
 			float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
@@ -657,9 +657,9 @@ MySphere::MySphere(float3 pos,float3 sca,float radius, uint rings, uint sectors)
 			*t++ = s * S;
 			*t++ = r * R;
 
-			*v++ = (x * radius);
-			*v++ = (y * radius);
-			*v++ = (z * radius);
+			*v++ = (x * sca.x);
+			*v++ = (y * sca.x);
+			*v++ = (z * sca.x);
 
 			*n++ = x;
 			*n++ = y;
@@ -667,16 +667,16 @@ MySphere::MySphere(float3 pos,float3 sca,float radius, uint rings, uint sectors)
 		}
 	}
 
-	indices.resize(rings * sectors * 4);
+	indices.resize(sca.y * sca.z * 4);
 	std::vector<GLushort>::iterator i = indices.begin();
-	for (r = 0; r < rings; r++)
+	for (r = 0; r < sca.y; r++)
 	{
-		for (s = 0; s < sectors; s++)
+		for (s = 0; s < sca.z; s++)
 		{
-			*i++ = r * sectors + s;
-			*i++ = r * sectors + (s + 1);
-			*i++ = (r + 1) * sectors + (s + 1);
-			*i++ = (r + 1) * sectors + s;
+			*i++ = r * sca.z + s;
+			*i++ = r * sca.z + (s + 1);
+			*i++ = (r + 1) * sca.z + (s + 1);
+			*i++ = (r + 1) * sca.z + s;
 		}
 	}
 
