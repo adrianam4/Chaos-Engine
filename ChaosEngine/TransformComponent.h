@@ -21,6 +21,10 @@ public:
 	void Update() override;
 	void Disable() override;
 	void OnEditor(int i) override;
+	Quat FromEulerToQuat(float3 eulerAngles);
+	float3 FromQuatToEuler(Quat quatAngles);
+	float RadianToDegrees(float radian);
+	float DegreesToRadian(float degrees);
 
 	float4x4 transMatrix;
 	//mat4x4 transMatrix;
