@@ -19,9 +19,10 @@ public:
 	Model(char* path, GameObject* objSelected);
 	void Draw(float* matrix);
 	uint id;
+	std::vector<Mesh> meshes;
 private:
 	//std::vector<Textures> textures_loaded;
-	std::vector<Mesh> meshes;
+	
 	std::string directory; // or const char*
 
 	void LoadModel(std::string path, GameObject* objSelected);

@@ -28,7 +28,6 @@ public:
 	bool active;
 	GameObject* owner;
 	const char* name;
-	const char* texturePath;
 
 	float3 position;
 	float3 scale;

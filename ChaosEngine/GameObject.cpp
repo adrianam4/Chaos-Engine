@@ -73,5 +73,5 @@ int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
 		if (gameObject->components[i]->type == type)
 			return i;
 	}
-	return 0;
+	return -1;
 }

@@ -130,6 +130,13 @@ update_status ModuleInput::PreUpdate(float dt)
 				{
 					if (App->editor->objectSelected != nullptr)
 					{
+						int allmaterialId;
+						allmaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
+						if (allmaterialId != -1) 
+						{
+
+							App->editor->objectSelected->components.erase(App->editor->objectSelected->components.begin() + allmaterialId);
+						}
 						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, fileDir));
 						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
 					}
