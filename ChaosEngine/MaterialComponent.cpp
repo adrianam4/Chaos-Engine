@@ -1,9 +1,11 @@
+#include "Application.h"
 #include "MaterialComponent.h"
 
-ComponentMaterial::ComponentMaterial()
+ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path)
 {
-	type = ComponentType::MATERIAL;
+	type = _type;
 	name = "Material Component";
+	texturePath = _path;
 }
 
 ComponentMaterial::~ComponentMaterial()

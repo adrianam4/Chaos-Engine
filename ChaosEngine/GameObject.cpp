@@ -8,7 +8,18 @@ Component* GameObject::CreateComponent(ComponentType type, const char* name)
 {
 	Component* component = nullptr;
 
-	component = new ComponentMesh(ComponentType::MESH, (char*)name);
+	switch (type)
+	{
+	case ComponentType::MESH:
+		component = new ComponentMesh(type, (char*)name);
+		break;
+	case ComponentType::MATERIAL:
+		component = new ComponentMaterial(type, (char*)name);
+		break;
+	default:
+		break;
+	}
+	
 		
 	return component;
 }
@@ -39,9 +50,6 @@ Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* m
 		break;
 	case ComponentType::PLANE:
 		component = new ComponentMesh(ComponentType::PLANE, pos);
-		break;
-	case ComponentType::MATERIAL:
-		component = new ComponentMaterial();
 		break;
 	case ComponentType::EMPTY:
 		component = new ComponentMesh(ComponentType::EMPTY);

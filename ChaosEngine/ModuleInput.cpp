@@ -126,13 +126,13 @@ update_status ModuleInput::PreUpdate(float dt)
 					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 					SDL_free(&fileDir);
 				}
-				if ((aux[0] == 'p' && aux[1] == 'n' && aux[2] == 'g') || (aux[0] == 'd' && aux[1] == 'd' && aux[2] == 's'))
+				if ((aux[0] == 'p' && aux[1] == 'n' && aux[2] == 'g') || (aux[0] == 'd' && aux[1] == 'd' && aux[2] == 's') || (aux[0] == 'P' && aux[1] == 'N' && aux[2] == 'G') || (aux[0] == 'D' && aux[1] == 'D' && aux[2] == 'S'))
 				{
 					if (App->editor->objectSelected != nullptr)
 					{
-						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL));
+						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, fileDir));
+						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
 					}
-
 				}
 			}
 			break;

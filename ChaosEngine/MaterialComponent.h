@@ -9,7 +9,7 @@
 class ComponentMaterial : public Component
 {
 public:
-	ComponentMaterial();
+	ComponentMaterial(ComponentType type, const char* path);
 	~ComponentMaterial();
 
 	void Enable() override;

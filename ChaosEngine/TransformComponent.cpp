@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "TransformComponent.h"
+#include <math.h>
 
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
@@ -61,26 +62,26 @@ void ComponentTransform::OnEditor(int i)
 		Update();
 
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Rotation");
-	if (ImGui::DragFloat("Rotation X", &rotationEuler.x))
+	if (ImGui::DragFloat("Rotation X", &rotationEuler.x, 0.5f, -360.0f, 360.0f))
 		Update();
-	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y))
+	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y, 0.5f, -360.0f, 360.0f))
 		Update();
-	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z))
+	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z, 0.5f, -360.0f, 360.0f))
 		Update();
 }
 
 Quat ComponentTransform::FromEulerToQuat(float3 eulerAngles)
 {
-	eulerAngles.x = DegreesToRadian(eulerAngles.x);
-	eulerAngles.y = DegreesToRadian(eulerAngles.y);
-	eulerAngles.z = DegreesToRadian(eulerAngles.z);
+	eulerAngles.x = math::DegToRad(eulerAngles.x);
+	eulerAngles.y = math::DegToRad(eulerAngles.y);
+	eulerAngles.z = math::DegToRad(eulerAngles.z);
 
-	double cy = cos(eulerAngles.z * 0.5);
-	double sy = sin(eulerAngles.z * 0.5);
-	double cp = cos(eulerAngles.y * 0.5);
-	double sp = sin(eulerAngles.y * 0.5);
-	double cr = cos(eulerAngles.x * 0.5);
-	double sr = sin(eulerAngles.x * 0.5);
+	float cy = cos(eulerAngles.z * 0.5);
+	float sy = sin(eulerAngles.z * 0.5);
+	float cp = cos(eulerAngles.y * 0.5);
+	float sp = sin(eulerAngles.y * 0.5);
+	float cr = cos(eulerAngles.x * 0.5);
+	float sr = sin(eulerAngles.x * 0.5);
 
 	Quat q;
 	q.w = cr * cp * cy + sr * sp * sy;
@@ -112,23 +113,11 @@ float3 ComponentTransform::FromQuatToEuler(Quat quatAngles)
 	double cosy_cosp = 1 - 2 * (quatAngles.y * quatAngles.y + quatAngles.z * quatAngles.z);
 	angles.z = std::atan2(siny_cosp, cosy_cosp);
 
-	angles.x = RadianToDegrees(angles.x);
-	angles.y = RadianToDegrees(angles.y);
-	angles.z = RadianToDegrees(angles.z);
+	angles.x = math::RadToDeg(angles.x);
+	angles.y = math::RadToDeg(angles.y);
+	angles.z = math::RadToDeg(angles.z);
 
 	return angles;
-}
-
-float ComponentTransform::RadianToDegrees(float radian)
-{
-	float pi = 3.14159;
-	return (radian * (180 / pi));
-}
-
-float ComponentTransform::DegreesToRadian(float degrees)
-{
-	float pi = 3.14159;
-	return ((degrees * pi) /180);
 }
 
 //void ComponentTransform::CalculateTransMatrix(mat4x4 parentsMatrix, mat4x4 localMatrix)
