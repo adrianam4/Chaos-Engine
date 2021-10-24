@@ -12,6 +12,7 @@ ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path)
 	type = _type;
 	name = "Material Component";
 	loadTexture(_path);
+	path = _path;
 }
 
 ComponentMaterial::~ComponentMaterial()
@@ -32,14 +33,17 @@ void ComponentMaterial::Disable()
 
 void ComponentMaterial::OnEditor(int i)
 {
-
+	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Path: "); ImGui::SameLine(); ImGui::Text(path);
+	ImGui::Image((void*)(intptr_t)myImageId, ImVec2(width/2, height/2));
+	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Width: "); ImGui::SameLine(); ImGui::Text("%d", width);
+	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Height: "); ImGui::SameLine(); ImGui::Text("%d", height);
 }
 bool ComponentMaterial::loadTexture(const char* _path)
 {
 	ILboolean success;
 	ILuint imageID;
-	int width;
-	int height;
+	width;
+	height;
 	GLuint textId;
 	
 	
@@ -48,6 +52,7 @@ bool ComponentMaterial::loadTexture(const char* _path)
 
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
+	myImageId = imageID;
 
 	success = ilLoadImage(_path);
 

@@ -17,5 +17,8 @@ public:
 	void Disable() override;
 	void OnEditor(int i) override;
 private:
-
+	int width;
+	int height;
+	const char* path;
+	int myImageId;
 };
