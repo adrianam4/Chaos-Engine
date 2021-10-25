@@ -97,14 +97,18 @@ update_status ModuleCamera3D::Update(float dt)
 	{
 		if (App->editor->objectSelected == NULL)
 		{
-			LookAt(Vec3(0.0f, 0.0f, 0.0f));
+			Look(Vec3(3.0f, 3.0f, 3.0f), Vec3(0.0f, 0.0f, 0.0f), true);
 		}
 		else
 		{
 			int id = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::TRANSFORM);
-			LookAt(Vec3(App->editor->objectSelected->components[id]->position.x,
-				App->editor->objectSelected->components[id]->position.y,
-				App->editor->objectSelected->components[id]->position.z));
+
+			Look(Vec3(App->editor->objectSelected->components[id]->position.x + 5,
+				App->editor->objectSelected->components[id]->position.y + 5,
+				App->editor->objectSelected->components[id]->position.z+ 5),
+				Vec3(App->editor->objectSelected->components[id]->position.x,
+					App->editor->objectSelected->components[id]->position.y,
+					App->editor->objectSelected->components[id]->position.z), true);
 		}
 	}
 
@@ -113,13 +117,19 @@ update_status ModuleCamera3D::Update(float dt)
 		if (App->editor->objectSelected == NULL)
 		{
 			LookAt(Vec3(0.0f, 0.0f, 0.0f));
+			position = (Vec3(3.0f, 3.0f, 3.0f));
 		}
 		else
 		{
 			int id = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::TRANSFORM);
+
 			LookAt(Vec3(App->editor->objectSelected->components[id]->position.x,
-				App->editor->objectSelected->components[id]->position.y,
-				App->editor->objectSelected->components[id]->position.z));
+					App->editor->objectSelected->components[id]->position.y,
+					App->editor->objectSelected->components[id]->position.z));
+
+			position = ((Vec3(App->editor->objectSelected->components[id]->position.x + 5,
+				App->editor->objectSelected->components[id]->position.y + 5,
+				App->editor->objectSelected->components[id]->position.z + 5)));
 		}
 
 		int dx = -App->input->GetMouseXMotion();

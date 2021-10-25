@@ -1,8 +1,8 @@
 {
     "MaxFPS": 0,
     "MaxMs": 0,
-    "Width": 0,
-    "Height": 0,
+    "Width": 1136,
+    "Height": 688,
     "Brightness": 0,
     "Fullscreen": false,
     "Resizable": true,
