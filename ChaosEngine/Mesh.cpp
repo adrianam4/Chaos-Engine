@@ -126,7 +126,7 @@ void Mesh::setupMesh()
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
 
-	success = ilLoadImage("Assets/Lenna_(test_image).png");
+	success = ilLoadImage("Assets/BakerHouse.png");
 
 	width = ilGetInteger(IL_IMAGE_WIDTH);
 	height = ilGetInteger(IL_IMAGE_HEIGHT);

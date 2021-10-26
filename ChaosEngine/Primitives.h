@@ -3,6 +3,12 @@
 #include "Color.h"
 #include <vector>
 
+#include "GL/glew.h"
+
+#include "DevIL/include/IL/il.h"
+#include "DevIL/include/IL/ilu.h"
+#include "DevIL/include/IL/ilut.h"
+
 #define CHECKERS_WIDTH 64
 #define CHECKERS_HEIGHT 64
 
@@ -54,8 +60,11 @@ public:
 	MyCube(float3 pos, float3 sca);
 	~MyCube();
 	void DrawCube();
-private:
 
+public:
+	ILuint imageID;
+
+private:
 	std::vector<float> vertices;
 	std::vector<uint> indices;
 	std::vector<float> texCoords;
@@ -67,6 +76,10 @@ public:
 	MyPyramid(float3 pos, float3 sca);
 	~MyPyramid();
 	void DrawPyramid();
+
+public:
+	ILuint imageID;
+
 private:
 
 	std::vector<float> vertices;
@@ -84,6 +97,9 @@ public:
 	void BuildVerticalSmooth();
 	void DrawCylinder();
 	void Initialize();
+
+public:
+	ILuint imageID;
 
 private:
 	std::vector<float> unitCircleVertices;
@@ -110,6 +126,10 @@ protected:
 	std::vector<GLfloat> normals;
 	std::vector<GLfloat> texCoords;
 	std::vector<GLfloat> vertices;
+
+public:
+	ILuint imageID;
+
 public:
 	MySphere(float3 pos, float3 sca);
 	~MySphere();
@@ -126,6 +146,10 @@ public:
 	MyPlane(float x, float y, float z, float d);
 	void InnerRender() const;
 	void DrawPlane() const;
+
+public:
+	ILuint imageID;
+
 public:
 	Vec3 normal;
 	float constant;
@@ -139,6 +163,10 @@ public:
 
 	~MyPlane3D();
 	void DrawPlane();
+
+public:
+	ILuint imageID;
+
 public:
 	std::vector<GLushort> indices;
 	std::vector<GLfloat> normals;

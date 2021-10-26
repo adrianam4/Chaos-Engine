@@ -107,7 +107,7 @@ update_status ModuleInput::PreUpdate(float dt)
 
 			case SDL_DROPFILE:
 			{
-				char* fileDir = e.drop.file;
+				fileDir = e.drop.file;
 				char aux[3];
 				int lastChar = strlen(fileDir) - 1;
 				int j = 2;
@@ -125,6 +125,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 					SDL_free(&fileDir);
+					App->editor->AddLog("Loaded %s\n", fileDir);
 				}
 				if ((aux[0] == 'p' && aux[1] == 'n' && aux[2] == 'g') || (aux[0] == 'd' && aux[1] == 'd' && aux[2] == 's') || (aux[0] == 'P' && aux[1] == 'N' && aux[2] == 'G') || (aux[0] == 'D' && aux[1] == 'D' && aux[2] == 'S'))
 				{
@@ -139,6 +140,8 @@ update_status ModuleInput::PreUpdate(float dt)
 						}
 						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, fileDir));
 						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+						SDL_free(&fileDir);
+						App->editor->AddLog("Loaded %s\n", fileDir);
 					}
 				}
 			}

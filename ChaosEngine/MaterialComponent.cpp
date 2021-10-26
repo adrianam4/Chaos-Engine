@@ -88,6 +88,8 @@ bool ComponentMaterial::loadTexture(const char* _path)
 				break;
 			}
 		}
+		glDeleteTextures(1, &App->editor->cubes[a]->aTextureId);
+		ilDeleteImages(1, &App->editor->cubes[a]->imageID);
 		App->editor->cubes[a]->aTextureId = textId;
 	}
 	else {
@@ -101,6 +103,8 @@ bool ComponentMaterial::loadTexture(const char* _path)
 					break;
 				}
 			}
+			glDeleteTextures(1, &App->editor->cylinders[a]->aTextureId);
+			ilDeleteImages(1, &App->editor->cylinders[a]->imageID);
 			App->editor->cylinders[a]->aTextureId = textId;
 		}
 		else {
@@ -114,6 +118,8 @@ bool ComponentMaterial::loadTexture(const char* _path)
 						break;
 					}
 				}
+				glDeleteTextures(1, &App->editor->pyramids[a]->aTextureId);
+				ilDeleteImages(1, &App->editor->pyramids[a]->imageID);
 				App->editor->pyramids[a]->aTextureId = textId;
 			}
 			else 
@@ -128,6 +134,8 @@ bool ComponentMaterial::loadTexture(const char* _path)
 							break;
 						}
 					}
+					glDeleteTextures(1, &App->editor->spheres[a]->aTextureId);
+					ilDeleteImages(1, &App->editor->spheres[a]->imageID);
 					App->editor->spheres[a]->aTextureId = textId;
 				}
 				else {
@@ -146,7 +154,7 @@ bool ComponentMaterial::loadTexture(const char* _path)
 						{
 							App->renderer3D->models[a].meshes[b].textureId = textId;
 						}
-						
+
 					}
 					else 
 					{
@@ -161,6 +169,8 @@ bool ComponentMaterial::loadTexture(const char* _path)
 									break;
 								}
 							}
+							glDeleteTextures(1, &App->editor->planes[a]->aTextureId);
+							ilDeleteImages(1, &App->editor->planes[a]->imageID);
 							App->editor->planes[a]->aTextureId = textId;
 						}
 					}

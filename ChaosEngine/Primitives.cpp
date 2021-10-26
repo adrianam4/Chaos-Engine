@@ -5,12 +5,6 @@
 
 #include "glmath.h"
 #include "MathGeoLib/src/MathGeoLib.h"
-
-#include "GL/glew.h"
-
-#include "DevIL/include/IL/il.h"
-#include "DevIL/include/IL/ilu.h"
-#include "DevIL/include/IL/ilut.h"
 // ------------------------------------------------------------
 Primitives::Primitives() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitivesTypes::PRIMITIVE_MYPOINT)
 {
@@ -105,7 +99,6 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
 
 	ILboolean success;
-	ILuint imageID;
 	int width;
 	int height;
 
@@ -115,7 +108,7 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
 
-	success = ilLoadImage("Assets/Lenna_(test_image).png");
+	success = ilLoadImage("Assets/RockTexture.png");
 
 	width = ilGetInteger(IL_IMAGE_WIDTH);
 	height = ilGetInteger(IL_IMAGE_HEIGHT);
@@ -240,7 +233,6 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
 
 	ILboolean success;
-	ILuint imageID;
 	int width;
 	int height;
 
@@ -250,7 +242,7 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
 
-	success = ilLoadImage("Assets/Lenna_(test_image).png");
+	success = ilLoadImage("Assets/RockTexture.png");
 
 	width = ilGetInteger(IL_IMAGE_WIDTH);
 	height = ilGetInteger(IL_IMAGE_HEIGHT);
@@ -593,7 +585,6 @@ void MyCylinder::Initialize()
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
 
 	ILboolean success;
-	ILuint imageID;
 	int width;
 	int height;
 
@@ -603,7 +594,7 @@ void MyCylinder::Initialize()
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
 
-	success = ilLoadImage("Assets/Lenna_(test_image).png");
+	success = ilLoadImage("Assets/RockTexture.png");
 
 	width = ilGetInteger(IL_IMAGE_WIDTH);
 	height = ilGetInteger(IL_IMAGE_HEIGHT);
@@ -706,7 +697,6 @@ MySphere::MySphere(float3 pos,float3 sca) : Primitives()
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
 
 	ILboolean success;
-	ILuint imageID;
 	int width;
 	int height;
 
@@ -716,7 +706,7 @@ MySphere::MySphere(float3 pos,float3 sca) : Primitives()
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
 
-	success = ilLoadImage("Assets/Lenna_(test_image).png");
+	success = ilLoadImage("Assets/RockTexture.png");
 
 	width = ilGetInteger(IL_IMAGE_WIDTH);
 	height = ilGetInteger(IL_IMAGE_HEIGHT);
@@ -860,7 +850,6 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
 
 	ILboolean success;
-	ILuint imageID;
 	int width;
 	int height;
 
@@ -870,7 +859,7 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
 
-	success = ilLoadImage("Assets/Lenna_(test_image).png");
+	success = ilLoadImage("Assets/RockTexture.png");
 
 	width = ilGetInteger(IL_IMAGE_WIDTH);
 	height = ilGetInteger(IL_IMAGE_HEIGHT);

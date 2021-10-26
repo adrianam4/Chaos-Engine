@@ -38,6 +38,14 @@ bool ModuleEditor::Start()
 	LoadConfig();
 	ComproveScreen();
 
+	App->scene->gameObjects.push_back(App->scene->CreateGameObject("Assets/BakerHouse.fbx", false));
+	int lastComponent = App->scene->gameObjects.size() - 1;
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/BakerHouse.fbx"));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+	SDL_free("Assets/BakerHouse.fbx");
+
 	return ret;
 }
 
@@ -192,7 +200,6 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 
 		ImGui::DragFloat("Z Size", &M.z);
 
-
 		if (ImGui::Button("Create Cube")) {
 			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cube", false));
 			int lastComponent = App->scene->gameObjects.size() - 1;
@@ -201,6 +208,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			sowOptionsMenu = ComponentType::NONE;
+			App->editor->AddLog("Cube Created\n");
 		}
 		ImGui::End();
 		break;
@@ -232,6 +240,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			sowOptionsMenu = ComponentType::NONE;
+			App->editor->AddLog("Pyramid Created\n");
 		}
 		ImGui::End();
 		break;
@@ -251,6 +260,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			sowOptionsMenu = ComponentType::NONE;
+			App->editor->AddLog("Cylinder Created\n");
 		}
 		ImGui::End();
 		break;
@@ -284,6 +294,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			sowOptionsMenu = ComponentType::NONE;
+			App->editor->AddLog("Sphere Created\n");
 		}
 		ImGui::End();
 		break;
@@ -312,6 +323,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		if (ImGui::Button("Create Plane")) {
 			//objectManager->SetPlaneProperties(objectManager->Create(shapeType::plane, position), xM, zM);
 			sowOptionsMenu = ComponentType::NONE;
+			App->editor->AddLog("Plane Created\n");
 		}
 		ImGui::End();
 		break;
@@ -445,9 +457,9 @@ update_status ModuleEditor::Update(float dt)
 			{
 				sowOptionsMenu = ComponentType::SPHERE;
 				position = { 0,0,0 };
-				M.x = 2;
-				M.y = 20;
-				M.z = 20;
+				M.x = 1;
+				M.y = 1;
+				M.z = 1;
 				
 			}
 			if (ImGui::MenuItem("Create Cylinder"))
@@ -683,11 +695,11 @@ update_status ModuleEditor::Update(float dt)
 				ImGui::Text("Base Path: ");
 				ImGui::TextColored(ImVec4(255, 255, 0, 255), SDL_GetBasePath());
 
-				ImGui::Text("Read Paths: ");
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), ".");
+				//ImGui::Text("Read Paths: ");
+				//ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", App->input->fileDir);
 
-				ImGui::Text("Write Path: ");
-				ImGui::TextColored(ImVec4(255, 255, 0, 255), ".");
+				//ImGui::Text("Write Path: ");
+				//ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", App->input->fileDir);
 			}
 
 		}

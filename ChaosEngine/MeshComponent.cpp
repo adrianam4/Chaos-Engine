@@ -9,7 +9,7 @@ ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 	switch (mType)
 	{
 	case ComponentType::MESH:
-		App->renderer3D->InitMesh("Assets/BakerHouse.fbx", App->scene->gameObjects[App->scene->gameObjects.size() - 1]);
+		App->renderer3D->InitMesh("Assets/Warrior.fbx", App->scene->gameObjects[App->scene->gameObjects.size() - 1]);
 		App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
 		App->editor->lastId++;
 		break;
