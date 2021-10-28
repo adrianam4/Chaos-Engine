@@ -40,20 +40,22 @@ private:
 	ComponentType sowOptionsMenu;
 	float3 position;
 	float3 M;
+	void childrenManage(int i);
 	
 public:
 	ImGuiTextBuffer consoleBuffer;
 	bool wireframe;
 	bool normals;
 	bool scrollToBottom;
+	GameObject* objectSelected;
 
 	std::vector<MyCube*> cubes;
 	std::vector<MyCylinder*> cylinders;
 	std::vector<MySphere*> spheres;
 	std::vector<MyPyramid*> pyramids;
 	std::vector<MyPlane3D*> planes;
-
-	GameObject* objectSelected;
+	GameObject* objectToChildren;
+	
 	int lastId;
 	bool isSelected;
 };

@@ -566,48 +566,94 @@ update_status ModuleEditor::Update(float dt)
 
 	//////////////////////////////////////////////////////////////////////////////////////////// HIERARCHY WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
+		objectToChildren = nullptr;
+		objectSelected = nullptr;
+	}
+
+
+
+
 	if (showHierarchy)
 	{
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Hierarchy", &showHierarchy);
 		ImGui::LabelText("", "Game Objects in Scene: %d", App->scene->gameObjects.size());
-		
+
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			const char* name = App->scene->gameObjects[i]->name.c_str();
-			if (ImGui::TreeNode(name))
-			{
-				if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
+			if (App->scene->gameObjects[i]->isChild == false) {
+				if (ImGui::TreeNode(App->scene->gameObjects[i]->name.c_str()))
 				{
-					objectSelected = App->scene->gameObjects[i];
-
-				}
-
-				for (int j = 0; j < App->scene->gameObjects[i]->childrens.size(); j++)
-				{
-					const char* childName = App->scene->gameObjects[i]->childrens[j]->name.c_str();
-					if (App->scene->gameObjects[i]->childrens.size() > 0)
+					if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
 					{
-						if (ImGui::TreeNode(childName))
+
+						childrenManage(i);
+					}
+
+
+
+					for (int j = 0; j < App->scene->gameObjects[i]->childrens.size(); j++)
+					{
+						if (App->scene->gameObjects[i]->childrens.size() > 0)
 						{
-							ImGui::TreePop();
+							if (ImGui::TreeNode(App->scene->gameObjects[i]->childrens[j]->name.c_str()))
+							{
+								if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
+								{
+									objectSelected = App->scene->gameObjects[i]->childrens[j];
+									//childrenManage(i);
+								}
+								ImGui::TreePop();
+							}
 						}
 					}
+					ImGui::TreePop();
 				}
-				ImGui::TreePop();
-			}
-			else
-			{
-				if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
+				else
 				{
-					objectSelected = App->scene->gameObjects[i];
 
+					if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
+					{
+						childrenManage(i);
+
+
+					}
+				}
+				ImGui::Separator();
+			}
+		}
+
+		ImGui::End();
+	}
+
+
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_UP)
+	{
+		if (objectSelected && objectToChildren)
+		{
+			int a;
+			for (a = 0; a < App->scene->gameObjects.size(); a++) {
+				if (App->scene->gameObjects[a] == objectToChildren) {
+					break;
 				}
 			}
-			ImGui::Separator();
+
+
+			objectSelected->childrens.push_back(objectToChildren);
+			objectToChildren->isChild = true;
+
+			objectToChildren = nullptr;
+			objectSelected = nullptr;
 		}
-		
-		ImGui::End();
+		else {
+			objectToChildren = nullptr;
+			objectSelected = nullptr;
+		}
+
+
 	}
 
 	if (showInspector && objectSelected != nullptr)
@@ -1045,4 +1091,26 @@ update_status ModuleEditor::PostUpdate(float dt)
 	}
 
 	return UPDATE_CONTINUE;
+}
+
+void  ModuleEditor::childrenManage(int i) {
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_REPEAT)
+	{
+
+		if (objectSelected == nullptr && objectToChildren == nullptr)
+		{
+			objectToChildren = App->scene->gameObjects[i];
+		}
+		else if (objectSelected == nullptr && objectToChildren) {
+			objectSelected = App->scene->gameObjects[i];
+		}
+		else if (objectSelected && objectToChildren) {
+			objectToChildren = App->scene->gameObjects[i];
+			objectSelected = nullptr;
+		}
+	}
+	else if (App->input->GetKey(SDL_SCANCODE_P) == KEY_IDLE) {
+		objectSelected = App->scene->gameObjects[i];
+	}
 }

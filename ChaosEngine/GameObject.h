@@ -24,7 +24,7 @@ public:
 	std::vector<GameObject*> childrens;
 	GameObject* parent;
 	AABB aabb;
-
+	bool isChild = false;
 	float3 trans;
 	float3 sca;
 	Quat rot;

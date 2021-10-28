@@ -30,6 +30,7 @@ public:
 	const char* name;
 
 	float3 position;
+	float3 lastposition;
 	float3 scale;
 	float3 rotationEuler;
 	float generalScale;

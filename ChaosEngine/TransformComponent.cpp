@@ -36,6 +36,22 @@ void ComponentTransform::Update()
 	transMatrix = aux.FromTRS(position, rotationQuat, scale);
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
+
+	for (int a = 0; a < App->editor->objectSelected->childrens.size(); a++) {
+		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {
+			if (App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM)
+			{
+				App->editor->objectSelected->childrens[a]->components[b]->position += position - lastposition;
+
+				App->editor->objectSelected->childrens[a]->matrix = transMatrix.ptr();
+
+			}
+		}
+
+
+
+
+	}
 }
 
 void ComponentTransform::Disable()
@@ -44,6 +60,7 @@ void ComponentTransform::Disable()
 
 void ComponentTransform::OnEditor(int i)
 {
+	lastposition = position;
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
 	if (ImGui::DragFloat("Position X", &position.x))
 		Update();
