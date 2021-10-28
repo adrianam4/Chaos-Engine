@@ -38,16 +38,15 @@ bool ModuleEditor::Start()
 	LoadConfig();
 	ComproveScreen();
 
-	//Loading Baker House
-	App->scene->gameObjects.push_back(App->scene->CreateGameObject("BakerHouse", false));
+	App->scene->gameObjects.push_back(App->scene->CreateGameObject("House", false));
 	int lastComponent = App->scene->gameObjects.size() - 1;
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH,"Assets/BakerHouse.fbx"));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx"));
 	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/BakerHouse.png"));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png"));
 	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
-	SDL_free("Assets/BakerHouse.fbx");
+	SDL_free("Assets/Textures/BakerHouse.fbx");
 
 	return ret;
 }
@@ -429,12 +428,33 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
-			if (ImGui::MenuItem("Create Mesh"))
+			if (ImGui::MenuItem("Create House"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Mesh", false));
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("House", false));
 				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, & position));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png"));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			}
+			if (ImGui::MenuItem("Create Penguin"))
+			{
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Penguin", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Penguin.fbx"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Penguin.png"));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			}
+			if (ImGui::MenuItem("Create Car"))
+			{
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Car", false));
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Car.fbx"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Car.png"));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}

@@ -140,7 +140,6 @@ update_status ModuleInput::PreUpdate(float dt)
 						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, fileDir));
 						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
 						SDL_free(&fileDir);
-						App->editor->AddLog("Loaded %s\n", fileDir);
 					}
 				}
 			}

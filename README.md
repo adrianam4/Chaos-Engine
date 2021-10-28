@@ -3,7 +3,13 @@
 An amazing Engine created by [David Lira](https://github.com/davidlira19), [Adrián Aroca](https://github.com/adrianam4) and [Unai Díaz](https://github.com/unaidiaz), three university students from CITM-UPC for the subject Game Engines.
 
 
-## FUNCTIONS:
+## Github Accounts:
+
+- [David Lira](https://github.com/davidlira19)
+- [Adrián Aroca](https://github.com/adrianam4)
+- [Unai Díaz](https://github.com/unaidiaz)
+
+## Functions:
 
 - Free Camera Movement
 - Create primitives (Cube, Pyramid, Cyilinder and Sphere)
@@ -16,7 +22,7 @@ An amazing Engine created by [David Lira](https://github.com/davidlira19), [Adri
 - A Console that shows your actions on the Engine
 
 
-## CONTROLS:
+## Controls:
 
 - WASD: Camera Movement
 - Q: Camera Up

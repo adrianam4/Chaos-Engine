@@ -31,7 +31,7 @@ void ComponentMaterial::Update()
 	{
 		for (int i = 0; i < App->renderer3D->models[0].meshes.size(); i++)
 		{
-			loadTexture("Assets/Checker.png");
+			loadTexture("Assets/Textures/Checker.png");
 		}
 	}
 	else
@@ -96,9 +96,9 @@ bool ComponentMaterial::loadTexture(const char* _path)
 
 	if (App->editor->objectSelected == nullptr)
 	{
-		for (int i = 0; i < App->renderer3D->models[0].meshes.size(); i++)
+		for (int i = 0; i < App->renderer3D->models[App->renderer3D->models.size() - 1].meshes.size(); i++)
 		{			
-			App->renderer3D->models[0].meshes[i].textureId = textId;
+			App->renderer3D->models[App->renderer3D->models.size() - 1].meshes[i].textureId = textId;
 		}
 	}
 	if (App->editor->objectSelected != nullptr)
