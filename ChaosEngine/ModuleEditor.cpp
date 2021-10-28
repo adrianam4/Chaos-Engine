@@ -38,11 +38,11 @@ bool ModuleEditor::Start()
 	LoadConfig();
 	ComproveScreen();
 
-	App->scene->gameObjects.push_back(App->scene->CreateGameObject("House", false));
+	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "House "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx"));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx",false));
 	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png"));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png",false));
 	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
@@ -203,7 +203,11 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::DragFloat("Z Size", &M.z);
 
 		if (ImGui::Button("Create Cube")) {
-			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cube", false));
+			if (cubes.size() == 0)
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Cube "));
+			else
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cubes.size() + 1, "Cube "));
+
 			int lastComponent = App->scene->gameObjects.size() - 1;
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position,&M));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -234,8 +238,13 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::DragFloat("Z Size", &M.z);
 
 
-		if (ImGui::Button("Create Pyramid")) {
-			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Pyramid", false));
+		if (ImGui::Button("Create Pyramid")) 
+		{
+			if (pyramids.size() == 0)
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Pyramid "));
+			else
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, pyramids.size() + 1, "Pyramid "));
+
 			int lastComponent = App->scene->gameObjects.size() - 1;
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID, &position,&M));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -254,8 +263,13 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::DragFloat("X", &position.x);
 		ImGui::DragFloat("Y", &position.y);
 		ImGui::DragFloat("Z", &position.z);
-		if (ImGui::Button("Create Cylindrer")) {
-			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Cylinder", false));
+		if (ImGui::Button("Create Cylindrer")) 
+		{
+			if (cylinders.size() == 0)
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Cylinder "));
+			else
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cylinders.size() + 1, "Cylinder "));
+
 			int lastComponent = App->scene->gameObjects.size() - 1;
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -288,8 +302,13 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::DragFloat("X Size", &M.z);
 
 
-		if (ImGui::Button("Create Sphere")) {
-			App->scene->gameObjects.push_back(App->scene->CreateGameObject("Sphere", false));
+		if (ImGui::Button("Create Sphere")) 
+		{
+			if (spheres.size() == 0)
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Sphere "));
+			else
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, spheres.size() + 1, "Sphere "));
+
 			int lastComponent = App->scene->gameObjects.size() - 1;
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE, &position, &M));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -421,7 +440,9 @@ update_status ModuleEditor::Update(float dt)
 		{
 			if (ImGui::MenuItem("Create Empty"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Empty GameObject", false));
+				static int empties = 1;
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, empties, "Empty "));
+				empties++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::EMPTY, &position));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -430,31 +451,37 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create House"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("House", false));
+				static int houses = 2;
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, houses, "House "));
+				houses++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx",false));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Penguin"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Penguin", false));
+				static int penguins = 1;
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, penguins, "Penguin "));
+				penguins++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Penguin.fbx"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Penguin.fbx", false));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Penguin.png"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Penguin.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
 			if (ImGui::MenuItem("Create Car"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Car", false));
+				static int cars = 1;
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cars, "Car "));
+				cars++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Car.fbx"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Car.fbx", false));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Car.png"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Car.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			}
@@ -496,7 +523,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Plane"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject("Plane", false));
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Plane"));
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -547,7 +574,8 @@ update_status ModuleEditor::Update(float dt)
 		
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			if (ImGui::TreeNode(App->scene->gameObjects[i]->name))
+			const char* name = App->scene->gameObjects[i]->name.c_str();
+			if (ImGui::TreeNode(name))
 			{
 				if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
 				{
@@ -557,9 +585,10 @@ update_status ModuleEditor::Update(float dt)
 
 				for (int j = 0; j < App->scene->gameObjects[i]->childrens.size(); j++)
 				{
+					const char* childName = App->scene->gameObjects[i]->childrens[j]->name.c_str();
 					if (App->scene->gameObjects[i]->childrens.size() > 0)
 					{
-						if (ImGui::TreeNode(App->scene->gameObjects[i]->childrens[j]->name))
+						if (ImGui::TreeNode(childName))
 						{
 							ImGui::TreePop();
 						}
@@ -584,8 +613,8 @@ update_status ModuleEditor::Update(float dt)
 	if (showInspector && objectSelected != nullptr)
 	{
 		ImGui::Begin("Inspector", &showInspector);
-
-		ImGui::TextColored(ImVec4(255, 255, 0, 255), objectSelected->name);
+		const char* name = objectSelected->name.c_str();
+		ImGui::TextColored(ImVec4(255, 255, 0, 255), name);
 		ImGui::Separator();
 		for (int i = 0; i < objectSelected->components.size(); i++)
 		{

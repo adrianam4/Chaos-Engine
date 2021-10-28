@@ -13,6 +13,7 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, Quat rot)
 	position = pos;
 	scale = sca;
 	rotationQuat = rot;
+	generalScale = 1.0f;
 
 	rotationEuler = FromQuatToEuler(rotationQuat);
 
@@ -35,9 +36,6 @@ void ComponentTransform::Update()
 	transMatrix = aux.FromTRS(position, rotationQuat, scale);
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
-
-	App->editor->AddLog("Quat -> w:%f x:%f y:%f z:%f \n",rotationQuat.w, rotationQuat.x, rotationQuat.y, rotationQuat.z);
-	App->editor->AddLog("Angles -> x:%f y:%f z:%f \n",rotationEuler.x, rotationEuler.y, rotationEuler.z);
 }
 
 void ComponentTransform::Disable()
@@ -55,6 +53,14 @@ void ComponentTransform::OnEditor(int i)
 		Update();
 
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Scale");
+	if (ImGui::DragFloat("General Scale", &generalScale))
+	{
+		scale.x = generalScale;
+		scale.y = generalScale;
+		scale.z = generalScale;
+		Update();
+	}
+	ImGui::Spacing();
 	if (ImGui::DragFloat("Scale X", &scale.x))
 		Update();
 	if (ImGui::DragFloat("Scale Y", &scale.y))

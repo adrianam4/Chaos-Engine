@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleScene.h"
+#include <string>
 
 #include "assimp/cimport.h"
 #include "assimp/Importer.hpp"
@@ -52,11 +53,12 @@ bool ModuleScene::CleanUp()
 	return true;
 }
 
-GameObject* ModuleScene::CreateGameObject(const char* label, bool select)
+GameObject* ModuleScene::CreateGameObject(bool select, int number, const char* fmt, ...)
 {
 	GameObject* auxGameObject = new GameObject();
-
-	auxGameObject->name = label;
+	std::string _name(fmt);
+	std::string _num = std::to_string(number);
+	auxGameObject->name = _name + _num;
 	auxGameObject->selected = select;
 	auxGameObject->id = lastId + 1;
 	lastId++;

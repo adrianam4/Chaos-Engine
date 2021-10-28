@@ -118,9 +118,9 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 				if ((aux[0] == 'f' && aux[1] == 'b' && aux[2] == 'x') || (aux[0] == 'o' && aux[1] == 'b' && aux[2] == 'j') || (aux[0] == 'F' && aux[1] == 'B' && aux[2] == 'X'))
 				{
-					App->scene->gameObjects.push_back(App->scene->CreateGameObject(fileDir, false));
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, fileDir));
 					int lastComponent = App->scene->gameObjects.size() - 1;
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, fileDir));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, fileDir, true));
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
@@ -137,7 +137,7 @@ update_status ModuleInput::PreUpdate(float dt)
 						{
 							App->editor->objectSelected->components.erase(App->editor->objectSelected->components.begin() + oldMaterialId);
 						}
-						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, fileDir));
+						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, fileDir, true));
 						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
 						SDL_free(&fileDir);
 					}

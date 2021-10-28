@@ -4,7 +4,7 @@
 #include "TransformComponent.h"
 #include "MaterialComponent.h"
 
-Component* GameObject::CreateComponent(ComponentType type, const char* name)
+Component* GameObject::CreateComponent(ComponentType type, const char* name, bool isDropped)
 {
 	Component* component = nullptr;
 
@@ -14,7 +14,7 @@ Component* GameObject::CreateComponent(ComponentType type, const char* name)
 		component = new ComponentMesh(type, (char*)name);
 		break;
 	case ComponentType::MATERIAL:
-		component = new ComponentMaterial(type, (char*)name);
+		component = new ComponentMaterial(type, (char*)name, isDropped);
 		break;
 	default:
 		break;

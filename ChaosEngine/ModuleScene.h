@@ -17,7 +17,7 @@ public:
 	bool CleanUp();
 	
 public:
-	GameObject* CreateGameObject(const char* label, bool select);
+	GameObject* CreateGameObject(bool select, int number, const char* fmt, ...);
 	std::vector<GameObject*> gameObjects;
 private:
 	int lastId;

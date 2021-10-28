@@ -7,12 +7,13 @@
 #include "DevIL/include/IL/ilut.h"
 
 
-ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path)
+ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path, bool _isDropped)
 {
 	type = _type;
 	name = "Material Component";
-	loadTexture(_path);
 	path = _path;
+	isDropped = _isDropped;
+	loadTexture(_path);
 
 	showCheckerTexture = false;
 }
@@ -94,14 +95,14 @@ bool ComponentMaterial::loadTexture(const char* _path)
 	int toFound;
 	int a;
 
-	if (App->editor->objectSelected == nullptr)
+	if (!isDropped)
 	{
 		for (int i = 0; i < App->renderer3D->models[App->renderer3D->models.size() - 1].meshes.size(); i++)
 		{			
 			App->renderer3D->models[App->renderer3D->models.size() - 1].meshes[i].textureId = textId;
 		}
 	}
-	if (App->editor->objectSelected != nullptr)
+	if (isDropped)
 	{
 		toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CUBE);
 

@@ -9,7 +9,7 @@
 class ComponentMaterial : public Component
 {
 public:
-	ComponentMaterial(ComponentType type, const char* path);
+	ComponentMaterial(ComponentType type, const char* path, bool isDropped);
 	~ComponentMaterial();
 	bool loadTexture(const char* _path);
 	void Enable() override;
@@ -25,4 +25,5 @@ private:
 	GLubyte checkerImageData[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	const char* checkerTextPath;
 	char* oldTextPath;
+	bool isDropped;
 };
