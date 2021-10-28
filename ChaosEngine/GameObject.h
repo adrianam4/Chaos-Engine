@@ -23,6 +23,7 @@ public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
 	GameObject* parent;
+	AABB aabb;
 
 	float3 trans;
 	float3 sca;

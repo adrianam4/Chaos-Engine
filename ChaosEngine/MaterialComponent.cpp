@@ -13,6 +13,8 @@ ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path)
 	name = "Material Component";
 	loadTexture(_path);
 	path = _path;
+
+	showCheckerTexture = false;
 }
 
 ComponentMaterial::~ComponentMaterial()
@@ -25,6 +27,17 @@ void ComponentMaterial::Enable()
 
 void ComponentMaterial::Update()
 {
+	if (showCheckerTexture)
+	{
+		for (int i = 0; i < App->renderer3D->models[0].meshes.size(); i++)
+		{
+			loadTexture("Assets/Checker.png");
+		}
+	}
+	else
+	{
+		loadTexture(path);
+	}
 }
 
 void ComponentMaterial::Disable()
@@ -33,11 +46,14 @@ void ComponentMaterial::Disable()
 
 void ComponentMaterial::OnEditor(int i)
 {
+	if (ImGui::Checkbox("Checkers Texture", &showCheckerTexture))
+		Update();
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Path: "); ImGui::SameLine(); ImGui::Text(path);
 	ImGui::Image((void*)(intptr_t)myImageId, ImVec2(width/2, height/2));
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Width: "); ImGui::SameLine(); ImGui::Text("%d", width);
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Height: "); ImGui::SameLine(); ImGui::Text("%d", height);
 }
+
 bool ComponentMaterial::loadTexture(const char* _path)
 {
 	ILboolean success;
@@ -46,12 +62,12 @@ bool ComponentMaterial::loadTexture(const char* _path)
 	height;
 	GLuint textId;
 	
-	
 	glGenTextures(1, &textId);
 	glBindTexture(GL_TEXTURE_2D, textId);
 
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
+
 	myImageId = imageID;
 
 	success = ilLoadImage(_path);
@@ -77,106 +93,120 @@ bool ComponentMaterial::loadTexture(const char* _path)
 	glBindTexture(GL_TEXTURE_2D, 0);
 	int toFound;
 	int a;
-	toFound= App->editor->objectSelected->SearchComponent(App->editor->objectSelected,ComponentType::CUBE);
-	
-	if (toFound != -1) 
+
+	if (App->editor->objectSelected == nullptr)
 	{
-		for (a = 0; a < App->scene->gameObjects.size() - 1; a++)
-		{
-			if (App->editor->objectSelected->id == App->editor->cubes[a]->id)
-			{	
-				break;
-			}
+		for (int i = 0; i < App->renderer3D->models[0].meshes.size(); i++)
+		{			
+			App->renderer3D->models[0].meshes[i].textureId = textId;
 		}
-		glDeleteTextures(1, &App->editor->cubes[a]->aTextureId);
-		ilDeleteImages(1, &App->editor->cubes[a]->imageID);
-		App->editor->cubes[a]->aTextureId = textId;
 	}
-	else {
-		toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CYLINDER);
+	if (App->editor->objectSelected != nullptr)
+	{
+		toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CUBE);
+
 		if (toFound != -1)
 		{
 			for (a = 0; a < App->scene->gameObjects.size() - 1; a++)
 			{
-				if (App->editor->objectSelected->id == App->editor->cylinders[a]->id)
+				if (App->editor->objectSelected->id == App->editor->cubes[a]->id)
 				{
 					break;
 				}
 			}
-			glDeleteTextures(1, &App->editor->cylinders[a]->aTextureId);
-			ilDeleteImages(1, &App->editor->cylinders[a]->imageID);
-			App->editor->cylinders[a]->aTextureId = textId;
+			glDeleteTextures(1, &App->editor->cubes[a]->aTextureId);
+			ilDeleteImages(1, &App->editor->cubes[a]->imageID);
+			App->editor->cubes[a]->aTextureId = textId;
 		}
 		else {
-			toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::PYRAMID);
+			toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CYLINDER);
 			if (toFound != -1)
 			{
 				for (a = 0; a < App->scene->gameObjects.size() - 1; a++)
 				{
-					if (App->editor->objectSelected->id == App->editor->pyramids[a]->id)
+					if (App->editor->objectSelected->id == App->editor->cylinders[a]->id)
 					{
 						break;
 					}
 				}
-				glDeleteTextures(1, &App->editor->pyramids[a]->aTextureId);
-				ilDeleteImages(1, &App->editor->pyramids[a]->imageID);
-				App->editor->pyramids[a]->aTextureId = textId;
+				glDeleteTextures(1, &App->editor->cylinders[a]->aTextureId);
+				ilDeleteImages(1, &App->editor->cylinders[a]->imageID);
+				App->editor->cylinders[a]->aTextureId = textId;
 			}
-			else 
-			{
-				toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::SPHERE);
+			else {
+				toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::PYRAMID);
 				if (toFound != -1)
 				{
 					for (a = 0; a < App->scene->gameObjects.size() - 1; a++)
 					{
-						if (App->editor->objectSelected->id == App->editor->spheres[a]->id)
+						if (App->editor->objectSelected->id == App->editor->pyramids[a]->id)
 						{
 							break;
 						}
 					}
-					glDeleteTextures(1, &App->editor->spheres[a]->aTextureId);
-					ilDeleteImages(1, &App->editor->spheres[a]->imageID);
-					App->editor->spheres[a]->aTextureId = textId;
+					glDeleteTextures(1, &App->editor->pyramids[a]->aTextureId);
+					ilDeleteImages(1, &App->editor->pyramids[a]->imageID);
+					App->editor->pyramids[a]->aTextureId = textId;
 				}
-				else {
-					toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MESH);
+				else
+				{
+					toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::SPHERE);
 					if (toFound != -1)
 					{
 						for (a = 0; a < App->scene->gameObjects.size() - 1; a++)
 						{
-							if (App->editor->objectSelected->id == App->renderer3D->models[a].id)
+							if (App->editor->objectSelected->id == App->editor->spheres[a]->id)
 							{
 								break;
 							}
 						}
-						
-						for (int b = 0; b < App->renderer3D->models[a].meshes.size(); b++)
-						{
-							App->renderer3D->models[a].meshes[b].textureId = textId;
-						}
-
+						glDeleteTextures(1, &App->editor->spheres[a]->aTextureId);
+						ilDeleteImages(1, &App->editor->spheres[a]->imageID);
+						App->editor->spheres[a]->aTextureId = textId;
 					}
-					else 
-					{
-						toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::PLANE);
+					else {
+						toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MESH);
 						if (toFound != -1)
 						{
 							for (a = 0; a < App->scene->gameObjects.size() - 1; a++)
 							{
-								if (App->editor->objectSelected->id == App->editor->planes[a]->id)
+								if (App->editor->objectSelected->id == App->renderer3D->models[a].id)
 								{
-
 									break;
 								}
 							}
-							glDeleteTextures(1, &App->editor->planes[a]->aTextureId);
-							ilDeleteImages(1, &App->editor->planes[a]->imageID);
-							App->editor->planes[a]->aTextureId = textId;
+
+							for (int b = 0; b < App->renderer3D->models[a].meshes.size(); b++)
+							{
+								glDeleteTextures(1, &App->renderer3D->models[a].meshes[b].textureId);
+								ilDeleteImages(1, &myImageId);
+								App->renderer3D->models[a].meshes[b].textureId = textId;
+							}
+
+						}
+						else
+						{
+							toFound = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::PLANE);
+							if (toFound != -1)
+							{
+								for (a = 0; a < App->scene->gameObjects.size() - 1; a++)
+								{
+									if (App->editor->objectSelected->id == App->editor->planes[a]->id)
+									{
+
+										break;
+									}
+								}
+								glDeleteTextures(1, &App->editor->planes[a]->aTextureId);
+								ilDeleteImages(1, &App->editor->planes[a]->imageID);
+								App->editor->planes[a]->aTextureId = textId;
+							}
 						}
 					}
 				}
 			}
 		}
 	}
+	
 	return true;
 }

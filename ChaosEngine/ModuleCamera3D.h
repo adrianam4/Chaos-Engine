@@ -3,6 +3,8 @@
 #include "Globals.h"
 #include "glmath.h"
 
+#include "MathGeoLib/src/MathGeoLib.h"
+
 class ModuleCamera3D : public Module
 {
 public:
@@ -25,6 +27,7 @@ private:
 public:
 	
 	Vec3 x, y, z, position, reference;
+	Frustum camFrustum;
 
 private:
 

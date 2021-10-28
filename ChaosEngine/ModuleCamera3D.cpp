@@ -7,12 +7,26 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app
 {
 	CalculateViewMatrix();
 
-x = Vec3(1.0f, 0.0f, 0.0f);
-y = Vec3(0.0f, 1.0f, 0.0f);
-z = Vec3(0.0f, 0.0f, 1.0f);
+	x = Vec3(1.0f, 0.0f, 0.0f);
+	y = Vec3(0.0f, 1.0f, 0.0f);
+	z = Vec3(0.0f, 0.0f, 1.0f);
 
-position = Vec3(0.0f, 0.0f, 5.0f);
-reference = Vec3(0.0f, 0.0f, 0.0f);
+	position = Vec3(0.0f, 0.0f, 5.0f);
+	reference = Vec3(0.0f, 0.0f, 0.0f);
+
+	vec pos = vec(0.0f, 0.0f, 5.0f);
+	vec front = vec(1.0f, 0.0f, 0.0f);
+	vec up = vec(0.0f, 1.0f, 0.0f);
+	
+	float horizontalFov, verticalFov;
+	horizontalFov = verticalFov = 75;
+	camFrustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
+	camFrustum.SetViewPlaneDistances(5, 300);
+	camFrustum.SetFrame(pos, front, up);
+	camFrustum.SetPos(pos);
+	camFrustum.SetFront(front);
+	camFrustum.SetUp(up);
+	camFrustum.SetPerspective(horizontalFov, verticalFov);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -23,7 +37,7 @@ bool ModuleCamera3D::Start()
 {
 	App->editor->AddLog("Setting up the camera\n");
 	bool ret = true;
-
+	
 	return ret;
 }
 

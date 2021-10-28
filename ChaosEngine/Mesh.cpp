@@ -42,6 +42,11 @@ void Mesh::Draw(float* matrix)
 
 	// draw mesh
 	//Enable states
+	if (App->editor->wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
@@ -114,37 +119,6 @@ void Mesh::setupMesh()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
-
-	ILboolean success;
-	ILuint imageID;
-	int width;
-	int height;
-
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-
-	success = ilLoadImage("Assets/BakerHouse.png");
-
-	width = ilGetInteger(IL_IMAGE_WIDTH);
-	height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-	if (success)
-	{
-		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-		if (!success)
-		{
-			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
-			ilDeleteImages(1, &imageID);
-		}
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);

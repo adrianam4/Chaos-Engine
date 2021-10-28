@@ -38,12 +38,15 @@ bool ModuleEditor::Start()
 	LoadConfig();
 	ComproveScreen();
 
-	App->scene->gameObjects.push_back(App->scene->CreateGameObject("Assets/BakerHouse.fbx", false));
+	//Loading Baker House
+	App->scene->gameObjects.push_back(App->scene->CreateGameObject("BakerHouse", false));
 	int lastComponent = App->scene->gameObjects.size() - 1;
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/BakerHouse.fbx"));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH,"Assets/BakerHouse.fbx"));
 	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/BakerHouse.png"));
 	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+	App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 	SDL_free("Assets/BakerHouse.fbx");
 
 	return ret;
@@ -159,7 +162,7 @@ void ModuleEditor::AddPyramid(float3 pos, float3 sca)
 void ModuleEditor::AddSphere(float3 pos, float3 sca)
 {
 	MySphere* auxSphere;
-	auxSphere = new MySphere(pos, sca);
+	auxSphere = new MySphere(3, 20, 20, pos, sca);
 	spheres.push_back(auxSphere);
 }
 void ModuleEditor::AddPlane(float3 pos, float3 sca)
@@ -279,11 +282,11 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 
 		ImGui::Text("Set Measures:");
 
-		ImGui::DragFloat("Radius", &M.x);
+		ImGui::DragFloat("X Size", &M.x);
 
-		ImGui::DragFloat("Rings", &M.y);
+		ImGui::DragFloat("X Size", &M.y);
 
-		ImGui::DragFloat("Sectors", &M.z);
+		ImGui::DragFloat("X Size", &M.z);
 
 
 		if (ImGui::Button("Create Sphere")) {
@@ -505,6 +508,11 @@ update_status ModuleEditor::Update(float dt)
 				showAboutWindow = !showAboutWindow;
 			}
 			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Quit",&openConfigMenu))
+		{
+			return update_status::UPDATE_STOP;
 		}
 		ImGui::EndMainMenuBar();
 	}

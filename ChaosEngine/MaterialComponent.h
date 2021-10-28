@@ -20,5 +20,9 @@ private:
 	int width;
 	int height;
 	const char* path;
-	int myImageId;
+	ILuint myImageId;
+	bool showCheckerTexture;
+	GLubyte checkerImageData[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
+	const char* checkerTextPath;
+	char* oldTextPath;
 };

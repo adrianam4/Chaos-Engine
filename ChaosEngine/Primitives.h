@@ -131,7 +131,7 @@ public:
 	ILuint imageID;
 
 public:
-	MySphere(float3 pos, float3 sca);
+	MySphere(float radius, int sectorCount, int stackCount, float3 pos, float3 sca);
 	~MySphere();
 	void DrawSphere();
 private:

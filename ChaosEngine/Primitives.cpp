@@ -97,38 +97,6 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
-
-	ILboolean success;
-	int width;
-	int height;
-
-	glGenTextures(1, &aTextureId);
-	glBindTexture(GL_TEXTURE_2D, aTextureId);
-
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-
-	success = ilLoadImage("Assets/RockTexture.png");
-
-	width = ilGetInteger(IL_IMAGE_WIDTH);
-	height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-	if (success) 
-	{
-		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-		if (!success)
-		{
-			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
-			ilDeleteImages(1, &imageID);
-		}
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 MyCube::~MyCube()
@@ -231,38 +199,6 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
-
-	ILboolean success;
-	int width;
-	int height;
-
-	glGenTextures(1, &aTextureId);
-	glBindTexture(GL_TEXTURE_2D, aTextureId);
-
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-
-	success = ilLoadImage("Assets/RockTexture.png");
-
-	width = ilGetInteger(IL_IMAGE_WIDTH);
-	height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-	if (success)
-	{
-		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-		if (!success)
-		{
-			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
-			ilDeleteImages(1, &imageID);
-		}
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 MyPyramid::~MyPyramid()
@@ -583,92 +519,51 @@ void MyCylinder::Initialize()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
-
-	ILboolean success;
-	int width;
-	int height;
-
-	glGenTextures(1, &aTextureId);
-	glBindTexture(GL_TEXTURE_2D, aTextureId);
-
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-
-	success = ilLoadImage("Assets/RockTexture.png");
-
-	width = ilGetInteger(IL_IMAGE_WIDTH);
-	height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-	if (success)
-	{
-		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-		if (!success)
-		{
-			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
-			ilDeleteImages(1, &imageID);
-		}
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 //// SPHERE ================================================================================================================================================================================
 
-MySphere::MySphere(float3 pos,float3 sca) : Primitives()
+MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYSPHERE;
 	
 	position = pos;
 	scale = sca;
 
-	float const R = 1. / (float)(sca.y - 1);
-	float const S = 1. / (float)(sca.z - 1);
+	float const R = 1. / (float)(rings - 1);
+	float const S = 1. / (float)(sectors - 1);
 	int r, s;
 
-	vertices.resize(sca.y * sca.z * 3);
-	normals.resize(sca.y * sca.z * 3);
-	texCoords.resize(sca.y * sca.z * 3);
-
+	vertices.resize(rings * sectors * 3);
+	normals.resize(rings * sectors * 3);
+	texCoords.resize(rings * sectors * 2);
 	std::vector<GLfloat>::iterator v = vertices.begin();
 	std::vector<GLfloat>::iterator n = normals.begin();
 	std::vector<GLfloat>::iterator t = texCoords.begin();
-	for (r = 0; r < sca.y; r++)
-	{
-		for (s = 0; s < sca.z; s++)
-		{
-			float const y = sin(-M_PI_2 + M_PI * r * R);
-			float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
-			float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
+	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) {
+		float const y = sin(-M_PI_2 + M_PI * r * R);
+		float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
+		float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
 
-			*t++ = s * S;
-			*t++ = r * R;
+		*t++ = s * S;
+		*t++ = r * R;
 
-			*v++ = (x * sca.x);
-			*v++ = (y * sca.x);
-			*v++ = (z * sca.x);
+		*v++ = -x * radius;
+		*v++ = -y * radius;
+		*v++ = -z * radius;
 
-			*n++ = x;
-			*n++ = y;
-			*n++ = z;
-		}
+		*n++ = -x;
+		*n++ = -y;
+		*n++ = -z;
 	}
 
-	indices.resize(sca.y * sca.z * 4);
+	indices.resize(rings * sectors * 4);
 	std::vector<GLushort>::iterator i = indices.begin();
-	for (r = 0; r < sca.y; r++)
-	{
-		for (s = 0; s < sca.z; s++)
-		{
-			*i++ = r * sca.z + s;
-			*i++ = r * sca.z + (s + 1);
-			*i++ = (r + 1) * sca.z + (s + 1);
-			*i++ = (r + 1) * sca.z + s;
-		}
+	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) {
+		*i++ = r * sectors + s;
+		*i++ = r * sectors + (s + 1);
+		*i++ = (r + 1) * sectors + (s + 1);
+		*i++ = (r + 1) * sectors + s;
 	}
 
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
@@ -695,39 +590,6 @@ MySphere::MySphere(float3 pos,float3 sca) : Primitives()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
-
-	ILboolean success;
-	int width;
-	int height;
-
-	glGenTextures(1, &aTextureId);
-	glBindTexture(GL_TEXTURE_2D, aTextureId);
-
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-
-	success = ilLoadImage("Assets/RockTexture.png");
-
-	width = ilGetInteger(IL_IMAGE_WIDTH);
-	height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-	if (success)
-	{
-		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-		if (!success)
-		{
-			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
-			ilDeleteImages(1, &imageID);
-		}
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-
-	glBindTexture(GL_TEXTURE_2D, 0);
-	
 }
 
 MySphere::~MySphere()
@@ -848,38 +710,6 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
-
-	ILboolean success;
-	int width;
-	int height;
-
-	glGenTextures(1, &aTextureId);
-	glBindTexture(GL_TEXTURE_2D, aTextureId);
-
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-
-	success = ilLoadImage("Assets/RockTexture.png");
-
-	width = ilGetInteger(IL_IMAGE_WIDTH);
-	height = ilGetInteger(IL_IMAGE_HEIGHT);
-
-	if (success)
-	{
-		success = ilConvertImage(IL_RGBA, IL_UNSIGNED_BYTE);
-		if (!success)
-		{
-			std::cout << "Could not convert image :: " << "wood.png" << std::endl;
-			ilDeleteImages(1, &imageID);
-		}
-	}
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
-
-	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 MyPlane3D::~MyPlane3D()
