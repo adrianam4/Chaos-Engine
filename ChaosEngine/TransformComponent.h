@@ -18,7 +18,6 @@ public:
 	~ComponentTransform();
 
 	void Enable() override;
-	
 	void Update() override;
 	void Disable() override;
 	void OnEditor(int i) override;
@@ -26,6 +25,7 @@ public:
 	float3 FromQuatToEuler(Quat quatAngles);
 	std::vector<float3> vertices_aux;
 	float4x4 transMatrix;
+
 	//mat4x4 transMatrix;
 	//void CalculateTransMatrix(mat4x4 parentsMatrix, mat4x4 localMatrix);
 };

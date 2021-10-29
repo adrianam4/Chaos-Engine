@@ -8,6 +8,8 @@
 
 ComponentTransform::ComponentTransform(float3 pos, float3 sca, Quat rot)
 {
+	lastPosition = { 0,0,0 };
+	lastRotation = {0,0,0};
 	type = ComponentType::TRANSFORM;
 
 	position = pos;
@@ -88,22 +90,27 @@ void ComponentTransform::Update()
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
 	}
 	
-
+	float4x4 aux1;
+	
 	for (int a = 0; a < App->editor->objectSelected->childrens.size(); a++) {
 		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {
 			if (App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM)
 			{
-				App->editor->objectSelected->childrens[a]->components[b]->position += position - lastposition;
+				//App->editor->objectSelected->childrens[a]->components[b]->position += position;
+				App->editor->objectSelected->childrens[a]->components[b]->scale += (scale - lastScale);
+				App->editor->objectSelected->childrens[a]->components[b]->position += (position - lastPosition);
+				App->editor->objectSelected->childrens[a]->components[b]->rotationEuler += (rotationEuler - lastRotation);
+				App->editor->objectSelected->childrens[a]->components[b]->rotationQuat = FromEulerToQuat(App->editor->objectSelected->childrens[a]->components[b]->rotationEuler);
 
-				App->editor->objectSelected->childrens[a]->matrix = transMatrix.ptr();
+				App->editor->objectSelected->childrens[a]->components[b]->transmat = aux1.FromTRS(App->editor->objectSelected->childrens[a]->components[b]->position, App->editor->objectSelected->childrens[a]->components[b]->rotationQuat, App->editor->objectSelected->childrens[a]->components[b]->scale);
+				App->editor->objectSelected->childrens[a]->components[b]->transmat = App->editor->objectSelected->childrens[a]->components[b]->transmat.Transposed();
+				App->editor->objectSelected->childrens[a]->matrix = App->editor->objectSelected->childrens[a]->components[b]->transmat.ptr();
+
+							
+				//App->editor->objectSelected->childrens[a]->matrix = transMatrix.ptr();
 			}
 		}
 	}
-	//obb = mesh->GetAABB();
-	//obb.Transform(GetComponent<C_Transform>()->GetGlobalTransform());
-	//// Generate global AABB
-	//aabb.SetNegativeInfinity();
-	//aabb.Enclose(obb);
 }
 
 void ComponentTransform::Disable()
@@ -112,7 +119,10 @@ void ComponentTransform::Disable()
 
 void ComponentTransform::OnEditor(int i)
 {
-	lastposition = position;
+	lastScale = scale;
+	lastPosition = position;
+	lastRotation = rotationEuler;
+	lastGeneralScale = generalScale;
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
 	if (ImGui::DragFloat("Position X", &position.x))
 		Update();

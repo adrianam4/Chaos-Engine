@@ -28,14 +28,20 @@ public:
 	bool active;
 	GameObject* owner;
 	const char* name;
-
+	
+	float3 lastRotation;
+	float3 lastPosition;
+	float3 lastScale;
 	float3 position;
-	float3 lastposition;
+	float lastGeneralScale;
+
 	float3 scale;
 	float3 rotationEuler;
 	float generalScale;
+	float4x4 transmat;
 	Quat rotationQuat;
-	
+		
+
 	virtual void Enable() {}
 	virtual void Update() {}
 	virtual void Disable() {}
