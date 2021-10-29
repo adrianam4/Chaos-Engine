@@ -71,5 +71,5 @@ public:
 	SDL_Event e;
 	const Uint8* keys;
 	KEY_STATE* keyboard;
-	char* fileDir;
+	char* fileDir = ".";
 };

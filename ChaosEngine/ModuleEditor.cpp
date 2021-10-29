@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ModuleEditor.h"
 #include "ModuleScene.h"
+#include "Mesh.h"
 
 #include "shellapi.h"
 #include <GL/GL.h>
@@ -9,6 +10,8 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include "Parson/parson.h"
+
+#define DIV 1048576
 
 ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -662,6 +665,12 @@ update_status ModuleEditor::Update(float dt)
 		const char* name = objectSelected->name.c_str();
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), name);
 		ImGui::Separator();
+		if (ImGui::CollapsingHeader("Mesh Info"))
+		{
+			int lastComponent = App->scene->gameObjects.size() - 1;
+			ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
+			ImGui::Text("Number of Vertex: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
+		}
 		for (int i = 0; i < objectSelected->components.size(); i++)
 		{
 			if (ImGui::TreeNode(objectSelected->components[i]->name))
@@ -685,10 +694,18 @@ update_status ModuleEditor::Update(float dt)
 		{
 			static ImVector<float> fpsLog;
 			static ImVector<float> msLog;
+			static ImVector<float> memLog;
 			char title[25];
+
+			MEMORYSTATUSEX statex;
+
+			statex.dwLength = sizeof(statex);
+
+			GlobalMemoryStatusEx(&statex);
 
 			fpsLog.push_back(ImGui::GetIO().Framerate);
 			msLog.push_back(1000 / (ImGui::GetIO().Framerate));
+			memLog.push_back(statex.ullTotalVirtual / DIV);
 
 			ImGui::InputText("App Name", TITLE, 25);
 			ImGui::InputText("Organization", ORGANIZATION, 25);
@@ -704,16 +721,25 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::PlotHistogram("##framerate", &fpsLog[0], fpsLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
 			sprintf_s(title, 25, "Miliseconds %.1f", msLog[msLog.size() - 1]);
 			ImGui::PlotHistogram("##miliseconds", &msLog[0], msLog.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+			/*sprintf_s(title, 25, "Memory Consumption %.1f", memLog[memLog.size() - 1]);
+			ImGui::PlotHistogram("##memory", &memLog[0], memLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));*/
 
-			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Accumulated Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Total Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Peak Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
+			int peakMem;
+			int accMem = statex.ullTotalPhys / DIV;
+			int peakActual;
+			int accActual;
+			int peakAlloc;
+			int accAlloc;
+
+			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB", statex.ullTotalPhys / DIV);
+			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB", statex.ullTotalVirtual / DIV);
+			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			ImGui::Text("Total Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB", statex.ullTotalVirtual / DIV - statex.ullAvailVirtual / DIV);
+			ImGui::Text("Peak Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			ImGui::Text("Accumulated Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
 		}
 
 		if (ImGui::CollapsingHeader("Window"))
@@ -798,11 +824,11 @@ update_status ModuleEditor::Update(float dt)
 				ImGui::Text("Base Path: ");
 				ImGui::TextColored(ImVec4(255, 255, 0, 255), SDL_GetBasePath());
 
-				//ImGui::Text("Read Paths: ");
-				//ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", App->input->fileDir);
+				ImGui::Text("Read Paths: ");
+				ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", App->input->fileDir);
 
-				//ImGui::Text("Write Path: ");
-				//ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", App->input->fileDir);
+				ImGui::Text("Write Path: ");
+				ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", "ConfigFile.json");
 			}
 
 		}
@@ -983,6 +1009,7 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Text("- Glew v7.0");
 		ImGui::Text("- ImGui v1.84.2");
 		ImGui::Text("- MathGeoLib v1.5");
+		ImGui::Text("- DevIL v1.8.0");
 		ImGui::Text("- OpenGL v%s",glGetString(GL_VERSION));
 		ImGui::Text("");
 		ImGui::Separator();
