@@ -1087,6 +1087,15 @@ update_status ModuleEditor::PostUpdate(float dt)
 					}
 				}
 			}
+			
+				
+			for (int k = 0; k < boundingBoxes.size(); k++)
+			{
+				
+				boundingBoxes[k]->DrawCube();
+				
+			}
+			
 		}
 	}
 

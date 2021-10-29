@@ -79,6 +79,15 @@ void Mesh::Draw(float* matrix)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
+
+	glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
+	glBegin(GL_LINES);
+	glLineWidth(5);
+	glVertex3f(App->scene->gameObjects[0]->aabb[1]->maxPoint.x, App->scene->gameObjects[0]->aabb[1]->maxPoint.y, App->scene->gameObjects[0]->aabb[1]->maxPoint.z);
+	glVertex3f(App->scene->gameObjects[0]->aabb[1]->minPoint.x, App->scene->gameObjects[0]->aabb[1]->minPoint.y, App->scene->gameObjects[0]->aabb[1]->minPoint.z);
+
+
+	glEnd();
 	if (App->editor->normals)
 	{
 		glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
@@ -124,14 +133,11 @@ void Mesh::setupMesh()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	aabb.SetNegativeInfinity();
 
 
-	for (int a = 0; a < vertices.size(); a++) {
-		vertices_aux.push_back(vertices[a].position);
-		
-	}
-	aabb.Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
 	
-	int a = 0;
+	
+	
+	
+	
 }

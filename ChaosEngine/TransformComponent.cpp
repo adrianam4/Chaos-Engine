@@ -18,6 +18,52 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, Quat rot)
 	rotationEuler = FromQuatToEuler(rotationQuat);
 
 	name = "Transform Component";
+
+
+	GameObject* auxiliar;
+	auxiliar = *App->scene->gameObjects.end()._Ptr;
+
+	Model* auxiliar1;
+	auxiliar1 = App->renderer3D->models.end()._Ptr;
+	
+	float4x4 aux;
+	transMatrix = aux.FromTRS(position, rotationQuat, scale);
+	transMatrix = transMatrix.Transposed();
+
+	
+	for (int b = 0; b < App->renderer3D->models[App->renderer3D->models.size() - 1].meshes.size(); b++)
+	{
+		AABB* aux = new AABB();
+		OBB* aux1 = new OBB();
+		
+
+
+		aux->SetNegativeInfinity();
+		
+		for (int a = 0; a < App->renderer3D->models[App->renderer3D->models.size() - 1].meshes[b].vertices.size(); a++) {
+
+			vertices_aux.push_back(App->renderer3D->models[App->renderer3D->models.size() - 1].meshes[b].vertices[a].position);
+
+		}
+
+		aux->Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
+		(*aux1)=(*aux);
+		aux1->Transform(transMatrix);
+		aux->SetNegativeInfinity();
+		aux->Enclose(*aux1);
+		App->scene->gameObjects[App->scene->gameObjects.size()-1]->aabb.push_back(aux);
+		
+		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->obb.push_back(aux1);
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		BoundingBoxes* auxiliarCube = new BoundingBoxes(aux->maxPoint,aux->minPoint);
+		App->editor->boundingBoxes.push_back(auxiliarCube);
+	}
+	
+	
+
+	
+	
+				
 }
 
 ComponentTransform::~ComponentTransform()

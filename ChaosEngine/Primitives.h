@@ -53,7 +53,21 @@ public:
 	mat4x4 transform;
 	bool axis, wire;
 };
+class BoundingBoxes : public Primitives
+{
+public:
+	
+	BoundingBoxes(float3 maxPoint, float3 minPoint);
+	~BoundingBoxes();
+	void DrawCube();
 
+public:
+	ILuint imageID;
+
+private:
+	std::vector<float3> vertices;
+	std::vector<uint> indices;
+};
 class MyCube : public Primitives
 {
 public:

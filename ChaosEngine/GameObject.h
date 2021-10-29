@@ -5,7 +5,7 @@
 #include "glmath.h"
 #include <vector>
 #include "Component.h"
-
+#include"Primitives.h"
 #include "MathGeoLib/src/MathGeoLib.h"
 
 class GameObject
@@ -16,6 +16,7 @@ public:
 	Component* CreateComponent(ComponentType type, const char* name, bool isDropped);
 	int SearchComponent(GameObject* gameObject, ComponentType type);
 public:
+	
 	uint id;
 	bool active;
 	bool selected;
@@ -23,8 +24,10 @@ public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
 	GameObject* parent;
-	AABB aabb;
+	std::vector<AABB*>aabb;
+	std::vector<OBB*>obb;
 	bool isChild = false;
+	
 	float3 trans;
 	float3 sca;
 	Quat rot;

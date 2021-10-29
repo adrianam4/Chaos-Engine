@@ -35,7 +35,7 @@ public:
 	float3 rotationEuler;
 	float generalScale;
 	Quat rotationQuat;
-
+	
 	virtual void Enable() {}
 	virtual void Update() {}
 	virtual void Disable() {}

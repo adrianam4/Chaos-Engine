@@ -49,6 +49,7 @@ public:
 	bool scrollToBottom;
 	GameObject* objectSelected;
 
+	std::vector<BoundingBoxes*>boundingBoxes;
 	std::vector<MyCube*> cubes;
 	std::vector<MyCylinder*> cylinders;
 	std::vector<MySphere*> spheres;
