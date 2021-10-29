@@ -124,4 +124,14 @@ void Mesh::setupMesh()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	aabb.SetNegativeInfinity();
+
+
+	for (int a = 0; a < vertices.size(); a++) {
+		vertices_aux.push_back(vertices[a].position);
+		
+	}
+	aabb.Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
+	
+	int a = 0;
 }

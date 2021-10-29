@@ -44,16 +44,16 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 	//scale = sca;
 	scale = { 1,1,1 };
 	type = PrimitivesTypes::PRIMITIVE_MYCUBE;
+	vertices.push_back({ (-1 + position.x * sca.x), ((0 + position.y) * sca.y), (0 + position.z) * sca.z });
+	
+	vertices.push_back({ (1 + position.x * sca.x), ((0 + position.y) * sca.y), (0 + position.z) * sca.z });
+	vertices.push_back({ (1 + position.x * sca.x), ((2 + position.y) * sca.y), (0 + position.z) * sca.z });
+	vertices.push_back({ (-1 + position.x * sca.x), ((2 + position.y) * sca.y), (0 + position.z) * sca.z });
 
-	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
-	vertices.push_back((1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
-	vertices.push_back((1 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
-	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
-
-	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((-2 + position.z) * sca.z);
-	vertices.push_back((1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((-2 + position.z) * sca.z);
-	vertices.push_back((1 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((-2 + position.z) * sca.z);
-	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((-2 + position.z) * sca.z);
+	vertices.push_back({ (-1 + position.x * sca.x), ((0 + position.y) * sca.y), (-2 + position.z) * sca.z });
+	vertices.push_back({ (1 + position.x * sca.x), ((0 + position.y) * sca.y), (-2 + position.z) * sca.z });
+	vertices.push_back({ (1 + position.x * sca.x), ((2 + position.y) * sca.y), (-2 + position.z) * sca.z });
+	vertices.push_back({ (-1 + position.x * sca.x), ((2 + position.y) * sca.y), (-2+ position.z) * sca.z });
 	
 	indices.push_back(0); indices.push_back(1); indices.push_back(2); indices.push_back(0); indices.push_back(2); indices.push_back(3);
 	indices.push_back(6); indices.push_back(5); indices.push_back(4); indices.push_back(7); indices.push_back(6); indices.push_back(4);
@@ -88,7 +88,7 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float3), vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -97,6 +97,11 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
+	
+	
 }
 
 MyCube::~MyCube()
@@ -154,11 +159,12 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	position = pos;
 	//scale = sca;
 	scale = { 1,1,1 };
-	vertices.push_back((-1 + position.x) * sca.x); vertices.push_back((0 + position.y) * sca.y); vertices.push_back((-1 + position.z) * sca.z);
-	vertices.push_back((1 + position.x) * sca.x);vertices.push_back((0 + position.y) * sca.y);vertices.push_back((-1 + position.z) * sca.z);
-	vertices.push_back((0 + position.x) * sca.x); vertices.push_back((2 + position.y) * sca.y); vertices.push_back((0 + position.z) * sca.z);
-	vertices.push_back((1 + position.x) * sca.x);vertices.push_back((0 + position.y) * sca.y);vertices.push_back((1 + position.z) * sca.z);
-	vertices.push_back((-1 + position.x) * sca.x);vertices.push_back((0 + position.y) * sca.y);vertices.push_back((1 + position.z) * sca.z);
+	
+	vertices.push_back({ ((-1 + position.x) * sca.x), ((0 + position.y) * sca.y),((-1 + position.z) * sca.z) });
+	vertices.push_back({ ((1 + position.x) * sca.x), ((0 + position.y) * sca.y),((-1 + position.z) * sca.z) });
+	vertices.push_back({ ((0 + position.x) * sca.x), ((2 + position.y) * sca.y),((0 + position.z) * sca.z) });
+	vertices.push_back({ ((1 + position.x) * sca.x), ((0 + position.y) * sca.y),((1 + position.z) * sca.z) });
+	vertices.push_back({ ((-1 + position.x) * sca.x), ((0 + position.y) * sca.y),((1 + position.z) * sca.z) });
 
 	indices.push_back(2); indices.push_back(1); indices.push_back(0);
 	indices.push_back(2); indices.push_back(3); indices.push_back(1);
@@ -190,7 +196,7 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float3), vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -199,6 +205,8 @@ MyPyramid::MyPyramid(float3 pos, float3 sca) : Primitives()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 }
 
 MyPyramid::~MyPyramid()
@@ -322,7 +330,7 @@ std::vector<float> MyCylinder::GetUnitCircleVertices()
 void MyCylinder::BuildVerticalSmooth()
 {
 	// clear memory of prev arrays
-	std::vector<float>().swap(vertices);
+	std::vector<float3>().swap(vertices);
 	std::vector<float>().swap(normals);
 	std::vector<float>().swap(texCoords);
 
@@ -346,9 +354,10 @@ void MyCylinder::BuildVerticalSmooth()
 			float uy = unitVertices[k + 1];
 			float uz = unitVertices[k + 2];
 			// position vector
-			vertices.push_back((ux * radius) + position.x);             // vx
-			vertices.push_back((uy * radius) + position.y);            // vy
-			vertices.push_back(h + position.z);                       // vz
+			vertices.push_back({ (ux * radius) + position.x ,(uy * radius) + position.y,h + position.z });
+			//vertices.push_back((ux * radius) + position.x);             // vx
+			//vertices.push_back((uy * radius) + position.y);            // vy
+			//vertices.push_back(h + position.z);                       // vz
 			// normal vector
 			normals.push_back(ux);                       // nx
 			normals.push_back(uy);                       // ny
@@ -371,7 +380,8 @@ void MyCylinder::BuildVerticalSmooth()
 		float nz = -1 + i * 2;                           // z value of normal; -1 to 1
 
 		// center point
-		vertices.push_back(0 + position.x);     vertices.push_back(0 + position.y);     vertices.push_back(h + position.z);
+		vertices.push_back({ 0 + position.x ,0 + position.y ,h + position.z });
+		//vertices.push_back(0 + position.x);     vertices.push_back(0 + position.y);     vertices.push_back(h + position.z);
 		normals.push_back(0);      normals.push_back(0);      normals.push_back(nz);
 		texCoords.push_back(0.5f); texCoords.push_back(0.5f);
 
@@ -380,9 +390,10 @@ void MyCylinder::BuildVerticalSmooth()
 			float ux = unitVertices[k];
 			float uy = unitVertices[k + 1];
 			// position vector
-			vertices.push_back(ux * radius + position.x);             // vx
-			vertices.push_back(uy * radius + position.y);             // vy
-			vertices.push_back(h + position.z);                       // vz
+			vertices.push_back({ ux * radius + position.x ,uy * radius + position.y ,h + position.z });
+			//vertices.push_back(ux * radius + position.x);             // vx
+			//vertices.push_back(uy * radius + position.y);             // vy
+			//vertices.push_back(h + position.z);                       // vz
 			// normal vector
 			normals.push_back(0);                        // nx
 			normals.push_back(0);                        // ny
@@ -510,7 +521,7 @@ void MyCylinder::Initialize()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float3), vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -519,6 +530,8 @@ void MyCylinder::Initialize()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 }
 
 //// SPHERE ================================================================================================================================================================================
@@ -537,7 +550,7 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 	vertices.resize(rings * sectors * 3);
 	normals.resize(rings * sectors * 3);
 	texCoords.resize(rings * sectors * 2);
-	std::vector<GLfloat>::iterator v = vertices.begin();
+	std::vector<float3>::iterator v = vertices.begin();
 	std::vector<GLfloat>::iterator n = normals.begin();
 	std::vector<GLfloat>::iterator t = texCoords.begin();
 	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) {
@@ -548,9 +561,8 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 		*t++ = s * S;
 		*t++ = r * R;
 
-		*v++ = -x * radius;
-		*v++ = -y * radius;
-		*v++ = -z * radius;
+		*v++ = { -x * radius ,-y * radius, -z * radius };
+		
 
 		*n++ = -x;
 		*n++ = -y;
@@ -581,7 +593,7 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float3), vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -590,6 +602,8 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 }
 
 MySphere::~MySphere()
@@ -645,22 +659,14 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	scale = sca;
 
 	type = PrimitivesTypes::PRIMITIVE_MYPLANE3D;
+	vertices.push_back({ 1 + pos.x ,pos.y,1 + pos.z });
+	
+	vertices.push_back({ 1 + pos.x ,pos.y, pos.z-1 });
 
-	vertices.push_back(1 + pos.x);
-	vertices.push_back(pos.y);
-	vertices.push_back(1 + pos.z);
+	vertices.push_back({  pos.x-1 ,pos.y,pos.z - 1 });
 
-	vertices.push_back(1 + pos.x);
-	vertices.push_back(pos.y);
-	vertices.push_back(pos.z - 1);
+	vertices.push_back({ pos.x - 1 ,pos.y,1+pos.z });
 
-	vertices.push_back(pos.x - 1);
-	vertices.push_back(pos.y);
-	vertices.push_back(pos.z - 1);
-
-	vertices.push_back(pos.x - 1);
-	vertices.push_back(pos.y);
-	vertices.push_back(1 + pos.z);
 
 	indices.push_back(3);
 	indices.push_back(0);
@@ -701,7 +707,7 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(GLfloat), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float3), vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -710,6 +716,8 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 }
 
 MyPlane3D::~MyPlane3D()

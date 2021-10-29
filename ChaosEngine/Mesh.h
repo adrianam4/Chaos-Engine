@@ -20,10 +20,11 @@ class Mesh
 {
 public:
 	std::vector<Vertex> vertices;
+	std::vector<float3> vertices_aux;
 	std::vector<unsigned int> indices;
 	std::vector<Textures> textures;
 	std::vector<float> texCoords;
-
+	AABB aabb;
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Textures> textures, std::vector<float> texCoord);
 	void Draw(float* matrix);
 

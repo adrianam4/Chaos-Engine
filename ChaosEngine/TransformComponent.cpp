@@ -44,14 +44,14 @@ void ComponentTransform::Update()
 				App->editor->objectSelected->childrens[a]->components[b]->position += position - lastposition;
 
 				App->editor->objectSelected->childrens[a]->matrix = transMatrix.ptr();
-
 			}
 		}
-
-
-
-
 	}
+	//obb = mesh->GetAABB();
+	//obb.Transform(GetComponent<C_Transform>()->GetGlobalTransform());
+	//// Generate global AABB
+	//aabb.SetNegativeInfinity();
+	//aabb.Enclose(obb);
 }
 
 void ComponentTransform::Disable()

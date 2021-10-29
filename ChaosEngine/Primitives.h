@@ -2,7 +2,7 @@
 #include "glmath.h"
 #include "Color.h"
 #include <vector>
-
+#include"MathGeoLib.h"
 #include "GL/glew.h"
 
 #include "DevIL/include/IL/il.h"
@@ -48,7 +48,7 @@ public:
 	unsigned int TBO;
 	GLuint textureId;
 	GLuint aTextureId;
-
+	AABB aabb;
 	Color color;
 	mat4x4 transform;
 	bool axis, wire;
@@ -65,7 +65,7 @@ public:
 	ILuint imageID;
 
 private:
-	std::vector<float> vertices;
+	std::vector<float3> vertices;
 	std::vector<uint> indices;
 	std::vector<float> texCoords;
 };
@@ -82,7 +82,7 @@ public:
 
 private:
 
-	std::vector<float> vertices;
+	std::vector<float3> vertices;
 	std::vector<uint> indices;
 	std::vector<float> texCoords;
 };
@@ -103,7 +103,7 @@ public:
 
 private:
 	std::vector<float> unitCircleVertices;
-	std::vector<float> vertices;
+	std::vector<float3> vertices;
 	std::vector<float> normals;
 	std::vector<float> texCoords;
 	std::vector<unsigned int> indices;
@@ -125,7 +125,7 @@ protected:
 	std::vector<GLushort> indices;
 	std::vector<GLfloat> normals;
 	std::vector<GLfloat> texCoords;
-	std::vector<GLfloat> vertices;
+	std::vector<float3> vertices;
 
 public:
 	ILuint imageID;
@@ -171,7 +171,7 @@ public:
 	std::vector<GLushort> indices;
 	std::vector<GLfloat> normals;
 	std::vector<GLfloat> texCoords;
-	std::vector<GLfloat> vertices;
+	std::vector<float3> vertices;
 };
 
 
