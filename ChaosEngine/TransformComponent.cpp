@@ -55,8 +55,8 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, Quat rot)
 		
 		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->obb.push_back(aux1);
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		BoundingBoxes* auxiliarCube = new BoundingBoxes(aux->maxPoint,aux->minPoint);
-		App->editor->boundingBoxes.push_back(auxiliarCube);
+		BoundingBoxes* auxiliarCube = new BoundingBoxes(position,scale,aux->maxPoint,aux->minPoint);
+		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->boundingBoxes.push_back(auxiliarCube);
 	}
 	
 	
@@ -82,6 +82,12 @@ void ComponentTransform::Update()
 	transMatrix = aux.FromTRS(position, rotationQuat, scale);
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
+
+	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size() -1; i++)
+	{
+		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
+	}
+	
 
 	for (int a = 0; a < App->editor->objectSelected->childrens.size(); a++) {
 		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {

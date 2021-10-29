@@ -79,14 +79,6 @@ void Mesh::Draw(float* matrix)
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-
-	glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
-	glBegin(GL_LINES);
-	glLineWidth(5);
-	glVertex3f(App->scene->gameObjects[0]->aabb[1]->maxPoint.x, App->scene->gameObjects[0]->aabb[1]->maxPoint.y, App->scene->gameObjects[0]->aabb[1]->maxPoint.z);
-	glVertex3f(App->scene->gameObjects[0]->aabb[1]->minPoint.x, App->scene->gameObjects[0]->aabb[1]->minPoint.y, App->scene->gameObjects[0]->aabb[1]->minPoint.z);
-
-
 	glEnd();
 	if (App->editor->normals)
 	{

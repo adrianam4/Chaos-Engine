@@ -1025,6 +1025,11 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
+		for (int a = 0; a < App->scene->gameObjects[i]->boundingBoxes.size(); a++)
+		{
+			App->scene->gameObjects[i]->boundingBoxes[a]->DrawCube();
+		}
+
 		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 		{
 			//Cubes
@@ -1086,14 +1091,6 @@ update_status ModuleEditor::PostUpdate(float dt)
 						planes[k]->DrawPlane();
 					}
 				}
-			}
-			
-				
-			for (int k = 0; k < boundingBoxes.size(); k++)
-			{
-				
-				boundingBoxes[k]->DrawCube();
-				
 			}
 			
 		}

@@ -23,6 +23,7 @@ public:
 	std::string name;
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
+	std::vector<BoundingBoxes*> boundingBoxes;
 	GameObject* parent;
 	std::vector<AABB*>aabb;
 	std::vector<OBB*>obb;

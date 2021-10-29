@@ -29,7 +29,6 @@ int Primitives::TransformMatrix()
 				glPushMatrix();
 				glMultMatrixf(App->scene->gameObjects[i]->matrix);
 				found = true;
-
 				return i;
 			}
 
@@ -39,21 +38,23 @@ int Primitives::TransformMatrix()
 
 //// CUBE ================================================================================================================================================================================
 
-BoundingBoxes::BoundingBoxes(float3 maxPoint, float3 minPoint): Primitives()
+BoundingBoxes::BoundingBoxes(float3 pos, float3 sca, float3 maxPoint, float3 minPoint): Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYCUBE;
+	position = pos;
+	scale = sca;
 
-	vertices.push_back(minPoint);
+	vertices.push_back({ (minPoint.x + position.x) * scale.x, (minPoint.y + position.y) * scale.y, (minPoint.z + position.z) * scale.z });
 
-	vertices.push_back({ maxPoint.x, minPoint.y, minPoint.z });
-	vertices.push_back({ maxPoint.x, minPoint.y, maxPoint.z });
+	vertices.push_back({ (maxPoint.x + position.x) * scale.x, (minPoint.y + position.y) * scale.y, (minPoint.z + position.z) * scale.z });
+	vertices.push_back({ (maxPoint.x + position.x) * scale.x, (minPoint.y + position.y) * scale.y, (maxPoint.z + position.z) * scale.z });
 
-	vertices.push_back({ minPoint.x, minPoint.y, maxPoint.z});
+	vertices.push_back({ (minPoint.x + position.x) * scale.x, (minPoint.y + position.y) * scale.y, (maxPoint.z + position.z) * scale.z });
 
-	vertices.push_back(maxPoint);
-	vertices.push_back({ maxPoint.x, maxPoint.y, minPoint.z });
-	vertices.push_back({ minPoint.x, maxPoint.y, minPoint.z });
-	vertices.push_back({ minPoint.x, maxPoint.y, maxPoint.z });
+	vertices.push_back({ (maxPoint.x + position.x) * scale.x, (maxPoint.y + position.y) * scale.y, (maxPoint.z + position.z) * scale.z });
+	vertices.push_back({ (maxPoint.x + position.x) * scale.x, (maxPoint.y + position.y) * scale.y, (minPoint.z + position.z) * scale.z });
+	vertices.push_back({ (minPoint.x + position.x) * scale.x, (maxPoint.y + position.y) * scale.y, (minPoint.z + position.z) * scale.z });
+	vertices.push_back({ (minPoint.x + position.x) * scale.x, (maxPoint.y + position.y) * scale.y, (maxPoint.z + position.z) * scale.z });
 
 
 	indices.push_back(0); indices.push_back(1); indices.push_back(5); indices.push_back(0); indices.push_back(5); indices.push_back(6);
@@ -78,26 +79,24 @@ BoundingBoxes::BoundingBoxes(float3 maxPoint, float3 minPoint): Primitives()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 
 }
+BoundingBoxes::~BoundingBoxes()
+{
+}
 void BoundingBoxes::DrawCube()
 {
 	glLineWidth(3.0f);
 
 	
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//Enable states
 	glEnableClientState(GL_VERTEX_ARRAY);
-	//glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	int i = TransformMatrix();
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
-	//glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-
-	//glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	//Draw
@@ -106,12 +105,9 @@ void BoundingBoxes::DrawCube()
 	//UnBind Buffers
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	//glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
-	//glBindTexture(GL_TEXTURE_2D, 0);
 
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
-	//glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	if (found && App->scene->gameObjects[i]->matrix != nullptr)
 		glPopMatrix();
@@ -178,8 +174,6 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 
 	aabb.SetNegativeInfinity();
 	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
-	
-	
 }
 
 MyCube::~MyCube()

@@ -40,6 +40,7 @@ public:
 	uint id;
 	int TransformMatrix();
 	bool found;
+	float* matrix;
 protected:
 	PrimitivesTypes type;
 public:
@@ -57,7 +58,7 @@ class BoundingBoxes : public Primitives
 {
 public:
 	
-	BoundingBoxes(float3 maxPoint, float3 minPoint);
+	BoundingBoxes(float3 pos, float3 sca, float3 maxPoint, float3 minPoint);
 	~BoundingBoxes();
 	void DrawCube();
 
