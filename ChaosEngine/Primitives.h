@@ -41,7 +41,11 @@ public:
 	int TransformMatrix();
 	int TransformMatrixAABB();
 	bool found;
+
 	float* matrix = nullptr;
+
+	virtual std::vector<float3> getVertex();
+
 protected:
 	PrimitivesTypes type;
 public:
@@ -79,8 +83,7 @@ public:
 
 public:
 	ILuint imageID;
-
-private:
+	std::vector<float3> getVertex()override;
 	std::vector<float3> vertices;
 	std::vector<uint> indices;
 	std::vector<float> texCoords;
@@ -95,9 +98,10 @@ public:
 
 public:
 	ILuint imageID;
+	std::vector<float3> getVertex()override;
 
 private:
-
+	
 	std::vector<float3> vertices;
 	std::vector<uint> indices;
 	std::vector<float> texCoords;
@@ -116,7 +120,7 @@ public:
 
 public:
 	ILuint imageID;
-
+	std::vector<float3> getVertex()override;
 private:
 	std::vector<float> unitCircleVertices;
 	std::vector<float3> vertices;
@@ -145,7 +149,7 @@ protected:
 
 public:
 	ILuint imageID;
-
+	std::vector<float3> getVertex()override;
 public:
 	MySphere(float radius, int sectorCount, int stackCount, float3 pos, float3 sca);
 	~MySphere();
@@ -179,7 +183,7 @@ public:
 
 	~MyPlane3D();
 	void DrawPlane();
-
+	std::vector<float3> getVertex()override;
 public:
 	ILuint imageID;
 

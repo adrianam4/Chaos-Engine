@@ -16,7 +16,7 @@ class ComponentTransform : public Component
 public:
 	ComponentTransform(float3 pos, float3 sca, Quat rot);
 	~ComponentTransform();
-
+	ComponentType getComponentType();
 	void Enable() override;
 	void Update() override;
 	void Disable() override;

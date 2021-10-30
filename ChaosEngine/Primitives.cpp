@@ -35,6 +35,7 @@ int Primitives::TransformMatrix()
 	}
 }
 
+
 int Primitives::TransformMatrixAABB()
 {
 	if (App->editor->objectSelected != nullptr)
@@ -50,6 +51,12 @@ int Primitives::TransformMatrixAABB()
 			}
 		}
 	}
+}
+
+
+std::vector<float3> Primitives::getVertex() {
+	std::vector<float3> aux;
+	return aux;
 }
 
 //// CUBE ================================================================================================================================================================================
@@ -197,7 +204,10 @@ MyCube::~MyCube()
 	vertices.clear();
 	indices.clear();
 }
-
+std::vector<float3> MyCube::getVertex() 
+{
+	return vertices;
+}
 void MyCube::DrawCube()
 {
 	glLineWidth(3.0f);
@@ -302,7 +312,10 @@ MyPyramid::~MyPyramid()
 	vertices.clear();
 	indices.clear();
 }
- 
+std::vector<float3> MyPyramid::getVertex()
+{
+	return vertices;
+}
 void MyPyramid::DrawPyramid() 
 {
 	//glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
@@ -396,7 +409,10 @@ MyCylinder::~MyCylinder()
 	indices.clear();
 	lineIndices.clear();
 }
-
+std::vector<float3> MyCylinder::getVertex()
+{
+	return vertices;
+}
 std::vector<float> MyCylinder::GetUnitCircleVertices()
 {
 	const float pi = 3.1415926f;
@@ -698,7 +714,10 @@ MySphere::~MySphere()
 {
 
 }
-
+std::vector<float3> MySphere::getVertex()
+{
+	return vertices;
+}
 void MySphere::DrawSphere()
 {
 	if (App->editor->wireframe)
@@ -812,6 +831,10 @@ MyPlane3D::~MyPlane3D()
 {
 	vertices.clear();
 	indices.clear();
+}
+std::vector<float3> MyPlane3D::getVertex()
+{
+	return vertices;
 }
 void MyPlane3D::DrawPlane()
 {

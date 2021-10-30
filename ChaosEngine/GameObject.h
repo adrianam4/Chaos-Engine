@@ -7,7 +7,7 @@
 #include "Component.h"
 #include"Primitives.h"
 #include "MathGeoLib/src/MathGeoLib.h"
-
+#include"TransformComponent.h"
 class GameObject
 {
 public:
@@ -28,7 +28,7 @@ public:
 	std::vector<AABB*>aabb;
 	std::vector<OBB*>obb;
 	bool isChild = false;
-	
+	ComponentTransform* getTransform();
 	float3 trans;
 	float3 sca;
 	Quat rot;

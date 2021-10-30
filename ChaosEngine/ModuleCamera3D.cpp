@@ -115,14 +115,10 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 		else
 		{
-			int id = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::TRANSFORM);
-
-			Look(Vec3(App->editor->objectSelected->components[id]->position.x + 5,
-				App->editor->objectSelected->components[id]->position.y + 5,
-				App->editor->objectSelected->components[id]->position.z+ 5),
-				Vec3(App->editor->objectSelected->components[id]->position.x,
-					App->editor->objectSelected->components[id]->position.y,
-					App->editor->objectSelected->components[id]->position.z), true);
+			/*float3 objectPoition=App->editor->objectSelected->trans;*/
+			float3 Max= App->editor->objectSelected->aabb[0]->maxPoint;
+			float3 Min = App->editor->objectSelected->aabb[0]->minPoint;
+			LookAt({ Max.x - Min.x,Max.y - Min.y,Max.z - Min.z });
 		}
 	}
 
