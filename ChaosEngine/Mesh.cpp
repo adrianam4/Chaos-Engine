@@ -125,11 +125,4 @@ void Mesh::setupMesh()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-
-	
-	
-	
-	
-	
 }

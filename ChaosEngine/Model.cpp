@@ -100,6 +100,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 		vertices.push_back(vertex);
 	}
+	numFaces += mesh->mNumFaces;
 
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
