@@ -37,7 +37,7 @@ private:
 	bool borderless = false;
 	bool dekstop = false;
 	MyPlane* plane;
-	ComponentType sowOptionsMenu;
+	ComponentType showOptionsMenu;
 	float3 position;
 	float3 M;
 	void childrenManage(int i);
@@ -46,6 +46,7 @@ public:
 	ImGuiTextBuffer consoleBuffer;
 	bool wireframe;
 	bool normals;
+	bool showAABB;
 	bool scrollToBottom;
 	GameObject* objectSelected;
 

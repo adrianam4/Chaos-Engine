@@ -1,13 +1,14 @@
 {
     "MaxFPS": 0,
     "MaxMs": 0,
-    "Width": 1286,
-    "Height": 688,
-    "Brightness": 1,
+    "Width": 0,
+    "Height": 0,
+    "Brightness": 0,
     "Fullscreen": false,
     "Resizable": false,
     "Borderless": false,
     "Dekstop": true,
     "Wireframe": false,
-    "Normals": false
+    "Normals": false,
+    "AABB": false
 }

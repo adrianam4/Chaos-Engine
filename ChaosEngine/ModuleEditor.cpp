@@ -99,6 +99,7 @@ void ModuleEditor::SaveConfig()
 	json_object_set_boolean(json_object(user_data), "Dekstop", dekstop);
 	json_object_set_boolean(json_object(user_data), "Wireframe", wireframe);
 	json_object_set_boolean(json_object(user_data), "Normals", normals);
+	json_object_set_boolean(json_object(user_data), "AABB", showAABB);
 
 	json_serialize_to_file_pretty(user_data, "ConfigFile.json");
 
@@ -121,6 +122,7 @@ void ModuleEditor::LoadConfig()
 	dekstop = json_object_get_boolean(json_object(userData), "Dekstop");
 	wireframe = json_object_get_boolean(json_object(userData), "Wireframe");
 	normals = json_object_get_boolean(json_object(userData), "Normals");
+	showAABB = json_object_get_boolean(json_object(userData), "AABB");
 
 	AddLog("Loaded Config Data\n");
 }
@@ -188,24 +190,13 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::CloseCurrentPopup();
 
 		ImGui::Begin("Options");
-
 		ImGui::Text("Set Position:");
-
-
 		ImGui::DragFloat("X", &position.x);
-
 		ImGui::DragFloat("Y", &position.y);
-
 		ImGui::DragFloat("Z", &position.z);
-
 		ImGui::Text("Set Measures:");
-
 		ImGui::DragFloat("X Size", &M.x);
-
-
 		ImGui::DragFloat("Y Size", &M.y);
-
-
 		ImGui::DragFloat("Z Size", &M.z);
 
 		if (ImGui::Button("Create Cube")) {
@@ -219,30 +210,25 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			sowOptionsMenu = ComponentType::NONE;
+			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Cube Created\n");
 		}
 		ImGui::End();
 		break;
 	
 	case ComponentType::PYRAMID:
+
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
-
 		ImGui::DragFloat("X", &position.x);
 		ImGui::DragFloat("Y", &position.y);
 		ImGui::DragFloat("Z", &position.z);
+
 		ImGui::Text("Set Measures:");
-
 		ImGui::DragFloat("x Size", &M.x);
-
-
 		ImGui::DragFloat("Y Size", &M.y);
-
-
 		ImGui::DragFloat("Z Size", &M.z);
-
 
 		if (ImGui::Button("Create Pyramid")) 
 		{
@@ -256,7 +242,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			sowOptionsMenu = ComponentType::NONE;
+			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Pyramid Created\n");
 		}
 		ImGui::End();
@@ -281,32 +267,24 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			sowOptionsMenu = ComponentType::NONE;
+			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Cylinder Created\n");
 		}
 		ImGui::End();
 		break;
 	case ComponentType::SPHERE:
+
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
-
-
 		ImGui::DragFloat("X", &position.x);
-
 		ImGui::DragFloat("Y", &position.y);
-
-
 		ImGui::DragFloat("Z", &position.z);
 
 		ImGui::Text("Set Measures:");
-
 		ImGui::DragFloat("X Size", &M.x);
-
 		ImGui::DragFloat("X Size", &M.y);
-
 		ImGui::DragFloat("X Size", &M.z);
-
 
 		if (ImGui::Button("Create Sphere")) 
 		{
@@ -320,36 +298,28 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			sowOptionsMenu = ComponentType::NONE;
+			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Sphere Created\n");
 		}
 		ImGui::End();
 		break;
 		
 	case ComponentType::PLANE:
+
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
-
-
 		ImGui::DragFloat("X", &position.x);
-
 		ImGui::DragFloat("Y", &position.y);
-
-
 		ImGui::DragFloat("Z", &position.z);
 
 		ImGui::Text("Set Measures:");
-
 		ImGui::DragFloat("X Size", &M.x);
-
-
 		ImGui::DragFloat("Z Size", &M.z);
-
 
 		if (ImGui::Button("Create Plane")) {
 			//objectManager->SetPlaneProperties(objectManager->Create(shapeType::plane, position), xM, zM);
-			sowOptionsMenu = ComponentType::NONE;
+			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Plane Created\n");
 		}
 		ImGui::End();
@@ -361,6 +331,20 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 // Update: draw background
 update_status ModuleEditor::Update(float dt)
 {
+	if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
+	{
+		int i;
+		int id = objectSelected->id;
+		for (i = 0; i < App->scene->gameObjects.size(); i++)
+		{
+			if (id == App->scene->gameObjects[i]->id)
+			{
+				objectSelected = nullptr;
+				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
+				break;
+			}
+		}
+	}
 	// Our state
 	static bool showDemoWindow = false;
 	static bool showAnotherWindow = false;
@@ -387,8 +371,8 @@ update_status ModuleEditor::Update(float dt)
 		ComproveScreen();
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////// SHAPES BEGIN OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////
-	if (sowOptionsMenu != ComponentType::NONE) {
-		DOptionsmenu(sowOptionsMenu);
+	if (showOptionsMenu != ComponentType::NONE) {
+		DOptionsmenu(showOptionsMenu);
 
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////// MAIN MENU BAR ////////////////////////////////////////////////////////////////////////////////////////////
@@ -432,6 +416,7 @@ update_status ModuleEditor::Update(float dt)
 			{
 				showConsoleMenu = !showConsoleMenu;
 			}
+			ImGui::Separator();
 			if (ImGui::MenuItem("Enable/Disable Wireframe"))
 			{
 				wireframe = !wireframe;
@@ -439,6 +424,10 @@ update_status ModuleEditor::Update(float dt)
 			if (ImGui::MenuItem("Enable/Disable Normals"))
 			{
 				normals = !normals;
+			}
+			if (ImGui::MenuItem("Enable/Disable AABB"))
+			{
+				showAABB = !showAABB;
 			}
 			ImGui::EndMenu();
 		}
@@ -494,7 +483,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Cube"))
 			{
-				sowOptionsMenu = ComponentType::CUBE;
+				showOptionsMenu = ComponentType::CUBE;
 				position = { 0,0,0 };
 				M.x = 1;
 				M.y = 1;
@@ -503,7 +492,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Pyramid"))
 			{
-				sowOptionsMenu = ComponentType::PYRAMID;
+				showOptionsMenu = ComponentType::PYRAMID;
 				position = { 0,0,0 };
 				M.x = 1;
 				M.y = 1;
@@ -512,7 +501,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Sphere"))
 			{
-				sowOptionsMenu = ComponentType::SPHERE;
+				showOptionsMenu = ComponentType::SPHERE;
 				position = { 0,0,0 };
 				M.x = 1;
 				M.y = 1;
@@ -521,7 +510,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Cylinder"))
 			{
-				sowOptionsMenu = ComponentType::CYLINDER;
+				showOptionsMenu = ComponentType::CYLINDER;
 				position = { 0,0,0 };
 				M.x = 1;
 				M.y = 1;
@@ -753,6 +742,11 @@ update_status ModuleEditor::Update(float dt)
 				if (ImGui::SliderInt("Heigh", &height, 0, 1440))
 					SDL_SetWindowSize(App->window->window, width, height);
 
+				if (ImGui::SliderInt("Width", &width, 0, 2560))
+					SDL_SetWindowSize(App->window->window, width, height);
+				if (ImGui::SliderInt("Heigh", &height, 0, 1440))
+					SDL_SetWindowSize(App->window->window, width, height);
+				
 				int displayCount = 0, displayIndex = 0, modeIndex = 0;
 				SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
 
@@ -1051,9 +1045,12 @@ update_status ModuleEditor::PostUpdate(float dt)
 
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
-		for (int a = 0; a < App->scene->gameObjects[i]->boundingBoxes.size(); a++)
+		if (showAABB)
 		{
-			App->scene->gameObjects[i]->boundingBoxes[a]->DrawCube();
+			for (int a = 0; a < App->scene->gameObjects[i]->boundingBoxes.size(); a++)
+			{
+				App->scene->gameObjects[i]->boundingBoxes[a]->DrawCube();
+			}
 		}
 
 		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
