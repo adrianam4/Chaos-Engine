@@ -116,9 +116,18 @@ update_status ModuleCamera3D::Update(float dt)
 		else
 		{
 			/*float3 objectPoition=App->editor->objectSelected->trans;*/
-			float3 Max= App->editor->objectSelected->aabb[0]->maxPoint;
+			float3 objectPoition = App->editor->objectSelected->getTransform()->position;
+			float3 Max = App->editor->objectSelected->aabb[0]->maxPoint;
 			float3 Min = App->editor->objectSelected->aabb[0]->minPoint;
-			LookAt({ Max.x - Min.x,Max.y - Min.y,Max.z - Min.z });
+
+			position.y = ((Max.y - Min.y) / 2) + objectPoition.y;
+
+			float h = (Max.y - Min.y) + (Max.x - Min.x) + (Max.z - Min.z);
+			float distance = h / math::Atan(75 / 2);
+			distance += 2;
+			position.z = objectPoition.z + distance / 2;
+			position.x = objectPoition.x + distance / 2;
+			LookAt({ ((Max.x - Min.x) / 2) + Min.x,((Max.y - Min.y) / 2) + Min.y,((Max.z - Min.z) / 2) + Min.z });
 		}
 	}
 
@@ -131,15 +140,18 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 		else
 		{
-			int id = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::TRANSFORM);
+			float3 objectPoition = App->editor->objectSelected->getTransform()->position;
+			float3 Max = App->editor->objectSelected->aabb[0]->maxPoint;
+			float3 Min = App->editor->objectSelected->aabb[0]->minPoint;
 
-			LookAt(Vec3(App->editor->objectSelected->components[id]->position.x,
-					App->editor->objectSelected->components[id]->position.y,
-					App->editor->objectSelected->components[id]->position.z));
+			position.y = ((Max.y - Min.y) / 2) + objectPoition.y;
 
-			position = ((Vec3(App->editor->objectSelected->components[id]->position.x + 5,
-				App->editor->objectSelected->components[id]->position.y + 5,
-				App->editor->objectSelected->components[id]->position.z + 5)));
+			float h = (Max.y - Min.y) + (Max.x - Min.x) + (Max.z - Min.z);
+			float distance = h / math::Atan(75 / 2);
+			distance += 2;
+			position.z = objectPoition.z + distance / 2;
+			position.x = objectPoition.x + distance / 2;
+			LookAt({ ((Max.x - Min.x) / 2) + Min.x,((Max.y - Min.y) / 2) + Min.y,((Max.z - Min.z) / 2) + Min.z });
 		}
 
 		int dx = -App->input->GetMouseXMotion();
