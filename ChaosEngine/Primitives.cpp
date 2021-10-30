@@ -68,28 +68,19 @@ BoundingBoxes::BoundingBoxes(float3 pos, float3 sca, float3 maxPoint, float3 min
 	scale = sca;
 
 	vertices.push_back({ (minPoint.x + position.x) * scale.x, (minPoint.y + position.y) * scale.y, (minPoint.z + position.z) * scale.z });
-
 	vertices.push_back({ (maxPoint.x + position.x) * scale.x, (minPoint.y + position.y) * scale.y, (minPoint.z + position.z) * scale.z });
 	vertices.push_back({ (maxPoint.x + position.x) * scale.x, (minPoint.y + position.y) * scale.y, (maxPoint.z + position.z) * scale.z });
-
 	vertices.push_back({ (minPoint.x + position.x) * scale.x, (minPoint.y + position.y) * scale.y, (maxPoint.z + position.z) * scale.z });
-
 	vertices.push_back({ (maxPoint.x + position.x) * scale.x, (maxPoint.y + position.y) * scale.y, (maxPoint.z + position.z) * scale.z });
 	vertices.push_back({ (maxPoint.x + position.x) * scale.x, (maxPoint.y + position.y) * scale.y, (minPoint.z + position.z) * scale.z });
 	vertices.push_back({ (minPoint.x + position.x) * scale.x, (maxPoint.y + position.y) * scale.y, (minPoint.z + position.z) * scale.z });
 	vertices.push_back({ (minPoint.x + position.x) * scale.x, (maxPoint.y + position.y) * scale.y, (maxPoint.z + position.z) * scale.z });
 
-
-	indices.push_back(5); indices.push_back(1); indices.push_back(0); indices.push_back(6); indices.push_back(5); indices.push_back(0);
-
-	indices.push_back(4); indices.push_back(2); indices.push_back(1); indices.push_back(5); indices.push_back(4); indices.push_back(1);
-
-	indices.push_back(4); indices.push_back(7); indices.push_back(2); indices.push_back(7); indices.push_back(3); indices.push_back(2);
-
-	indices.push_back(7); indices.push_back(0); indices.push_back(3); indices.push_back(7); indices.push_back(6); indices.push_back(3);
-
-	indices.push_back(3); indices.push_back(1); indices.push_back(0); indices.push_back(3); indices.push_back(2); indices.push_back(1);
-
+	indices.push_back(5); indices.push_back(1); indices.push_back(0); indices.push_back(6); indices.push_back(5); indices.push_back(0); 
+	indices.push_back(4); indices.push_back(2); indices.push_back(1); indices.push_back(5); indices.push_back(4); indices.push_back(1); 
+	indices.push_back(4); indices.push_back(7); indices.push_back(2); indices.push_back(7); indices.push_back(3); indices.push_back(2); 
+	indices.push_back(7); indices.push_back(0); indices.push_back(3); indices.push_back(6); indices.push_back(0); indices.push_back(7); 
+	indices.push_back(0); indices.push_back(1); indices.push_back(3); indices.push_back(1); indices.push_back(2); indices.push_back(3);
 	indices.push_back(7); indices.push_back(4); indices.push_back(6); indices.push_back(4); indices.push_back(5); indices.push_back(6);
 
 
@@ -109,13 +100,17 @@ void BoundingBoxes::DrawCube()
 {
 	glLineWidth(3.0f);
 
-	
+	glColor4f(255, 0, 255, 255);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//Enable states
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	int i = TransformMatrixAABB();
+	if (matrix != nullptr)
+	{
+		glPushMatrix();
+		glMultMatrixf(matrix);
+	}
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
@@ -132,8 +127,10 @@ void BoundingBoxes::DrawCube()
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 
-	if (found && App->scene->gameObjects[i]->matrix != nullptr)
+	if (matrix != nullptr)
 		glPopMatrix();
+
+	glColor4f(255, 255, 255, 255);
 }
 MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 {
@@ -634,6 +631,7 @@ void MyCylinder::Initialize()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
 	aabb.SetNegativeInfinity();
 	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 }
@@ -766,14 +764,11 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	scale = sca;
 
 	type = PrimitivesTypes::PRIMITIVE_MYPLANE3D;
+
 	vertices.push_back({ 1 + pos.x ,pos.y,1 + pos.z });
-	
-	vertices.push_back({ 1 + pos.x ,pos.y, pos.z-1 });
-
-	vertices.push_back({  pos.x-1 ,pos.y,pos.z - 1 });
-
-	vertices.push_back({ pos.x - 1 ,pos.y,1+pos.z });
-
+	vertices.push_back({ 1 + pos.x ,pos.y, pos.z - 1 });
+	vertices.push_back({ pos.x - 1 ,pos.y,pos.z - 1 });
+	vertices.push_back({ pos.x - 1 ,pos.y,1 + pos.z });
 
 	indices.push_back(3);
 	indices.push_back(0);
@@ -795,7 +790,6 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	texCoords.push_back(0);
 	texCoords.push_back(0);
 
-
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = 0;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = 0;
@@ -808,9 +802,6 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = pos.x;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = pos.y;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = pos.z;
-
-
-
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);

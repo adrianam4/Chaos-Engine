@@ -206,7 +206,7 @@ void ComponentTransform::Update()
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
 
-	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size() -1; i++)
+	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
 	{
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
 	}
