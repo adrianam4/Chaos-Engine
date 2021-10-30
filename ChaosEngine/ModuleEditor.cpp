@@ -180,10 +180,13 @@ void ModuleEditor::AddCylinder(float3 pos)
 	cylinders.push_back(auxCylinder);
 }
 void ModuleEditor::DOptionsmenu(ComponentType type) {
-
+	
 	switch (type)
 	{
 	case ComponentType::CUBE:
+
+		ImGui::CloseCurrentPopup();
+
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
@@ -368,6 +371,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool showHierarchy = true;
 	static bool showInspector = true;
 	static bool showConsoleMenu = true;
+	static bool showOptions = true;
 	static bool isActive = true;
 	static bool isActive2 = true;
 	static bool isActive3 = true;
@@ -718,13 +722,6 @@ update_status ModuleEditor::Update(float dt)
 			/*sprintf_s(title, 25, "Memory Consumption %.1f", memLog[memLog.size() - 1]);
 			ImGui::PlotHistogram("##memory", &memLog[0], memLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));*/
 
-			int peakMem;
-			int accMem = statex.ullTotalPhys / DIV;
-			int peakActual;
-			int accActual;
-			int peakAlloc;
-			int accAlloc;
-
 			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB", statex.ullTotalPhys / DIV);
 			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
 			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
@@ -747,13 +744,14 @@ update_status ModuleEditor::Update(float dt)
 
 				ImGui::Text("Icon: *default*");
 
-				ImGui::SliderFloat("Brigthness", &brightness, 0, 1.0f);
+				if (ImGui::SliderFloat("Brigthness", &brightness, 0, 1.0f))
+					SDL_SetWindowBrightness(App->window->window, brightness);
 
-				ImGui::SliderInt("Width", &width, 0, 2560);
-				ImGui::SliderInt("Heigh", &height, 0, 1440);
+				if (ImGui::SliderInt("Width", &width, 0, 2560))
+					SDL_SetWindowSize(App->window->window, width, height);
 
-				SDL_SetWindowSize(App->window->window, width, height);
-				SDL_SetWindowBrightness(App->window->window, brightness);
+				if (ImGui::SliderInt("Heigh", &height, 0, 1440))
+					SDL_SetWindowSize(App->window->window, width, height);
 
 				int displayCount = 0, displayIndex = 0, modeIndex = 0;
 				SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
@@ -955,12 +953,19 @@ update_status ModuleEditor::Update(float dt)
 				const GLubyte* renderer = glGetString(GL_RENDERER);
 				GLint gpuInfo = 0;
 
+				MEMORYSTATUSEX statex;
+
+				statex.dwLength = sizeof(statex);
+
+				GlobalMemoryStatusEx(&statex);
+
+
 				ImGui::Text("GPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", renderer);
 				ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", vendor);
-				ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
-				ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
-				ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
-				ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb");
+				ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", statex.ullTotalVirtual / DIV);
+				ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", (statex.ullTotalVirtual / DIV) - (statex.ullAvailVirtual / DIV));
+				ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", statex.ullAvailVirtual / DIV);
+				ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", statex.ullTotalVirtual / DIV);
 			}
 		}
 
