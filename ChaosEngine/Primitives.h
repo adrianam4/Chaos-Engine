@@ -39,8 +39,9 @@ public:
 	float3 scale;
 	uint id;
 	int TransformMatrix();
+	int TransformMatrixAABB();
 	bool found;
-	float* matrix;
+	float* matrix = nullptr;
 protected:
 	PrimitivesTypes type;
 public:

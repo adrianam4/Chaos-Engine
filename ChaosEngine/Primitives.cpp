@@ -19,8 +19,7 @@ PrimitivesTypes Primitives::GetType() const
 
 int Primitives::TransformMatrix()
 {
-	int i = 0;
-	for (i = 0; i < App->scene->gameObjects.size(); i++)
+	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
 		if (App->scene->gameObjects[i]->id == id)
 		{
@@ -32,6 +31,23 @@ int Primitives::TransformMatrix()
 				return i;
 			}
 
+		}
+	}
+}
+
+int Primitives::TransformMatrixAABB()
+{
+	if (App->editor->objectSelected != nullptr)
+	{
+		for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
+		{
+			if (App->editor->objectSelected->boundingBoxes[i]->matrix != nullptr)
+			{
+				glPushMatrix();
+				glMultMatrixf(App->editor->objectSelected->boundingBoxes[i]->matrix);
+				found = true;
+				return i;
+			}
 		}
 	}
 }
@@ -92,7 +108,7 @@ void BoundingBoxes::DrawCube()
 	//Enable states
 	glEnableClientState(GL_VERTEX_ARRAY);
 
-	int i = TransformMatrix();
+	int i = TransformMatrixAABB();
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
 	glVertexPointer(3, GL_FLOAT, 0, NULL);
