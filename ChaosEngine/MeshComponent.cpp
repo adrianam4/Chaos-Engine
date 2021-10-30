@@ -75,4 +75,95 @@ void ComponentMesh::Disable()
 void ComponentMesh::OnEditor(int i)
 {
 	ImGui::Checkbox("Active", &App->editor->objectSelected->components[i]->active);
+
+	if ((App->editor->objectSelected->components[i]->type == ComponentType::MESH))
+	{
+		int id = App->editor->objectSelected->id;
+		int j;
+		for (j = 0; j < App->renderer3D->models.size(); j++)
+		{
+			if (id == App->renderer3D->models[j].id)
+			{
+				break;
+			}
+		}
+		ImGui::Text("Number of Meshes: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->renderer3D->models[j].meshes.size());
+		ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->renderer3D->models[j].numFaces);
+		ImGui::Text("Number of Vertices: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->renderer3D->models[j].meshes[i].vertices.size());
+	}
+	if ((App->editor->objectSelected->components[i]->type == ComponentType::CUBE)) 
+	{
+		int id = App->editor->objectSelected->id;
+		int j;
+		for (j = 0; j < App->editor->cubes.size(); j++)
+		{
+			if (id == App->editor->cubes[j]->id) 
+			{
+				break;
+			}
+		}
+		ImGui::Text("Number of Meshes: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "1");
+		ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->cubes[j]->indices.size() / 3);
+		ImGui::Text("Number of Vertices: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->cubes[j]->vertices.size());
+	}
+	if ((App->editor->objectSelected->components[i]->type == ComponentType::PYRAMID))
+	{
+		int id = App->editor->objectSelected->id;
+		int j;
+		for (j = 0; j < App->editor->pyramids.size(); j++)
+		{
+			if (id == App->editor->pyramids[j]->id)
+			{
+				break;
+			}
+		}
+		ImGui::Text("Number of Meshes: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "1");
+		ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->pyramids[j]->indices.size() / 3);
+		ImGui::Text("Number of Vertices: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->pyramids[j]->vertices.size());
+	}
+	if ((App->editor->objectSelected->components[i]->type == ComponentType::CYLINDER))
+	{
+		int id = App->editor->objectSelected->id;
+		int j;
+		for (j = 0; j < App->editor->cylinders.size(); j++)
+		{
+			if (id == App->editor->cylinders[j]->id)
+			{
+				break;
+			}
+		}
+		ImGui::Text("Number of Meshes: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "1");
+		ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->cylinders[j]->indices.size() / 3);
+		ImGui::Text("Number of Vertices: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->cylinders[j]->vertices.size());
+	}
+	if ((App->editor->objectSelected->components[i]->type == ComponentType::SPHERE))
+	{
+		int id = App->editor->objectSelected->id;
+		int j;
+		for (j = 0; j < App->editor->spheres.size(); j++)
+		{
+			if (id == App->editor->spheres[j]->id)
+			{
+				break;
+			}
+		}
+		ImGui::Text("Number of Meshes: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "1");
+		ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->spheres[j]->indices.size() / 4);
+		ImGui::Text("Number of Vertices: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->spheres[j]->vertices.size());
+	}
+	if ((App->editor->objectSelected->components[i]->type == ComponentType::PLANE))
+	{
+		int id = App->editor->objectSelected->id;
+		int j;
+		for ( j = 0; j < App->editor->planes.size(); j++)
+		{
+			if (id == App->editor->planes[j]->id)
+			{
+				break;
+			}
+		}
+		ImGui::Text("Number of Meshes: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "1");
+		ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->planes[j]->indices.size() / 3);
+		ImGui::Text("Number of Vertices: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->planes[j]->vertices.size());
+	}
 }

@@ -665,12 +665,6 @@ update_status ModuleEditor::Update(float dt)
 		const char* name = objectSelected->name.c_str();
 		ImGui::TextColored(ImVec4(255, 255, 0, 255), name);
 		ImGui::Separator();
-		if (ImGui::CollapsingHeader("Mesh Info"))
-		{
-			int lastComponent = App->scene->gameObjects.size() - 1;
-			ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-			ImGui::Text("Number of Vertex: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d");
-		}
 		for (int i = 0; i < objectSelected->components.size(); i++)
 		{
 			if (ImGui::TreeNode(objectSelected->components[i]->name))

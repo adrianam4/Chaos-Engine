@@ -32,7 +32,6 @@ enum PrimitivesTypes
 class Primitives
 {
 public:
-
 	Primitives();
 	PrimitivesTypes	GetType() const;
 	float3 position;
@@ -48,6 +47,7 @@ public:
 
 protected:
 	PrimitivesTypes type;
+
 public:
 	unsigned int VBO;
 	unsigned int EBO;
@@ -59,10 +59,10 @@ public:
 	mat4x4 transform;
 	bool axis, wire;
 };
+
 class BoundingBoxes : public Primitives
 {
 public:
-	
 	BoundingBoxes(float3 pos, float3 sca, float3 maxPoint, float3 minPoint);
 	~BoundingBoxes();
 	void DrawCube();
@@ -74,6 +74,7 @@ private:
 	std::vector<float3> vertices;
 	std::vector<uint> indices;
 };
+
 class MyCube : public Primitives
 {
 public:
@@ -100,8 +101,7 @@ public:
 	ILuint imageID;
 	std::vector<float3> getVertex()override;
 
-private:
-	
+public:
 	std::vector<float3> vertices;
 	std::vector<uint> indices;
 	std::vector<float> texCoords;
@@ -121,12 +121,10 @@ public:
 public:
 	ILuint imageID;
 	std::vector<float3> getVertex()override;
+
 private:
 	std::vector<float> unitCircleVertices;
-	std::vector<float3> vertices;
 	std::vector<float> normals;
-	std::vector<float> texCoords;
-	std::vector<unsigned int> indices;
 	std::vector<unsigned int> lineIndices;
 
 	float baseRadius;
@@ -137,26 +135,33 @@ private:
 	bool smooth;
 	int sectorCount;
 	float radius;
+
+public:
+	std::vector<float3> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<float> texCoords;
 };
 
 class MySphere : public Primitives
 {
-protected:
-	std::vector<GLushort> indices;
-	std::vector<GLfloat> normals;
-	std::vector<GLfloat> texCoords;
-	std::vector<float3> vertices;
-
 public:
 	ILuint imageID;
 	std::vector<float3> getVertex()override;
+
 public:
 	MySphere(float radius, int sectorCount, int stackCount, float3 pos, float3 sca);
 	~MySphere();
 	void DrawSphere();
+
 private:
 	uint bufferIndices;
 	uint bufferVertex;
+
+public:
+	std::vector<GLushort> indices;
+	std::vector<GLfloat> normals;
+	std::vector<GLfloat> texCoords;
+	std::vector<float3> vertices;
 };
 
 class MyPlane : public Primitives
@@ -180,10 +185,10 @@ class MyPlane3D : public Primitives
 {
 public:
 	MyPlane3D(float3 pos, float3 sca);
-
 	~MyPlane3D();
 	void DrawPlane();
 	std::vector<float3> getVertex()override;
+
 public:
 	ILuint imageID;
 
@@ -201,6 +206,7 @@ public:
 	MyLine();
 	MyLine(float x, float y, float z);
 	void DrawLine() const;
+
 public:
 	Vec3 origin;
 	Vec3 destination;

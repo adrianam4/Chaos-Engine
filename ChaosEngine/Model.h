@@ -20,6 +20,7 @@ public:
 	void Draw(float* matrix);
 	uint id;
 	std::vector<Mesh> meshes;
+	uint numFaces = 0;
 private:
 	//std::vector<Textures> textures_loaded;
 	
