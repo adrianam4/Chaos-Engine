@@ -65,7 +65,16 @@ void GameObject::Update()
 {
 
 }
+ComponentTransform* GameObject::getTransform() {
+	for (int i = 0; i < components.size(); i++)
+	{
+		if (components[i]->type == ComponentType::TRANSFORM) {
+			return (ComponentTransform*)components[i];
+		}
 
+	}
+
+}
 int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
 {
 	for (int i = 0; i < gameObject->components.size(); i++)
