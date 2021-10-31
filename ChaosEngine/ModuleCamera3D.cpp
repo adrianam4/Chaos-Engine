@@ -116,18 +116,52 @@ update_status ModuleCamera3D::Update(float dt)
 		else
 		{
 			/*float3 objectPoition=App->editor->objectSelected->trans;*/
-			float3 objectPosition = App->editor->objectSelected->getTransform()->position;
-			float3 Max = App->editor->objectSelected->aabb[0]->maxPoint;
-			float3 Min = App->editor->objectSelected->aabb[0]->minPoint;
+			float3 objectScale = App->editor->objectSelected->getTransform()->scale;
+			float generalScale = objectScale.x * objectScale.y * objectScale.z;
+			float3 objectPoition = App->editor->objectSelected->getTransform()->position;
 
-			position.y = ((Max.y - Min.y) / 2) + objectPosition.y;
 
-			float h = (Max.y - Min.y) + (Max.x - Min.x) + (Max.z - Min.z);
+			int aabbSize = App->editor->objectSelected->aabb.size();
+			float3 Max;
+			float3 Min;
+			if (aabbSize > 1) {
+				float* maxarray = new float[aabbSize];
+
+				for (int a = 0; a < aabbSize; a++)
+				{
+					maxarray[a] = (App->editor->objectSelected->aabb[a]->maxPoint.x - App->editor->objectSelected->aabb[a]->minPoint.x) + (App->editor->objectSelected->aabb[a]->maxPoint.y - App->editor->objectSelected->aabb[a]->minPoint.y) + (App->editor->objectSelected->aabb[a]->maxPoint.z - App->editor->objectSelected->aabb[a]->minPoint.z);
+
+				}
+				int max = maxarray[0];
+				int index = 0;
+				for (int i = 1; i < aabbSize; i++) {
+					if (maxarray[i] > max) {
+						max = maxarray[i];
+						index = i;
+					}
+				}
+				Max = App->editor->objectSelected->aabb[index]->maxPoint;
+				Min = App->editor->objectSelected->aabb[index]->minPoint;
+				delete[] maxarray;
+			}
+			else {
+				Max = App->editor->objectSelected->aabb[0]->maxPoint;
+				Min = App->editor->objectSelected->aabb[0]->minPoint;
+
+			}
+
+
+
+			position.y = (objectPoition.y + ((objectScale.y * (Max.y - Min.y)) / 2));
+
+			float h = ((Max.y - Min.y) * objectScale.y) + ((Max.x - Min.x) * objectScale.x) + ((Max.z - Min.z) * objectScale.z);
 			float distance = h / math::Atan(75 / 2);
-			distance += 2;
-			position.z = objectPosition.z + distance / 2;
-			position.x = objectPosition.x + distance / 2;
-			LookAt({ (((Max.x - Min.x) / 2) + Min.x) + objectPosition.x,(((Max.y - Min.y) / 2) + Min.y) + objectPosition.y,(((Max.z - Min.z) / 2) + Min.z) + objectPosition.z });
+
+
+
+			position.z = (objectPoition.z + distance);
+			position.x = (objectPoition.x + distance);
+			LookAt({ (((Max.x - Min.x) / 2) + objectPoition.x),(objectPoition.y + ((objectScale.y * (Max.y - Min.y)) / 2)),(((Max.z - Min.z) / 2) + objectPoition.z) });
 		}
 	}
 
