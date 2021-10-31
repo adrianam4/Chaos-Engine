@@ -113,7 +113,7 @@ public:
 	MyCylinder(float3 pos);
 	MyCylinder(float3 pos, float3 sca, float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth);
 	~MyCylinder();
-	std::vector<float> GetUnitCircleVertices();
+	std::vector<float3> GetUnitCircleVertices();
 	void BuildVerticalSmooth();
 	void DrawCylinder();
 	void Initialize();
@@ -159,7 +159,7 @@ private:
 
 public:
 	std::vector<GLushort> indices;
-	std::vector<GLfloat> normals;
+	std::vector<float3> normals;
 	std::vector<GLfloat> texCoords;
 	std::vector<float3> vertices;
 };

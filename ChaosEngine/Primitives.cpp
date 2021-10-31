@@ -137,16 +137,16 @@ MyCube::MyCube(float3 pos, float3 sca) : Primitives()
 	//scale = sca;
 	scale = { 1,1,1 };
 	type = PrimitivesTypes::PRIMITIVE_MYCUBE;
-	vertices.push_back({ (-1 + position.x * sca.x), ((0 + position.y) * sca.y), (0 + position.z) * sca.z });
-	
-	vertices.push_back({ (1 + position.x * sca.x), ((0 + position.y) * sca.y), (0 + position.z) * sca.z });
-	vertices.push_back({ (1 + position.x * sca.x), ((2 + position.y) * sca.y), (0 + position.z) * sca.z });
-	vertices.push_back({ (-1 + position.x * sca.x), ((2 + position.y) * sca.y), (0 + position.z) * sca.z });
 
-	vertices.push_back({ (-1 + position.x * sca.x), ((0 + position.y) * sca.y), (-2 + position.z) * sca.z });
-	vertices.push_back({ (1 + position.x * sca.x), ((0 + position.y) * sca.y), (-2 + position.z) * sca.z });
-	vertices.push_back({ (1 + position.x * sca.x), ((2 + position.y) * sca.y), (-2 + position.z) * sca.z });
-	vertices.push_back({ (-1 + position.x * sca.x), ((2 + position.y) * sca.y), (-2+ position.z) * sca.z });
+	vertices.push_back({ ((-1 + position.x) * sca.x), ((0 + position.y) * sca.y), (0 + position.z) * sca.z });
+	vertices.push_back({ ((1 + position.x) * sca.x), ((0 + position.y) * sca.y), (0 + position.z) * sca.z });
+	vertices.push_back({ ((1 + position.x) * sca.x), ((2 + position.y) * sca.y), (0 + position.z) * sca.z });
+	vertices.push_back({ ((-1 + position.x) * sca.x), ((2 + position.y) * sca.y), (0 + position.z) * sca.z });
+
+	vertices.push_back({ ((-1 + position.x) * sca.x), ((0 + position.y) * sca.y), (-2 + position.z) * sca.z });
+	vertices.push_back({ ((1 + position.x) * sca.x), ((0 + position.y) * sca.y), (-2 + position.z) * sca.z });
+	vertices.push_back({ ((1 + position.x) * sca.x), ((2 + position.y) * sca.y), (-2 + position.z) * sca.z });
+	vertices.push_back({ ((-1 + position.x) * sca.x), ((2 + position.y) * sca.y), (-2+ position.z) * sca.z });
 	
 	indices.push_back(0); indices.push_back(1); indices.push_back(2); indices.push_back(0); indices.push_back(2); indices.push_back(3);
 	indices.push_back(6); indices.push_back(5); indices.push_back(4); indices.push_back(7); indices.push_back(6); indices.push_back(4);
@@ -409,22 +409,20 @@ std::vector<float3> MyCylinder::getVertex()
 {
 	return vertices;
 }
-std::vector<float> MyCylinder::GetUnitCircleVertices()
+std::vector<float3> MyCylinder::GetUnitCircleVertices()
 {
-	const float pi = 3.1415926f;
-	float sectorStep = 2 * pi / sectorCount;
-	float sectorAngle;
+    const float PI = 3.1415926f;
+    float sectorStep = 2 * PI / sectorCount;
+    float sectorAngle;  // radian
 
-	std::vector<float> unitCircleVertices;
-	for (int i = 0; i <= sectorCount; ++i)
-	{
-		sectorAngle = i * sectorStep;
-		unitCircleVertices.push_back(cos(sectorAngle)); //x
-		unitCircleVertices.push_back(sin(sectorAngle)); //y
-		unitCircleVertices.push_back(0); //z
-	}
+    std::vector<float3> unitCircleVertices;
+    for(int i = 0; i <= sectorCount; ++i)
+    {
+        sectorAngle = i * sectorStep;
+		unitCircleVertices.push_back({ cos(sectorAngle), sin(sectorAngle),0 });
+    }
 
-	return unitCircleVertices;
+    return unitCircleVertices;
 }
 
 void MyCylinder::BuildVerticalSmooth()
@@ -435,7 +433,7 @@ void MyCylinder::BuildVerticalSmooth()
 	std::vector<float>().swap(texCoords);
 
 	// get unit circle vectors on XY-plane
-	std::vector<float> unitVertices = GetUnitCircleVertices();
+	std::vector<float3> unitVertices = GetUnitCircleVertices();
 
 	//defining some useful vars
 	static float sectorCount = 16.0f;
@@ -448,16 +446,13 @@ void MyCylinder::BuildVerticalSmooth()
 		float h = -height / 2.0f + i * height;           // z value; -h/2 to h/2
 		float t = 1.0f - i;                              // vertical tex coord; 1 to 0
 
-		for (int j = 0, k = 0; j <= sectorCount; ++j, k += 3)
+		for (int j = 0, k = 0; j <= sectorCount; ++j, ++k)
 		{
-			float ux = unitVertices[k];
-			float uy = unitVertices[k + 1];
-			float uz = unitVertices[k + 2];
+			float ux = unitVertices[k].x;
+			float uy = unitVertices[k].y;
+			float uz = unitVertices[k].z;
 			// position vector
 			vertices.push_back({ (ux * radius) + position.x ,(uy * radius) + position.y,h + position.z });
-			//vertices.push_back((ux * radius) + position.x);             // vx
-			//vertices.push_back((uy * radius) + position.y);            // vy
-			//vertices.push_back(h + position.z);                       // vz
 			// normal vector
 			normals.push_back(ux);                       // nx
 			normals.push_back(uy);                       // ny
@@ -470,7 +465,7 @@ void MyCylinder::BuildVerticalSmooth()
 
 	// the starting index for the base/top surface
 	//NOTE: it is used for generating indices later
-	int baseCenterIndex = (int)vertices.size() / 3;
+	int baseCenterIndex = (int)vertices.size();
 	int topCenterIndex = baseCenterIndex + sectorCount + 1; // include center vertex
 
 	// put base and top vertices to arrays
@@ -481,19 +476,15 @@ void MyCylinder::BuildVerticalSmooth()
 
 		// center point
 		vertices.push_back({ 0 + position.x ,0 + position.y ,h + position.z });
-		//vertices.push_back(0 + position.x);     vertices.push_back(0 + position.y);     vertices.push_back(h + position.z);
 		normals.push_back(0);      normals.push_back(0);      normals.push_back(nz);
 		texCoords.push_back(0.5f); texCoords.push_back(0.5f);
 
-		for (int j = 0, k = 0; j < sectorCount; ++j, k += 3)
+		for (int j = 0, k = 0; j < sectorCount; ++j, ++k)
 		{
-			float ux = unitVertices[k];
-			float uy = unitVertices[k + 1];
+			float ux = unitVertices[k].x;
+			float uy = unitVertices[k].y;
 			// position vector
 			vertices.push_back({ ux * radius + position.x ,uy * radius + position.y ,h + position.z });
-			//vertices.push_back(ux * radius + position.x);             // vx
-			//vertices.push_back(uy * radius + position.y);             // vy
-			//vertices.push_back(h + position.z);                       // vz
 			// normal vector
 			normals.push_back(0);                        // nx
 			normals.push_back(0);                        // ny
@@ -644,39 +635,87 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 	position = pos;
 	scale = sca;
 
-	float const R = 1. / (float)(rings - 1);
-	float const S = 1. / (float)(sectors - 1);
-	int r, s;
+	std::vector<float3>().swap(vertices);
+	std::vector<float3>().swap(normals);
+	std::vector<float>().swap(texCoords);
 
-	vertices.resize(rings * sectors * 3);
-	normals.resize(rings * sectors * 3);
-	texCoords.resize(rings * sectors * 2);
-	std::vector<float3>::iterator v = vertices.begin();
-	std::vector<GLfloat>::iterator n = normals.begin();
-	std::vector<GLfloat>::iterator t = texCoords.begin();
-	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) {
-		float const y = sin(-M_PI_2 + M_PI * r * R);
-		float const x = cos(2 * M_PI * s * S) * sin(M_PI * r * R);
-		float const z = sin(2 * M_PI * s * S) * sin(M_PI * r * R);
+	float x, y, z, xy;                              // vertex position
+	float nx, ny, nz, lengthInv = 1.0f / radius;    // vertex normal
+	float s, t;                                     // vertex texCoord
 
-		*t++ = s * S;
-		*t++ = r * R;
+	const float PI = 3.1415926f;
 
-		*v++ = { -x * radius ,-y * radius, -z * radius };
-		
+	float sectorStep = 2 * PI / sectors;
+	float stackStep = PI / rings;
+	float sectorAngle, stackAngle;
 
-		*n++ = -x;
-		*n++ = -y;
-		*n++ = -z;
+	for (int i = 0; i <= rings; ++i)
+	{
+		stackAngle = M_PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
+		xy = 1.0f * cosf(stackAngle);             // r * cos(u)
+		z = 1.0f * sinf(stackAngle);              // r * sin(u)
+
+		// add (sectorCount+1) vertices per stack
+		// the first and last vertices have same position and normal, but different tex coords
+		for (int j = 0; j <= sectors; ++j)
+		{
+			sectorAngle = j * sectorStep;           // starting from 0 to 2pi
+
+			// vertex position (x, y, z)
+			x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
+			y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
+			vertices.push_back({ x, y, z });
+
+			// normalized vertex normal (nx, ny, nz)
+			nx = x * lengthInv;
+			ny = y * lengthInv;
+			nz = z * lengthInv;
+			normals.push_back({ nx, ny, nz });
+
+			// vertex tex coord (s, t) range between [0, 1]
+			s = (float)j / sectors;
+			t = (float)i / rings;
+			texCoords.push_back(s);
+			texCoords.push_back(t);
+		}
 	}
 
-	indices.resize(rings * sectors * 4);
-	std::vector<GLushort>::iterator i = indices.begin();
-	for (r = 0; r < rings; r++) for (s = 0; s < sectors; s++) {
-		*i++ = r * sectors + s;
-		*i++ = r * sectors + (s + 1);
-		*i++ = (r + 1) * sectors + (s + 1);
-		*i++ = (r + 1) * sectors + s;
+	std::vector<int> lineIndices;
+	int k1, k2;
+	for (int i = 0; i < rings; ++i)
+	{
+		k1 = i * (sectors + 1);     // beginning of current stack
+		k2 = k1 + sectors + 1;      // beginning of next stack
+
+		for (int j = 0; j < sectors; ++j, ++k1, ++k2)
+		{
+			// 2 triangles per sector excluding first and last stacks
+			// k1 => k2 => k1+1
+			if (i != 0)
+			{
+				indices.push_back(k1);
+				indices.push_back(k2);
+				indices.push_back(k1 +1);
+			}
+
+			// k1+1 => k2 => k2+1
+			if (i != (rings - 1))
+			{
+				indices.push_back(k1 + 1);
+				indices.push_back(k2);
+				indices.push_back(k2 + 1);
+			}
+
+			// store indices for lines
+			// vertical lines for all stacks, k1 => k2
+			lineIndices.push_back(k1);
+			lineIndices.push_back(k2);
+			if (i != 0)  // horizontal lines except 1st stack, k1 => k+1
+			{
+				lineIndices.push_back(k1);
+				lineIndices.push_back(k1 + 1);
+			}
+		}
 	}
 
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
@@ -694,7 +733,7 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float3), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float) * 3, vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -703,6 +742,7 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
 	aabb.SetNegativeInfinity();
 	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 }
@@ -739,7 +779,7 @@ void MySphere::DrawSphere()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	//Draw
-	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_SHORT, 0);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, 0);
 
 	//UnBind Buffers
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

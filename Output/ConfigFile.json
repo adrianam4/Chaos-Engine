@@ -5,9 +5,9 @@
     "Height": 0,
     "Brightness": 0,
     "Fullscreen": false,
-    "Resizable": false,
+    "Resizable": true,
     "Borderless": false,
-    "Dekstop": true,
+    "Dekstop": false,
     "Wireframe": false,
     "Normals": false,
     "AABB": false

@@ -166,7 +166,7 @@ void ModuleEditor::AddPyramid(float3 pos, float3 sca)
 void ModuleEditor::AddSphere(float3 pos, float3 sca)
 {
 	MySphere* auxSphere;
-	auxSphere = new MySphere(3, 20, 20, pos, sca);
+	auxSphere = new MySphere(1, 20, 20, pos, sca);
 	spheres.push_back(auxSphere);
 }
 void ModuleEditor::AddPlane(float3 pos, float3 sca)
@@ -251,10 +251,10 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
-
 		ImGui::DragFloat("X", &position.x);
 		ImGui::DragFloat("Y", &position.y);
 		ImGui::DragFloat("Z", &position.z);
+
 		if (ImGui::Button("Create Cylindrer")) 
 		{
 			if (cylinders.size() == 0)
@@ -283,8 +283,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 
 		ImGui::Text("Set Measures:");
 		ImGui::DragFloat("X Size", &M.x);
-		ImGui::DragFloat("X Size", &M.y);
-		ImGui::DragFloat("X Size", &M.z);
+		ImGui::DragFloat("Y Size", &M.y);
+		ImGui::DragFloat("Z Size", &M.z);
 
 		if (ImGui::Button("Create Sphere")) 
 		{

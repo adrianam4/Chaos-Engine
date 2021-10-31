@@ -116,18 +116,18 @@ update_status ModuleCamera3D::Update(float dt)
 		else
 		{
 			/*float3 objectPoition=App->editor->objectSelected->trans;*/
-			float3 objectPoition = App->editor->objectSelected->getTransform()->position;
+			float3 objectPosition = App->editor->objectSelected->getTransform()->position;
 			float3 Max = App->editor->objectSelected->aabb[0]->maxPoint;
 			float3 Min = App->editor->objectSelected->aabb[0]->minPoint;
 
-			position.y = ((Max.y - Min.y) / 2) + objectPoition.y;
+			position.y = ((Max.y - Min.y) / 2) + objectPosition.y;
 
 			float h = (Max.y - Min.y) + (Max.x - Min.x) + (Max.z - Min.z);
 			float distance = h / math::Atan(75 / 2);
 			distance += 2;
-			position.z = objectPoition.z + distance / 2;
-			position.x = objectPoition.x + distance / 2;
-			LookAt({ ((Max.x - Min.x) / 2) + Min.x,((Max.y - Min.y) / 2) + Min.y,((Max.z - Min.z) / 2) + Min.z });
+			position.z = objectPosition.z + distance / 2;
+			position.x = objectPosition.x + distance / 2;
+			LookAt({ (((Max.x - Min.x) / 2) + Min.x) + objectPosition.x,(((Max.y - Min.y) / 2) + Min.y) + objectPosition.y,(((Max.z - Min.z) / 2) + Min.z) + objectPosition.z });
 		}
 	}
 
