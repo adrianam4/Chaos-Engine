@@ -72,7 +72,7 @@ update_status ModuleCamera3D::Update(float dt)
 	reference += newPos;
 
 	// Mouse motion ----------------
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT || (App->input->GetMouseButton(SDL_BUTTON_LEFT) && App->input->GetKey(SDL_SCANCODE_LALT)))
 	{
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
@@ -163,57 +163,6 @@ update_status ModuleCamera3D::Update(float dt)
 			position.x = (objectPoition.x + distance);
 			LookAt({ (((Max.x - Min.x) / 2) + objectPoition.x),(objectPoition.y + ((objectScale.y * (Max.y - Min.y)) / 2)),(((Max.z - Min.z) / 2) + objectPoition.z) });
 		}
-	}
-
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) && App->input->GetKey(SDL_SCANCODE_LALT))
-	{
-		if (App->editor->objectSelected == NULL)
-		{
-			LookAt(Vec3(0.0f, 0.0f, 0.0f));
-			position = (Vec3(3.0f, 3.0f, 3.0f));
-		}
-		else
-		{
-			float3 objectPoition = App->editor->objectSelected->getTransform()->position;
-			float3 Max = App->editor->objectSelected->aabb[0]->maxPoint;
-			float3 Min = App->editor->objectSelected->aabb[0]->minPoint;
-
-			position.y = ((Max.y - Min.y) / 2) + objectPoition.y;
-
-			float h = (Max.y - Min.y) + (Max.x - Min.x) + (Max.z - Min.z);
-			float distance = h / math::Atan(75 / 2);
-			distance += 2;
-			position.z = objectPoition.z + distance / 2;
-			position.x = objectPoition.x + distance / 2;
-			LookAt({ ((Max.x - Min.x) / 2) + Min.x,((Max.y - Min.y) / 2) + Min.y,((Max.z - Min.z) / 2) + Min.z });
-		}
-
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
-
-		float sensitivity = 0.25f;
-
-		position -= reference;
-
-		if (dx != 0)
-		{
-			float deltaX = (float)dx * sensitivity;
-
-			x = rotate(x, deltaX, Vec3(0.0f, 1.0f, 0.0f));
-			y = rotate(y, deltaX, Vec3(0.0f, 1.0f, 0.0f));
-			z = rotate(z, deltaX, Vec3(0.0f, 1.0f, 0.0f));
-		}
-
-		if (dy != 0)
-		{
-			float deltaY = (float)dy * sensitivity;
-
-			y = rotate(y, deltaY, x);
-			z = rotate(z, deltaY, x);
-
-		}
-
-		position = reference + z * length(position);
 	}
 
 	// Recalculate matrix -------------
