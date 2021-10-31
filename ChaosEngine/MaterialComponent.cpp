@@ -34,6 +34,7 @@ void ComponentMaterial::Update()
 		{
 			loadTexture("Assets/Textures/Checker.png");
 		}
+
 	}
 	else
 	{
@@ -47,8 +48,12 @@ void ComponentMaterial::Disable()
 
 void ComponentMaterial::OnEditor(int i)
 {
+	ILuint imageID;
+
 	if (ImGui::Checkbox("Checkers Texture", &showCheckerTexture))
+	{
 		Update();
+	}
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Path: "); ImGui::SameLine(); ImGui::Text(path);
 	ImGui::Image((void*)(intptr_t)myImageId, ImVec2(width/2, height/2));
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Width: "); ImGui::SameLine(); ImGui::Text("%d", width);

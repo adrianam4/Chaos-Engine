@@ -15,6 +15,7 @@ void Model::Draw(float* matrix)
 	{
 		meshes[i].Draw(matrix);
 	}
+	//App->editor->AddLog("Drawing Model\n");
 }
 
 void Model::LoadModel(std::string path, GameObject* lastObj)
@@ -30,6 +31,7 @@ void Model::LoadModel(std::string path, GameObject* lastObj)
 
 	directory = path.substr(0, path.find_last_of('/'));
 	ProcessNode(scene->mRootNode, scene, lastObj);
+	App->editor->AddLog("Loading Model\n");
 }
 
 void Model::ProcessNode(aiNode* node, const aiScene* scene, GameObject* lastObj)
@@ -68,6 +70,7 @@ void Model::ProcessNode(aiNode* node, const aiScene* scene, GameObject* lastObj)
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = translation.x;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = translation.y;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = translation.z;
+	App->editor->AddLog("Processing Node\n");
 }
 
 Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
@@ -119,7 +122,7 @@ Mesh Model::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	//	std::vector<Textures> specularMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
 	//	textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 	//}
-
+	App->editor->AddLog("Processing Mesh\n");
 	return Mesh(vertices, indices, textures, texCoords);
 }
 

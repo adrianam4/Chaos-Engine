@@ -11,6 +11,9 @@
 #include "imgui_impl_opengl3.h"
 #include "Parson/parson.h"
 
+#define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
+#define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
+
 #define DIV 1048576
 
 ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, startEnabled)
@@ -340,8 +343,36 @@ update_status ModuleEditor::Update(float dt)
 			if (id == App->scene->gameObjects[i]->id)
 			{
 				objectSelected = nullptr;
-				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
+				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i); 
 				break;
+			}
+			if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
+			{
+				App->editor->AddLog("Cube Deleted\n");
+			}
+			if (App->editor->objectSelected->components[i]->type == ComponentType::PYRAMID)
+			{
+				App->editor->AddLog("Pyramid Deleted\n");
+			}
+			if (App->editor->objectSelected->components[i]->type == ComponentType::CYLINDER)
+			{
+				App->editor->AddLog("Cylinder Deleted\n");
+			}
+			if (App->editor->objectSelected->components[i]->type == ComponentType::SPHERE)
+			{
+				App->editor->AddLog("Sphere Deleted\n");
+			}
+			if (App->editor->objectSelected->components[i]->type == ComponentType::PLANE)
+			{
+				App->editor->AddLog("Plane Deleted\n");
+			}
+			if (App->editor->objectSelected->components[i]->type == ComponentType::MESH)
+			{
+				App->editor->AddLog("Mesh Deleted\n");
+			}
+			if (App->editor->objectSelected->components[i]->type == ComponentType::EMPTY)
+			{
+				App->editor->AddLog("Empty Object Deleted\n");
 			}
 		}
 	}
@@ -420,14 +451,38 @@ update_status ModuleEditor::Update(float dt)
 			if (ImGui::MenuItem("Enable/Disable Wireframe"))
 			{
 				wireframe = !wireframe;
+				if (wireframe)
+				{
+					App->editor->AddLog("Wireframe Enabled\n");
+				}
+				else
+				{
+					App->editor->AddLog("Wireframe Disabled\n");
+				}
 			}
 			if (ImGui::MenuItem("Enable/Disable Normals"))
 			{
 				normals = !normals;
+				if (normals)
+				{
+					App->editor->AddLog("Normals Enabled\n");
+				}
+				else
+				{
+					App->editor->AddLog("Normals Disabled\n");
+				}
 			}
 			if (ImGui::MenuItem("Enable/Disable AABB"))
 			{
 				showAABB = !showAABB;
+				if (showAABB)
+				{
+					App->editor->AddLog("AABB Enabled\n");
+				}
+				else
+				{
+					App->editor->AddLog("AABB Disabled\n");
+				}
 			}
 			ImGui::EndMenu();
 		}
@@ -444,6 +499,7 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				App->editor->AddLog("Empty Object Created\n");
 			}
 			if (ImGui::MenuItem("Create House"))
 			{
@@ -456,6 +512,7 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				App->editor->AddLog("House Created\n");
 			}
 			if (ImGui::MenuItem("Create Penguin"))
 			{
@@ -468,6 +525,7 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Penguin.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				App->editor->AddLog("Penguin Created\n");
 			}
 			if (ImGui::MenuItem("Create Car"))
 			{
@@ -480,6 +538,7 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Car.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				App->editor->AddLog("Car Created\n");
 			}
 			if (ImGui::MenuItem("Create Cube"))
 			{
@@ -519,7 +578,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Plane"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Plane"));
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Plane "));
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
@@ -694,8 +753,8 @@ update_status ModuleEditor::Update(float dt)
 			msLog.push_back(1000 / (ImGui::GetIO().Framerate));
 			memLog.push_back(statex.ullTotalVirtual / DIV);
 
-			ImGui::InputText("App Name", TITLE, 25);
-			ImGui::InputText("Organization", ORGANIZATION, 25);
+			ImGui::Text("%s", TITLE, 25);
+			ImGui::Text("%s", ORGANIZATION, 25);
 			if (ImGui::SliderInt("Max FPS", &maxFPS, 0, 144))
 			{
 				if (maxFPS > 0)
@@ -711,15 +770,16 @@ update_status ModuleEditor::Update(float dt)
 			/*sprintf_s(title, 25, "Memory Consumption %.1f", memLog[memLog.size() - 1]);
 			ImGui::PlotHistogram("##memory", &memLog[0], memLog.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));*/
 
+
 			ImGui::Text("Total Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB", statex.ullTotalPhys / DIV);
-			ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
-			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			/*ImGui::Text("Peak Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			ImGui::Text("Accumulated Reported Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");*/
 			ImGui::Text("Total Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB", statex.ullTotalVirtual / DIV);
-			ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
-			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			/*ImGui::Text("Peak Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			ImGui::Text("Accumulated Actual Mem: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");*/
 			ImGui::Text("Total Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB", statex.ullTotalVirtual / DIV - statex.ullAvailVirtual / DIV);
-			ImGui::Text("Peak Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
-			ImGui::Text("Accumulated Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			/*ImGui::Text("Peak Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");
+			ImGui::Text("Accumulated Alloc Unit Count: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d MB");*/
 		}
 
 		if (ImGui::CollapsingHeader("Window"))
@@ -953,13 +1013,20 @@ update_status ModuleEditor::Update(float dt)
 
 				GlobalMemoryStatusEx(&statex);
 
+				GLint total_mem_kb = 0;
+				glGetIntegerv(GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX,
+					&total_mem_kb);
+
+				GLint cur_avail_mem_kb = 0;
+				glGetIntegerv(GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX,
+					&cur_avail_mem_kb);
 
 				ImGui::Text("GPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", renderer);
 				ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", vendor);
-				ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", statex.ullTotalVirtual / DIV);
-				ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", (statex.ullTotalVirtual / DIV) - (statex.ullAvailVirtual / DIV));
-				ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", statex.ullAvailVirtual / DIV);
-				ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", statex.ullTotalVirtual / DIV);
+				ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Kb", total_mem_kb / DIV);
+				ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Kb", (total_mem_kb - cur_avail_mem_kb) / DIV);
+				ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Kb", cur_avail_mem_kb / DIV);
+				//ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Kb");
 			}
 		}
 
