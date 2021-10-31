@@ -243,6 +243,7 @@ void MyCube::DrawCube()
 
 	if (found && App->scene->gameObjects[i]->matrix != nullptr)
 		glPopMatrix();
+
 }
 
 //// PYRAMID ================================================================================================================================================================================
@@ -352,8 +353,8 @@ void MyPyramid::DrawPyramid()
 
 	if (found && App->scene->gameObjects[i]->matrix != nullptr)
 		glPopMatrix();
-
 }
+
 
 //// CYLINDER ================================================================================================================================================================================
 
@@ -593,6 +594,7 @@ void MyCylinder::DrawCylinder()
 		glPopMatrix();
 }
 
+
 void MyCylinder::Initialize()
 {
 	BuildVerticalSmooth();
@@ -797,7 +799,7 @@ void MySphere::DrawSphere()
 
 //// PLANE ================================================================================================================================================================================
 
-MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
+MyPlane::MyPlane(float3 pos, float3 sca) : Primitives()
 {
 	position = pos;
 	scale = sca;
@@ -857,16 +859,16 @@ MyPlane3D::MyPlane3D(float3 pos, float3 sca) : Primitives()
 	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 }
 
-MyPlane3D::~MyPlane3D()
+MyPlane::~MyPlane()
 {
 	vertices.clear();
 	indices.clear();
 }
-std::vector<float3> MyPlane3D::getVertex()
+std::vector<float3> MyPlane::getVertex()
 {
 	return vertices;
 }
-void MyPlane3D::DrawPlane()
+void MyPlane::DrawPlane()
 {
 	if (App->editor->wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -907,17 +909,17 @@ void MyPlane3D::DrawPlane()
 }
 
 
-MyPlane::MyPlane() : Primitives(), normal(0, 1, 0), constant(1)
+Grid::Grid() : Primitives(), normal(0, 1, 0), constant(1)
 {
 	type = PrimitivesTypes::PRIMITIVE_MYPLANE;
 }
 
-MyPlane::MyPlane(float x, float y, float z, float d) : Primitives(), normal(x, y, z), constant(d)
+Grid::Grid(float x, float y, float z, float d) : Primitives(), normal(x, y, z), constant(d)
 {
 	type = PrimitivesTypes::PRIMITIVE_MYPLANE;
 }
 
-void MyPlane::InnerRender() const
+void Grid::InnerRender() const
 {
 	glLineWidth(1.0f);
 
@@ -936,7 +938,7 @@ void MyPlane::InnerRender() const
 	glEnd();
 }
 
-void MyPlane::DrawPlane() const
+void Grid::DrawGrid() const
 {
 	glPushMatrix();
 	glMultMatrixf(transform.M);

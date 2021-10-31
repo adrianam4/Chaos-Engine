@@ -26,6 +26,7 @@ class Component
 public:
 	ComponentType type;
 	bool active;
+	bool drawNormals = false;
 	GameObject* owner;
 	const char* name;
 	

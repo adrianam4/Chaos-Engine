@@ -36,7 +36,7 @@ private:
 	bool resizable = true;
 	bool borderless = false;
 	bool dekstop = false;
-	MyPlane* plane;
+	Grid* grid;
 	ComponentType showOptionsMenu;
 	float3 position;
 	float3 M;
@@ -54,7 +54,7 @@ public:
 	std::vector<MyCylinder*> cylinders;
 	std::vector<MySphere*> spheres;
 	std::vector<MyPyramid*> pyramids;
-	std::vector<MyPlane3D*> planes;
+	std::vector<MyPlane*> planes;
 	GameObject* objectToChildren;
 	
 	int lastId;

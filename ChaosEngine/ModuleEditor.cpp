@@ -35,8 +35,8 @@ bool ModuleEditor::Start()
 	App->editor->AddLog("Loading Editor Assets\n");
 	bool ret = true;
 
-	plane = new MyPlane(0, 0, 0, 0);
-	plane->axis = true;
+	grid = new Grid(0, 0, 0, 0);
+	grid->axis = true;
 
 	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(Vec3(0, 0, 0));
@@ -174,8 +174,8 @@ void ModuleEditor::AddSphere(float3 pos, float3 sca)
 }
 void ModuleEditor::AddPlane(float3 pos, float3 sca)
 {
-	MyPlane3D* auxPlane;
-	auxPlane = new MyPlane3D(pos, sca);
+	MyPlane* auxPlane;
+	auxPlane = new MyPlane(pos, sca);
 	planes.push_back(auxPlane);
 }
 void ModuleEditor::AddCylinder(float3 pos)
@@ -1108,7 +1108,7 @@ update_status ModuleEditor::Update(float dt)
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
-	plane->DrawPlane();
+	grid->DrawGrid();
 
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{

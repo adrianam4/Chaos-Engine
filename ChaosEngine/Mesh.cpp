@@ -80,28 +80,7 @@ void Mesh::Draw(float* matrix)
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 	glEnd();
-	if (App->editor->normals)
-	{
-		glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
-		glBegin(GL_LINES);
-		for (int i = 0; i < vertices.size(); i += 3)
-		{
-			float3 vertex1(vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
-			float3 vertex2(vertices[i + 1].position.x, vertices[i + 1].position.y, vertices[i + 1].position.z);
-			float3 vertex3(vertices[i + 2].position.x, vertices[i + 2].position.y, vertices[i + 2].position.z);
-			float3 avgVertex((vertex1.x + vertex2.x + vertex3.x) / 3, (vertex1.y + vertex2.y + vertex3.y) / 3, (vertex1.z + vertex2.z + vertex3.z) / 3);
-
-			float3 line = -(vertex1 - vertex2);
-			float3 line2 = vertex2 - vertex3;
-
-			float3 normal = math::Cross(line2, line);
-			normal.Normalize();
-
-			glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
-			glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
-		}
-		glEnd();
-	}
+	
 
 	if (matrix != nullptr)
 		glPopMatrix();

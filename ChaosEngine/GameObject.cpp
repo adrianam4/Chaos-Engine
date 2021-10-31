@@ -84,3 +84,22 @@ int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
 	}
 	return -1;
 }
+
+std::vector<float3> GameObject::GetVertices(int _id)
+{
+	std::vector<float3> vertices;
+	for (int i = 0; i < App->renderer3D->models.size(); i++)
+	{
+		if (App->renderer3D->models[i].id == _id)
+		{
+			for (int j = 0; j < App->renderer3D->models[i].meshes.size(); j++)
+			{
+				for (int k = 0; k < App->renderer3D->models[i].meshes[j].vertices.size(); k++)
+				{
+					vertices.push_back(App->renderer3D->models[i].meshes[j].vertices[k].position);
+				}
+			}
+		}
+	}
+	return vertices;
+}

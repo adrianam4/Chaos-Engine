@@ -81,7 +81,6 @@ public:
 	MyCube(float3 pos, float3 sca);
 	~MyCube();
 	void DrawCube();
-
 public:
 	ILuint imageID;
 	std::vector<float3> getVertex()override;
@@ -96,7 +95,6 @@ public:
 	MyPyramid(float3 pos, float3 sca);
 	~MyPyramid();
 	void DrawPyramid();
-
 public:
 	ILuint imageID;
 	std::vector<float3> getVertex()override;
@@ -117,7 +115,6 @@ public:
 	void BuildVerticalSmooth();
 	void DrawCylinder();
 	void Initialize();
-
 public:
 	ILuint imageID;
 	std::vector<float3> getVertex()override;
@@ -152,7 +149,6 @@ public:
 	MySphere(float radius, int sectorCount, int stackCount, float3 pos, float3 sca);
 	~MySphere();
 	void DrawSphere();
-
 private:
 	uint bufferIndices;
 	uint bufferVertex;
@@ -164,13 +160,13 @@ public:
 	std::vector<float3> vertices;
 };
 
-class MyPlane : public Primitives
+class Grid : public Primitives
 {
 public:
-	MyPlane();
-	MyPlane(float x, float y, float z, float d);
+	Grid();
+	Grid(float x, float y, float z, float d);
 	void InnerRender() const;
-	void DrawPlane() const;
+	void DrawGrid() const;
 
 public:
 	ILuint imageID;
@@ -181,11 +177,11 @@ public:
 };
 
 
-class MyPlane3D : public Primitives
+class MyPlane : public Primitives
 {
 public:
-	MyPlane3D(float3 pos, float3 sca);
-	~MyPlane3D();
+	MyPlane(float3 pos, float3 sca);
+	~MyPlane();
 	void DrawPlane();
 	std::vector<float3> getVertex()override;
 

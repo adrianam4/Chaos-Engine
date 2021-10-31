@@ -16,7 +16,7 @@ public:
 	Component* CreateComponent(ComponentType type, const char* name, bool isDropped);
 	int SearchComponent(GameObject* gameObject, ComponentType type);
 public:
-	
+	std::vector<float3> GetVertices(int id);
 	uint id;
 	bool active;
 	bool selected;
