@@ -19,6 +19,7 @@ typedef unsigned char GLubyte;
 
 enum PrimitivesTypes
 {
+	PRIMITIVE_BOUNDINGBOX,
 	PRIMITIVE_MYCUBE,
 	PRIMITIVE_MYPLANE3D,
 	PRIMITIVE_MYSPHERE,
@@ -40,6 +41,7 @@ public:
 	int TransformMatrix();
 	int TransformMatrixAABB();
 	bool found;
+	bool wireframe = false;
 
 	float* matrix = nullptr;
 
@@ -66,9 +68,6 @@ public:
 	BoundingBoxes(float3 pos, float3 sca, float3 maxPoint, float3 minPoint);
 	~BoundingBoxes();
 	void DrawCube();
-
-public:
-	ILuint imageID;
 
 private:
 	std::vector<float3> vertices;
@@ -108,7 +107,7 @@ public:
 class MyCylinder : public Primitives
 {
 public:
-	MyCylinder(float3 pos);
+	MyCylinder(float3 pos, float3 sca);
 	MyCylinder(float3 pos, float3 sca, float baseRadius, float topRadius, float height, int sectors, int sectorCounts, int stacks, bool smooth);
 	~MyCylinder();
 	std::vector<float3> GetUnitCircleVertices();

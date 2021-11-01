@@ -63,7 +63,7 @@ std::vector<float3> Primitives::getVertex() {
 
 BoundingBoxes::BoundingBoxes(float3 pos, float3 sca, float3 maxPoint, float3 minPoint): Primitives()
 {
-	type = PrimitivesTypes::PRIMITIVE_MYCUBE;
+	type = PrimitivesTypes::PRIMITIVE_BOUNDINGBOX;
 	position = pos;
 	scale = sca;
 
@@ -208,7 +208,7 @@ void MyCube::DrawCube()
 {
 	glLineWidth(3.0f);
 
-	if (App->editor->wireframe)
+	if (wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -317,7 +317,7 @@ void MyPyramid::DrawPyramid()
 {
 	//glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
 
-	if (App->editor->wireframe)
+	if (wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -358,7 +358,7 @@ void MyPyramid::DrawPyramid()
 
 //// CYLINDER ================================================================================================================================================================================
 
-MyCylinder::MyCylinder(float3 pos) : Primitives()
+MyCylinder::MyCylinder(float3 pos, float3 sca) : Primitives()
 {
 	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
 
@@ -383,7 +383,7 @@ MyCylinder::MyCylinder(float3 pos, float3 sca, float baseRadius, float topRadius
 	type = PrimitivesTypes::PRIMITIVE_MYCYLINDER;
 
 	position = pos;
-	scale = {1,1,1};
+	scale = { 1,1,1 };
 
 	this->baseRadius = baseRadius;
 	this->topRadius = topRadius;
@@ -453,7 +453,7 @@ void MyCylinder::BuildVerticalSmooth()
 			float uy = unitVertices[k].y;
 			float uz = unitVertices[k].z;
 			// position vector
-			vertices.push_back({ (ux * radius) + position.x ,(uy * radius) + position.y,h + position.z });
+			vertices.push_back({ ((ux * radius) + position.x) * scale.x ,((uy * radius) + position.y) * scale.x,(h + position.z) * scale.z });
 			// normal vector
 			normals.push_back(ux);                       // nx
 			normals.push_back(uy);                       // ny
@@ -476,7 +476,7 @@ void MyCylinder::BuildVerticalSmooth()
 		float nz = -1 + i * 2;                           // z value of normal; -1 to 1
 
 		// center point
-		vertices.push_back({ 0 + position.x ,0 + position.y ,h + position.z });
+		vertices.push_back({ (0 + position.x) * scale.x ,(0 + position.y) * scale.y ,(h + position.z) * scale.z });
 		normals.push_back(0);      normals.push_back(0);      normals.push_back(nz);
 		texCoords.push_back(0.5f); texCoords.push_back(0.5f);
 
@@ -485,7 +485,7 @@ void MyCylinder::BuildVerticalSmooth()
 			float ux = unitVertices[k].x;
 			float uy = unitVertices[k].y;
 			// position vector
-			vertices.push_back({ ux * radius + position.x ,uy * radius + position.y ,h + position.z });
+			vertices.push_back({ (ux * radius + position.x) * scale.x ,(uy * radius + position.y) * scale.y ,(h + position.z) * scale.z });
 			// normal vector
 			normals.push_back(0);                        // nx
 			normals.push_back(0);                        // ny
@@ -556,7 +556,7 @@ void MyCylinder::DrawCylinder()
 {
 	//glColor4f(0.0f, 0.0f, 1.0f, 1.0f);
 
-	if (App->editor->wireframe)
+	if (wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -635,7 +635,7 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 	type = PrimitivesTypes::PRIMITIVE_MYSPHERE;
 	
 	position = pos;
-	scale = sca;
+	scale = { 1,1,1 };
 
 	std::vector<float3>().swap(vertices);
 	std::vector<float3>().swap(normals);
@@ -666,7 +666,7 @@ MySphere::MySphere(float radius, int rings, int sectors, float3 pos, float3 sca)
 			// vertex position (x, y, z)
 			x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
 			y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
-			vertices.push_back({ x, y, z });
+			vertices.push_back({ (x + position.x)* scale.x, (y + position.y) * scale.y, (z + position.z) * scale.z });
 
 			// normalized vertex normal (nx, ny, nz)
 			nx = x * lengthInv;
@@ -759,7 +759,7 @@ std::vector<float3> MySphere::getVertex()
 }
 void MySphere::DrawSphere()
 {
-	if (App->editor->wireframe)
+	if (wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -806,28 +806,24 @@ MyPlane::MyPlane(float3 pos, float3 sca) : Primitives()
 
 	type = PrimitivesTypes::PRIMITIVE_MYPLANE3D;
 
-	vertices.push_back({ 1 + pos.x ,pos.y,1 + pos.z });
-	vertices.push_back({ 1 + pos.x ,pos.y, pos.z - 1 });
-	vertices.push_back({ pos.x - 1 ,pos.y,pos.z - 1 });
-	vertices.push_back({ pos.x - 1 ,pos.y,1 + pos.z });
+	vertices.push_back({ (1 + pos.x) * sca.x ,pos.y,(1 + pos.z) * sca.z });
+	vertices.push_back({ (1 + pos.x) * sca.x ,pos.y, (pos.z - 1) * sca.z });
+	vertices.push_back({ (pos.x - 1) * sca.x ,pos.y,(pos.z - 1) * sca.z });
+	vertices.push_back({ (pos.x - 1) * sca.x ,pos.y,(1 + pos.z) * sca.z });
 
 	indices.push_back(3);
 	indices.push_back(0);
 	indices.push_back(1);
-
 	indices.push_back(3);
 	indices.push_back(1);
 	indices.push_back(2);
 
 	texCoords.push_back(1);
 	texCoords.push_back(0);
-
 	texCoords.push_back(1);
 	texCoords.push_back(1);
-
 	texCoords.push_back(0);
 	texCoords.push_back(1);
-
 	texCoords.push_back(0);
 	texCoords.push_back(0);
 
@@ -836,9 +832,9 @@ MyPlane::MyPlane(float3 pos, float3 sca) : Primitives()
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = 0;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = 0;
 
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = 1;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = 1;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = 1;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = sca.x;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = sca.y;
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = sca.z;
 
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = pos.x;
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = pos.y;
@@ -846,7 +842,7 @@ MyPlane::MyPlane(float3 pos, float3 sca) : Primitives()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float3), vertices.data(), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float) * 3, vertices.data(), GL_STATIC_DRAW);
 
 	glGenBuffers(1, &EBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
@@ -855,6 +851,7 @@ MyPlane::MyPlane(float3 pos, float3 sca) : Primitives()
 	glGenBuffers(1, &TBO);
 	glBindBuffer(GL_ARRAY_BUFFER, TBO);
 	glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(GLfloat), texCoords.data(), GL_STATIC_DRAW);
+
 	aabb.SetNegativeInfinity();
 	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 }
@@ -870,7 +867,7 @@ std::vector<float3> MyPlane::getVertex()
 }
 void MyPlane::DrawPlane()
 {
-	if (App->editor->wireframe)
+	if (wireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -892,7 +889,7 @@ void MyPlane::DrawPlane()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	//Draw
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, 0);
 
 	//UnBind Buffers
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

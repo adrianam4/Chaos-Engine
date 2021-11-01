@@ -25,7 +25,7 @@ public:
 	void AddCube(float3 pos, float3 sca);
 	void AddPyramid(float3 pos, float3 sca);
 	void AddSphere(float3 pos, float3 sca);
-	void AddCylinder(float3 pos);
+	void AddCylinder(float3 pos, float3 sca);
 	void AddPlane(float3 pos, float3 sca);
 private:
 	int maxFPS;
@@ -44,8 +44,6 @@ private:
 	
 public:
 	ImGuiTextBuffer consoleBuffer;
-	bool wireframe;
-	bool normals;
 	bool showAABB;
 	bool scrollToBottom;
 	GameObject* objectSelected;

@@ -151,16 +151,7 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, Quat rot)
 		break;
 	default:
 		break;
-	}
-		
-
-	
-	
-	
-
-	
-	
-				
+	}			
 }
 ComponentType ComponentTransform::getComponentType() 
 {

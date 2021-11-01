@@ -27,6 +27,7 @@ public:
 	ComponentType type;
 	bool active;
 	bool drawNormals = false;
+	bool drawWireframe = false;
 	GameObject* owner;
 	const char* name;
 	

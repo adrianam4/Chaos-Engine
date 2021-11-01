@@ -29,12 +29,12 @@ ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 		App->editor->lastId++;
 		break;
 	case ComponentType::PLANE:
-		App->editor->AddPlane(float3(0, 0, 0), float3(1, 1, 1));
+		App->editor->AddPlane(*pos, *measures);
 		App->editor->planes[App->editor->planes.size() - 1]->id = App->editor->lastId + 1;
 		App->editor->lastId++;
 		break;
 	case ComponentType::CYLINDER:
-		App->editor->AddCylinder(*pos);
+		App->editor->AddCylinder(*pos, *measures);
 		App->editor->cylinders[App->editor->cylinders.size() - 1]->id = App->editor->lastId + 1;
 		App->editor->lastId++;
 		break;
@@ -74,18 +74,97 @@ void ComponentMesh::Disable()
 
 void ComponentMesh::OnEditor(int i)
 {
+	//Draw Mesh
 	ImGui::Checkbox("Active", &App->editor->objectSelected->components[i]->active);
-	if (ImGui::Checkbox("Show Normals", &App->editor->objectSelected->components[i]->drawNormals))
+	//Draw Normals
+	if (App->editor->objectSelected->components[i]->type == ComponentType::MESH)
 	{
-		for (int j = 0; j < App->renderer3D->models.size(); ++j)
+		if (ImGui::Checkbox("Normals", &App->editor->objectSelected->components[i]->drawNormals))
 		{
-			if (App->renderer3D->models[j].id == App->editor->objectSelected->id)
+			for (int j = 0; j < App->renderer3D->models.size(); ++j)
 			{
-				for (int k = 0; k < App->renderer3D->models[j].meshes.size(); ++k)
+				if (App->renderer3D->models[j].id == App->editor->objectSelected->id)
 				{
-					App->renderer3D->models[j].meshes[k].drawNormals = !App->renderer3D->models[j].meshes[k].drawNormals;
+					for (int k = 0; k < App->renderer3D->models[j].meshes.size(); ++k)
+					{
+						App->renderer3D->models[j].meshes[k].drawNormals = !App->renderer3D->models[j].meshes[k].drawNormals;
+					}
+					break;
 				}
-				break;
+			}
+		}
+	}
+	//Draw Wireframe
+
+	if (ImGui::Checkbox("Wireframe", &App->editor->objectSelected->components[i]->drawWireframe))
+	{
+		if (App->editor->objectSelected->components[i]->type == ComponentType::MESH)
+		{
+			for (int j = 0; j < App->renderer3D->models.size(); ++j)
+			{
+				if (App->renderer3D->models[j].id == App->editor->objectSelected->id)
+				{
+					for (int k = 0; k < App->renderer3D->models[j].meshes.size(); ++k)
+					{
+						App->renderer3D->models[j].meshes[k].drawWireframe = !App->renderer3D->models[j].meshes[k].drawWireframe;
+					}
+					break;
+				}
+			}
+		}
+		else if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
+		{
+			for (int j = 0; j < App->editor->cubes.size(); ++j)
+			{
+				if (App->editor->cubes[j]->id == App->editor->objectSelected->id)
+				{
+					App->editor->cubes[j]->wireframe = !App->editor->cubes[j]->wireframe;
+					break;
+				}
+			}
+		}
+		else if (App->editor->objectSelected->components[i]->type == ComponentType::CYLINDER)
+		{
+			for (int j = 0; j < App->editor->cylinders.size(); ++j)
+			{
+				if (App->editor->cylinders[j]->id == App->editor->objectSelected->id)
+				{
+					App->editor->cylinders[j]->wireframe = !App->editor->cylinders[j]->wireframe;
+					break;
+				}
+			}
+		}
+		else if (App->editor->objectSelected->components[i]->type == ComponentType::PYRAMID)
+		{
+			for (int j = 0; j < App->editor->pyramids.size(); ++j)
+			{
+				if (App->editor->pyramids[j]->id == App->editor->objectSelected->id)
+				{
+					App->editor->pyramids[j]->wireframe = !App->editor->pyramids[j]->wireframe;
+					break;
+				}
+			}
+		}
+		else if (App->editor->objectSelected->components[i]->type == ComponentType::SPHERE)
+		{
+			for (int j = 0; j < App->editor->spheres.size(); ++j)
+			{
+				if (App->editor->spheres[j]->id == App->editor->objectSelected->id)
+				{
+					App->editor->spheres[j]->wireframe = !App->editor->spheres[j]->wireframe;
+					break;
+				}
+			}
+		}
+		else if (App->editor->objectSelected->components[i]->type == ComponentType::PLANE)
+		{
+			for (int j = 0; j < App->editor->planes.size(); ++j)
+			{
+				if (App->editor->planes[j]->id == App->editor->objectSelected->id)
+				{
+					App->editor->planes[j]->wireframe = !App->editor->planes[j]->wireframe;
+					break;
+				}
 			}
 		}
 	}

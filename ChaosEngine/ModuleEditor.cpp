@@ -100,8 +100,6 @@ void ModuleEditor::SaveConfig()
 	json_object_set_boolean(json_object(user_data), "Resizable", resizable);
 	json_object_set_boolean(json_object(user_data), "Borderless", borderless);
 	json_object_set_boolean(json_object(user_data), "Dekstop", dekstop);
-	json_object_set_boolean(json_object(user_data), "Wireframe", wireframe);
-	json_object_set_boolean(json_object(user_data), "Normals", normals);
 	json_object_set_boolean(json_object(user_data), "AABB", showAABB);
 
 	json_serialize_to_file_pretty(user_data, "ConfigFile.json");
@@ -123,8 +121,6 @@ void ModuleEditor::LoadConfig()
 	resizable = json_object_get_boolean(json_object(userData), "Resizable");
 	borderless = json_object_get_boolean(json_object(userData), "Borderless");
 	dekstop = json_object_get_boolean(json_object(userData), "Dekstop");
-	wireframe = json_object_get_boolean(json_object(userData), "Wireframe");
-	normals = json_object_get_boolean(json_object(userData), "Normals");
 	showAABB = json_object_get_boolean(json_object(userData), "AABB");
 
 	AddLog("Loaded Config Data\n");
@@ -178,10 +174,10 @@ void ModuleEditor::AddPlane(float3 pos, float3 sca)
 	auxPlane = new MyPlane(pos, sca);
 	planes.push_back(auxPlane);
 }
-void ModuleEditor::AddCylinder(float3 pos)
+void ModuleEditor::AddCylinder(float3 pos, float3 sca)
 {
 	MyCylinder* auxCylinder;
-	auxCylinder = new MyCylinder(pos);
+	auxCylinder = new MyCylinder(pos,sca);
 	cylinders.push_back(auxCylinder);
 }
 void ModuleEditor::DOptionsmenu(ComponentType type) {
@@ -194,13 +190,13 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 
 		ImGui::Begin("Options");
 		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X", &position.x);
-		ImGui::DragFloat("Y", &position.y);
-		ImGui::DragFloat("Z", &position.z);
-		ImGui::Text("Set Measures:");
-		ImGui::DragFloat("X Size", &M.x);
-		ImGui::DragFloat("Y Size", &M.y);
-		ImGui::DragFloat("Z Size", &M.z);
+		ImGui::DragFloat("X Position", &position.x);
+		ImGui::DragFloat("Y Position", &position.y);
+		ImGui::DragFloat("Z Position", &position.z);
+		ImGui::Text("Set Scale:");
+		ImGui::DragFloat("X Scale", &M.x);
+		ImGui::DragFloat("Y Scale", &M.y);
+		ImGui::DragFloat("Z Scale", &M.z);
 
 		if (ImGui::Button("Create Cube")) {
 			if (cubes.size() == 0)
@@ -224,14 +220,14 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X", &position.x);
-		ImGui::DragFloat("Y", &position.y);
-		ImGui::DragFloat("Z", &position.z);
+		ImGui::DragFloat("X Position", &position.x);
+		ImGui::DragFloat("Y Position", &position.y);
+		ImGui::DragFloat("Z Position", &position.z);
 
-		ImGui::Text("Set Measures:");
-		ImGui::DragFloat("x Size", &M.x);
-		ImGui::DragFloat("Y Size", &M.y);
-		ImGui::DragFloat("Z Size", &M.z);
+		ImGui::Text("Set Scale:");
+		ImGui::DragFloat("X Scale", &M.x);
+		ImGui::DragFloat("Y Scale", &M.y);
+		ImGui::DragFloat("Z Scale", &M.z);
 
 		if (ImGui::Button("Create Pyramid")) 
 		{
@@ -254,9 +250,14 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X", &position.x);
-		ImGui::DragFloat("Y", &position.y);
-		ImGui::DragFloat("Z", &position.z);
+		ImGui::DragFloat("X Position", &position.x);
+		ImGui::DragFloat("Y Position", &position.y);
+		ImGui::DragFloat("Z Position", &position.z);
+
+		//ImGui::Text("Set Scale:");
+		//ImGui::DragFloat("X Scale", &M.x);
+		//ImGui::DragFloat("Y Scale", &M.y);
+		//ImGui::DragFloat("Z Scale", &M.z);
 
 		if (ImGui::Button("Create Cylindrer")) 
 		{
@@ -266,7 +267,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cylinders.size() + 1, "Cylinder "));
 
 			int lastComponent = App->scene->gameObjects.size() - 1;
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position, &M));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
@@ -280,14 +281,14 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X", &position.x);
-		ImGui::DragFloat("Y", &position.y);
-		ImGui::DragFloat("Z", &position.z);
+		ImGui::DragFloat("X Position", &position.x);
+		ImGui::DragFloat("Y Position", &position.y);
+		ImGui::DragFloat("Z Position", &position.z);
 
-		ImGui::Text("Set Measures:");
-		ImGui::DragFloat("X Size", &M.x);
-		ImGui::DragFloat("Y Size", &M.y);
-		ImGui::DragFloat("Z Size", &M.z);
+		//ImGui::Text("Set Scale:");
+		//ImGui::DragFloat("X Scale", &M.x);
+		//ImGui::DragFloat("Y Scale", &M.y);
+		//ImGui::DragFloat("Z Scale", &M.z);
 
 		if (ImGui::Button("Create Sphere")) 
 		{
@@ -312,16 +313,27 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::Begin("Options");
 
 		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X", &position.x);
-		ImGui::DragFloat("Y", &position.y);
-		ImGui::DragFloat("Z", &position.z);
+		ImGui::DragFloat("X Position", &position.x);
+		ImGui::DragFloat("Y Position", &position.y);
+		ImGui::DragFloat("Z Position", &position.z);
 
-		ImGui::Text("Set Measures:");
-		ImGui::DragFloat("X Size", &M.x);
-		ImGui::DragFloat("Z Size", &M.z);
+		ImGui::Text("Set Scale:");
+		ImGui::DragFloat("X Scale", &M.x);
+		ImGui::DragFloat("Y Scale", &M.y);
+		ImGui::DragFloat("Z Scale", &M.z);
 
-		if (ImGui::Button("Create Plane")) {
-			//objectManager->SetPlaneProperties(objectManager->Create(shapeType::plane, position), xM, zM);
+		if (ImGui::Button("Create Plane"))
+		{
+			if (planes.size() == 0)
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Plane "));
+			else
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, planes.size() + 1, "Plane "));
+
+			int lastComponent = App->scene->gameObjects.size() - 1;
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position, &M));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Plane Created\n");
 		}
@@ -393,10 +405,10 @@ update_status ModuleEditor::Update(float dt)
 	static bool isActive4 = true;
 	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
-	if (App->input->GetKey(SDL_SCANCODE_F10))
+	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
 		SaveConfig();
 
-	if (App->input->GetKey(SDL_SCANCODE_F11))
+	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
 	{
 		LoadConfig();
 		ComproveScreen();
@@ -448,30 +460,6 @@ update_status ModuleEditor::Update(float dt)
 				showConsoleMenu = !showConsoleMenu;
 			}
 			ImGui::Separator();
-			if (ImGui::MenuItem("Enable/Disable Wireframe"))
-			{
-				wireframe = !wireframe;
-				if (wireframe)
-				{
-					App->editor->AddLog("Wireframe Enabled\n");
-				}
-				else
-				{
-					App->editor->AddLog("Wireframe Disabled\n");
-				}
-			}
-			if (ImGui::MenuItem("Enable/Disable Normals"))
-			{
-				normals = !normals;
-				if (normals)
-				{
-					App->editor->AddLog("Normals Enabled\n");
-				}
-				else
-				{
-					App->editor->AddLog("Normals Disabled\n");
-				}
-			}
 			if (ImGui::MenuItem("Enable/Disable AABB"))
 			{
 				showAABB = !showAABB;
@@ -578,12 +566,11 @@ update_status ModuleEditor::Update(float dt)
 			}
 			if (ImGui::MenuItem("Create Plane"))
 			{
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Plane "));
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				showOptionsMenu = ComponentType::PLANE;
+				position = { 0,0,0 };
+				M.x = 1;
+				M.y = 1;
+				M.z = 1;
 			}
 			ImGui::EndMenu();
 		}
@@ -795,13 +782,6 @@ update_status ModuleEditor::Update(float dt)
 
 				if (ImGui::SliderFloat("Brigthness", &brightness, 0, 1.0f))
 					SDL_SetWindowBrightness(App->window->window, brightness);
-
-				if (ImGui::SliderInt("Width", &width, 0, 2560))
-					SDL_SetWindowSize(App->window->window, width, height);
-
-				if (ImGui::SliderInt("Heigh", &height, 0, 1440))
-					SDL_SetWindowSize(App->window->window, width, height);
-
 				if (ImGui::SliderInt("Width", &width, 0, 2560))
 					SDL_SetWindowSize(App->window->window, width, height);
 				if (ImGui::SliderInt("Heigh", &height, 0, 1440))
@@ -1023,9 +1003,9 @@ update_status ModuleEditor::Update(float dt)
 
 				ImGui::Text("GPUs: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", renderer);
 				ImGui::Text("Brand: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%s", vendor);
-				ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Kb", total_mem_kb / DIV);
-				ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Kb", (total_mem_kb - cur_avail_mem_kb) / DIV);
-				ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Kb", cur_avail_mem_kb / DIV);
+				ImGui::Text("VRAM Budget: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", total_mem_kb / 1000);
+				ImGui::Text("VRAM Usage: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", ((total_mem_kb - cur_avail_mem_kb)) / 1000);
+				ImGui::Text("VRAM Available: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Mb", cur_avail_mem_kb / 1000);
 				//ImGui::Text("VRAM Reserved: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d Kb");
 			}
 		}

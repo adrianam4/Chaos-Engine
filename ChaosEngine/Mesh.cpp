@@ -16,6 +16,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 
 	setupMesh();
 	drawNormals = false;
+	drawWireframe = false;
 }
 
 void Mesh::Draw(float* matrix)
@@ -43,7 +44,7 @@ void Mesh::Draw(float* matrix)
 
 	// draw mesh
 	//Enable states
-	if (App->editor->wireframe)
+	if (drawWireframe)
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);

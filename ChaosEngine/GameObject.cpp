@@ -40,7 +40,7 @@ Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* m
 		component = new ComponentMesh(ComponentType::CUBE, pos, measures);
 		break;
 	case ComponentType::CYLINDER:
-		component = new ComponentMesh(ComponentType::CYLINDER, pos);
+		component = new ComponentMesh(ComponentType::CYLINDER, pos , measures);
 		break;
 	case ComponentType::PYRAMID:
 		component = new ComponentMesh(ComponentType::PYRAMID, pos, measures);
@@ -49,7 +49,7 @@ Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* m
 		component = new ComponentMesh(ComponentType::SPHERE, pos, measures);
 		break;
 	case ComponentType::PLANE:
-		component = new ComponentMesh(ComponentType::PLANE, pos);
+		component = new ComponentMesh(ComponentType::PLANE, pos, measures);
 		break;
 	case ComponentType::EMPTY:
 		component = new ComponentMesh(ComponentType::EMPTY);
