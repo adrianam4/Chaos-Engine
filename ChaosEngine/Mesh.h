@@ -20,7 +20,6 @@ class Mesh
 {
 public:
 	std::vector<Vertex> vertices;
-	
 	std::vector<unsigned int> indices;
 	std::vector<Textures> textures;
 	std::vector<float> texCoords;
@@ -28,7 +27,7 @@ public:
 	
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Textures> textures, std::vector<float> texCoord);
 	void Draw(float* matrix);
-
+	bool drawNormals;
 	unsigned int VBO, EBO, TBO, textureId;
 	void setupMesh();
 };

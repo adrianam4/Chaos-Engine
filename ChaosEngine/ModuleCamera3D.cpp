@@ -124,7 +124,8 @@ update_status ModuleCamera3D::Update(float dt)
 			int aabbSize = App->editor->objectSelected->aabb.size();
 			float3 Max;
 			float3 Min;
-			if (aabbSize > 1) {
+			if (aabbSize > 1) 
+			{
 				float* maxarray = new float[aabbSize];
 
 				for (int a = 0; a < aabbSize; a++)
@@ -134,7 +135,8 @@ update_status ModuleCamera3D::Update(float dt)
 				}
 				int max = maxarray[0];
 				int index = 0;
-				for (int i = 1; i < aabbSize; i++) {
+				for (int i = 1; i < aabbSize; i++) 
+				{
 					if (maxarray[i] > max) {
 						max = maxarray[i];
 						index = i;
@@ -144,7 +146,8 @@ update_status ModuleCamera3D::Update(float dt)
 				Min = App->editor->objectSelected->aabb[index]->minPoint;
 				delete[] maxarray;
 			}
-			else {
+			else 
+			{
 				Max = App->editor->objectSelected->aabb[0]->maxPoint;
 				Min = App->editor->objectSelected->aabb[0]->minPoint;
 

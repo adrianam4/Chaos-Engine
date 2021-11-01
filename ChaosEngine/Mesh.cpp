@@ -15,6 +15,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 	this->texCoords = texCoord;
 
 	setupMesh();
+	drawNormals = false;
 }
 
 void Mesh::Draw(float* matrix)
@@ -81,6 +82,19 @@ void Mesh::Draw(float* matrix)
 
 	glEnd();
 	
+	if (drawNormals)
+	{
+		glColor4d(0.0f, 1.0f, 1.0f, 0.5f); // Soft Blue
+		glBegin(GL_LINES);
+		for (int i = 0; i < vertices.size(); i++)
+		{
+			//Draw in direct mode (Lines from each vertex, until the final position (vertex + normal))
+			glVertex3f(vertices[i].position.x, vertices[i].position.y, vertices[i].position.z);
+			glVertex3f(vertices[i].position.x + vertices[i].normal.x, vertices[i].position.y + vertices[i].normal.y, vertices[i].position.z + vertices[i].normal.z);
+		}
+		glEnd();
+		glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
+	}
 
 	if (matrix != nullptr)
 		glPopMatrix();

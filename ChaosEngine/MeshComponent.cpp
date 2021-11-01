@@ -66,10 +66,6 @@ void ComponentMesh::Enable()
 
 void ComponentMesh::Update()
 {
-	if (drawNormals)
-	{
-		DrawNormals();
-	}
 }
 
 void ComponentMesh::Disable()
@@ -79,14 +75,20 @@ void ComponentMesh::Disable()
 void ComponentMesh::OnEditor(int i)
 {
 	ImGui::Checkbox("Active", &App->editor->objectSelected->components[i]->active);
-	ImGui::Checkbox("Draw Normals", &App->editor->objectSelected->components[i]->drawNormals);
-
-	if (drawNormals && copyVertices)
+	if (ImGui::Checkbox("Show Normals", &App->editor->objectSelected->components[i]->drawNormals))
 	{
-		vertices = owner->GetVertices(owner->id);
-		copyVertices = false;
+		for (int j = 0; j < App->renderer3D->models.size(); ++j)
+		{
+			if (App->renderer3D->models[j].id == App->editor->objectSelected->id)
+			{
+				for (int k = 0; k < App->renderer3D->models[j].meshes.size(); ++k)
+				{
+					App->renderer3D->models[j].meshes[k].drawNormals = !App->renderer3D->models[j].meshes[k].drawNormals;
+				}
+				break;
+			}
+		}
 	}
-	Update();
 
 	if ((App->editor->objectSelected->components[i]->type == ComponentType::MESH))
 	{
@@ -178,27 +180,4 @@ void ComponentMesh::OnEditor(int i)
 		ImGui::Text("Number of Faces: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->planes[j]->indices.size() / 3);
 		ImGui::Text("Number of Vertices: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->planes[j]->vertices.size());
 	}
-}
-
-void ComponentMesh::DrawNormals()
-{
-	glColor4d(1.0f, 1.0f, 1.0f, 1.0f);
-	glBegin(GL_LINES);
-	for (int i = 0; i < vertices.size(); i += 3)
-	{
-		float3 vertex1(vertices[i].x, vertices[i].y, vertices[i].z);
-		float3 vertex2(vertices[i + 1].x, vertices[i + 1].y, vertices[i + 1].z);
-		float3 vertex3(vertices[i + 2].x, vertices[i + 2].y, vertices[i + 2].z);
-		float3 avgVertex((vertex1.x + vertex2.x + vertex3.x) / 3, (vertex1.y + vertex2.y + vertex3.y) / 3, (vertex1.z + vertex2.z + vertex3.z) / 3);
-
-		float3 line = -(vertex1 - vertex2);
-		float3 line2 = vertex2 - vertex3;
-
-		float3 normal = math::Cross(line2, line);
-		normal.Normalize();
-
-		glVertex3f(avgVertex.x, avgVertex.y, avgVertex.z);
-		glVertex3f(avgVertex.x + normal.x, avgVertex.y + normal.y, avgVertex.z + normal.z);
-	}
-	glEnd();
 }

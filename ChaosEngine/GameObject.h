@@ -17,6 +17,8 @@ public:
 	int SearchComponent(GameObject* gameObject, ComponentType type);
 public:
 	std::vector<float3> GetVertices(int id);
+	std::vector<float3> GetNormals(int id);
+
 	uint id;
 	bool active;
 	bool selected;

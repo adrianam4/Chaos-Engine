@@ -18,8 +18,6 @@ enum class MeshType
 class ComponentMesh : public Component
 {
 public:
-	std::vector<float3> vertices;
-
 	ComponentMesh(ComponentType mType, float3* pos=nullptr, float3* measures = nullptr);
 	ComponentMesh(ComponentType mType, char* name);
 	~ComponentMesh();
@@ -28,7 +26,4 @@ public:
 	void Update() override;
 	void Disable() override;
 	void OnEditor(int i) override;
-
-	void DrawNormals();
-	bool copyVertices = true;
 };

@@ -103,3 +103,22 @@ std::vector<float3> GameObject::GetVertices(int _id)
 	}
 	return vertices;
 }
+
+std::vector<float3> GameObject::GetNormals(int _id)
+{
+	std::vector<float3> normals;
+	for (int i = 0; i < App->renderer3D->models.size(); i++)
+	{
+		if (App->renderer3D->models[i].id == _id)
+		{
+			for (int j = 0; j < App->renderer3D->models[i].meshes.size(); j++)
+			{
+				for (int k = 0; k < App->renderer3D->models[i].meshes[j].vertices.size(); k++)
+				{
+					normals.push_back(App->renderer3D->models[i].meshes[j].vertices[k].normal);
+				}
+			}
+		}
+	}
+	return normals;
+}
