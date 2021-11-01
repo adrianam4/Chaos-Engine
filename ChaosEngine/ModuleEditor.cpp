@@ -355,7 +355,36 @@ update_status ModuleEditor::Update(float dt)
 			if (id == App->scene->gameObjects[i]->id)
 			{
 				objectSelected = nullptr;
-				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i); 
+				
+				for (int b = 0; b < App->scene->gameObjects.size(); b++)
+				{
+					for (int a = 0; a < App->scene->gameObjects[b]->childrens.size(); a++)
+					{
+						if (App->scene->gameObjects[i] == App->scene->gameObjects[b]->childrens[a])
+						{
+							App->scene->gameObjects[b]->childrens.erase(App->scene->gameObjects[b]->childrens.begin() + a);
+							//App->scene->gameObjects.erase(App->scene->gameObjects[b]->childrens.begin() + a);
+						}
+
+					}
+					//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
+				}
+
+				for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++) 
+				{
+					for (int b = 0; b < App->scene->gameObjects.size(); b++)
+					{
+						if (App->scene->gameObjects[i]->childrens[a] == App->scene->gameObjects[b]) 
+						{
+							App->scene->gameObjects.erase(App->scene->gameObjects.begin() + b);
+						}
+						
+					}
+					//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
+					
+				}
+				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
+				
 				break;
 			}
 			if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
