@@ -13,12 +13,20 @@ public:
 	~ModuleEditor();
 
 	bool Start();
+	//update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 	void SaveConfig();
 	void LoadConfig();
 	void ComproveScreen();
+
+	//Docking Helper functions
+	bool DockingRootItem(char* id, ImGuiWindowFlags winFlags);
+	void BeginDock(char* dockSpaceId, ImGuiDockNodeFlags dockFlags, ImVec2 size = { .0f, .0f });
+
+	//Core Update functions to show and manage windows
+	void MenuBar();
 
 	void AddLog(const char* fmt, ...);
 	void DOptionsmenu(ComponentType type);

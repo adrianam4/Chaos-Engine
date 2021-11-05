@@ -170,7 +170,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 
 	// Start the Dear ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame();
+	ImGui_ImplSDL2_NewFrame(App->window->window);
 	ImGui::NewFrame();
 
 	static bool depth;

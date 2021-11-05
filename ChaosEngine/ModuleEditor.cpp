@@ -44,6 +44,11 @@ bool ModuleEditor::Start()
 	LoadConfig();
 	ComproveScreen();
 
+	ImGuiIO& io = ImGui::GetIO();
+
+	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "House "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
 	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx",false));
@@ -56,6 +61,17 @@ bool ModuleEditor::Start()
 
 	return ret;
 }
+
+//update_status ModuleEditor::PreUpdate(float dt) {
+//
+//	// Start the Dear ImGui frame
+//	ImGui_ImplOpenGL3_NewFrame();
+//	ImGui_ImplSDL2_NewFrame(App->window->window);
+//	ImGui::NewFrame();
+//
+//	return UPDATE_CONTINUE;
+//
+//}
 
 // Load assets
 bool ModuleEditor::CleanUp()
@@ -84,6 +100,42 @@ bool ModuleEditor::CleanUp()
 	}
 
 	return true;
+}
+
+bool ModuleEditor::DockingRootItem(char* id, ImGuiWindowFlags winFlags)
+{
+	//Setting windows as viewport size
+	ImGuiViewport* viewport = ImGui::GetWindowViewport();
+	ImGui::SetNextWindowPos(viewport->Pos);
+	ImGui::SetNextWindowSize(viewport->Size);
+	ImGui::SetNextWindowViewport(viewport->ID);
+
+	//Setting window style
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, .0f);
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, .0f);
+
+	//Viewport window flags just to have a non interactable white space where we can dock the rest of windows
+	winFlags |= ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoTitleBar;
+	winFlags |= ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoBackground;
+
+	bool temp = true;
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+	temp = ImGui::Begin(id, &temp, winFlags);
+	ImGui::PopStyleVar(3);
+
+	BeginDock(id, ImGuiDockNodeFlags_PassthruCentralNode);
+
+	return temp;
+}
+
+void ModuleEditor::BeginDock(char* dockSpaceId, ImGuiDockNodeFlags dockFlags, ImVec2 size)
+{
+	// DockSpace
+	ImGuiIO& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable) {
+		ImGuiID dock = ImGui::GetID(dockSpaceId);
+		ImGui::DockSpace(dock, size, dockFlags);
+	}
 }
 
 void ModuleEditor::SaveConfig()
