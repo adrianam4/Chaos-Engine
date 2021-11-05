@@ -48,8 +48,6 @@ void ComponentMaterial::Disable()
 
 void ComponentMaterial::OnEditor(int i)
 {
-	ILuint imageID;
-
 	if (ImGui::Checkbox("Checkers Texture", &showCheckerTexture))
 	{
 		Update();
@@ -64,8 +62,6 @@ bool ComponentMaterial::loadTexture(const char* _path)
 {
 	ILboolean success;
 	ILuint imageID;
-	width;
-	height;
 	GLuint textId;
 	
 	glGenTextures(1, &textId);
@@ -73,6 +69,33 @@ bool ComponentMaterial::loadTexture(const char* _path)
 
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
+
+	ILuint size;
+	ILubyte* data;
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
+	size = App->fileSystem->GetFileSize(_path);// Get the size of the data buffer
+
+	std::string auxPath = std::string(_path);
+	unsigned sz = auxPath.size();
+	std::string finalPath;
+	finalPath.resize(sz -3);
+	//uint lastBarPos = auxPath.find_last_of("/");
+	for (int i = 0; i < auxPath.length() - 3; i++)
+	{
+		finalPath[i] = auxPath[i];
+	}
+	finalPath = finalPath + "dds";
+
+	if (size > 0) 
+	{
+		data = new ILubyte[size]; // allocate data buffer
+		
+		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+		{
+			App->fileSystem->Save(finalPath.c_str(), data, size);
+			delete[] data;
+		}
+	}
 
 	myImageId = imageID;
 

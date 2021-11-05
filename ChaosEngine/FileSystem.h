@@ -11,11 +11,11 @@ int close_sdl_rwops(SDL_RWops *rw);
 struct aiFileIO;
 struct BASS_FILEPROCS;
 
-class FileSystem
+class FileSystem : public Module
 {
 public:
 
-	FileSystem(const char* gamePath);
+	FileSystem(Application* app, bool startEnabled = true);
 
 	// Destructor
 	~FileSystem();
@@ -32,6 +32,7 @@ public:
 	void SplitFilePath(const char* fullPath, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
 	void NormalizePath(char* fullPath) const;
 	void NormalizePath(std::string& fullPath) const;
+	uint GetFileSize(const char* path);
 
 	// Open for Read/Write
 	unsigned int Load(const char* path, const char* file, char** buffer) const;

@@ -11,11 +11,13 @@ class ComponentMaterial : public Component
 public:
 	ComponentMaterial(ComponentType type, const char* path, bool isDropped);
 	~ComponentMaterial();
+
 	bool loadTexture(const char* _path);
 	void Enable() override;
 	void Update() override;
 	void Disable() override;
 	void OnEditor(int i) override;
+
 private:
 	int width;
 	int height;

@@ -9,7 +9,7 @@
 
 using namespace std;
 
-FileSystem::FileSystem(const char* game_path)
+FileSystem::FileSystem(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	// needs to be created before Init so other modules can use it
 	char* base_path = SDL_GetBasePath();
@@ -19,16 +19,16 @@ FileSystem::FileSystem(const char* game_path)
 	// workaround VS string directory mess
 	AddPath(".");
 
-	if(0&&game_path != nullptr)
-		AddPath(game_path);
+	/*if (0 && game_path != nullptr)
+		AddPath(game_path);*/
 
 	// Dump list of paths
-	App->editor->AddLog("FileSystem Operations base is [%s] plus:", GetBasePath());
-	App->editor->AddLog(GetReadPaths());
+	//App->editor->AddLog("FileSystem Operations base is [%s] plus:", GetBasePath());
+	//App->editor->AddLog(GetReadPaths());
 
 	// enable us to write in the game's dir area
-	if(PHYSFS_setWriteDir(".") == 0)
-		App->editor->AddLog("File System error while creating write dir: %s\n", PHYSFS_getLastError());
+	//if(PHYSFS_setWriteDir(".") == 0)
+		//App->editor->AddLog("File System error while creating write dir: %s\n", PHYSFS_getLastError());
 
 	// Make sure standard paths exist
 	const char* dirs[] = {
@@ -60,6 +60,8 @@ bool FileSystem::Init()
 
 	// Ask SDL for a write dir
 	char* write_path = SDL_GetPrefPath("Adrian Aroca and David Lira", "Chaos Engine");
+	PHYSFS_setWriteDir("Assets/Library/Textures");
+	CreateDirectory("Assets/Library/Textures");
 
 	// Trun this on while in game mode
 	//if(PHYSFS_setWriteDir(write_path) == 0)
@@ -241,6 +243,15 @@ void FileSystem::NormalizePath(std::string & full_path) const
 		else
 			*it = tolower(*it);
 	}
+}
+
+uint FileSystem::GetFileSize(const char* path)
+{
+	PHYSFS_File* file = PHYSFS_openRead(path);
+	if (file != nullptr)
+		return 0;
+
+	return PHYSFS_fileLength(file);
 }
 
 unsigned int FileSystem::Load(const char * path, const char * file, char ** buffer) const
