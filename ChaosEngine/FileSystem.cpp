@@ -12,34 +12,12 @@ using namespace std;
 FileSystem::FileSystem(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	// needs to be created before Init so other modules can use it
-	char* base_path = SDL_GetBasePath();
-	PHYSFS_init(base_path);
-	SDL_free(base_path);
-
+	basePath = SDL_GetBasePath();
+	PHYSFS_init(nullptr);
+	
 	// workaround VS string directory mess
 	AddPath(".");
-
-	/*if (0 && game_path != nullptr)
-		AddPath(game_path);*/
-
-	// Dump list of paths
-	//App->editor->AddLog("FileSystem Operations base is [%s] plus:", GetBasePath());
-	//App->editor->AddLog(GetReadPaths());
-
-	// enable us to write in the game's dir area
-	//if(PHYSFS_setWriteDir(".") == 0)
-		//App->editor->AddLog("File System error while creating write dir: %s\n", PHYSFS_getLastError());
-
-	// Make sure standard paths exist
-	const char* dirs[] = {
-		SETTINGS_FOLDER, ASSETS_FOLDER,
-	};
-
-	for (uint i = 0; i < sizeof(dirs)/sizeof(const char*); ++i)
-	{
-		if (PHYSFS_exists(dirs[i]) == 0)
-			PHYSFS_mkdir(dirs[i]);
-	}
+	AddPath("./Library");
 
 	// Generate IO interfaces
 	CreateAssimpIO();
@@ -55,20 +33,26 @@ FileSystem::~FileSystem()
 // Called before render is available
 bool FileSystem::Init()
 {
-	App->editor->AddLog("Loading File System");
+	App->editor->AddLog("Loading File System\n");
 	bool ret = true;
 
-	// Ask SDL for a write dir
-	char* write_path = SDL_GetPrefPath("Adrian Aroca and David Lira", "Chaos Engine");
-	PHYSFS_setWriteDir("Assets/Library/Textures");
-	CreateDirectory("Assets/Library/Textures");
+	//// Ask SDL for a write dir
+	//char* write_path = SDL_GetPrefPath("Adrian Aroca and David Lira", "Chaos Engine");
+	//PHYSFS_setWriteDir("Assets/Library/Textures");
+	//CreateDirectory("Assets/Library/Textures");
 
-	// Trun this on while in game mode
-	//if(PHYSFS_setWriteDir(write_path) == 0)
-		//LOG("File System error while creating write dir: %s\n", PHYSFS_getLastError());
+	//SDL_free(write_path);
+	if (PHYSFS_setWriteDir(".") == 0) { App->editor->AddLog("File System error while creating write dir: %s\n", PHYSFS_getLastError()); }
+	if (PHYSFS_init(nullptr) == 0) {
 
+		App->editor->AddLog("PhysFS succesfully loaded | Libs initialized\n");
 
-	SDL_free(write_path);
+	}
+
+	CreateDir("Assets/Textures/");
+	CreateDir("Assets/Models/");
+	CreateDir("Library/Textures/");
+	CreateDir("Library/Models/");
 
 	return ret;
 }
@@ -144,10 +128,10 @@ bool FileSystem::CopyFromOutsideFS(const char * full_path, const char * destinat
 		PHYSFS_close(dest);
 		ret = true;
 
-		App->editor->AddLog("File System copied file [%s] to [%s]", full_path, destination);
+		App->editor->AddLog("File System copied file [%s] to [%s]\n", full_path, destination);
 	}
 	else
-		App->editor->AddLog("File System error while copy from [%s] to [%s]", full_path, destination);
+		App->editor->AddLog("File System error while copy from [%s] to [%s]\n", full_path, destination);
 
 	return ret;
 }
@@ -171,10 +155,10 @@ bool FileSystem::Copy(const char * source, const char * destination)
 		PHYSFS_close(dst);
 		ret = true;
 
-		App->editor->AddLog("File System copied file [%s] to [%s]", source, destination);
+		App->editor->AddLog("File System copied file [%s] to [%s]\n", source, destination);
 	}
 	else
-		App->editor->AddLog("File System error while copy from [%s] to [%s]", source, destination);
+		App->editor->AddLog("File System error while copy from [%s] to [%s]\n", source, destination);
 
 	return ret;
 }
@@ -245,10 +229,11 @@ void FileSystem::NormalizePath(std::string & full_path) const
 	}
 }
 
-uint FileSystem::GetFileSize(const char* path)
+unsigned FileSystem::GetFileSize(const char* path) const
 {
 	PHYSFS_File* file = PHYSFS_openRead(path);
-	if (file != nullptr)
+
+	if (file == nullptr)
 		return 0;
 
 	return PHYSFS_fileLength(file);
@@ -332,25 +317,25 @@ uint FileSystem::Save(const char* file, const void* buffer, unsigned int size, b
 		uint written = (uint) PHYSFS_write(fs_file, (const void*)buffer, 1, size);
 		if (written != size)
 		{
-			App->editor->AddLog("File System error while writing to file %s: %s", file, PHYSFS_getLastError());
+			App->editor->AddLog("File System error while writing to file %s: %s\n", file, PHYSFS_getLastError());
 		}
 		else
 		{
 			if (append == true)
-				App->editor->AddLog("Added %u data to [%s%s]", size, PHYSFS_getWriteDir(), file);
+				App->editor->AddLog("Added %u data to [%s%s]\n", size, PHYSFS_getWriteDir(), file);
 			else if(overwrite == true)
-				App->editor->AddLog("File [%s%s] overwritten with %u bytes", PHYSFS_getWriteDir(), file, size);
+				App->editor->AddLog("File [%s%s] overwritten with %u bytes\n", PHYSFS_getWriteDir(), file, size);
 			else if(overwrite == false)
-				App->editor->AddLog("New file created [%s%s] of %u bytes", PHYSFS_getWriteDir(), file, size);
+				App->editor->AddLog("New file created [%s%s] of %u bytes\n", PHYSFS_getWriteDir(), file, size);
 
 			ret = written;
 		}
 
 		if(PHYSFS_close(fs_file) == 0)
-			App->editor->AddLog("File System error while closing file %s: %s", file, PHYSFS_getLastError());
+			App->editor->AddLog("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
 	}
 	else
-		App->editor->AddLog("File System error while opening file %s: %s", file, PHYSFS_getLastError());
+		App->editor->AddLog("File System error while opening file %s: %s\n", file, PHYSFS_getLastError());
 
 	return ret;
 }
@@ -377,14 +362,25 @@ bool FileSystem::Remove(const char * file)
 	{
 		if (PHYSFS_delete(file) == 0)
 		{
-			App->editor->AddLog("File deleted: [%s]", file);
+			App->editor->AddLog("File deleted: [%s]\n", file);
 			ret = true;
 		}
 		else
-			App->editor->AddLog("File System error while trying to delete [%s]: ", file, PHYSFS_getLastError());
+			App->editor->AddLog("File System error while trying to delete [%s]: \n", file, PHYSFS_getLastError());
 	}
 
 	return ret;
+}
+
+bool FileSystem::CreateDir(const char* directory)
+{
+	if (!IsDirectory(directory))
+	{
+		PHYSFS_mkdir(directory);
+		AddPath(directory);
+		return true;
+	}
+	return false;
 }
 
 const char * FileSystem::GetBasePath() const
@@ -421,7 +417,7 @@ size_t AssimpWrite(aiFile* file, const char* data, size_t size, size_t chunks)
 {
 	PHYSFS_sint64 ret = PHYSFS_write((PHYSFS_File*)file->UserData, (void*)data, size, chunks);
 	if(ret == -1)
-		App->editor->AddLog("File System error while WRITE via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while WRITE via assimp: %s\n", PHYSFS_getLastError());
 
 	return (size_t) ret;
 }
@@ -430,7 +426,7 @@ size_t AssimpRead(aiFile* file, char* data, size_t size, size_t chunks)
 {
 	PHYSFS_sint64 ret = PHYSFS_read((PHYSFS_File*)file->UserData, (void*)data, size, chunks);
 	if(ret == -1)
-		App->editor->AddLog("File System error while READ via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while READ via assimp: %s\n", PHYSFS_getLastError());
 
 	return (size_t) ret;
 }
@@ -439,7 +435,7 @@ size_t AssimpTell(aiFile* file)
 {
 	PHYSFS_sint64 ret = PHYSFS_tell((PHYSFS_File*)file->UserData);
 	if(ret == -1)
-		App->editor->AddLog("File System error while TELL via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while TELL via assimp: %s\n", PHYSFS_getLastError());
 
 	return (size_t) ret;
 }
@@ -448,7 +444,7 @@ size_t AssimpSize(aiFile* file)
 {
 	PHYSFS_sint64 ret = PHYSFS_fileLength((PHYSFS_File*)file->UserData);
 	if(ret == -1)
-		App->editor->AddLog("File System error while SIZE via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while SIZE via assimp: %s\n", PHYSFS_getLastError());
 
 	return (size_t) ret;
 }
@@ -456,7 +452,7 @@ size_t AssimpSize(aiFile* file)
 void AssimpFlush(aiFile* file)
 {
 	if(PHYSFS_flush((PHYSFS_File*)file->UserData) == 0)
-		App->editor->AddLog("File System error while FLUSH via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while FLUSH via assimp: %s\n", PHYSFS_getLastError());
 }
 
 aiReturn AssimpSeek(aiFile* file, size_t pos, aiOrigin from)
@@ -477,7 +473,7 @@ aiReturn AssimpSeek(aiFile* file, size_t pos, aiOrigin from)
 	}
 
 	if(res == 0)
-		App->editor->AddLog("File System error while SEEK via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while SEEK via assimp: %s\n", PHYSFS_getLastError());
 
 	return (res != 0) ? aiReturn_SUCCESS : aiReturn_FAILURE;
 }
@@ -500,7 +496,7 @@ aiFile* AssimpOpen(aiFileIO* io, const char* name, const char* format)
 void AssimpClose(aiFileIO* io, aiFile* file)
 {
 	if (PHYSFS_close((PHYSFS_File*)file->UserData) == 0)
-		App->editor->AddLog("File System error while CLOSE via assimp: %s", PHYSFS_getLastError());
+		App->editor->AddLog("File System error while CLOSE via assimp: %s\n", PHYSFS_getLastError());
 }
 
 void FileSystem::CreateAssimpIO()

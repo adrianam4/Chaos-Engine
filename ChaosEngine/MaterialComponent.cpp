@@ -58,6 +58,59 @@ void ComponentMaterial::OnEditor(int i)
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Height: "); ImGui::SameLine(); ImGui::Text("%d", height);
 }
 
+void ComponentMaterial::Load(const char* path)
+{
+}
+
+void ComponentMaterial::Save(const char* path)
+{
+}
+
+void ComponentMaterial::CreateDDSfile(const char* filePath)
+{
+	/* ------------------ VERSION GETTING SIZE LIKE PDF ------------------------------- */
+
+	ILuint size;
+	ILubyte* data;
+	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+	size = ilSaveL(IL_DDS, nullptr, 0);
+
+	std::string auxPath = std::string(filePath);
+	unsigned start = auxPath.find_first_of("/");
+	auxPath = "Library" + auxPath.substr(start, auxPath.length() - start - 3) + "dds";
+
+	if (size > 0)
+	{
+		data = new ILubyte[size];
+		if (ilSaveL(IL_DDS, data, size) > 0)
+			App->fileSystem->Save(auxPath.c_str(), data, size);
+
+		delete[] data;
+	}
+
+	/* ------------------ VERSION GETTING SIZE FROM FILESYSTEM ------------------------------- */
+
+	//ILubyte* data;
+	//ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
+	//unsigned size = App->fileSystem->GetFileSize(filePath);// Get the size of the data buffer
+
+	//std::string auxPath = std::string(filePath);
+	//unsigned start = auxPath.find_first_of("/");
+
+	//auxPath = "Library" + auxPath.substr(start, auxPath.length() - start - 3) + "dds";
+
+	//if (size > 0)
+	//{
+	//	data = new ILubyte[size]; // allocate data buffer
+
+	//	if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
+	//	{
+	//		App->fileSystem->Save(auxPath.c_str(), data, size);
+	//		delete[] data;
+	//	}
+	//}
+}
+
 bool ComponentMaterial::loadTexture(const char* _path)
 {
 	ILboolean success;
@@ -69,35 +122,9 @@ bool ComponentMaterial::loadTexture(const char* _path)
 
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
-
-	ILuint size;
-	ILubyte* data;
-	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
-	size = App->fileSystem->GetFileSize(_path);// Get the size of the data buffer
-
-	std::string auxPath = std::string(_path);
-	unsigned sz = auxPath.size();
-	std::string finalPath;
-	finalPath.resize(sz -3);
-	//uint lastBarPos = auxPath.find_last_of("/");
-	for (int i = 0; i < auxPath.length() - 3; i++)
-	{
-		finalPath[i] = auxPath[i];
-	}
-	finalPath = finalPath + "dds";
-
-	if (size > 0) 
-	{
-		data = new ILubyte[size]; // allocate data buffer
-		
-		if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-		{
-			App->fileSystem->Save(finalPath.c_str(), data, size);
-			delete[] data;
-		}
-	}
-
 	myImageId = imageID;
+
+	CreateDDSfile(_path);
 
 	success = ilLoadImage(_path);
 

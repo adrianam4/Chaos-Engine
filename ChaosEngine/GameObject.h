@@ -6,8 +6,8 @@
 #include <vector>
 #include "Component.h"
 #include"Primitives.h"
-#include "MathGeoLib/src/MathGeoLib.h"
 #include"TransformComponent.h"
+
 class GameObject
 {
 public:
@@ -15,10 +15,13 @@ public:
 	Component* CreateComponent(ComponentType type, float3* pos = nullptr, float3* measures = nullptr);
 	Component* CreateComponent(ComponentType type, const char* name, bool isDropped);
 	int SearchComponent(GameObject* gameObject, ComponentType type);
+	u32 GenerateUID();
 public:
 	std::vector<float3> GetVertices(int id);
 	std::vector<float3> GetNormals(int id);
 
+	u32 UID;
+	u32 parentUID;
 	uint id;
 	bool active;
 	bool selected;

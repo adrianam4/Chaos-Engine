@@ -268,6 +268,14 @@ void ComponentTransform::OnEditor(int i)
 		Update();
 }
 
+void ComponentTransform::Load(const char* path)
+{
+}
+
+void ComponentTransform::Save(const char* path)
+{
+}
+
 Quat ComponentTransform::FromEulerToQuat(float3 eulerAngles)
 {
 	eulerAngles.x = math::DegToRad(eulerAngles.x);

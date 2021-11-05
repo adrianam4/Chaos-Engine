@@ -26,4 +26,6 @@ public:
 	void Update() override;
 	void Disable() override;
 	void OnEditor(int i) override;
+	void Load(const char* path) override;
+	void Save(const char* path) override;
 };

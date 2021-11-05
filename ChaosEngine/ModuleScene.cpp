@@ -61,6 +61,7 @@ GameObject* ModuleScene::CreateGameObject(bool select, int number, const char* f
 	auxGameObject->name = _name + _num;
 	auxGameObject->selected = select;
 	auxGameObject->id = lastId + 1;
+	auxGameObject->UID = auxGameObject->GenerateUID();
 	lastId++;
 
 	return auxGameObject;

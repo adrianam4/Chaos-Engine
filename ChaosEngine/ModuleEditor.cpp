@@ -46,9 +46,9 @@ bool ModuleEditor::Start()
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "House "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Library/Models/BakerHouse.fbx",false));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx",false));
 	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Library/Textures/BakerHouse.png",false));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png",false));
 	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
@@ -539,7 +539,7 @@ update_status ModuleEditor::Update(float dt)
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Penguin.fbx", false));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Library/Textures/Penguin.png", false));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Penguin.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 				App->editor->AddLog("Penguin Created\n");

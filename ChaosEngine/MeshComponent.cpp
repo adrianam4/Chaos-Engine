@@ -260,3 +260,11 @@ void ComponentMesh::OnEditor(int i)
 		ImGui::Text("Number of Vertices: "); ImGui::SameLine(); ImGui::TextColored(ImVec4(255, 255, 0, 255), "%d", App->editor->planes[j]->vertices.size());
 	}
 }
+
+void ComponentMesh::Load(const char* path)
+{
+}
+
+void ComponentMesh::Save(const char* path)
+{
+}

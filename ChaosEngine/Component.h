@@ -47,5 +47,7 @@ public:
 	virtual void Enable() {}
 	virtual void Update() {}
 	virtual void Disable() {}
+	virtual void Save(const char* path) {}
+	virtual void Load(const char* path) {}
 	virtual void OnEditor(int i) {}
 };

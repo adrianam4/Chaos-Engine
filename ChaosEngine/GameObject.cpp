@@ -3,6 +3,7 @@
 #include "MeshComponent.h"
 #include "TransformComponent.h"
 #include "MaterialComponent.h"
+#include "MathGeoLib/src/MathGeoLib.h"
 
 Component* GameObject::CreateComponent(ComponentType type, const char* name, bool isDropped)
 {
@@ -83,6 +84,12 @@ int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
 			return i;
 	}
 	return -1;
+}
+
+u32 GameObject::GenerateUID()
+{
+	LCG uidGenerator;
+	return uidGenerator.IntFast();
 }
 
 std::vector<float3> GameObject::GetVertices(int _id)

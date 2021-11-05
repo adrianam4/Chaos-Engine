@@ -21,6 +21,8 @@ public:
 	void Update() override;
 	void Disable() override;
 	void OnEditor(int i) override;
+	void Load(const char* path) override;
+	void Save(const char* path) override;
 	Quat FromEulerToQuat(float3 eulerAngles);
 	float3 FromQuatToEuler(Quat quatAngles);
 	std::vector<float3> vertices_aux;

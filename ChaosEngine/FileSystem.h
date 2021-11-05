@@ -32,7 +32,7 @@ public:
 	void SplitFilePath(const char* fullPath, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
 	void NormalizePath(char* fullPath) const;
 	void NormalizePath(std::string& fullPath) const;
-	uint GetFileSize(const char* path);
+	unsigned GetFileSize(const char* path) const;
 
 	// Open for Read/Write
 	unsigned int Load(const char* path, const char* file, char** buffer) const;
@@ -45,6 +45,7 @@ public:
 	unsigned int Save(const char* file, const void* buffer, unsigned int size, bool append = false) const;
 	bool SaveUnique(std::string& output, const void* buffer, uint size, const char* path, const char* prefix, const char* extension);
 	bool Remove(const char* file);
+	bool CreateDir(const char* directory);
 
 	const char* GetBasePath() const;
 	const char* GetWritePath() const;
@@ -57,6 +58,7 @@ private:
 private:
 
 	aiFileIO* AssimpIO = nullptr;
+	char* basePath;
 };
 
 #endif // __FILESYSTEM_H__
