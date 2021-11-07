@@ -163,7 +163,7 @@ bool FileSystem::Copy(const char * source, const char * destination)
 	return ret;
 }
 
-void FileSystem::SplitFilePath(const char * full_path, std::string * path, std::string * file, std::string * extension) const
+void FileSystem::SplitFilePath(const char * full_path, std::string * texturePath, std::string * file, std::string * extension) const
 {
 	if (full_path != nullptr)
 	{
@@ -172,12 +172,12 @@ void FileSystem::SplitFilePath(const char * full_path, std::string * path, std::
 		size_t pos_separator = full.find_last_of("\\/");
 		size_t pos_dot = full.find_last_of(".");
 
-		if (path != nullptr)
+		if (texturePath != nullptr)
 		{
 			if (pos_separator < full.length())
-				*path = full.substr(0, pos_separator + 1);
+				*texturePath = full.substr(0, pos_separator + 1);
 			else
-				path->clear();
+				texturePath->clear();
 		}
 
 		if (file != nullptr)
@@ -229,9 +229,9 @@ void FileSystem::NormalizePath(std::string & full_path) const
 	}
 }
 
-unsigned FileSystem::GetFileSize(const char* path) const
+unsigned FileSystem::GetFileSize(const char* texturePath) const
 {
-	PHYSFS_File* file = PHYSFS_openRead(path);
+	PHYSFS_File* file = PHYSFS_openRead(texturePath);
 
 	if (file == nullptr)
 		return 0;
@@ -239,9 +239,9 @@ unsigned FileSystem::GetFileSize(const char* path) const
 	return PHYSFS_fileLength(file);
 }
 
-unsigned int FileSystem::Load(const char * path, const char * file, char ** buffer) const
+unsigned int FileSystem::Load(const char * texturePath, const char * file, char ** buffer) const
 {
-	string full_path(path);
+	string full_path(texturePath);
 	full_path += file;
 	return Load(full_path.c_str(), buffer);
 }
@@ -340,7 +340,7 @@ uint FileSystem::Save(const char* file, const void* buffer, unsigned int size, b
 	return ret;
 }
 
-bool FileSystem::SaveUnique(string& name, const void * buffer, uint size, const char * path, const char * prefix, const char * extension)
+bool FileSystem::SaveUnique(string& name, const void * buffer, uint size, const char * texturePath, const char * prefix, const char * extension)
 {
 	//char result[250];
 	////MODULE RESOURCES
@@ -399,10 +399,10 @@ const char * FileSystem::GetReadPaths() const
 
 	paths[0] = '\0';
 
-	char **path;
-	for (path = PHYSFS_getSearchPath(); *path != nullptr; path++)
+	char **texturePath;
+	for (texturePath = PHYSFS_getSearchPath(); *texturePath != nullptr; texturePath++)
 	{
-		strcat_s(paths, 512, *path);
+		strcat_s(paths, 512, *texturePath);
 		strcat_s(paths, 512, "\n");
 	}
 

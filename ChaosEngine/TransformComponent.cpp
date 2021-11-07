@@ -6,8 +6,11 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 
+#include "Parson/parson.h"
+
 ComponentTransform::ComponentTransform(float3 pos, float3 sca, Quat rot)
 {
+	UID = GenerateUID();
 	lastPosition = { 0,0,0 };
 	lastRotation = {0,0,0};
 	type = ComponentType::TRANSFORM;
@@ -231,6 +234,12 @@ void ComponentTransform::Disable()
 
 void ComponentTransform::OnEditor(int i)
 {
+	if (ImGui::Button("Save"))
+		Save("Settings/TransformComponent.json");
+	ImGui::SameLine();
+	if (ImGui::Button("Load"))
+		Load("Settings/TransformComponent.json");
+
 	lastScale = scale;
 	lastPosition = position;
 	lastRotation = rotationEuler;
@@ -270,10 +279,44 @@ void ComponentTransform::OnEditor(int i)
 
 void ComponentTransform::Load(const char* path)
 {
+	//Reading JSON File
+	JSON_Value* userData = json_parse_file(path);
+
+	UID = json_object_get_number(json_object(userData), "UID");
+	position.x = json_object_get_number(json_object(userData), "Position X");
+	position.y = json_object_get_number(json_object(userData), "Position Y");
+	position.z = json_object_get_number(json_object(userData), "Position Z");
+	scale.x = json_object_get_number(json_object(userData), "Scale X");
+	scale.y = json_object_get_number(json_object(userData), "Scale Y");
+	scale.z = json_object_get_number(json_object(userData), "Scale Z");
+	rotationEuler.x = json_object_get_number(json_object(userData), "Rotation X");
+	rotationEuler.y = json_object_get_number(json_object(userData), "Rotation Y");
+	rotationEuler.z = json_object_get_number(json_object(userData), "Rotation Z");
+
+	App->editor->AddLog("Loaded Transform Component Data\n");
+
+	Update();
 }
 
 void ComponentTransform::Save(const char* path)
 {
+	//Creating Json file
+	JSON_Value* user_data = json_value_init_object();
+
+	json_object_set_number(json_object(user_data), "UID", UID);
+	json_object_set_number(json_object(user_data), "Position X", position.x);
+	json_object_set_number(json_object(user_data), "Position Y", position.y);
+	json_object_set_number(json_object(user_data), "Position Z", position.z);
+	json_object_set_number(json_object(user_data), "Scale X", scale.x);
+	json_object_set_number(json_object(user_data), "Scale Y", scale.y);
+	json_object_set_number(json_object(user_data), "Scale Z", scale.z);
+	json_object_set_number(json_object(user_data), "Rotation X", rotationEuler.x);
+	json_object_set_number(json_object(user_data), "Rotation Y", rotationEuler.y);
+	json_object_set_number(json_object(user_data), "Rotation Z", rotationEuler.z);
+
+	json_serialize_to_file_pretty(user_data, path);
+
+	App->editor->AddLog("Saved Transform Component Data\n");
 }
 
 Quat ComponentTransform::FromEulerToQuat(float3 eulerAngles)

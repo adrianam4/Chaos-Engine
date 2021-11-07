@@ -6,13 +6,11 @@
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleScene.h"
-#include "FileSystem.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
-#include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_opengl3.h"
+#include "FileSystem.h"
+
 #include <iostream>
 #include <list>
 #include <vector>
@@ -24,10 +22,10 @@ public:
 	ModuleWindow* window;
 	ModuleInput* input;
 	ModuleScene* scene;
-	FileSystem* fileSystem;
 	ModuleRenderer3D* renderer3D;
 	ModuleCamera3D* camera;
 	ModuleEditor* editor;
+	FileSystem* fileSystem;
 
 private:
 

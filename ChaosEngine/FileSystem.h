@@ -29,13 +29,13 @@ public:
 	void DiscoverFiles(const char* directory, std::vector<std::string>& fileList, std::vector<std::string>& dirList) const;
 	bool CopyFromOutsideFS(const char* fullPath, const char* destination);
 	bool Copy(const char* source, const char* destination);
-	void SplitFilePath(const char* fullPath, std::string* path, std::string* file = nullptr, std::string* extension = nullptr) const;
+	void SplitFilePath(const char* fullPath, std::string* texturePath, std::string* file = nullptr, std::string* extension = nullptr) const;
 	void NormalizePath(char* fullPath) const;
 	void NormalizePath(std::string& fullPath) const;
-	unsigned GetFileSize(const char* path) const;
+	unsigned GetFileSize(const char* texturePath) const;
 
 	// Open for Read/Write
-	unsigned int Load(const char* path, const char* file, char** buffer) const;
+	unsigned int Load(const char* texturePath, const char* file, char** buffer) const;
 	unsigned int Load(const char* file, char** buffer) const;
 	SDL_RWops* Load(const char* file) const;
 
@@ -43,7 +43,7 @@ public:
 	aiFileIO* GetAssimpIO();
 
 	unsigned int Save(const char* file, const void* buffer, unsigned int size, bool append = false) const;
-	bool SaveUnique(std::string& output, const void* buffer, uint size, const char* path, const char* prefix, const char* extension);
+	bool SaveUnique(std::string& output, const void* buffer, uint size, const char* texturePath, const char* prefix, const char* extension);
 	bool Remove(const char* file);
 	bool CreateDir(const char* directory);
 

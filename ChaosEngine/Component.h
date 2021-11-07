@@ -30,6 +30,10 @@ public:
 	bool drawWireframe = false;
 	GameObject* owner;
 	const char* name;
+	const char* texturePath;
+	int width;
+	int height;
+	u32 UID;
 	
 	float3 lastRotation;
 	float3 lastPosition;
@@ -47,7 +51,8 @@ public:
 	virtual void Enable() {}
 	virtual void Update() {}
 	virtual void Disable() {}
-	virtual void Save(const char* path) {}
-	virtual void Load(const char* path) {}
+	virtual void Save(const char* texturePath) {}
+	virtual void Load(const char* texturePath) {}
 	virtual void OnEditor(int i) {}
+	u32 GenerateUID();
 };

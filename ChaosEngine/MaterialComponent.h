@@ -22,9 +22,6 @@ public:
 	void CreateDDSfile(const char* filePath);
 
 private:
-	int width;
-	int height;
-	const char* path;
 	ILuint myImageId;
 	bool showCheckerTexture;
 	GLubyte checkerImageData[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];

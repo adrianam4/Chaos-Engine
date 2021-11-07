@@ -154,7 +154,7 @@ void ModuleEditor::SaveConfig()
 	json_object_set_boolean(json_object(user_data), "Dekstop", dekstop);
 	json_object_set_boolean(json_object(user_data), "AABB", showAABB);
 
-	json_serialize_to_file_pretty(user_data, "ConfigFile.json");
+	json_serialize_to_file_pretty(user_data, "Settings/ConfigFile.json");
 
 	AddLog("Saved Config Data\n");
 }
@@ -162,7 +162,7 @@ void ModuleEditor::SaveConfig()
 void ModuleEditor::LoadConfig()
 {
 	//Reading JSON File
-	JSON_Value* userData = json_parse_file("ConfigFile.json");
+	JSON_Value* userData = json_parse_file("Settings/ConfigFile.json");
 
 	maxFPS = json_object_get_number(json_object(userData), "MaxFPS");
 	App->maxMs = json_object_get_number(json_object(userData), "MaxMs");
@@ -176,6 +176,66 @@ void ModuleEditor::LoadConfig()
 	showAABB = json_object_get_boolean(json_object(userData), "AABB");
 
 	AddLog("Loaded Config Data\n");
+}
+
+void ModuleEditor::SaveScene()
+{
+	JSON_Value* root = json_value_init_array();
+	JSON_Array* myArray = json_value_get_array(root);
+	GameObject* go;
+
+	for (int i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		go = App->scene->gameObjects[i];
+		JSON_Value* gameObjectValue = json_value_init_object();
+		JSON_Object* gameObjObject = json_value_get_object(gameObjectValue);
+		json_object_set_number(gameObjObject, "UID", go->UID);
+		json_object_set_string(gameObjObject, "Name", go->name.c_str());
+		for (int j = 0; j < go->components.size(); j++)
+		{
+			if (go->components[j]->type == ComponentType::MESH)
+			{
+				json_object_set_number(gameObjObject, "Type", (double)go->components[j]->type);
+				json_object_set_number(gameObjObject, "UID", go->components[j]->UID);
+				json_object_set_boolean(gameObjObject, "Active", go->components[j]->active);
+				json_object_set_boolean(gameObjObject, "Normals", go->components[j]->drawNormals);
+				json_object_set_boolean(gameObjObject, "Wireframe", go->components[j]->drawWireframe);
+			}
+			if (go->components[j]->type == ComponentType::TRANSFORM)
+			{
+				json_object_set_number(gameObjObject, "Type", (double)go->components[j]->type);
+				json_object_set_number(gameObjObject, "UID", go->components[j]->UID);
+				json_object_set_number(gameObjObject, "Position X", go->components[j]->position.x);
+				json_object_set_number(gameObjObject, "Position Y", go->components[j]->position.y);
+				json_object_set_number(gameObjObject, "Position Z", go->components[j]->position.z);
+
+				json_object_set_number(gameObjObject, "General Scale", go->components[j]->generalScale);
+				json_object_set_number(gameObjObject, "Scale X", go->components[j]->scale.x);
+				json_object_set_number(gameObjObject, "Scale Y", go->components[j]->scale.y);
+				json_object_set_number(gameObjObject, "Scale Z", go->components[j]->scale.z);
+
+				json_object_set_number(gameObjObject, "Rotation X", go->components[j]->rotationEuler.x);
+				json_object_set_number(gameObjObject, "Rotation Y", go->components[j]->rotationEuler.y);
+				json_object_set_number(gameObjObject, "Rotation Z", go->components[j]->rotationEuler.z);
+			}
+			if (go->components[j]->type == ComponentType::MATERIAL)
+			{
+				json_object_set_number(gameObjObject, "Type", (double)go->components[j]->type);
+				json_object_set_number(gameObjObject, "UID", go->components[j]->UID);
+				json_object_set_string(gameObjObject, "Texture Path", go->components[j]->texturePath);
+				json_object_set_number(gameObjObject, "Width", go->components[j]->width);
+				json_object_set_number(gameObjObject, "Height", go->components[j]->height);
+			}
+		}
+		json_array_append_value(myArray, gameObjectValue);
+	}
+
+	json_serialize_to_file_pretty(root, "Settings/SceneFile.json");
+}
+
+void ModuleEditor::LoadScene()
+{
+
 }
 
 void ModuleEditor::ComproveScreen()
@@ -487,7 +547,7 @@ update_status ModuleEditor::Update(float dt)
 	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
-		SaveConfig();
+		SaveScene();
 
 	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
 	{

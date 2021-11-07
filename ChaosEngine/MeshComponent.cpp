@@ -2,9 +2,12 @@
 #include "ModuleRenderer3D.h"
 #include "MeshComponent.h"
 
+#include "Parson/parson.h"
+
 ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 {
 	type = mType;
+	UID = GenerateUID();
 
 	switch (mType)
 	{
@@ -74,6 +77,11 @@ void ComponentMesh::Disable()
 
 void ComponentMesh::OnEditor(int i)
 {
+	if (ImGui::Button("Save"))
+		Save("Settings/MeshComponent.json");
+	ImGui::SameLine();
+	if (ImGui::Button("Load"))
+		Load("Settings/MeshComponent.json");
 	//Draw Mesh
 	ImGui::Checkbox("Active", &App->editor->objectSelected->components[i]->active);
 	//Draw Normals
@@ -263,8 +271,28 @@ void ComponentMesh::OnEditor(int i)
 
 void ComponentMesh::Load(const char* path)
 {
+	//Reading JSON File
+	JSON_Value* userData = json_parse_file(path);
+
+	UID = json_object_get_number(json_object(userData), "UID");
+	active = json_object_get_boolean(json_object(userData), "Active");
+	drawNormals = json_object_get_boolean(json_object(userData), "Normals");
+	drawWireframe = json_object_get_boolean(json_object(userData), "Wireframe");
+
+	App->editor->AddLog("Loaded Mesh Component Data\n");
 }
 
 void ComponentMesh::Save(const char* path)
 {
+	//Creating Json file
+	JSON_Value* user_data = json_value_init_object();
+
+	json_object_set_number(json_object(user_data), "UID", UID);
+	json_object_set_boolean(json_object(user_data), "Active", active);
+	json_object_set_boolean(json_object(user_data), "Normals", drawNormals);
+	json_object_set_boolean(json_object(user_data), "Wireframe", drawWireframe);
+
+	json_serialize_to_file_pretty(user_data, path);
+
+	App->editor->AddLog("Saved Mesh Component Data\n");
 }

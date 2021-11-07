@@ -4,21 +4,6 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{3691ef6e-9087-47f7-a95f-e284a859ddd8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\GameObjects Components">
-      <UniqueIdentifier>{90101a5f-9bad-42cd-8aa1-dca3708e298d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\GameObjects Components\Components">
-      <UniqueIdentifier>{0bd9b2ed-f442-4b9a-867e-303b7bec3ec6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\GameObjects Components\Components\Material">
-      <UniqueIdentifier>{85a2db1d-fc99-4d1c-b02e-c6d20ee3380e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\GameObjects Components\Components\Mesh">
-      <UniqueIdentifier>{3d3894a3-2726-4e01-8f7e-714d9353033d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\GameObjects Components\Components\Transform">
-      <UniqueIdentifier>{b00d6b4b-0d11-4e59-84cb-f4db643f097e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Modules">
       <UniqueIdentifier>{7b418be2-1631-4a31-9ef2-8a8b234a7339}</UniqueIdentifier>
     </Filter>
@@ -45,6 +30,21 @@
     </Filter>
     <Filter Include="Engine\Tools\Importer">
       <UniqueIdentifier>{c12b00f3-4263-4097-a30e-dcd7a51e5e99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObjects">
+      <UniqueIdentifier>{90101a5f-9bad-42cd-8aa1-dca3708e298d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObjects\Components">
+      <UniqueIdentifier>{0bd9b2ed-f442-4b9a-867e-303b7bec3ec6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObjects\Components\Material">
+      <UniqueIdentifier>{85a2db1d-fc99-4d1c-b02e-c6d20ee3380e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObjects\Components\Mesh">
+      <UniqueIdentifier>{3d3894a3-2726-4e01-8f7e-714d9353033d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObjects\Components\Transform">
+      <UniqueIdentifier>{b00d6b4b-0d11-4e59-84cb-f4db643f097e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -112,19 +112,19 @@
       <Filter>Engine\Modules</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
-      <Filter>Engine\GameObjects Components\Components</Filter>
+      <Filter>Engine\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="MaterialComponent.h">
-      <Filter>Engine\GameObjects Components\Components\Material</Filter>
+      <Filter>Engine\GameObjects\Components\Material</Filter>
     </ClInclude>
     <ClInclude Include="MeshComponent.h">
-      <Filter>Engine\GameObjects Components\Components\Mesh</Filter>
+      <Filter>Engine\GameObjects\Components\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="TransformComponent.h">
-      <Filter>Engine\GameObjects Components\Components\Transform</Filter>
+      <Filter>Engine\GameObjects\Components\Transform</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Engine\GameObjects Components</Filter>
+      <Filter>Engine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Engine\Tools</Filter>
@@ -204,19 +204,19 @@
       <Filter>Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
-      <Filter>Engine\GameObjects Components\Components</Filter>
+      <Filter>Engine\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="MaterialComponent.cpp">
-      <Filter>Engine\GameObjects Components\Components\Material</Filter>
+      <Filter>Engine\GameObjects\Components\Material</Filter>
     </ClCompile>
     <ClCompile Include="MeshComponent.cpp">
-      <Filter>Engine\GameObjects Components\Components\Mesh</Filter>
+      <Filter>Engine\GameObjects\Components\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
-      <Filter>Engine\GameObjects Components\Components\Transform</Filter>
+      <Filter>Engine\GameObjects\Components\Transform</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Engine\GameObjects Components</Filter>
+      <Filter>Engine\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Light.cpp">
       <Filter>Engine\Tools</Filter>

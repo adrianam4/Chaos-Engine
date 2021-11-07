@@ -1,0 +1,23 @@
+[
+    {
+        "UID": 3501520233,
+        "Name": "House 1",
+        "Type": 8,
+        "Active": true,
+        "Normals": false,
+        "Wireframe": false,
+        "Position X": 0,
+        "Position Y": 0,
+        "Position Z": 0,
+        "General Scale": 1,
+        "Scale X": 1,
+        "Scale Y": 1,
+        "Scale Z": 1,
+        "Rotation X": -0,
+        "Rotation Y": 0,
+        "Rotation Z": -0,
+        "Texture Path": "Assets\/Textures\/BakerHouse.png",
+        "Width": 1024,
+        "Height": 1024
+    }
+]

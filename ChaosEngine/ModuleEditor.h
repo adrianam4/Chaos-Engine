@@ -19,6 +19,8 @@ public:
 	bool CleanUp();
 	void SaveConfig();
 	void LoadConfig();
+	void LoadScene();
+	void SaveScene();
 	void ComproveScreen();
 
 	//Docking Helper functions

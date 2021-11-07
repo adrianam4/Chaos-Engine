@@ -5,9 +5,9 @@
 #include"MathGeoLib.h"
 #include "GL/glew.h"
 
-#include "DevIL/include/IL/il.h"
-#include "DevIL/include/IL/ilu.h"
-#include "DevIL/include/IL/ilut.h"
+#include "DevIL/include/il.h"
+#include "DevIL/include/ilu.h"
+#include "DevIL/include/ilut.h"
 
 #define CHECKERS_WIDTH 64
 #define CHECKERS_HEIGHT 64
