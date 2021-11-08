@@ -8,6 +8,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	editor = new ModuleEditor(this);
+	viewportBuffer = new ModuleViewportFrameBuffer(this);
 	fileSystem = new FileSystem(this);
 
 	// The order of calls is very important!
@@ -20,6 +21,7 @@ Application::Application()
 	AddModule(input);
 	AddModule(scene);
 	AddModule(editor);
+	AddModule(viewportBuffer);
 	AddModule(fileSystem);
 
 	// Renderer last!

@@ -144,6 +144,9 @@
     <ClInclude Include="Importer.h">
       <Filter>Engine\Tools\Importer</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleViewportFrameBuffer.h">
+      <Filter>Engine\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -233,6 +236,9 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Importer.cpp">
       <Filter>Engine\Tools\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleViewportFrameBuffer.cpp">
+      <Filter>Engine\Modules</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

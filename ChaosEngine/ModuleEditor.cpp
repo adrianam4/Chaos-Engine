@@ -9,6 +9,7 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include "imgui_internal.h"
 #include "Parson/parson.h"
 
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
@@ -48,6 +49,14 @@ bool ModuleEditor::Start()
 
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	sceneWindow |= ImGuiWindowFlags_NoScrollbar;
+
+	// Setup ImGui style by default
+	ImGui::StyleColorsDark();
+
+	// Setup Platform/Renderer bindings
+	ImGui_ImplOpenGL3_Init();
+	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
 	return ret;
 }
@@ -561,6 +570,12 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 // Update: draw background
 update_status ModuleEditor::Update(float dt)
 {
+	grid->DrawGrid();
+	//Creating MenuBar item as a root for docking windows
+	if (DockingRootItem("Viewport", ImGuiWindowFlags_MenuBar)) {
+		ImGui::End();
+	}
+
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		LoadScene();
 
@@ -645,6 +660,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool showHierarchy = true;
 	static bool showInspector = true;
 	static bool showConsoleMenu = true;
+	static bool showSceneWindow = true;
 	static bool showOptions = true;
 	static bool isActive = true;
 	static bool isActive2 = true;
@@ -1327,8 +1343,28 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 
+	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+
+	if (showSceneWindow)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Scene", &showSceneWindow, ImGuiWindowFlags_NoScrollbar);
+
+		ImVec2 viewportSize = ImGui::GetCurrentWindow()->Size;
+		if (viewportSize.x != lastViewportSize.x || viewportSize.y != lastViewportSize.y)
+		{
+			App->camera->aspectRatio = viewportSize.x / viewportSize.y;
+			//App->camera->RecalculateProjection();
+		}
+		lastViewportSize = viewportSize;
+		ImGui::Image((ImTextureID)App->viewportBuffer->texture, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::End();
+	}
+
+
 	if (showDemoWindow)
 		ImGui::ShowDemoWindow(&showDemoWindow);
+
 
 	return UPDATE_CONTINUE;
 }
@@ -1336,6 +1372,22 @@ update_status ModuleEditor::Update(float dt)
 update_status ModuleEditor::PostUpdate(float dt)
 {
 	grid->DrawGrid();
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	// Rendering
+	ImGui::Render();
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+		SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+	}
 
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{

@@ -13,7 +13,7 @@ public:
 	~ModuleEditor();
 
 	bool Start();
-	//update_status PreUpdate(float dt);
+	/*update_status PreUpdate(float dt);*/
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
@@ -27,9 +27,6 @@ public:
 	bool DockingRootItem(char* id, ImGuiWindowFlags winFlags);
 	void BeginDock(char* dockSpaceId, ImGuiDockNodeFlags dockFlags, ImVec2 size = { .0f, .0f });
 
-	//Core Update functions to show and manage windows
-	void MenuBar();
-
 	void AddLog(const char* fmt, ...);
 	void DOptionsmenu(ComponentType type);
 	void AddCube(float3 pos, float3 sca);
@@ -38,6 +35,7 @@ public:
 	void AddCylinder(float3 pos, float3 sca);
 	void AddPlane(float3 pos, float3 sca);
 	void UpdateAll();
+
 private:
 	int maxFPS;
 	int width;
@@ -53,9 +51,11 @@ private:
 	float3 M;
 	float3 R;
 	void childrenManage(int i);
-	
+
 public:
 	ImGuiTextBuffer consoleBuffer;
+	ImGuiWindowFlags sceneWindow = 0;
+	ImVec2 lastViewportSize;
 	bool showAABB;
 	bool scrollToBottom;
 	GameObject* objectSelected;

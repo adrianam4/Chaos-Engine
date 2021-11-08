@@ -17,7 +17,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app
 	vec pos = vec(0.0f, 0.0f, 5.0f);
 	vec front = vec(1.0f, 0.0f, 0.0f);
 	vec up = vec(0.0f, 1.0f, 0.0f);
-	
+
 	float horizontalFov, verticalFov;
 	horizontalFov = verticalFov = 75;
 	camFrustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
@@ -37,7 +37,7 @@ bool ModuleCamera3D::Start()
 {
 	App->editor->AddLog("Setting up the camera\n");
 	bool ret = true;
-	
+
 	return ret;
 }
 
@@ -124,7 +124,7 @@ update_status ModuleCamera3D::Update(float dt)
 			int aabbSize = App->editor->objectSelected->aabb.size();
 			float3 Max;
 			float3 Min;
-			if (aabbSize > 1) 
+			if (aabbSize > 1)
 			{
 				float* maxarray = new float[aabbSize];
 
@@ -135,7 +135,7 @@ update_status ModuleCamera3D::Update(float dt)
 				}
 				int max = maxarray[0];
 				int index = 0;
-				for (int i = 1; i < aabbSize; i++) 
+				for (int i = 1; i < aabbSize; i++)
 				{
 					if (maxarray[i] > max) {
 						max = maxarray[i];
@@ -146,7 +146,7 @@ update_status ModuleCamera3D::Update(float dt)
 				Min = App->editor->objectSelected->aabb[index]->minPoint;
 				delete[] maxarray;
 			}
-			else 
+			else
 			{
 				Max = App->editor->objectSelected->aabb[0]->maxPoint;
 				Min = App->editor->objectSelected->aabb[0]->minPoint;
@@ -175,7 +175,7 @@ update_status ModuleCamera3D::Update(float dt)
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Look(const Vec3 &position, const Vec3 &reference, bool rotateAroundReference)
+void ModuleCamera3D::Look(const Vec3& position, const Vec3& reference, bool rotateAroundReference)
 {
 	this->position = position;
 	this->reference = reference;
@@ -184,7 +184,7 @@ void ModuleCamera3D::Look(const Vec3 &position, const Vec3 &reference, bool rota
 	x = normalize(cross(Vec3(0.0f, 1.0f, 0.0f), z));
 	y = cross(z, x);
 
-	if(!rotateAroundReference)
+	if (!rotateAroundReference)
 	{
 		this->reference = this->position;
 		this->position += z * 0.05f;
@@ -194,7 +194,7 @@ void ModuleCamera3D::Look(const Vec3 &position, const Vec3 &reference, bool rota
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::LookAt( const Vec3 &spot)
+void ModuleCamera3D::LookAt(const Vec3& spot)
 {
 	reference = spot;
 
@@ -205,9 +205,17 @@ void ModuleCamera3D::LookAt( const Vec3 &spot)
 	CalculateViewMatrix();
 }
 
+//void ModuleCamera3D::RecalculateProjection()
+//{
+//	camFrustum.type = FrustumType::PerspectiveFrustum;
+//	camFrustum.nearPlaneDistance = nearPlaneDistance;
+//	camFrustum.farPlaneDistance = farPlaneDistance;
+//	camFrustum.verticalFov = (verticalFOV * 3.141592 / 2) / 180.f;
+//	camFrustum.horizontalFov = 2.f * atanf(tanf(cameraFrustum.verticalFov * 0.5f) * aspectRatio);
+//}
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Move(const Vec3 &movement)
+void ModuleCamera3D::Move(const Vec3& movement)
 {
 	position += movement;
 	reference += movement;
