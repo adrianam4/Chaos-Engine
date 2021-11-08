@@ -1,0 +1,127 @@
+{
+    "GameObjects": [
+        {
+            "UID": 2919024533,
+            "Name": "House _2",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Assets\/Models\/BakerHouse.fbx",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3539900435,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 722847728,
+                    "TexturePath": "Assets\/Textures\/BakerHouse.png",
+                    "Width": 1024,
+                    "Height": 1024
+                }
+            }
+        },
+        {
+            "UID": 2091052961,
+            "Name": "Car _1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Assets\/Models\/Car.fbx",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3590611328,
+                    "Position": {
+                        "x": 5,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 22,
+                        "y": 19,
+                        "z": 32
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 2577577972,
+                    "TexturePath": "Assets\/Textures\/Car.png",
+                    "Width": 512,
+                    "Height": 512
+                }
+            }
+        },
+        {
+            "UID": 4171062180,
+            "Name": "Penguin _1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Assets\/Models\/Penguin.fbx",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 526108578,
+                    "Position": {
+                        "x": 8,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": -76,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 92082912,
+                    "TexturePath": "Assets\/Textures\/Penguin.png",
+                    "Width": 2048,
+                    "Height": 2048
+                }
+            }
+        }
+    ]
+}

@@ -49,16 +49,6 @@ bool ModuleEditor::Start()
 	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
-	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "House "));
-	int lastComponent = App->scene->gameObjects.size() - 1;
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx",false));
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png",false));
-	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-	App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
-	SDL_free("Assets/Library/Textures/BakerHouse.fbx");
-
 	return ret;
 }
 
@@ -175,6 +165,8 @@ void ModuleEditor::LoadConfig()
 	dekstop = json_object_get_boolean(json_object(userData), "Dekstop");
 	showAABB = json_object_get_boolean(json_object(userData), "AABB");
 
+	//LoadScene();
+
 	AddLog("Loaded Config Data\n");
 }
 
@@ -186,7 +178,7 @@ void ModuleEditor::SaveScene()
 	JSON_Array* myArray = json_value_get_array(arr);
 	GameObject* go;
 
-	json_object_dotset_value(rootObj, "Game Objects", arr);
+	json_object_dotset_value(rootObj, "GameObjects", arr);
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
 		go = App->scene->gameObjects[i];
@@ -201,8 +193,17 @@ void ModuleEditor::SaveScene()
 			{
 				json_object_dotset_number(gameObjObject, "Components.Mesh.Type", (double)go->components[j]->type);
 				json_object_dotset_number(gameObjObject, "Components.Mesh.UID", go->components[j]->UID);
+				json_object_dotset_string(gameObjObject, "Components.Mesh.Path", go->components[j]->modelPath);
 				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Active", go->components[j]->active);
 				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Normals", go->components[j]->drawNormals);
+				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Wireframe", go->components[j]->drawWireframe);
+			}
+			if (go->components[j]->type == ComponentType::CUBE || go->components[j]->type == ComponentType::CYLINDER || go->components[j]->type == ComponentType::PLANE
+				|| go->components[j]->type == ComponentType::PYRAMID || go->components[j]->type == ComponentType::SPHERE)
+			{
+				json_object_dotset_number(gameObjObject, "Components.Mesh.Type", (double)go->components[j]->type);
+				json_object_dotset_number(gameObjObject, "Components.Mesh.UID", go->components[j]->UID);
+				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Active", go->components[j]->active);
 				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Wireframe", go->components[j]->drawWireframe);
 			}
 			if (go->components[j]->type == ComponentType::TRANSFORM)
@@ -234,13 +235,92 @@ void ModuleEditor::SaveScene()
 		json_array_append_value(myArray, gameObjectValue);
 	}
 
-	json_serialize_to_file_pretty(root, "Settings/SceneFile.json");
+	json_serialize_to_file_pretty(root, "Assets/SceneFile.json");
 }
 
 void ModuleEditor::LoadScene()
 {
-	//Reading JSON File
-	JSON_Value* root = json_parse_file("Settings/SceneFile.json");
+	JSON_Value* root = json_parse_file("Assets/SceneFile.json");
+	JSON_Array* gameObjectsInfo = json_object_dotget_array(json_value_get_object(root), "GameObjects");
+
+	for (size_t i = 0; i < json_array_get_count(gameObjectsInfo); i++)
+	{
+		JSON_Value* auxValue = json_array_get_value(gameObjectsInfo, i);
+
+		u32 UID = json_object_get_number(json_value_get_object(auxValue), "UID");
+		const char* name = json_object_get_string(json_value_get_object(auxValue), "Name");
+
+		bool createGameObject = true;
+		for (size_t j = 0; j < App->scene->gameObjects.size(); j++)
+		{
+			if (App->scene->gameObjects[j]->UID == UID)
+			{
+				createGameObject = false;
+				break;
+			}
+		}
+		if (createGameObject)
+		{
+			std::string futureNumber = std::string(name);
+			size_t start = futureNumber.find_last_of("_");
+			futureNumber = futureNumber.substr(start + 1, futureNumber.length() - start);
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, atoi(futureNumber.c_str()), name)); // Create GO with name
+			GameObject* lastGO = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+			lastGO->UID = UID; //UID
+			/*  MESH   */
+			int auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.Type");
+			u32 compUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.UID");
+			bool wire = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Wireframe");
+			bool act = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Active");
+			ComponentType type;
+			if (auxType == 2)
+			{
+				bool nor = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Normals");
+				const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::MESH, modelPath, false));
+			}
+			if (auxType == 3)
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CUBE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			if (auxType == 6)
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CYLINDER, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			if (auxType == 7)
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			if (auxType == 4)
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PYRAMID, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			if (auxType == 5)
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::SPHERE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+
+			/*   TRANSFORMATIONS   */
+
+			//Position
+			double position_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.x");
+			double position_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.y");
+			double position_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.z");
+			float3 position = float3(position_x, position_y, position_z);
+			//Scale
+			double scale_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.x");
+			double scale_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.y");
+			double scale_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.z");
+			float3 scale = float3(scale_x, scale_y, scale_z);
+			//Rotation
+			double rotation_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.x");
+			double rotation_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.y");
+			double rotation_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.z");
+			float3 rotation = float3(rotation_x, rotation_y, rotation_z);
+			
+			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::TRANSFORM, &position, &scale, &rotation));
+
+			/*   MATERIALS   */
+			u32 materialUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.UID");
+			const char* textPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Material.TexturePath");
+			double width = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Width");
+			double height = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Height");
+
+			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::MATERIAL, textPath, false));
+		}
+	}
+	
+	UpdateAll();
 
 	AddLog("Loaded Scene Data\n");
 }
@@ -293,6 +373,21 @@ void ModuleEditor::AddPlane(float3 pos, float3 sca)
 	auxPlane = new MyPlane(pos, sca);
 	planes.push_back(auxPlane);
 }
+void ModuleEditor::UpdateAll()
+{
+	for (size_t i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		for (size_t j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+		{
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::TRANSFORM)
+			{
+				App->editor->objectSelected = App->scene->gameObjects[i];
+				App->scene->gameObjects[i]->components[j]->Update();
+			}	
+		}
+	}
+	App->editor->objectSelected = nullptr;
+}
 void ModuleEditor::AddCylinder(float3 pos, float3 sca)
 {
 	MyCylinder* auxCylinder;
@@ -317,6 +412,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::DragFloat("Y Scale", &M.y);
 		ImGui::DragFloat("Z Scale", &M.z);
 
+
 		if (ImGui::Button("Create Cube")) {
 			if (cubes.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Cube "));
@@ -324,8 +420,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cubes.size() + 1, "Cube "));
 
 			int lastComponent = App->scene->gameObjects.size() - 1;
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position,&M));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position,&M,&float3(0,0,0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
@@ -356,8 +452,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, pyramids.size() + 1, "Pyramid "));
 
 			int lastComponent = App->scene->gameObjects.size() - 1;
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID, &position,&M));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
@@ -386,8 +482,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cylinders.size() + 1, "Cylinder "));
 
 			int lastComponent = App->scene->gameObjects.size() - 1;
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position, &M));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
@@ -417,8 +513,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, spheres.size() + 1, "Sphere "));
 
 			int lastComponent = App->scene->gameObjects.size() - 1;
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE, &position, &M));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
@@ -449,8 +545,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, planes.size() + 1, "Plane "));
 
 			int lastComponent = App->scene->gameObjects.size() - 1;
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position, &M));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
@@ -465,6 +561,9 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 // Update: draw background
 update_status ModuleEditor::Update(float dt)
 {
+	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		LoadScene();
+
 	if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 	{
 		int i;
@@ -632,7 +731,7 @@ update_status ModuleEditor::Update(float dt)
 				empties++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::EMPTY, &position));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 				App->editor->AddLog("Empty Object Created\n");
@@ -644,7 +743,7 @@ update_status ModuleEditor::Update(float dt)
 				houses++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/BakerHouse.fbx",false));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM,&float3(0,0,0),&float3(1,1,1),&float3(0,0,0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
@@ -657,7 +756,7 @@ update_status ModuleEditor::Update(float dt)
 				penguins++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Penguin.fbx", false));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Penguin.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
@@ -670,7 +769,7 @@ update_status ModuleEditor::Update(float dt)
 				cars++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MESH, "Assets/Models/Car.fbx", false));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/Car.png", false));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];

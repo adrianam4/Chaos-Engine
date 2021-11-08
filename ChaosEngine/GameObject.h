@@ -12,7 +12,7 @@ class GameObject
 {
 public:
 	void Update();
-	Component* CreateComponent(ComponentType type, float3* pos = nullptr, float3* measures = nullptr);
+	Component* CreateComponent(ComponentType type, float3* pos = nullptr, float3* measures = nullptr, float3* rotation = nullptr);
 	Component* CreateComponent(ComponentType type, const char* name, bool isDropped);
 	int SearchComponent(GameObject* gameObject, ComponentType type);
 	u32 GenerateUID();

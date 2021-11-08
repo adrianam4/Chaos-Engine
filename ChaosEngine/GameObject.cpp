@@ -25,14 +25,19 @@ Component* GameObject::CreateComponent(ComponentType type, const char* name, boo
 	return component;
 }
 
-Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* measures)
+Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* measures, float3* rot)
 {
 	Component* component = nullptr;
+
+	float3 position = *pos;
+	float3 scale = *measures;
+	float3 rotation = *rot;
 
 	switch (type)
 	{
 	case ComponentType::TRANSFORM:
-		component = new ComponentTransform(App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans, App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca, App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot);
+		
+		component = new ComponentTransform(position, scale, rotation);
 		break;
 	case ComponentType::MESH:
 		component = new ComponentMesh(ComponentType::MESH);

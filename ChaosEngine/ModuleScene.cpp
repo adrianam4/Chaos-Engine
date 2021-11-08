@@ -58,7 +58,7 @@ GameObject* ModuleScene::CreateGameObject(bool select, int number, const char* f
 	GameObject* auxGameObject = new GameObject();
 	std::string _name(fmt);
 	std::string _num = std::to_string(number);
-	auxGameObject->name = _name + _num;
+	auxGameObject->name = _name + "_" + _num;
 	auxGameObject->selected = select;
 	auxGameObject->id = lastId + 1;
 	auxGameObject->UID = auxGameObject->GenerateUID();

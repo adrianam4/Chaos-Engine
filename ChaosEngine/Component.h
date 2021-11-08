@@ -30,6 +30,7 @@ public:
 	bool drawWireframe = false;
 	GameObject* owner;
 	const char* name;
+	const char* modelPath;
 	const char* texturePath;
 	int width;
 	int height;

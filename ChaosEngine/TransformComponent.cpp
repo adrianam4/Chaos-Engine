@@ -8,7 +8,7 @@
 
 #include "Parson/parson.h"
 
-ComponentTransform::ComponentTransform(float3 pos, float3 sca, Quat rot)
+ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 {
 	UID = GenerateUID();
 	lastPosition = { 0,0,0 };
@@ -17,10 +17,10 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, Quat rot)
 
 	position = pos;
 	scale = sca;
-	rotationQuat = rot;
+	rotationEuler = rot;
 	generalScale = 1.0f;
 
-	rotationEuler = FromQuatToEuler(rotationQuat);
+	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	name = "Transform Component";
 

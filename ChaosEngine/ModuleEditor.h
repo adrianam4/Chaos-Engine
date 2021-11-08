@@ -37,6 +37,7 @@ public:
 	void AddSphere(float3 pos, float3 sca);
 	void AddCylinder(float3 pos, float3 sca);
 	void AddPlane(float3 pos, float3 sca);
+	void UpdateAll();
 private:
 	int maxFPS;
 	int width;
@@ -50,6 +51,7 @@ private:
 	ComponentType showOptionsMenu;
 	float3 position;
 	float3 M;
+	float3 R;
 	void childrenManage(int i);
 	
 public:
