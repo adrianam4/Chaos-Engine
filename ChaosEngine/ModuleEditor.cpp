@@ -180,10 +180,13 @@ void ModuleEditor::LoadConfig()
 
 void ModuleEditor::SaveScene()
 {
-	JSON_Value* root = json_value_init_array();
-	JSON_Array* myArray = json_value_get_array(root);
+	JSON_Value* root = json_value_init_object();
+	JSON_Value* arr = json_value_init_array();
+	JSON_Object* rootObj = json_value_get_object(root);
+	JSON_Array* myArray = json_value_get_array(arr);
 	GameObject* go;
 
+	json_object_dotset_value(rootObj, "Game Objects", arr);
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
 		go = App->scene->gameObjects[i];
@@ -191,40 +194,41 @@ void ModuleEditor::SaveScene()
 		JSON_Object* gameObjObject = json_value_get_object(gameObjectValue);
 		json_object_set_number(gameObjObject, "UID", go->UID);
 		json_object_set_string(gameObjObject, "Name", go->name.c_str());
+
 		for (int j = 0; j < go->components.size(); j++)
 		{
 			if (go->components[j]->type == ComponentType::MESH)
 			{
-				json_object_set_number(gameObjObject, "Type", (double)go->components[j]->type);
-				json_object_set_number(gameObjObject, "UID", go->components[j]->UID);
-				json_object_set_boolean(gameObjObject, "Active", go->components[j]->active);
-				json_object_set_boolean(gameObjObject, "Normals", go->components[j]->drawNormals);
-				json_object_set_boolean(gameObjObject, "Wireframe", go->components[j]->drawWireframe);
+				json_object_dotset_number(gameObjObject, "Components.Mesh.Type", (double)go->components[j]->type);
+				json_object_dotset_number(gameObjObject, "Components.Mesh.UID", go->components[j]->UID);
+				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Active", go->components[j]->active);
+				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Normals", go->components[j]->drawNormals);
+				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Wireframe", go->components[j]->drawWireframe);
 			}
 			if (go->components[j]->type == ComponentType::TRANSFORM)
 			{
-				json_object_set_number(gameObjObject, "Type", (double)go->components[j]->type);
-				json_object_set_number(gameObjObject, "UID", go->components[j]->UID);
-				json_object_set_number(gameObjObject, "Position X", go->components[j]->position.x);
-				json_object_set_number(gameObjObject, "Position Y", go->components[j]->position.y);
-				json_object_set_number(gameObjObject, "Position Z", go->components[j]->position.z);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Type", (double)go->components[j]->type);
+				json_object_dotset_number(gameObjObject, "Components.Transform.UID", go->components[j]->UID);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Position.x", go->components[j]->position.x);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Position.y", go->components[j]->position.y);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Position.z", go->components[j]->position.z);
 
-				json_object_set_number(gameObjObject, "General Scale", go->components[j]->generalScale);
-				json_object_set_number(gameObjObject, "Scale X", go->components[j]->scale.x);
-				json_object_set_number(gameObjObject, "Scale Y", go->components[j]->scale.y);
-				json_object_set_number(gameObjObject, "Scale Z", go->components[j]->scale.z);
+				json_object_dotset_number(gameObjObject, "Components.Transform.GeneralScale", go->components[j]->generalScale);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Scale.x", go->components[j]->scale.x);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Scale.y", go->components[j]->scale.y);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Scale.z", go->components[j]->scale.z);
 
-				json_object_set_number(gameObjObject, "Rotation X", go->components[j]->rotationEuler.x);
-				json_object_set_number(gameObjObject, "Rotation Y", go->components[j]->rotationEuler.y);
-				json_object_set_number(gameObjObject, "Rotation Z", go->components[j]->rotationEuler.z);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Rotation.x", go->components[j]->rotationEuler.x);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Rotation.y", go->components[j]->rotationEuler.y);
+				json_object_dotset_number(gameObjObject, "Components.Transform.Rotation.z", go->components[j]->rotationEuler.z);
 			}
 			if (go->components[j]->type == ComponentType::MATERIAL)
 			{
-				json_object_set_number(gameObjObject, "Type", (double)go->components[j]->type);
-				json_object_set_number(gameObjObject, "UID", go->components[j]->UID);
-				json_object_set_string(gameObjObject, "Texture Path", go->components[j]->texturePath);
-				json_object_set_number(gameObjObject, "Width", go->components[j]->width);
-				json_object_set_number(gameObjObject, "Height", go->components[j]->height);
+				json_object_dotset_number(gameObjObject, "Components.Material.Type", (double)go->components[j]->type);
+				json_object_dotset_number(gameObjObject, "Components.Material.UID", go->components[j]->UID);
+				json_object_dotset_string(gameObjObject, "Components.Material.TexturePath", go->components[j]->texturePath);
+				json_object_dotset_number(gameObjObject, "Components.Material.Width", go->components[j]->width);
+				json_object_dotset_number(gameObjObject, "Components.Material.Height", go->components[j]->height);
 			}
 		}
 		json_array_append_value(myArray, gameObjectValue);

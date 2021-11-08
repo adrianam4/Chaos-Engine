@@ -1,13 +1,7 @@
 #include"Importer.h"
 
 #include"Application.h"
-FBXImporter::FBXImporter() {
-	/*FBXImporter u;
-	u.saveMesh("prueba.msh", this);
-
-
-	u.readFile("Assets/Library/Textures/prueba.msh");*/
-}
+FBXImporter::FBXImporter() {}
 FBXImporter::~FBXImporter() {
 
 }

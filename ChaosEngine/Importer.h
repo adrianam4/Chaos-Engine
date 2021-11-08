@@ -8,8 +8,6 @@ public:
 	~FBXImporter();
 
 	bool saveMesh(const char* destinationPath, Mesh* object);
-	
-	
 	Mesh* readFile(const char* path);
 private:
 	bool saveInFile(const char* path, void* data, int size);

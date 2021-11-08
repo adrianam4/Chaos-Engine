@@ -1,23 +1,110 @@
-[
-    {
-        "UID": 3501520233,
-        "Name": "House 1",
-        "Type": 8,
-        "Active": true,
-        "Normals": false,
-        "Wireframe": false,
-        "Position X": 0,
-        "Position Y": 0,
-        "Position Z": 0,
-        "General Scale": 1,
-        "Scale X": 1,
-        "Scale Y": 1,
-        "Scale Z": 1,
-        "Rotation X": -0,
-        "Rotation Y": 0,
-        "Rotation Z": -0,
-        "Texture Path": "Assets\/Textures\/BakerHouse.png",
-        "Width": 1024,
-        "Height": 1024
-    }
-]
+{
+    "Game Objects": [
+        {
+            "UID": 423353062,
+            "Name": "House 1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 1330719379,
+                    "Position": {
+                        "x": 5,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": -0,
+                        "y": 0,
+                        "z": -0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 3850164126,
+                    "TexturePath": "Assets\/Textures\/BakerHouse.png",
+                    "Width": 1024,
+                    "Height": 1024
+                }
+            }
+        },
+        {
+            "UID": 3785167601,
+            "Name": "Penguin 1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3023133284,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": -0,
+                        "y": 0,
+                        "z": -0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 1319377459,
+                    "TexturePath": "Assets\/Textures\/Penguin.png",
+                    "Width": 2048,
+                    "Height": 2048
+                }
+            }
+        },
+        {
+            "UID": 2998673752,
+            "Name": "Sphere 1",
+            "Components": {
+                "Transform": {
+                    "Type": 1,
+                    "UID": 389927076,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": -0,
+                        "y": 0,
+                        "z": -0
+                    }
+                }
+            }
+        }
+    ]
+}

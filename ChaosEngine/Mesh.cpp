@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "Mesh.h"
+#include "Importer.h"
 
 #include "Glew/include/GL/glew.h"
 
@@ -119,5 +120,10 @@ void Mesh::setupMesh()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	FBXImporter u;
+	u.saveMesh("Library/Models/prueba.msh", this);
+	//u.readFile("Library/Models/prueba.msh");
+
 	App->editor->AddLog("Mesh Setup\n");
 }
