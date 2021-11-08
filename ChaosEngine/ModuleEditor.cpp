@@ -239,7 +239,10 @@ void ModuleEditor::SaveScene()
 
 void ModuleEditor::LoadScene()
 {
+	//Reading JSON File
+	JSON_Value* root = json_parse_file("Settings/SceneFile.json");
 
+	AddLog("Loaded Scene Data\n");
 }
 
 void ModuleEditor::ComproveScreen()

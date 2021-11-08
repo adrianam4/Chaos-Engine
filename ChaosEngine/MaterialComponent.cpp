@@ -149,9 +149,8 @@ bool ComponentMaterial::loadTexture(const char* _path)
 	ilBindImage(imageID);
 	myImageId = imageID;
 
-	CreateDDSfile(_path);
-
 	success = ilLoadImage(_path);
+	CreateDDSfile(_path);
 
 	width = ilGetInteger(IL_IMAGE_WIDTH);
 	height = ilGetInteger(IL_IMAGE_HEIGHT);
