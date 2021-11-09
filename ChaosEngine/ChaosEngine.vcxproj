@@ -96,7 +96,8 @@
     <ClInclude Include="ImGui\imstb_rectpack.h" />
     <ClInclude Include="ImGui\imstb_textedit.h" />
     <ClInclude Include="ImGui\imstb_truetype.h" />
-    <ClInclude Include="Importer.h" />
+    <ClInclude Include="MaterialImporter.h" />
+    <ClInclude Include="ModelImporter.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MaterialComponent.h" />
     <ClInclude Include="Mesh.h" />
@@ -128,7 +129,8 @@
     <ClCompile Include="ImGui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="ImGui\imgui_impl_sdl.cpp" />
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="Importer.cpp" />
+    <ClCompile Include="MaterialImporter.cpp" />
+    <ClCompile Include="ModelImporter.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />

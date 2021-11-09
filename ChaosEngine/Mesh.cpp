@@ -1,6 +1,6 @@
 #include "Application.h"
 #include "Mesh.h"
-#include "Importer.h"
+#include "ModelImporter.h"
 
 #include "Glew/include/GL/glew.h"
 

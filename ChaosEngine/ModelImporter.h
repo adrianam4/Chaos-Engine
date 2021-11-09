@@ -1,8 +1,11 @@
 #pragma once
+
 #include"Mesh.h"
 #include"Globals.h"
 #include"physfs.h"
-class FBXImporter {
+
+class FBXImporter 
+{
 public:
 	FBXImporter();
 	~FBXImporter();

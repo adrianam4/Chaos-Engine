@@ -141,11 +141,14 @@
     <ClInclude Include="glmath.h">
       <Filter>Engine\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="Importer.h">
+    <ClInclude Include="ModelImporter.h">
       <Filter>Engine\Tools\Importer</Filter>
     </ClInclude>
     <ClInclude Include="ModuleViewportFrameBuffer.h">
       <Filter>Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialImporter.h">
+      <Filter>Engine\Tools\Importer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -234,11 +237,14 @@
       <Filter>Engine\Tools</Filter>
     </ClCompile>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Importer.cpp">
+    <ClCompile Include="ModelImporter.cpp">
       <Filter>Engine\Tools\Importer</Filter>
     </ClCompile>
     <ClCompile Include="ModuleViewportFrameBuffer.cpp">
       <Filter>Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialImporter.cpp">
+      <Filter>Engine\Tools\Importer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

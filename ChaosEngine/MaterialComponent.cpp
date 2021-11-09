@@ -93,46 +93,24 @@ void ComponentMaterial::Save(const char* path)
 
 void ComponentMaterial::CreateDDSfile(const char* filePath)
 {
-	/* ------------------ VERSION GETTING SIZE LIKE PDF ------------------------------- */
+	///* ------------------ VERSION GETTING SIZE LIKE PDF ------------------------------- */
 
-	ILuint size;
-	ILubyte* data;
-	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
-	size = ilSaveL(IL_DDS, nullptr, 0);
-
-	std::string auxPath = std::string(filePath);
-	unsigned start = auxPath.find_first_of("/");
-	auxPath = "Library" + auxPath.substr(start, auxPath.length() - start - 3) + "dds";
-
-	if (size > 0)
-	{
-		data = new ILubyte[size];
-		if (ilSaveL(IL_DDS, data, size) > 0)
-			App->fileSystem->Save(auxPath.c_str(), data, size);
-
-		delete[] data;
-	}
-
-	/* ------------------ VERSION GETTING SIZE FROM FILESYSTEM ------------------------------- */
-
+	//ILuint size;
 	//ILubyte* data;
-	//ilSetInteger(IL_DXTC_FORMAT, IL_DXT5); // To pick a specific DXT compression use
-	//unsigned size = App->fileSystem->GetFileSize(filePath);// Get the size of the data buffer
+	//ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+	//size = ilSaveL(IL_DDS, nullptr, 0);
 
 	//std::string auxPath = std::string(filePath);
 	//unsigned start = auxPath.find_first_of("/");
-
 	//auxPath = "Library" + auxPath.substr(start, auxPath.length() - start - 3) + "dds";
 
 	//if (size > 0)
 	//{
-	//	data = new ILubyte[size]; // allocate data buffer
-
-	//	if (ilSaveL(IL_DDS, data, size) > 0) // Save to buffer with the ilSaveIL function
-	//	{
+	//	data = new ILubyte[size];
+	//	if (ilSaveL(IL_DDS, data, size) > 0)
 	//		App->fileSystem->Save(auxPath.c_str(), data, size);
-	//		delete[] data;
-	//	}
+
+	//	delete[] data;
 	//}
 }
 

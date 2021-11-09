@@ -1,10 +1,9 @@
-#include"Importer.h"
-
 #include"Application.h"
-FBXImporter::FBXImporter() {}
-FBXImporter::~FBXImporter() {
+#include"ModelImporter.h"
 
-}
+FBXImporter::FBXImporter() {}
+
+FBXImporter::~FBXImporter() {}
 
 bool FBXImporter::saveMesh(const char* destinationPath, Mesh* object) 
 {

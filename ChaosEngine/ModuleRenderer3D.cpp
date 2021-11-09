@@ -308,6 +308,7 @@ void ModuleRenderer3D::OnResize(int width, int height)
 
 void ModuleRenderer3D::DrawMeshes()
 {
+	App->viewportBuffer->Bind();
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
 		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
@@ -325,6 +326,7 @@ void ModuleRenderer3D::DrawMeshes()
 			}
 		}
 	}
+	App->viewportBuffer->UnBind();
 }
 
 void ModuleRenderer3D::InitMesh(char* path, GameObject* lastObj)

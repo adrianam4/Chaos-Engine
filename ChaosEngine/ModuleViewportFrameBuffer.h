@@ -16,6 +16,9 @@ public:
 	update_status PostUpdate(float dt) override;
 	bool CleanUp();
 
+	void Bind();
+	void UnBind();
+
 public:
 
 	uint frameBuffer = 0;
