@@ -47,7 +47,14 @@ ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 
 	name = "Mesh Component";
 }
+ComponentMesh::ComponentMesh(std::vector<theBuffer*>* theArray) {
+	type = ComponentType::MESH;
+	App->renderer3D->InitModel(theArray);
+	App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
+	App->editor->lastId++;
 
+	name = "Mesh Component";
+}
 ComponentMesh::ComponentMesh(ComponentType mType, char* mName)
 {
 	type = mType;

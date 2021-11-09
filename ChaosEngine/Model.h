@@ -16,8 +16,10 @@ class Model
 {
 public:
 	Model();
+	Model(std::vector<theBuffer*>* theArray);
 	Model(char* path, GameObject* objSelected);
 	void Draw(float* matrix);
+	Mesh createMesh(char* buffer);
 	uint id;
 	std::vector<Mesh> meshes;
 	uint numFaces = 0;
