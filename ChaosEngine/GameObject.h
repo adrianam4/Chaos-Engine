@@ -6,6 +6,7 @@
 #include <vector>
 #include "Component.h"
 #include"Primitives.h"
+#include"Importer.h"
 #include"TransformComponent.h"
 
 class GameObject
@@ -16,6 +17,7 @@ public:
 	Component* CreateComponent(ComponentType type, const char* name, bool isDropped);
 	int SearchComponent(GameObject* gameObject, ComponentType type);
 	u32 GenerateUID();
+	Component* CreateMeshComponent(std::vector<theBuffer*>* theArray);
 public:
 	std::vector<float3> GetVertices(int id);
 	std::vector<float3> GetNormals(int id);

@@ -152,7 +152,9 @@ bool ModuleRenderer3D::Init()
 
 	return ret;
 }
-
+void ModuleRenderer3D::InitModel(std::vector<theBuffer*>* theArray) {
+	models.push_back(Model(theArray));
+}
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {

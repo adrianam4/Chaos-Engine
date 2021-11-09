@@ -150,6 +150,9 @@
     <ClInclude Include="MaterialImporter.h">
       <Filter>Engine\Tools\Importer</Filter>
     </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Engine\Tools\Importer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -244,6 +247,9 @@
       <Filter>Engine\Modules</Filter>
     </ClCompile>
     <ClCompile Include="MaterialImporter.cpp">
+      <Filter>Engine\Tools\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="Importer.cpp">
       <Filter>Engine\Tools\Importer</Filter>
     </ClCompile>
   </ItemGroup>
