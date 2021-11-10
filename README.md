@@ -59,3 +59,4 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - You need to keep pressing the P key to assign one Children to the Father
 - If you don't see a window you can make it visible with the top menu selecting View
 - Our two extra FBX can be loaded with the Create Menu
+- We used the ModuleFrameBuffer.ccp and ModuleFrameBuffer.h from the Engine3D in order to make the Window Docking/Viewport!!!!!

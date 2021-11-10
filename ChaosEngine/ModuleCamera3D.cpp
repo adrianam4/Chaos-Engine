@@ -205,14 +205,14 @@ void ModuleCamera3D::LookAt(const Vec3& spot)
 	CalculateViewMatrix();
 }
 
-//void ModuleCamera3D::RecalculateProjection()
-//{
-//	camFrustum.type = FrustumType::PerspectiveFrustum;
-//	camFrustum.nearPlaneDistance = nearPlaneDistance;
-//	camFrustum.farPlaneDistance = farPlaneDistance;
-//	camFrustum.verticalFov = (verticalFOV * 3.141592 / 2) / 180.f;
-//	camFrustum.horizontalFov = 2.f * atanf(tanf(cameraFrustum.verticalFov * 0.5f) * aspectRatio);
-//}
+void ModuleCamera3D::RecalculateProjection()
+{
+	camFrustum.type = FrustumType::PerspectiveFrustum;
+	camFrustum.nearPlaneDistance = nearPlaneDistance;
+	camFrustum.farPlaneDistance = farPlaneDistance;
+	camFrustum.verticalFov = (verticalFOV * 3.141592 / 2) / 180.f;
+	camFrustum.horizontalFov = 2.f * atanf(tanf(camFrustum.verticalFov * 0.5f) * aspectRatio);
+}
 
 // -----------------------------------------------------------------
 void ModuleCamera3D::Move(const Vec3& movement)
