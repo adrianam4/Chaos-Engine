@@ -3,9 +3,10 @@
 #include "ModuleEditor.h"
 #include "ModuleScene.h"
 #include "Mesh.h"
-#include"Importer.h"
+#include "Importer.h"
 #include "shellapi.h"
 #include <GL/GL.h>
+#include "ImGuizmo.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
@@ -253,6 +254,8 @@ void ModuleEditor::SaveScene()
 	}
 
 	json_serialize_to_file_pretty(root, "Assets/SceneFile.json");
+
+	AddLog("Saved Scene Data\n");
 }
 
 void ModuleEditor::LoadScene()
@@ -623,12 +626,51 @@ update_status ModuleEditor::Update(float dt)
 {
 	grid->DrawGrid();
 	//Creating MenuBar item as a root for docking windows
+
+	//////////////////////////////////////////////////////////////////////////// GUIZMOS ///////////////////////////////////////////////////////////////////////
+	/*if (objectSelected)
+	{
+		ImGuizmo::SetOrthographic(false);
+		ImGuizmo::SetDrawlist();
+		float windowWidth = (float)ImGui::GetWindowWidth();
+		float windowHeight = (float)ImGui::GetWindowHeight();
+		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+		auto cameraEntity = App->camera->GetViewMatrix();
+		const auto& camera = cameraEntity->GetComponentType();
+
+
+		auto& tc = objectSelected->components;
+
+		ImGuizmo::Manipulate(App->camera->GetViewMatrix(), App->camera->GetViewMatrix(),
+			ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, App->camera->GetViewMatrix());
+
+	}*/
+
+	//int gizmoCount = 1;
+	//static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
+	//static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
+	//static bool useSnap = false;
+	//static float snap[3] = { 1.f, 1.f, 1.f };
+	//static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+	//static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
+	//static bool boundSizing = false;
+	//static bool boundSizingSnap = false;
+
+	//ImGuizmo::SetDrawlist();
+	//ImGuizmo::BeginFrame();
+
+	//if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
+	//	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
+	//if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+	//	mCurrentGizmoOperation = ImGuizmo::ROTATE;
+	//if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+	//	mCurrentGizmoOperation = ImGuizmo::SCALE;
+
+
 	if (DockingRootItem("Viewport", ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
 	}
-
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
-		LoadScene();
 
 	if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 	{
@@ -707,7 +749,9 @@ update_status ModuleEditor::Update(float dt)
 	static bool showCloseWindow = true;
 	static bool showAboutWindow = false;
 	static bool openConfigMenu = false;
+	static bool openSceneMenu = false;
 	static bool showConfigMenu = true;
+	static bool showWarningMenu = false;
 	static bool showHierarchy = true;
 	static bool showInspector = true;
 	static bool showConsoleMenu = true;
@@ -719,14 +763,6 @@ update_status ModuleEditor::Update(float dt)
 	static bool isActive4 = true;
 	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
-	if (App->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
-		SaveScene();
-
-	if (App->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN)
-	{
-		LoadConfig();
-		ComproveScreen();
-	}
 	//////////////////////////////////////////////////////////////////////////////////////////// SHAPES BEGIN OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////
 	if (showOptionsMenu != ComponentType::NONE) {
 		DOptionsmenu(showOptionsMenu);
@@ -742,14 +778,27 @@ update_status ModuleEditor::Update(float dt)
 			{
 				return UPDATE_STOP;
 			}
-			if (ImGui::MenuItem("Save"))
+			if (ImGui::MenuItem("Save Config"))
 			{
 				SaveConfig();
 			}
-			if (ImGui::MenuItem("Load"))
+			if (ImGui::MenuItem("Load Config"))
 			{
 				LoadConfig();
 				ComproveScreen();
+			}
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Scene", &openSceneMenu))
+		{
+			if (ImGui::MenuItem("Save Scene"))
+			{
+				SaveScene();
+			}
+			if (ImGui::MenuItem("Load Scene"))
+			{
+				showWarningMenu = !showWarningMenu;
 			}
 			ImGui::EndMenu();
 		}
@@ -1424,13 +1473,42 @@ update_status ModuleEditor::Update(float dt)
 		if (viewportSize.x != lastViewportSize.x || viewportSize.y != lastViewportSize.y)
 		{
 			App->camera->aspectRatio = viewportSize.x / viewportSize.y;
-			//App->camera->RecalculateProjection();
+			App->camera->RecalculateProjection();
 		}
 		lastViewportSize = viewportSize;
 		ImGui::Image((ImTextureID)App->viewportBuffer->texture, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 	}
 
+	//////////////////////////////////////////////////////////////////////////////////////////// WARNING WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+
+	if (showWarningMenu)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Warning", &showWarningMenu);
+
+		ImGui::Text("Are you sure you want to load the saved scene?");
+		ImGui::Text("(All actions after the save will be deleted)");
+
+		if (ImGui::MenuItem("Yes"))
+		{
+			for (int i = 0; i <= App->scene->gameObjects.size(); i++)
+			{
+				if (App->scene->gameObjects.size() != NULL)
+				{
+					App->scene->gameObjects.erase(App->scene->gameObjects.begin());
+					LoadScene();
+				}
+				showWarningMenu = !showWarningMenu;
+			}
+		}
+		if (ImGui::MenuItem("No"))
+		{
+			showWarningMenu = !showWarningMenu;
+		}
+
+		ImGui::End();
+	}
 
 	if (showDemoWindow)
 		ImGui::ShowDemoWindow(&showDemoWindow);

@@ -158,6 +158,8 @@
     </ClInclude>
     <ClInclude Include="CameraComponent.h">
       <Filter>Engine\GameObjects\Components\Camera</Filter>
+    <ClInclude Include="ImGui\ImGuizmo.h">
+      <Filter>External Libraries\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +262,8 @@
     </ClCompile>
     <ClCompile Include="CameraComponent.cpp">
       <Filter>Engine\GameObjects\Components\Camera</Filter>
+    <ClCompile Include="ImGui\ImGuizmo.cpp">
+      <Filter>External Libraries\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

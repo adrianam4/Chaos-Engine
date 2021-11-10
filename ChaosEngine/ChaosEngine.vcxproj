@@ -91,6 +91,7 @@
     <ClInclude Include="Globals.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
+    <ClInclude Include="ImGui\ImGuizmo.h" />
     <ClInclude Include="ImGui\imgui_impl_opengl3.h" />
     <ClInclude Include="ImGui\imgui_impl_sdl.h" />
     <ClInclude Include="ImGui\imgui_internal.h" />
@@ -127,6 +128,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="glmath.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
+    <ClCompile Include="ImGui\ImGuizmo.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />
     <ClCompile Include="ImGui\imgui_draw.cpp" />
     <ClCompile Include="ImGui\imgui_impl_opengl3.cpp" />
