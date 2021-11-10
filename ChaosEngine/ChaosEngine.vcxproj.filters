@@ -46,6 +46,9 @@
     <Filter Include="Engine\GameObjects\Components\Transform">
       <UniqueIdentifier>{b00d6b4b-0d11-4e59-84cb-f4db643f097e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\GameObjects\Components\Camera">
+      <UniqueIdentifier>{6cc46ad5-7d01-4a3b-ad67-9b2d2440c6b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -153,6 +156,9 @@
     <ClInclude Include="Importer.h">
       <Filter>Engine\Tools\Importer</Filter>
     </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Engine\GameObjects\Components\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ModuleCamera3D.cpp">
@@ -251,6 +257,9 @@
     </ClCompile>
     <ClCompile Include="Importer.cpp">
       <Filter>Engine\Tools\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Engine\GameObjects\Components\Camera</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

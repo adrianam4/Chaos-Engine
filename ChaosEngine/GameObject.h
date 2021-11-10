@@ -13,6 +13,7 @@ class GameObject
 {
 public:
 	void Update();
+	Component* CreateComponent2(ComponentType type, float3 pos, double hFov, double nPlane, double fPlane);
 	Component* CreateComponent(ComponentType type, float3* pos = nullptr, float3* measures = nullptr, float3* rotation = nullptr);
 	Component* CreateComponent(ComponentType type, const char* name, bool isDropped);
 	int SearchComponent(GameObject* gameObject, ComponentType type);

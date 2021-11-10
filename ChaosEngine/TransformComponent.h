@@ -9,7 +9,7 @@
 #include "assimp/scene.h"
 #include "assimp/postProcess.h"
 
-#include "Component.h"
+class Component;
 
 class ComponentTransform : public Component
 {

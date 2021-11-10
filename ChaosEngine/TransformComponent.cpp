@@ -211,7 +211,6 @@ void ComponentTransform::Update()
 		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {
 			if (App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM)
 			{
-				//App->editor->objectSelected->childrens[a]->components[b]->position += position;
 				App->editor->objectSelected->childrens[a]->components[b]->scale += (scale - lastScale);
 				App->editor->objectSelected->childrens[a]->components[b]->position += (position - lastPosition);
 				App->editor->objectSelected->childrens[a]->components[b]->rotationEuler += (rotationEuler - lastRotation);
@@ -220,10 +219,16 @@ void ComponentTransform::Update()
 				App->editor->objectSelected->childrens[a]->components[b]->transmat = aux1.FromTRS(App->editor->objectSelected->childrens[a]->components[b]->position, App->editor->objectSelected->childrens[a]->components[b]->rotationQuat, App->editor->objectSelected->childrens[a]->components[b]->scale);
 				App->editor->objectSelected->childrens[a]->components[b]->transmat = App->editor->objectSelected->childrens[a]->components[b]->transmat.Transposed();
 				App->editor->objectSelected->childrens[a]->matrix = App->editor->objectSelected->childrens[a]->components[b]->transmat.ptr();
-
-							
-				//App->editor->objectSelected->childrens[a]->matrix = transMatrix.ptr();
 			}
+		}
+	}
+
+	for (int c = 0; c < App->editor->objectSelected->components.size(); c++)
+	{
+		if (App->editor->objectSelected->components[c]->type == ComponentType::CAMERA)
+		{
+			App->editor->objectSelected->components[c]->Update();
+			break;
 		}
 	}
 }

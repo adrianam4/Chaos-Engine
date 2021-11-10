@@ -240,6 +240,14 @@ void ModuleEditor::SaveScene()
 				json_object_dotset_number(gameObjObject, "Components.Material.Width", go->components[j]->width);
 				json_object_dotset_number(gameObjObject, "Components.Material.Height", go->components[j]->height);
 			}
+			if (go->components[j]->type == ComponentType::CAMERA)
+			{
+				json_object_dotset_number(gameObjObject, "Components.Camera.Type", (double)go->components[j]->type);
+				json_object_dotset_number(gameObjObject, "Components.Camera.UID", go->components[j]->UID);
+				json_object_dotset_number(gameObjObject, "Components.Camera.FOV", go->components[j]->horizontalFov);
+				json_object_dotset_number(gameObjObject, "Components.Camera.NearPlane", go->components[j]->nearPlaneDistance);
+				json_object_dotset_number(gameObjObject, "Components.Camera.FarPlane", go->components[j]->farPlaneDistance);
+			}
 		}
 		json_array_append_value(myArray, gameObjectValue);
 	}
@@ -313,7 +321,6 @@ void ModuleEditor::LoadScene()
 				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::SPHERE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 
 			/*   TRANSFORMATIONS   */
-
 			//Position
 			double position_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.x");
 			double position_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.y");
@@ -342,6 +349,14 @@ void ModuleEditor::LoadScene()
 
 				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::MATERIAL, textPath, false));
 			}
+
+			/*   CAMERAS   */
+			u32 cameraUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.UID");
+			int Type = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
+			double horizontalFov = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FOV");
+			double nearPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.NearPlane");
+			double farPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FarPlane");
+			lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane));
 		}
 	}
 	
@@ -448,8 +463,10 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position,&M,&float3(0,0,0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 5, 100));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			
 			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Cube Created\n");
@@ -482,8 +499,10 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 5, 100));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 			
 			App->editor->AddLog("Pyramid Created\n");
@@ -514,8 +533,10 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 5, 100));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 			
 			App->editor->AddLog("Cylinder Created\n");
@@ -547,8 +568,10 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 5, 100));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 		
 			App->editor->AddLog("Sphere Created\n");
@@ -581,8 +604,10 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 5, 100));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 			
 			App->editor->AddLog("Plane Created\n");
@@ -774,8 +799,10 @@ update_status ModuleEditor::Update(float dt)
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::EMPTY, &position));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 5, 100));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 				objectSelected = App->scene->gameObjects[lastComponent];
 				App->editor->AddLog("Empty Object Created\n");
 			}
@@ -790,8 +817,10 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "0", "2", ".msh"),"Library/Models/02.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM,&float3(0,0,0),&float3(1,1,1),&float3(0,0,0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 5, 100));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 				
 				App->editor->AddLog("House Created\n");
 			}
@@ -806,8 +835,10 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "0", "1", ".msh"), "Library/Models/01.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Penguin.dds", false));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 5, 100));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 				
 				App->editor->AddLog("Penguin Created\n");
 			}
@@ -823,8 +854,10 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "0", "5", ".msh"), "Library/Models/05.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Car.dds", false));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 5, 100));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 				
 				App->editor->AddLog("Car Created\n");
 			}

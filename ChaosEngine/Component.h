@@ -17,6 +17,7 @@ enum class ComponentType
 	CYLINDER,
 	PLANE,
 	MATERIAL,
+	CAMERA,
 	NONE,
 	EMPTY,
 };
@@ -47,7 +48,10 @@ public:
 	float generalScale;
 	float4x4 transmat;
 	Quat rotationQuat;
-		
+	
+	float horizontalFov;
+	float nearPlaneDistance;
+	float farPlaneDistance;
 
 	virtual void Enable() {}
 	virtual void Update() {}

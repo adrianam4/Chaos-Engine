@@ -3,7 +3,25 @@
 #include "MeshComponent.h"
 #include "TransformComponent.h"
 #include "MaterialComponent.h"
+#include "CameraComponent.h"
+
 #include "MathGeoLib/src/MathGeoLib.h"
+
+Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double hFov, double nPlane, double fPlane)
+{
+	Component* component = nullptr;
+
+	switch (type)
+	{
+	case ComponentType::CAMERA:
+		component = new ComponentCamera(pos, hFov, nPlane, fPlane);
+		break;
+	default:
+		break;
+	}
+
+	return component;
+}
 
 Component* GameObject::CreateComponent(ComponentType type, const char* name, bool isDropped)
 {
@@ -75,6 +93,7 @@ void GameObject::Update()
 {
 
 }
+
 ComponentTransform* GameObject::getTransform() {
 	for (int i = 0; i < components.size(); i++)
 	{
