@@ -1,3 +1,148 @@
 {
-    "GameObjects": []
+    "GameObjects": [
+        {
+            "UID": 3719963363,
+            "Name": "Penguin _1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Library\/Models\/2127450001.msh",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 2564321143,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 2526230104,
+                    "TexturePath": "Library\/Textures\/Penguin.dds",
+                    "Width": -842150451,
+                    "Height": -842150451
+                },
+                "Camera": {
+                    "Type": 9,
+                    "UID": 1760415373,
+                    "FOV": 75,
+                    "NearPlane": 5,
+                    "FarPlane": 100
+                }
+            }
+        },
+        {
+            "UID": 2991041468,
+            "Name": "House _2",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Library\/Models\/2940320802.msh",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 1430600005,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 2539732155,
+                    "TexturePath": "Library\/Textures\/BakerHouse.dds",
+                    "Width": -842150451,
+                    "Height": -842150451
+                },
+                "Camera": {
+                    "Type": 9,
+                    "UID": 801910782,
+                    "FOV": 75,
+                    "NearPlane": 5,
+                    "FarPlane": 100
+                }
+            }
+        },
+        {
+            "UID": 2659678732,
+            "Name": "Car _1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Library\/Models\/2185493605.msh",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3267235208,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 2217372343,
+                    "TexturePath": "Library\/Textures\/Car.dds",
+                    "Width": -842150451,
+                    "Height": -842150451
+                },
+                "Camera": {
+                    "Type": 9,
+                    "UID": 3120165489,
+                    "FOV": 75,
+                    "NearPlane": 5,
+                    "FarPlane": 100
+                }
+            }
+        }
+    ]
 }

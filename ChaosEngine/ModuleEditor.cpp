@@ -175,8 +175,6 @@ void ModuleEditor::LoadConfig()
 	dekstop = json_object_get_boolean(json_object(userData), "Dekstop");
 	showAABB = json_object_get_boolean(json_object(userData), "AABB");
 
-	//LoadScene();
-
 	AddLog("Loaded Config Data\n");
 }
 
@@ -348,7 +346,8 @@ void ModuleEditor::LoadScene()
 
 			/*   MATERIALS   */
 			auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Type");
-			if (auxType==8) {
+			if (auxType==8) 
+			{
 				u32 materialUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.UID");
 				const char* textPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Material.TexturePath");
 				double width = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Width");
@@ -1498,13 +1497,11 @@ update_status ModuleEditor::Update(float dt)
 		{
 			for (int i = 0; i <= App->scene->gameObjects.size(); i++)
 			{
-				if (App->scene->gameObjects.size() != NULL)
-				{
+				if (App->scene->gameObjects.size() > 0) 
 					App->scene->gameObjects.erase(App->scene->gameObjects.begin());
-					LoadScene();
-				}
-				showWarningMenu = !showWarningMenu;
 			}
+			LoadScene();
+			showWarningMenu = !showWarningMenu;
 		}
 		if (ImGui::MenuItem("No"))
 		{
