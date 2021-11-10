@@ -23,7 +23,7 @@ public:
 	bool saveMesh(const char* destinationPath, Mesh* object);
 	Mesh* readFile(const char* path);
 	Mesh* getNewMeshFBX(char* data);
-	std::vector<theBuffer*>* loadFromOurFile(const char* originPath, const char* mesh, const char* Numbermesh, const char* extension);
+	std::vector<theBuffer*>* loadFromOurFile(const char* originPath, const char* UID, const char* mesh, const char* Numbermesh, const char* extension);
 private:
 	theBuffer* procesOneOfOurFile(char* data,int size);
 	theBuffer* ProcessMesh(aiMesh* mesh, const aiScene* scene, int numOf);

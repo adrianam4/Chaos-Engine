@@ -300,13 +300,17 @@ void ModuleEditor::LoadScene()
 
 				std::string firstNum = std::string(modelPath);
 				unsigned firstNumPos = firstNum.find_last_of("/");
-				firstNum = firstNum.substr(firstNumPos+1, 1);
+				firstNum = firstNum.substr(firstNumPos+1+8, 1);
+
+				std::string Uid = std::string(modelPath);
+				unsigned UidNumPos = Uid.find_last_of("/");
+				Uid = Uid.substr(UidNumPos + 1, 8);
 
 				std::string secondNum = std::string(modelPath);
 				unsigned secondNumPos = secondNum.find_last_of("/");
-				secondNum = secondNum.substr(secondNumPos + 2, 1);
+				secondNum = secondNum.substr(secondNumPos + 2+8, 1);
 
-				lastGO->components.push_back(lastGO->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", firstNum.c_str(), secondNum.c_str(), ".msh"), modelPath));
+				lastGO->components.push_back(lastGO->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", Uid.c_str(), firstNum.c_str(), secondNum.c_str(), ".msh"), modelPath));
 				//lastGO->components.push_back(lastGO->CreateComponent(ComponentType::MESH, modelPath, false));
 			}
 			if (auxType == 3)
@@ -814,7 +818,7 @@ update_status ModuleEditor::Update(float dt)
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				objectSelected = App->scene->gameObjects[lastComponent];
 				FBXmporter importer;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "0", "2", ".msh"),"Library/Models/02.msh"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","29403208", "0", "2", ".msh"), "Library/Models/2940320802.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM,&float3(0,0,0),&float3(1,1,1),&float3(0,0,0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 5, 100));
@@ -832,7 +836,7 @@ update_status ModuleEditor::Update(float dt)
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				objectSelected = App->scene->gameObjects[lastComponent];
 				FBXmporter importer;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "0", "1", ".msh"), "Library/Models/01.msh"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","21274500", "0", "1", ".msh"), "Library/Models/2127450001.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Penguin.dds", false));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 5, 100));
@@ -851,7 +855,7 @@ update_status ModuleEditor::Update(float dt)
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				objectSelected = App->scene->gameObjects[lastComponent];
 				FBXmporter importer;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "0", "5", ".msh"), "Library/Models/05.msh"));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","21854936", "0", "5", ".msh"), "Library/Models/2185493605.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Car.dds", false));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 5, 100));

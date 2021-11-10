@@ -16,8 +16,23 @@ std::vector<theBuffer*>* FBXmporter::saveToOurFile(const char* originPath, const
 
 	//////////////////////////////////////////// write the buffers data in our custom file format ////////////////////////////////////////////	
 	std::string path = destinationPath;
-	
+	LCG uidGenerator;
+	std::string i;
+	int UID = 0;
+	for (int a = 0; a < 11; a++) {
+		
+		i += std::to_string(uidGenerator.IntFast());
+		if (i.size() > 8) {
+			int v = i.size()-8;
+			i=i.substr(0, 8);
+			break;
+		}
+		else if (i.size() == 8) {
+			break;
+		}
+	}
 	for (int a = 0; a < bufferArray.size(); a++) {
+		path = path + i;//generate UID
 		path = path + std::to_string(a);
 		path = path + std::to_string(bufferArray.size());
 		path = path + ".msh";
@@ -42,12 +57,14 @@ void  FBXmporter::readFromFBX(const char* originPath) {
 
 	
 }
-std::vector<theBuffer*>* FBXmporter::loadFromOurFile(const char* originPath, const char* mesh, const char* Numbermesh, const char* extension)
+std::vector<theBuffer*>* FBXmporter::loadFromOurFile(const char* originPath, const char* UID, const char* mesh, const char* Numbermesh, const char* extension)
 {
 	std::string first = originPath;
 	std::string Mesh = mesh;
+	std::string Uid = UID;
 	std::string NumMesh = Numbermesh;
 	std::string last = extension;
+	first = first + Uid;
 	first = first + Mesh;
 	first = first + NumMesh;
 	first = first + last;
@@ -74,6 +91,7 @@ std::vector<theBuffer*>* FBXmporter::loadFromOurFile(const char* originPath, con
 		theMesh++;
 		first = originPath;
 		Mesh = std::to_string(theMesh);
+		first = first + Uid;
 		first = first + Mesh;
 		first = first + NumMesh;
 		first = first + last;
