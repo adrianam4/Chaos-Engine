@@ -1,102 +1,20 @@
 {
     "GameObjects": [
         {
-            "UID": 2919024533,
-            "Name": "House _2",
+            "UID": 3874750604,
+            "Name": "House _2_2_2",
             "Components": {
                 "Mesh": {
                     "Type": 2,
                     "UID": 3452816845,
-                    "Path": "Assets\/Models\/BakerHouse.fbx",
+                    "Path": "Library\/Models\/02.msh",
                     "Active": true,
                     "Normals": false,
                     "Wireframe": false
                 },
                 "Transform": {
                     "Type": 1,
-                    "UID": 3539900435,
-                    "Position": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                    },
-                    "GeneralScale": 1,
-                    "Scale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                    },
-                    "Rotation": {
-                        "x": 0,
-                        "y": 0,
-                        "z": 0
-                    }
-                },
-                "Material": {
-                    "Type": 8,
-                    "UID": 722847728,
-                    "TexturePath": "Assets\/Textures\/BakerHouse.png",
-                    "Width": 1024,
-                    "Height": 1024
-                }
-            }
-        },
-        {
-            "UID": 2091052961,
-            "Name": "Car _1",
-            "Components": {
-                "Mesh": {
-                    "Type": 2,
-                    "UID": 3452816845,
-                    "Path": "Assets\/Models\/Car.fbx",
-                    "Active": true,
-                    "Normals": false,
-                    "Wireframe": false
-                },
-                "Transform": {
-                    "Type": 1,
-                    "UID": 3590611328,
-                    "Position": {
-                        "x": 5,
-                        "y": 0,
-                        "z": 0
-                    },
-                    "GeneralScale": 1,
-                    "Scale": {
-                        "x": 1,
-                        "y": 1,
-                        "z": 1
-                    },
-                    "Rotation": {
-                        "x": 22,
-                        "y": 19,
-                        "z": 32
-                    }
-                },
-                "Material": {
-                    "Type": 8,
-                    "UID": 2577577972,
-                    "TexturePath": "Assets\/Textures\/Car.png",
-                    "Width": 512,
-                    "Height": 512
-                }
-            }
-        },
-        {
-            "UID": 4171062180,
-            "Name": "Penguin _1",
-            "Components": {
-                "Mesh": {
-                    "Type": 2,
-                    "UID": 3452816845,
-                    "Path": "Assets\/Models\/Penguin.fbx",
-                    "Active": true,
-                    "Normals": false,
-                    "Wireframe": false
-                },
-                "Transform": {
-                    "Type": 1,
-                    "UID": 526108578,
+                    "UID": 526817782,
                     "Position": {
                         "x": 8,
                         "y": 0,
@@ -109,17 +27,268 @@
                         "z": 1
                     },
                     "Rotation": {
-                        "x": -76,
+                        "x": 0,
                         "y": 0,
                         "z": 0
                     }
                 },
                 "Material": {
                     "Type": 8,
-                    "UID": 92082912,
-                    "TexturePath": "Assets\/Textures\/Penguin.png",
-                    "Width": 2048,
-                    "Height": 2048
+                    "UID": 814399882,
+                    "TexturePath": "Library\/Textures\/BakerHouse.dds",
+                    "Width": -842150451,
+                    "Height": -842150451
+                }
+            }
+        },
+        {
+            "UID": 3678901814,
+            "Name": "Car _1_1_1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Library\/Models\/05.msh",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3019106663,
+                    "Position": {
+                        "x": 0,
+                        "y": 4,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 2991550273,
+                    "TexturePath": "Library\/Textures\/Car.dds",
+                    "Width": -842150451,
+                    "Height": -842150451
+                }
+            }
+        },
+        {
+            "UID": 4115426076,
+            "Name": "Cube _1_1",
+            "Components": {
+                "Mesh": {
+                    "Type": 3,
+                    "UID": 2992542606,
+                    "Active": true,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3092727225,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                }
+            }
+        },
+        {
+            "UID": 3014043178,
+            "Name": "Car _1_1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Library\/Models\/05.msh",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3660969651,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": -50,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 3729707393,
+                    "TexturePath": "Library\/Textures\/Car.dds",
+                    "Width": -842150451,
+                    "Height": -842150451
+                }
+            }
+        },
+        {
+            "UID": 2813585944,
+            "Name": "Plane _1_1",
+            "Components": {
+                "Mesh": {
+                    "Type": 7,
+                    "UID": 3228662695,
+                    "Active": true,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3314644630,
+                    "Position": {
+                        "x": -24,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                }
+            }
+        },
+        {
+            "UID": 1395042305,
+            "Name": "House _2_2",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Library\/Models\/02.msh",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 2520288529,
+                    "Position": {
+                        "x": 0,
+                        "y": -5,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 3885029102,
+                    "TexturePath": "Library\/Textures\/BakerHouse.dds",
+                    "Width": -842150451,
+                    "Height": -842150451
+                }
+            }
+        },
+        {
+            "UID": 1370058719,
+            "Name": "Sphere _1_1",
+            "Components": {
+                "Mesh": {
+                    "Type": 5,
+                    "UID": 3931489059,
+                    "Active": true,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 985985606,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 14
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                }
+            }
+        },
+        {
+            "UID": 3394021168,
+            "Name": "Cylinder _1_1",
+            "Components": {
+                "Mesh": {
+                    "Type": 6,
+                    "UID": 1748615910,
+                    "Active": true,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 2135778291,
+                    "Position": {
+                        "x": 0,
+                        "y": 0,
+                        "z": -7
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
                 }
             }
         }

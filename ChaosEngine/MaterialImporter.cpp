@@ -87,10 +87,22 @@ void MaterialImporter::ImportMaterial(std::string sourcePath, int* width, int* h
 
 	if (!isDropped)
 	{
-		for (int i = 0; i < App->renderer3D->models[App->renderer3D->models.size() - 1].meshes.size(); i++)
+		
+		for (a = 0; a < App->scene->gameObjects.size() - 1; a++)
 		{
-			App->renderer3D->models[App->renderer3D->models.size() - 1].meshes[i].textureId = textId;
+			if (App->editor->objectSelected->id == App->renderer3D->models[a].id)
+			{
+				break;
+			}
 		}
+
+		for (int b = 0; b < App->renderer3D->models[a].meshes.size(); b++)
+		{
+			glDeleteTextures(1, &App->renderer3D->models[a].meshes[b].textureId);
+			ilDeleteImages(1, myImageId);
+			App->renderer3D->models[a].meshes[b].textureId = textId;
+		}
+		
 	}
 	if (isDropped)
 	{

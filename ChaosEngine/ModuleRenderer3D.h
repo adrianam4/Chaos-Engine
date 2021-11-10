@@ -18,6 +18,7 @@ public:
 	update_status PostUpdate(float dt);
 	bool CleanUp();
 	void InitModel(std::vector<theBuffer*>* theArray);
+	void InitModelPath(char *path);
 	void OnResize(int width, int height);
 	void InitMesh(char* path, GameObject* selectedObj);
 	void DrawMeshes();

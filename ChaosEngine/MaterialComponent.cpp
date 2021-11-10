@@ -20,7 +20,7 @@ ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path, boo
 	importer.LoadMaterial(std::string(texturePath), &width, &height, isDropped, &myImageId);
 	if (texturePath != importer.ddsPath.c_str())
 		texturePath = importer.ddsPath.c_str();
-
+	TexturePathConst = texturePath;
 	showCheckerTexture = false;
 }
 
@@ -38,13 +38,15 @@ void ComponentMaterial::Update()
 	{
 		for (int i = 0; i < App->renderer3D->models[0].meshes.size(); i++)
 		{
-			importer.ImportMaterial(std::string("Library/Textures/Checker.dds"), &width, &height, isDropped, &myImageId);
+			std::string checkersPath= "Library/Textures/Checker.dds";
+			importer.ImportMaterial(checkersPath, &width, &height, isDropped, &myImageId);
 		}
 
 	}
 	else
 	{
-		importer.ImportMaterial(std::string(texturePath), &width, &height, isDropped, &myImageId);
+		
+		importer.ImportMaterial(TexturePathConst, &width, &height, isDropped, &myImageId);
 	}
 }
 

@@ -18,9 +18,9 @@ enum class MeshType
 class ComponentMesh : public Component
 {
 public:
-	ComponentMesh(std::vector<theBuffer*>* theArray);
+	ComponentMesh(std::vector<theBuffer*>* theArray , const char* mName);
 	ComponentMesh(ComponentType mType, float3* pos=nullptr, float3* measures = nullptr);
-	ComponentMesh(ComponentType mType, char* name);
+	
 	~ComponentMesh();
 
 	void Enable() override;

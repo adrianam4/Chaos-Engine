@@ -152,6 +152,9 @@ bool ModuleRenderer3D::Init()
 
 	return ret;
 }
+void ModuleRenderer3D::InitModelPath(char* path) {
+	models.push_back(Model());
+}
 void ModuleRenderer3D::InitModel(std::vector<theBuffer*>* theArray) {
 	models.push_back(Model(theArray));
 }

@@ -17,7 +17,7 @@ public:
 	Component* CreateComponent(ComponentType type, const char* name, bool isDropped);
 	int SearchComponent(GameObject* gameObject, ComponentType type);
 	u32 GenerateUID();
-	Component* CreateMeshComponent(std::vector<theBuffer*>* theArray);
+	Component* CreateMeshComponent(std::vector<theBuffer*>* theArray,const char* path);
 public:
 	std::vector<float3> GetVertices(int id);
 	std::vector<float3> GetNormals(int id);

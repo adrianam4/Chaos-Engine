@@ -28,4 +28,5 @@ private:
 	const char* checkerTextPath;
 	char* oldTextPath;
 	bool isDropped;
+	std::string TexturePathConst;
 };
