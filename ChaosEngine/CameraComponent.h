@@ -22,7 +22,10 @@ private:
 	unsigned int VBO;
 	unsigned int EBO;
 	std::vector<float3> vertices;
-	std::vector<float> indices;
+	std::vector<uint> indices;
+
+	float frontRotation;
+	float upRotation;
 
 	void RecalculateFront(float degrees);
 	void RecalculateUp(float degrees);

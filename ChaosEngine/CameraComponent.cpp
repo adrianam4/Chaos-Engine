@@ -18,6 +18,8 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 	nearPlaneDistance = nPlane;
 	farPlaneDistance = fPlane;
 
+	frontRotation = upRotation = 0;
+
 	Enable();
 }
 
@@ -32,11 +34,10 @@ void ComponentCamera::Enable()
 
 void ComponentCamera::Update()
 {
+	CalculatePoints();
 	RecalculateCamera();
 
-	App->viewportBuffer->Bind();
 	Draw();
-	App->viewportBuffer->UnBind();
 }
 
 void ComponentCamera::Disable()
@@ -57,16 +58,22 @@ void ComponentCamera::OnEditor(int i)
 	{
 		frustum.farPlaneDistance = farPlaneDistance;
 	}
+	if (ImGui::DragFloat("Front Rotation",&frontRotation, 0.2f))
+	{
+		RecalculateFront(frontRotation);
+	}
+	if (ImGui::DragFloat("Up Rotation", &upRotation, 0.2f))
+	{
+		RecalculateUp(upRotation);
+	}
 
 	Update();
 
-	ImGui::Text("%.2f, %.2f, %.2f", frustum.front.x, frustum.front.y, frustum.front.z);
-	ImGui::Text("%.2f, %.2f, %.2f", frustum.up.x, frustum.up.y, frustum.up.z);
 }
 
 void ComponentCamera::Draw()
 {
-	glLineWidth(10.0f);
+	glLineWidth(3.0f);
 
 	glColor4f(255, 0, 0, 255);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -80,7 +87,7 @@ void ComponentCamera::Draw()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
 	//Draw
-	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_QUADS, indices.size(), GL_UNSIGNED_INT, 0);
 
 	//UnBind Buffers
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -122,39 +129,36 @@ void ComponentCamera::RecalculateCamera()
 			break;
 		}
 	}
-	//RecalculateFront(45); // Set desired angles, 0 is WRONG, TODO
-	//RecalculateUp(45); // Set desired angles, 0 is WRONG, TODO
 }
 
 void ComponentCamera::CalculatePoints()
 {
-	// Center Points (Near & Far)
 	vec cornerPoints[8];
 	frustum.GetCornerPoints(cornerPoints);
 
-	vertices.push_back(cornerPoints[0]);
-	vertices.push_back(cornerPoints[1]);
-	vertices.push_back(cornerPoints[2]);
-	vertices.push_back(cornerPoints[3]);
-	vertices.push_back(cornerPoints[4]);
-	vertices.push_back(cornerPoints[5]);
-	vertices.push_back(cornerPoints[6]);
-	vertices.push_back(cornerPoints[7]);
+	vertices.clear();
+	vertices.push_back(cornerPoints[0]);vertices.push_back(cornerPoints[1]);vertices.push_back(cornerPoints[2]);vertices.push_back(cornerPoints[3]);
+	vertices.push_back(cornerPoints[4]);vertices.push_back(cornerPoints[5]);vertices.push_back(cornerPoints[6]);vertices.push_back(cornerPoints[7]);
 
-	indices.push_back(0); indices.push_back(1); indices.push_back(1);
-	indices.push_back(3); indices.push_back(3); indices.push_back(2);
-	indices.push_back(2); indices.push_back(0); indices.push_back(1);
-	indices.push_back(5); indices.push_back(4); indices.push_back(6);
-	indices.push_back(7); indices.push_back(3); indices.push_back(6);
-	indices.push_back(7); indices.push_back(6); indices.push_back(2);
-	indices.push_back(7); indices.push_back(5); indices.push_back(4);
-	indices.push_back(5); indices.push_back(4); indices.push_back(0);
+	static bool recalculate = true;
+	if (recalculate)
+	{
+		indices.push_back(3); indices.push_back(2); indices.push_back(0); indices.push_back(1);
+		indices.push_back(4); indices.push_back(5); indices.push_back(7); indices.push_back(6);
+		indices.push_back(2); indices.push_back(6); indices.push_back(4); indices.push_back(0);
+		indices.push_back(7); indices.push_back(3); indices.push_back(1); indices.push_back(5);
+		indices.push_back(3); indices.push_back(2); indices.push_back(6); indices.push_back(7);
+		indices.push_back(1); indices.push_back(0); indices.push_back(4); indices.push_back(5);
 
-	glGenBuffers(1, &VBO);
+		glGenBuffers(1, &VBO);
+		glGenBuffers(1, &EBO);
+
+		recalculate = false;
+	}
+	
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float3), vertices.data(), GL_STATIC_DRAW);
-
-	glGenBuffers(1, &EBO);
+	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), indices.data(), GL_STATIC_DRAW);
 }
