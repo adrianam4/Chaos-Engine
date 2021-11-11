@@ -469,10 +469,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position,&M,&float3(0,0,0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 1, 20));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			
 			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Cube Created\n");
@@ -505,10 +503,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 1, 20));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 			
 			App->editor->AddLog("Pyramid Created\n");
@@ -539,10 +535,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 1, 20));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 			
 			App->editor->AddLog("Cylinder Created\n");
@@ -574,10 +568,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 1, 20));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 		
 			App->editor->AddLog("Sphere Created\n");
@@ -610,10 +602,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, position, 75, 1, 20));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
 			
 			App->editor->AddLog("Plane Created\n");
@@ -759,6 +749,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool showInspector = true;
 	static bool showConsoleMenu = true;
 	static bool showSceneWindow = true;
+	static bool showFileWindow = false;
 	static bool showOptions = true;
 	static bool isActive = true;
 	static bool isActive2 = true;
@@ -789,6 +780,10 @@ update_status ModuleEditor::Update(float dt)
 			{
 				LoadConfig();
 				ComproveScreen();
+			}
+			if (ImGui::MenuItem("Load File"))
+			{
+				showFileWindow = !showFileWindow;
 			}
 			ImGui::EndMenu();
 		}
@@ -843,6 +838,20 @@ update_status ModuleEditor::Update(float dt)
 
 		if (ImGui::BeginMenu("GameObject", &openConfigMenu))
 		{
+
+			/*if (ImGui::MenuItem("Create Camera"))
+			{
+				static int empties = 1;
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, empties, "Camera "));
+				empties++;
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+				objectSelected = App->scene->gameObjects[lastComponent];
+				App->editor->AddLog("Camera Object Created\n");
+			}*/
 			if (ImGui::MenuItem("Create Empty"))
 			{
 				static int empties = 1;
@@ -851,16 +860,14 @@ update_status ModuleEditor::Update(float dt)
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::EMPTY, &position));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 				objectSelected = App->scene->gameObjects[lastComponent];
 				App->editor->AddLog("Empty Object Created\n");
 			}
 			if (ImGui::MenuItem("Create House"))
 			{
-				static int houses = 2;
+				static int houses = 1;
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, houses, "House "));
 				houses++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
@@ -869,10 +876,8 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","29403208", "0", "2", ".msh"), "Library/Models/2940320802.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM,&float3(0,0,0),&float3(1,1,1),&float3(0,0,0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 				
 				App->editor->AddLog("House Created\n");
 			}
@@ -887,10 +892,8 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","21274500", "0", "1", ".msh"), "Library/Models/2127450001.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Penguin.dds", false));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
 				
 				App->editor->AddLog("Penguin Created\n");
 			}
@@ -906,10 +909,9 @@ update_status ModuleEditor::Update(float dt)
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","21854936", "0", "5", ".msh"), "Library/Models/2185493605.msh"));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Car.dds", false));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
+
 				
 				App->editor->AddLog("Car Created\n");
 			}
@@ -1514,9 +1516,23 @@ update_status ModuleEditor::Update(float dt)
 	if (showDemoWindow)
 		ImGui::ShowDemoWindow(&showDemoWindow);
 
+	//////////////////////////////////////////////////////////////////////////////////////////// FILE WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+
+	if (showFileWindow)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Load File", &showFileWindow);
+
+		ImGui::Text("Select the file you want to load:");
+
+		SDL_GetBasePath();
+
+		ImGui::End();
+	}
 
 	return UPDATE_CONTINUE;
 }
+
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
