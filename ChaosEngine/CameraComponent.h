@@ -19,8 +19,13 @@ public:
 
 private:
 	Frustum frustum;
+	unsigned int VBO;
+	unsigned int EBO;
+	std::vector<float3> vertices;
+	std::vector<float> indices;
 
 	void RecalculateFront(float degrees);
 	void RecalculateUp(float degrees);
 	void RecalculateCamera();
+	void CalculatePoints();
 };
