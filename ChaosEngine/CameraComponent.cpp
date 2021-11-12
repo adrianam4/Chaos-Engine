@@ -20,6 +20,9 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 
 	frontRotation = upRotation = 0;
 
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = App->editor->lastId + 1;
+	App->editor->lastId++;
+
 	Enable();
 }
 
@@ -36,8 +39,6 @@ void ComponentCamera::Update()
 {
 	CalculatePoints();
 	RecalculateCamera();
-
-	Draw();
 }
 
 void ComponentCamera::Disable()
@@ -50,11 +51,11 @@ void ComponentCamera::OnEditor(int i)
 	{
 		frustum.verticalFov = frustum.horizontalFov = (horizontalFov * math::pi / 2) / 180; // Convert from deg to rads (All maths works with rads but user will see the info in degs)
 	}
-	if (ImGui::DragFloat("Near Plane Distance", &nearPlaneDistance))
+	if (ImGui::DragFloat("Near Plane Distance", &nearPlaneDistance, 0.5f, 1, 5))
 	{
 		frustum.nearPlaneDistance = nearPlaneDistance;
 	}
-	if (ImGui::DragFloat("Far Plane Distance", &farPlaneDistance))
+	if (ImGui::DragFloat("Far Plane Distance", &farPlaneDistance, 0.5f, 4, 50))
 	{
 		frustum.farPlaneDistance = farPlaneDistance;
 	}
@@ -66,9 +67,6 @@ void ComponentCamera::OnEditor(int i)
 	{
 		RecalculateUp(upRotation);
 	}
-
-	Update();
-
 }
 
 void ComponentCamera::Draw()

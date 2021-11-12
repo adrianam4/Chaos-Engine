@@ -222,15 +222,6 @@ void ComponentTransform::Update()
 			}
 		}
 	}
-
-	for (int c = 0; c < App->editor->objectSelected->components.size(); c++)
-	{
-		if (App->editor->objectSelected->components[c]->type == ComponentType::CAMERA)
-		{
-			App->editor->objectSelected->components[c]->Update();
-			break;
-		}
-	}
 }
 
 void ComponentTransform::Disable()

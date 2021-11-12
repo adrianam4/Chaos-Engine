@@ -22,6 +22,7 @@ public:
 	void OnResize(int width, int height);
 	void InitMesh(char* path, GameObject* selectedObj);
 	void DrawMeshes();
+	void DrawCameras();
 public:
 
 	Light lights[MAX_LIGHTS];

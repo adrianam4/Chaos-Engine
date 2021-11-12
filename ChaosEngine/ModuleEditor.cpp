@@ -286,6 +286,14 @@ void ModuleEditor::LoadScene()
 			objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
 			GameObject* lastGO = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
 			lastGO->UID = UID; //UID
+
+			std::string isEmpty = std::string(name);
+			isEmpty = isEmpty.substr(0, 5);
+			if (isEmpty == "Empty")
+			{
+				App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = lastId + 1;
+				lastId++;
+			}
 			/*  MESH   */
 			int auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.Type");
 			u32 compUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.UID");
@@ -312,7 +320,6 @@ void ModuleEditor::LoadScene()
 				secondNum = secondNum.substr(secondNumPos + 2+8, 1);
 
 				lastGO->components.push_back(lastGO->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", Uid.c_str(), firstNum.c_str(), secondNum.c_str(), ".msh"), modelPath));
-				//lastGO->components.push_back(lastGO->CreateComponent(ComponentType::MESH, modelPath, false));
 			}
 			if (auxType == 3)
 				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CUBE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
@@ -357,12 +364,16 @@ void ModuleEditor::LoadScene()
 			}
 
 			/*   CAMERAS   */
-			u32 cameraUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.UID");
-			int Type = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
-			double horizontalFov = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FOV");
-			double nearPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.NearPlane");
-			double farPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FarPlane");
-			lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane));
+			auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
+			if (auxType == 9)
+			{
+				u32 cameraUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.UID");
+				int Type = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
+				double horizontalFov = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FOV");
+				double nearPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.NearPlane");
+				double farPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FarPlane");
+				lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane));
+			}
 		}
 	}
 	
@@ -839,29 +850,30 @@ update_status ModuleEditor::Update(float dt)
 		if (ImGui::BeginMenu("GameObject", &openConfigMenu))
 		{
 
-			/*if (ImGui::MenuItem("Create Camera"))
+			if (ImGui::MenuItem("Create Camera"))
 			{
-				static int empties = 1;
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, empties, "Camera "));
-				empties++;
+				static int cameras = 1;
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cameras, "Camera "));
+				cameras++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
+				App->editor->objectSelected = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 				objectSelected = App->scene->gameObjects[lastComponent];
 				App->editor->AddLog("Camera Object Created\n");
-			}*/
+			}
 			if (ImGui::MenuItem("Create Empty"))
 			{
 				static int empties = 1;
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, empties, "Empty "));
 				empties++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::EMPTY, &position));
+				App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = lastId + 1;
+				lastId++;
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 				objectSelected = App->scene->gameObjects[lastComponent];
 				App->editor->AddLog("Empty Object Created\n");
 			}

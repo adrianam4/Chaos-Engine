@@ -15,7 +15,7 @@ public:
 	void Update() override;
 	void Disable() override;
 	void OnEditor(int i) override;
-	void Draw();
+	void Draw() override;
 
 private:
 	Frustum frustum;

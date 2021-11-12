@@ -80,7 +80,7 @@ Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* m
 		component = new ComponentMesh(ComponentType::PLANE, pos, measures);
 		break;
 	case ComponentType::EMPTY:
-		component = new ComponentMesh(ComponentType::EMPTY);
+		component = new ComponentMesh(ComponentType::EMPTY, pos, &float3(1,1,1));
 		break;
 	default:
 		break;

@@ -268,11 +268,9 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	// Rendering
 	DrawMeshes();
-
+	DrawCameras();
 	ImGui::Render();
-
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 	SDL_GL_SwapWindow(App->window->window);
 	
 	return UPDATE_CONTINUE;
@@ -329,6 +327,24 @@ void ModuleRenderer3D::DrawMeshes()
 					}
 				}
 			}
+		}
+	}
+	App->viewportBuffer->UnBind();
+}
+
+void ModuleRenderer3D::DrawCameras()
+{
+	App->viewportBuffer->Bind();
+	for (int i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+		{
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::CAMERA)
+			{
+				App->scene->gameObjects[i]->components[j]->Update();
+				App->scene->gameObjects[i]->components[j]->Draw();
+			}
+				
 		}
 	}
 	App->viewportBuffer->UnBind();

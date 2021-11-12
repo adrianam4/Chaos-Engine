@@ -7,6 +7,7 @@
 ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 {
 	type = mType;
+	name = "Mesh Component";
 	UID = GenerateUID();
 
 	switch (mType)
@@ -41,11 +42,14 @@ ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 		App->editor->cylinders[App->editor->cylinders.size() - 1]->id = App->editor->lastId + 1;
 		App->editor->lastId++;
 		break;
+	case ComponentType::EMPTY:
+		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = App->editor->lastId + 1;
+		App->editor->lastId++;
+		name = "Empty Component";
+		break;
 	default:
 		break;
 	}
-
-	name = "Mesh Component";
 }
 ComponentMesh::ComponentMesh(std::vector<theBuffer*>* theArray, const char* mName) {
 	type = ComponentType::MESH;

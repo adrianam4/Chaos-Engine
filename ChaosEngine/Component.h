@@ -56,6 +56,7 @@ public:
 	virtual void Enable() {}
 	virtual void Update() {}
 	virtual void Disable() {}
+	virtual void Draw() {}
 	virtual void Save(const char* texturePath) {}
 	virtual void Load(const char* texturePath) {}
 	virtual void OnEditor(int i) {}
