@@ -7,14 +7,14 @@
 
 #include "MathGeoLib/src/MathGeoLib.h"
 
-Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double hFov, double nPlane, double fPlane)
+Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double hFov, double nPlane, double fPlane, bool isObj)
 {
 	Component* component = nullptr;
 
 	switch (type)
 	{
 	case ComponentType::CAMERA:
-		component = new ComponentCamera(pos, hFov, nPlane, fPlane);
+		component = new ComponentCamera(pos, hFov, nPlane, fPlane, isObj);
 		break;
 	default:
 		break;

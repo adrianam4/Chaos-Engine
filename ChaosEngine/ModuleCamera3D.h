@@ -5,6 +5,8 @@
 
 #include "MathGeoLib/src/MathGeoLib.h"
 
+class ComponentCamera;
+
 class ModuleCamera3D : public Module
 {
 public:
@@ -20,21 +22,20 @@ public:
 	void Move(const Vec3& movement);
 	float* GetViewMatrix();
 	void RecalculateProjection();
-
 private:
 
 	void CalculateViewMatrix();
 
 public:
-
+	LineSegment myRay;
 	Vec3 x, y, z, position, reference;
-	Frustum camFrustum;
-	float aspectRatio = 1.f;
-	float verticalFOV = 60.f;
-	float nearPlaneDistance = 0.1f;
-	float farPlaneDistance = 5000.f;
-
+	//Frustum frustum;
+	ComponentCamera *cam;
+	float aspectRatio = 16/9;
+	float verticalFOV = 75.0f;
+	float nearPlaneDistance = 1.0f;
+	float farPlaneDistance = 20.0f;
+	float4x4 frustumMatrix;
 private:
-
 	mat4x4 viewMatrix, viewMatrixInverse;
 };

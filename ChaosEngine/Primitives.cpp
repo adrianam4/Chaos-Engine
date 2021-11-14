@@ -200,10 +200,12 @@ MyCube::~MyCube()
 	vertices.clear();
 	indices.clear();
 }
+
 std::vector<float3> MyCube::getVertex() 
 {
 	return vertices;
 }
+
 void MyCube::DrawCube()
 {
 	glLineWidth(3.0f);

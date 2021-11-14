@@ -372,7 +372,7 @@ void ModuleEditor::LoadScene()
 				double horizontalFov = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FOV");
 				double nearPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.NearPlane");
 				double farPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FarPlane");
-				lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane));
+				lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane, true));
 			}
 		}
 	}
@@ -857,7 +857,7 @@ update_status ModuleEditor::Update(float dt)
 				cameras++;
 				int lastComponent = App->scene->gameObjects.size() - 1;
 				App->editor->objectSelected = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20));
+				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20, true));
 				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];

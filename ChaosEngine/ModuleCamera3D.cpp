@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h"
+#include "CameraComponent.h"
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -14,19 +15,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app
 	position = Vec3(0.0f, 0.0f, 5.0f);
 	reference = Vec3(0.0f, 0.0f, 0.0f);
 
-	vec pos = vec(0.0f, 0.0f, 5.0f);
-	vec front = vec(1.0f, 0.0f, 0.0f);
-	vec up = vec(0.0f, 1.0f, 0.0f);
-
-	float horizontalFov, verticalFov;
-	horizontalFov = verticalFov = 75;
-	camFrustum.SetKind(FrustumSpaceGL, FrustumRightHanded);
-	camFrustum.SetViewPlaneDistances(5, 300);
-	camFrustum.SetFrame(pos, front, up);
-	camFrustum.SetPos(pos);
-	camFrustum.SetFront(front);
-	camFrustum.SetUp(up);
-	camFrustum.SetPerspective(horizontalFov, verticalFov);
+	cam = new ComponentCamera(float3(0, 5, 5), 75, 1, 20, false);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -68,7 +57,9 @@ update_status ModuleCamera3D::Update(float dt)
 
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= x * speed * 2;
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += x * speed * 2;
+
 	position += newPos;
+	cam->frustum.SetPos(vec(position.x, position.y, position.z));
 	reference += newPos;
 
 	// Mouse motion ----------------
@@ -79,7 +70,11 @@ update_status ModuleCamera3D::Update(float dt)
 
 		float sensitivity = 0.25f;
 
+		cam->RecalculateFront(App->input->GetMouseXMotion()); //Recalculate rotation (???)
+		cam->RecalculateUp(App->input->GetMouseYMotion());
+
 		position -= reference;
+		cam->frustum.SetPos(vec(position.x, position.y, position.z));
 
 		if (dx != 0)
 		{
@@ -105,6 +100,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		position = reference + z * length(position);
+		cam->frustum.SetPos(vec(position.x, position.y, position.z));
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F))
@@ -168,12 +164,39 @@ update_status ModuleCamera3D::Update(float dt)
 				position.z = (objectPoition.z + distance);
 				position.x = (objectPoition.x + distance);
 				LookAt({ (((Max.x - Min.x) / 2) + objectPoition.x),(objectPoition.y + ((objectScale.y * (Max.y - Min.y)) / 2)),(((Max.z - Min.z) / 2) + objectPoition.z) });
+				cam->frustum.SetPos(vec(position.x, position.y, position.z));
 			}
 		}
 	}
 
+	cam->CalculatePoints();
+	cam->Draw();
+
+	frustumMatrix = cam->frustum.ViewMatrix(); //Get CameraViewMatrix
+
 	// Recalculate matrix -------------
 	CalculateViewMatrix();
+
+	//Test if a ray intersects with gameobjects
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	{
+		float normalized_x = -1 + 2 * (float)App->input->GetMouseX() / App->window->width;
+		float normalized_y = -1 + 2 * (float)App->input->GetMouseY() / App->window->height;
+		myRay = cam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
+
+		for (int i = 0; i < App->scene->gameObjects.size(); i++)
+		{
+			GameObject* go = App->scene->gameObjects[i];
+			for (int j = 0; j < go->boundingBoxes.size(); j++)
+			{
+				bool hit = myRay.Intersects(*go->aabb[j]);
+				if (hit)
+				{
+					App->editor->AddLog("HIT TRUE\n");
+				}
+			}
+		}
+	}
 
 	return UPDATE_CONTINUE;
 }
@@ -211,11 +234,11 @@ void ModuleCamera3D::LookAt(const Vec3& spot)
 
 void ModuleCamera3D::RecalculateProjection()
 {
-	camFrustum.type = FrustumType::PerspectiveFrustum;
-	camFrustum.nearPlaneDistance = nearPlaneDistance;
-	camFrustum.farPlaneDistance = farPlaneDistance;
-	camFrustum.verticalFov = (verticalFOV * 3.141592 / 2) / 180.f;
-	camFrustum.horizontalFov = 2.f * atanf(tanf(camFrustum.verticalFov * 0.5f) * aspectRatio);
+	//frustum.type = FrustumType::PerspectiveFrustum;
+	//frustum.nearPlaneDistance = nearPlaneDistance;
+	//frustum.farPlaneDistance = farPlaneDistance;
+	//frustum.verticalFov = (verticalFOV * 3.141592 / 2) / 180.f;
+	//frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspectRatio);
 }
 
 // -----------------------------------------------------------------

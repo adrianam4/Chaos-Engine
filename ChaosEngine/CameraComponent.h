@@ -8,7 +8,7 @@ class Component;
 class ComponentCamera : public Component
 {
 public:
-	ComponentCamera(float3 pos, double hFov, double nPlane, double fPlane);
+	ComponentCamera(float3 pos, double hFov, double nPlane, double fPlane, bool isGameObj);
 	~ComponentCamera();
 
 	void Enable() override;
@@ -17,7 +17,7 @@ public:
 	void OnEditor(int i) override;
 	void Draw() override;
 
-private:
+public:
 	Frustum frustum;
 	unsigned int VBO;
 	unsigned int EBO;

@@ -1,9 +1,10 @@
 #include "Application.h"
+#include "Globals.h"
 
 #include "Component.h"
 #include "CameraComponent.h"
 
-ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double fPlane)
+ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double fPlane, bool isGameObj)
 {
 	type = ComponentType::CAMERA;
 	UID = GenerateUID();
@@ -11,7 +12,9 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 
 	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 	frustum.SetViewPlaneDistances(nPlane, fPlane);
-	frustum.SetPerspective(hFov, hFov);
+	float hFovR = DegToRad(hFov);
+	float vFovR = 2 * Atan((Tan(hFovR / 2)) * ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH));
+	frustum.SetPerspective(hFovR, vFovR);
 	frustum.SetFrame(pos, float3(0, 0, -1), float3(0, 1, 0));
 
 	horizontalFov = hFov;
@@ -20,10 +23,13 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 
 	frontRotation = upRotation = 0;
 
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = App->editor->lastId + 1;
-	App->editor->lastId++;
+	if (isGameObj)
+	{
+		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = App->editor->lastId + 1;
+		App->editor->lastId++;
 
-	Enable();
+		Enable();
+	}
 }
 
 ComponentCamera::~ComponentCamera()
@@ -49,7 +55,8 @@ void ComponentCamera::OnEditor(int i)
 {
 	if (ImGui::SliderFloat("FOV", &horizontalFov, 55.0f, 110.0f))
 	{
-		frustum.verticalFov = frustum.horizontalFov = (horizontalFov * math::pi / 2) / 180; // Convert from deg to rads (All maths works with rads but user will see the info in degs)
+		frustum.horizontalFov = math::DegToRad(horizontalFov); // Convert from deg to rads (All maths works with rads but user will see the info in degs)
+		frustum.verticalFov = 2 * Atan((Tan(frustum.horizontalFov / 2)) * ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH));
 	}
 	if (ImGui::DragFloat("Near Plane Distance", &nearPlaneDistance, 0.5f, 1, 5))
 	{
