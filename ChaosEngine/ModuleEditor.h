@@ -13,7 +13,7 @@ public:
 	~ModuleEditor();
 
 	bool Start();
-	/*update_status PreUpdate(float dt);*/
+	update_status PreUpdate(float dt);
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
@@ -38,8 +38,8 @@ public:
 
 private:
 	int maxFPS;
-	int width;
-	int height;
+	int width = 1280;
+	int height = 720;
 	float brightness;
 	bool fullscreen = false;
 	bool resizable = true;
@@ -69,4 +69,7 @@ public:
 	
 	int lastId;
 	bool isSelected;
+	bool start = true;
+	bool stop = false;
+	bool advance = false;
 };

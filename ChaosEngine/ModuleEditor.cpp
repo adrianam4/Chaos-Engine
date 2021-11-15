@@ -62,16 +62,17 @@ bool ModuleEditor::Start()
 	return ret;
 }
 
-//update_status ModuleEditor::PreUpdate(float dt) {
-//
-//	// Start the Dear ImGui frame
-//	ImGui_ImplOpenGL3_NewFrame();
-//	ImGui_ImplSDL2_NewFrame(App->window->window);
-//	ImGui::NewFrame();
-//
-//	return UPDATE_CONTINUE;
-//
-//}
+update_status ModuleEditor::PreUpdate(float dt) {
+	if (start == true)
+		return UPDATE_CONTINUE;
+	if (stop == true)
+		return UPDATE_STOP;
+	if (advance == true)
+	{
+		return UPDATE_CONTINUE;
+		return UPDATE_STOP;
+	}
+}
 
 // Load assets
 bool ModuleEditor::CleanUp()
@@ -161,19 +162,37 @@ void ModuleEditor::SaveConfig()
 
 void ModuleEditor::LoadConfig()
 {
-	//Reading JSON File
-	JSON_Value* userData = json_parse_file("Settings/ConfigFile.json");
+	if (App->gameMode == false)
+	{
+		JSON_Value* userData = json_parse_file("Settings/ConfigFile.json");
 
-	maxFPS = json_object_get_number(json_object(userData), "MaxFPS");
-	App->maxMs = json_object_get_number(json_object(userData), "MaxMs");
-	width = json_object_get_number(json_object(userData), "Width");
-	height = json_object_get_number(json_object(userData), "Height");
-	brightness = json_object_get_number(json_object(userData), "Brightness");
-	fullscreen = json_object_get_boolean(json_object(userData), "Fullscreen");
-	resizable = json_object_get_boolean(json_object(userData), "Resizable");
-	borderless = json_object_get_boolean(json_object(userData), "Borderless");
-	dekstop = json_object_get_boolean(json_object(userData), "Dekstop");
-	showAABB = json_object_get_boolean(json_object(userData), "AABB");
+		maxFPS = json_object_get_number(json_object(userData), "MaxFPS");
+		App->maxMs = json_object_get_number(json_object(userData), "MaxMs");
+		width = json_object_get_number(json_object(userData), "Width");
+		height = json_object_get_number(json_object(userData), "Height");
+		brightness = json_object_get_number(json_object(userData), "Brightness");
+		fullscreen = json_object_get_boolean(json_object(userData), "Fullscreen");
+		resizable = json_object_get_boolean(json_object(userData), "Resizable");
+		borderless = json_object_get_boolean(json_object(userData), "Borderless");
+		dekstop = json_object_get_boolean(json_object(userData), "Dekstop");
+		showAABB = json_object_get_boolean(json_object(userData), "AABB");
+	}
+
+	if (App->gameMode == true)
+	{
+		JSON_Value* userData = json_parse_file("Settings/GameMode.json");
+
+		maxFPS = json_object_get_number(json_object(userData), "MaxFPS");
+		App->maxMs = json_object_get_number(json_object(userData), "MaxMs");
+		width = json_object_get_number(json_object(userData), "Width");
+		height = json_object_get_number(json_object(userData), "Height");
+		brightness = json_object_get_number(json_object(userData), "Brightness");
+		fullscreen = json_object_get_boolean(json_object(userData), "Fullscreen");
+		resizable = json_object_get_boolean(json_object(userData), "Resizable");
+		borderless = json_object_get_boolean(json_object(userData), "Borderless");
+		dekstop = json_object_get_boolean(json_object(userData), "Dekstop");
+		showAABB = json_object_get_boolean(json_object(userData), "AABB");
+	}
 
 	AddLog("Loaded Config Data\n");
 }
@@ -747,25 +766,70 @@ update_status ModuleEditor::Update(float dt)
 			}
 		}
 	}
+	static bool showDemoWindow;
+	static bool showAnotherWindow;
+	static bool showCloseWindow;
+	static bool showAboutWindow;
+	static bool openConfigMenu;
+	static bool openSceneMenu;
+	static bool showConfigMenu;
+	static bool showWarningMenu;
+	static bool showHierarchy;
+	static bool showInspector;
+	static bool showConsoleMenu;
+	static bool showSceneWindow;
+	static bool showFileWindow;
+	static bool showTimeWindow;
+	static bool showOptions;
+	static bool isActive;
+	static bool isActive2;
+	static bool isActive3;
+	static bool isActive4;
+
 	// Our state
-	static bool showDemoWindow = false;
-	static bool showAnotherWindow = false;
-	static bool showCloseWindow = true;
-	static bool showAboutWindow = false;
-	static bool openConfigMenu = false;
-	static bool openSceneMenu = false;
-	static bool showConfigMenu = true;
-	static bool showWarningMenu = false;
-	static bool showHierarchy = true;
-	static bool showInspector = true;
-	static bool showConsoleMenu = true;
-	static bool showSceneWindow = true;
-	static bool showFileWindow = false;
-	static bool showOptions = true;
-	static bool isActive = true;
-	static bool isActive2 = true;
-	static bool isActive3 = true;
-	static bool isActive4 = true;
+	if (App->gameMode == false) {
+		showDemoWindow = false;
+		showAnotherWindow = false;
+		showCloseWindow = true;
+		showAboutWindow = false;
+		openConfigMenu = false;
+		openSceneMenu = false;
+		showConfigMenu = true;
+		showWarningMenu = false;
+		showHierarchy = true;
+		showInspector = true;
+		showConsoleMenu = true;
+		showSceneWindow = true;
+		showFileWindow = false;
+		showTimeWindow = false;
+		showOptions = true;
+		isActive = true;
+		isActive2 = true;
+		isActive3 = true;
+		isActive4 = true;
+	}
+
+	if (App->gameMode == true) {
+		showDemoWindow = false;
+		showAnotherWindow = false;
+		showCloseWindow = true;
+		showAboutWindow = false;
+		openConfigMenu = false;
+		openSceneMenu = false;
+		showConfigMenu = false;
+		showWarningMenu = false;
+		showHierarchy = false;
+		showInspector = false;
+		showConsoleMenu = false;
+		showSceneWindow = true;
+		showFileWindow = false;
+		showTimeWindow = false;
+		showOptions = true;
+		isActive = true;
+		isActive2 = true;
+		isActive3 = true;
+		isActive4 = true;
+	}
 	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 	//////////////////////////////////////////////////////////////////////////////////////////// SHAPES BEGIN OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////
@@ -774,236 +838,243 @@ update_status ModuleEditor::Update(float dt)
 
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////// MAIN MENU BAR ////////////////////////////////////////////////////////////////////////////////////////////
-
-	if (ImGui::BeginMainMenuBar())
+	if (App->gameMode == false)
 	{
-		if (ImGui::BeginMenu("File", &openConfigMenu))
+		if (ImGui::BeginMainMenuBar())
 		{
-			if (ImGui::MenuItem("Quit"))
+			if (ImGui::BeginMenu("File", &openConfigMenu))
 			{
-				return UPDATE_STOP;
-			}
-			if (ImGui::MenuItem("Save Config"))
-			{
-				SaveConfig();
-			}
-			if (ImGui::MenuItem("Load Config"))
-			{
-				LoadConfig();
-				ComproveScreen();
-			}
-			if (ImGui::MenuItem("Load File"))
-			{
-				showFileWindow = !showFileWindow;
-			}
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Scene", &openSceneMenu))
-		{
-			if (ImGui::MenuItem("Save Scene"))
-			{
-				SaveScene();
-			}
-			if (ImGui::MenuItem("Load Scene"))
-			{
-				showWarningMenu = !showWarningMenu;
-			}
-			ImGui::EndMenu();
-		}
-
-
-		if (ImGui::BeginMenu("View", &openConfigMenu))
-		{
-			if (ImGui::MenuItem("Configuration"))
-			{
-				showConfigMenu = !showConfigMenu;
-			}
-			if (ImGui::MenuItem("Hierarchy"))
-			{
-				showHierarchy = !showHierarchy;
-			}
-			if (ImGui::MenuItem("Inspector"))
-			{
-				showInspector = !showInspector;
-			}
-			if (ImGui::MenuItem("Console"))
-			{
-				showConsoleMenu = !showConsoleMenu;
-			}
-			ImGui::Separator();
-			if (ImGui::MenuItem("Enable/Disable AABB"))
-			{
-				showAABB = !showAABB;
-				if (showAABB)
+				if (ImGui::MenuItem("Quit"))
 				{
-					App->editor->AddLog("AABB Enabled\n");
+					return UPDATE_STOP;
 				}
-				else
+				if (ImGui::MenuItem("Save Config"))
 				{
-					App->editor->AddLog("AABB Disabled\n");
+					SaveConfig();
 				}
+				if (ImGui::MenuItem("Load Config"))
+				{
+					LoadConfig();
+					ComproveScreen();
+				}
+				if (ImGui::MenuItem("Load File"))
+				{
+					showFileWindow = !showFileWindow;
+				}
+				ImGui::EndMenu();
 			}
-			ImGui::EndMenu();
+
+			if (ImGui::BeginMenu("Scene", &openSceneMenu))
+			{
+				if (ImGui::MenuItem("Save Scene"))
+				{
+					SaveScene();
+				}
+				if (ImGui::MenuItem("Load Scene"))
+				{
+					showWarningMenu = !showWarningMenu;
+				}
+				ImGui::EndMenu();
+			}
+
+
+			if (ImGui::BeginMenu("View", &openConfigMenu))
+			{
+				if (ImGui::MenuItem("Configuration"))
+				{
+					showConfigMenu = !showConfigMenu;
+				}
+				if (ImGui::MenuItem("Hierarchy"))
+				{
+					showHierarchy = !showHierarchy;
+				}
+				if (ImGui::MenuItem("Inspector"))
+				{
+					showInspector = !showInspector;
+				}
+				if (ImGui::MenuItem("Console"))
+				{
+					showConsoleMenu = !showConsoleMenu;
+				}
+				if (ImGui::MenuItem("Time"))
+				{
+					showTimeWindow = !showTimeWindow;
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Enable/Disable AABB"))
+				{
+					showAABB = !showAABB;
+					if (showAABB)
+					{
+						App->editor->AddLog("AABB Enabled\n");
+					}
+					else
+					{
+						App->editor->AddLog("AABB Disabled\n");
+					}
+				}
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("GameObject", &openConfigMenu))
+			{
+
+				if (ImGui::MenuItem("Create Camera"))
+				{
+					static int cameras = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cameras, "Camera "));
+					cameras++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					App->editor->objectSelected = App->scene->gameObjects[lastComponent];
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20, true));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+					objectSelected = App->scene->gameObjects[lastComponent];
+					App->editor->AddLog("Camera Object Created\n");
+				}
+				if (ImGui::MenuItem("Create Empty"))
+				{
+					static int empties = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, empties, "Empty "));
+					empties++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = lastId + 1;
+					lastId++;
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+					objectSelected = App->scene->gameObjects[lastComponent];
+					App->editor->AddLog("Empty Object Created\n");
+				}
+				if (ImGui::MenuItem("Create House"))
+				{
+					static int houses = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, houses, "House "));
+					houses++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+					FBXmporter importer;
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "29403208", "0", "2", ".msh"), "Library/Models/2940320802.msh"));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
+					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+
+					App->editor->AddLog("House Created\n");
+				}
+				if (ImGui::MenuItem("Create Penguin"))
+				{
+					static int penguins = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, penguins, "Penguin "));
+					penguins++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+					FBXmporter importer;
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "21274500", "0", "1", ".msh"), "Library/Models/2127450001.msh"));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Penguin.dds", false));
+					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+
+					App->editor->AddLog("Penguin Created\n");
+				}
+				if (ImGui::MenuItem("Create Car"))
+				{
+					static int cars = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cars, "Car "));
+
+					cars++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+					FBXmporter importer;
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "21854936", "0", "5", ".msh"), "Library/Models/2185493605.msh"));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Car.dds", false));
+					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+
+
+					App->editor->AddLog("Car Created\n");
+				}
+				if (ImGui::MenuItem("Create Cube"))
+				{
+					showOptionsMenu = ComponentType::CUBE;
+					position = { 0,0,0 };
+					M.x = 1;
+					M.y = 1;
+					M.z = 1;
+
+				}
+				if (ImGui::MenuItem("Create Pyramid"))
+				{
+					showOptionsMenu = ComponentType::PYRAMID;
+					position = { 0,0,0 };
+					M.x = 1;
+					M.y = 1;
+					M.z = 1;
+
+				}
+				if (ImGui::MenuItem("Create Sphere"))
+				{
+					showOptionsMenu = ComponentType::SPHERE;
+					position = { 0,0,0 };
+					M.x = 1;
+					M.y = 1;
+					M.z = 1;
+
+				}
+				if (ImGui::MenuItem("Create Cylinder"))
+				{
+					showOptionsMenu = ComponentType::CYLINDER;
+					position = { 0,0,0 };
+					M.x = 1;
+					M.y = 1;
+					M.z = 1;
+
+				}
+				if (ImGui::MenuItem("Create Plane"))
+				{
+					showOptionsMenu = ComponentType::PLANE;
+					position = { 0,0,0 };
+					M.x = 1;
+					M.y = 1;
+					M.z = 1;
+				}
+				ImGui::EndMenu();
+			}
+
+
+			if (ImGui::BeginMenu("Help", &openConfigMenu))
+			{
+				if (ImGui::MenuItem("ImGui Demo"))
+				{
+					showDemoWindow = !showDemoWindow;
+				}
+
+				if (ImGui::MenuItem("Documentation"))
+					ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/wiki", NULL, NULL, SW_SHOWNORMAL);
+
+				if (ImGui::MenuItem("Download Latest"))
+					ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/releases", NULL, NULL, SW_SHOWNORMAL);
+
+				if (ImGui::MenuItem("Report a bug"))
+					ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/issues", NULL, NULL, SW_SHOWNORMAL);
+
+				if (ImGui::MenuItem("About"))
+				{
+					showAboutWindow = !showAboutWindow;
+				}
+				ImGui::EndMenu();
+			}
+
+			if (ImGui::BeginMenu("Quit", &openConfigMenu))
+			{
+				return update_status::UPDATE_STOP;
+			}
+			ImGui::EndMainMenuBar();
 		}
-
-		if (ImGui::BeginMenu("GameObject", &openConfigMenu))
-		{
-
-			if (ImGui::MenuItem("Create Camera"))
-			{
-				static int cameras = 1;
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cameras, "Camera "));
-				cameras++;
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->editor->objectSelected = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20, true));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-				objectSelected = App->scene->gameObjects[lastComponent];
-				App->editor->AddLog("Camera Object Created\n");
-			}
-			if (ImGui::MenuItem("Create Empty"))
-			{
-				static int empties = 1;
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, empties, "Empty "));
-				empties++;
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = lastId + 1;
-				lastId++;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				objectSelected = App->scene->gameObjects[lastComponent];
-				App->editor->AddLog("Empty Object Created\n");
-			}
-			if (ImGui::MenuItem("Create House"))
-			{
-				static int houses = 1;
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, houses, "House "));
-				houses++;
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				objectSelected = App->scene->gameObjects[lastComponent];
-				FBXmporter importer;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","29403208", "0", "2", ".msh"), "Library/Models/2940320802.msh"));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM,&float3(0,0,0),&float3(1,1,1),&float3(0,0,0)));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-				
-				App->editor->AddLog("House Created\n");
-			}
-			if (ImGui::MenuItem("Create Penguin"))
-			{
-				static int penguins = 1;
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, penguins, "Penguin "));
-				penguins++;
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				objectSelected = App->scene->gameObjects[lastComponent];
-				FBXmporter importer;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","21274500", "0", "1", ".msh"), "Library/Models/2127450001.msh"));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Penguin.dds", false));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-				
-				App->editor->AddLog("Penguin Created\n");
-			}
-			if (ImGui::MenuItem("Create Car"))
-			{
-				static int cars = 1;
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cars, "Car "));
-				
-				cars++;
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				objectSelected = App->scene->gameObjects[lastComponent];
-				FBXmporter importer;
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/","21854936", "0", "5", ".msh"), "Library/Models/2185493605.msh"));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-				App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Car.dds", false));
-				App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-				App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-
-				
-				App->editor->AddLog("Car Created\n");
-			}
-			if (ImGui::MenuItem("Create Cube"))
-			{
-				showOptionsMenu = ComponentType::CUBE;
-				position = { 0,0,0 };
-				M.x = 1;
-				M.y = 1;
-				M.z = 1;
-				
-			}
-			if (ImGui::MenuItem("Create Pyramid"))
-			{
-				showOptionsMenu = ComponentType::PYRAMID;
-				position = { 0,0,0 };
-				M.x = 1;
-				M.y = 1;
-				M.z = 1;
-				
-			}
-			if (ImGui::MenuItem("Create Sphere"))
-			{
-				showOptionsMenu = ComponentType::SPHERE;
-				position = { 0,0,0 };
-				M.x = 1;
-				M.y = 1;
-				M.z = 1;
-				
-			}
-			if (ImGui::MenuItem("Create Cylinder"))
-			{
-				showOptionsMenu = ComponentType::CYLINDER;
-				position = { 0,0,0 };
-				M.x = 1;
-				M.y = 1;
-				M.z = 1;
-				
-			}
-			if (ImGui::MenuItem("Create Plane"))
-			{
-				showOptionsMenu = ComponentType::PLANE;
-				position = { 0,0,0 };
-				M.x = 1;
-				M.y = 1;
-				M.z = 1;
-			}
-			ImGui::EndMenu();
-		}
-
-
-		if (ImGui::BeginMenu("Help", &openConfigMenu))
-		{
-			if (ImGui::MenuItem("ImGui Demo"))
-			{
-				showDemoWindow = !showDemoWindow;
-			}
-
-			if (ImGui::MenuItem("Documentation"))
-				ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/wiki", NULL, NULL, SW_SHOWNORMAL);
-
-			if (ImGui::MenuItem("Download Latest"))
-				ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/releases", NULL, NULL, SW_SHOWNORMAL);
-
-			if (ImGui::MenuItem("Report a bug"))
-				ShellExecute(NULL, "open", "https://github.com/adrianam4/Chaos-Engine/issues", NULL, NULL, SW_SHOWNORMAL);
-		
-			if (ImGui::MenuItem("About"))
-			{
-				showAboutWindow = !showAboutWindow;
-			}
-			ImGui::EndMenu();
-		}
-
-		if (ImGui::BeginMenu("Quit",&openConfigMenu))
-		{
-			return update_status::UPDATE_STOP;
-		}
-		ImGui::EndMainMenuBar();
 	}
+	
 
 	//////////////////////////////////////////////////////////////////////////////////////////// HIERARCHY WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1536,6 +1607,34 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Begin("Load File", &showFileWindow);
 
 		ImGui::Text("Select the file you want to load:");
+
+		SDL_GetBasePath();
+
+		ImGui::End();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////// TIME WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+
+	if (showTimeWindow)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Time", &showTimeWindow, ImGuiWindowFlags_NoScrollbar);
+
+		if (ImGui::Button("PLAY")); ImGui::SameLine(); {
+			start = true;
+		}
+		if (ImGui::Button("STOP")); ImGui::SameLine(); {
+			stop = true;
+		}
+		if (ImGui::Button("ADVANCE")); ImGui::SameLine(); {
+			advance = true;
+		}
+		if (ImGui::Button("SPEED UP")); ImGui::SameLine(); {
+			dt = dt * 2;
+		}
+		if (ImGui::Button("SPEED DOWN")); ImGui::SameLine(); {
+			dt = dt / 2;
+		}
 
 		SDL_GetBasePath();
 

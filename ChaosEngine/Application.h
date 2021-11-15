@@ -37,6 +37,8 @@ private:
 public:
 	int maxMs;
 
+	bool gameMode = false;
+
 public:
 
 	Application();
