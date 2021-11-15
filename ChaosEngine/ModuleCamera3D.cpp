@@ -15,7 +15,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app
 	position = Vec3(0.0f, 0.0f, 5.0f);
 	reference = Vec3(0.0f, 0.0f, 0.0f);
 
-	cam = new ComponentCamera(float3(0, 5, 5), 75, 1, 20, false);
+	cam = new ComponentCamera(float3(0, 0, 5), 60, 1, 20, false);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -49,14 +49,14 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_REPEAT) newPos.y += speed * 2;
 	if (App->input->GetKey(SDL_SCANCODE_E) == KEY_REPEAT) newPos.y -= speed * 2;
 
-	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= z * speed * 2;
-	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += z * speed * 2;
+	if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos += Vec3(cam->frustum.front.x, cam->frustum.front.y, cam->frustum.front.z) * speed * 2;
+	if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos -= Vec3(cam->frustum.front.x, cam->frustum.front.y, cam->frustum.front.z) * speed * 2;
 
-	if (App->input->GetMouseZ() > 0) newPos -= z * speed * 6;
-	if (App->input->GetMouseZ() < 0) newPos += z * speed * 6;
+	if (App->input->GetMouseZ() > 0) newPos += Vec3(cam->frustum.front.x, cam->frustum.front.y, cam->frustum.front.z) * speed * 6;
+	if (App->input->GetMouseZ() < 0) newPos -= Vec3(cam->frustum.front.x, cam->frustum.front.y, cam->frustum.front.z) * speed * 6;
 
-	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= x * speed * 2;
-	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += x * speed * 2;
+	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= Vec3(cam->frustum.WorldRight().x, cam->frustum.WorldRight().y, cam->frustum.WorldRight().z) * speed * 2;
+	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += Vec3(cam->frustum.WorldRight().x, cam->frustum.WorldRight().y, cam->frustum.WorldRight().z) * speed * 2;
 
 	position += newPos;
 	cam->frustum.SetPos(vec(position.x, position.y, position.z));
@@ -70,8 +70,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		float sensitivity = 0.25f;
 
-		cam->RecalculateFront(App->input->GetMouseXMotion()); //Recalculate rotation (???)
-		cam->RecalculateUp(App->input->GetMouseYMotion());
+		cam->RecalculateRotation((App->input->GetMouseXMotion()) * -1, (App->input->GetMouseYMotion()) * -1); //Recalculate rotation (???)
 
 		position -= reference;
 		cam->frustum.SetPos(vec(position.x, position.y, position.z));
@@ -169,9 +168,6 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 	}
 
-	cam->CalculatePoints();
-	cam->Draw();
-
 	frustumMatrix = cam->frustum.ViewMatrix(); //Get CameraViewMatrix
 
 	// Recalculate matrix -------------
@@ -234,11 +230,12 @@ void ModuleCamera3D::LookAt(const Vec3& spot)
 
 void ModuleCamera3D::RecalculateProjection()
 {
-	//frustum.type = FrustumType::PerspectiveFrustum;
-	//frustum.nearPlaneDistance = nearPlaneDistance;
-	//frustum.farPlaneDistance = farPlaneDistance;
-	//frustum.verticalFov = (verticalFOV * 3.141592 / 2) / 180.f;
-	//frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * aspectRatio);
+/*	cam->frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
+	cam->frustum.SetViewPlaneDistances(nPlane, fPlane);
+	float hFovR = DegToRad(hFov);
+	float vFovR = 2 * Atan((Tan(hFovR / 2)) * ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH));
+	cam->frustum.SetPerspective(hFovR, vFovR);
+	cam->frustum.ComputeProjectionMatrix();*/
 }
 
 // -----------------------------------------------------------------

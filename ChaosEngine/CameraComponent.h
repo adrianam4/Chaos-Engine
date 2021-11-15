@@ -27,8 +27,7 @@ public:
 	float frontRotation;
 	float upRotation;
 
-	void RecalculateFront(float degrees);
-	void RecalculateUp(float degrees);
+	void RecalculateRotation(float xDegrees, float yDegrees);
 	void RecalculateCamera();
 	void CalculatePoints();
 };

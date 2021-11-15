@@ -16,6 +16,7 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 	float vFovR = 2 * Atan((Tan(hFovR / 2)) * ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH));
 	frustum.SetPerspective(hFovR, vFovR);
 	frustum.SetFrame(pos, float3(0, 0, -1), float3(0, 1, 0));
+	frustum.ComputeProjectionMatrix();
 
 	horizontalFov = hFov;
 	nearPlaneDistance = nPlane;
@@ -66,14 +67,6 @@ void ComponentCamera::OnEditor(int i)
 	{
 		frustum.farPlaneDistance = farPlaneDistance;
 	}
-	if (ImGui::DragFloat("Front Rotation",&frontRotation, 0.2f))
-	{
-		RecalculateFront(frontRotation);
-	}
-	if (ImGui::DragFloat("Up Rotation", &upRotation, 0.2f))
-	{
-		RecalculateUp(upRotation);
-	}
 }
 
 void ComponentCamera::Draw()
@@ -102,21 +95,14 @@ void ComponentCamera::Draw()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void ComponentCamera::RecalculateFront(float degrees)
+void ComponentCamera::RecalculateRotation(float xDegrees, float yDegrees)
 {
-	degrees = math::DegToRad(degrees);
-	Quat rot = math::Quat::RotateY(degrees);
-	float3 auxFront = rot * frustum.front;
-	float3 auxUp = rot * frustum.up;
-	float3::Orthonormalize(auxFront, auxUp);
-	frustum.front = auxFront.Normalized();
-	frustum.up = auxUp.Normalized();
-}
+	xDegrees = math::DegToRad(xDegrees);
+	Quat rot1 = math::Quat::RotateY(xDegrees);
+	yDegrees = math::DegToRad(yDegrees);
+	Quat rot2 = math::Quat::RotateAxisAngle(frustum.WorldRight(), yDegrees);
+	Quat rot = rot1 * rot2;
 
-void ComponentCamera::RecalculateUp(float degrees)
-{
-	degrees = math::DegToRad(degrees);
-	Quat rot = math::Quat::RotateAxisAngle(frustum.WorldRight(), degrees);
 	float3 auxFront = rot * frustum.front;
 	float3 auxUp = rot * frustum.up;
 	float3::Orthonormalize(auxFront, auxUp);
