@@ -28,14 +28,16 @@ private:
 
 public:
 	LineSegment myRay;
-	Vec3 x, y, z, position, reference;
+	
 	//Frustum frustum;
+	 ComponentCamera* originCam;
 	ComponentCamera *cam;
 	float aspectRatio = 16/9;
 	float verticalFOV = 75.0f;
 	float nearPlaneDistance = 1.0f;
 	float farPlaneDistance = 20.0f;
 	float4x4 frustumMatrix;
+	std::vector<ComponentCamera*>camArray;
 private:
 	mat4x4 viewMatrix, viewMatrixInverse;
 };

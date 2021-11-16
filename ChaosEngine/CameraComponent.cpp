@@ -17,13 +17,13 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 	frustum.SetPerspective(hFovR, vFovR);
 	frustum.SetFrame(pos, float3(0, 0, -1), float3(0, 1, 0));
 	frustum.ComputeProjectionMatrix();
-
+	reference = Vec3(0.0f, 0.0f, 0.0f);
 	horizontalFov = hFov;
 	nearPlaneDistance = nPlane;
 	farPlaneDistance = fPlane;
-
+	position = Vec3(0.0f, 0.0f, 5.0f);
 	frontRotation = upRotation = 0;
-
+	isTheMainCamera = false;
 	if (isGameObj)
 	{
 		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = App->editor->lastId + 1;
@@ -31,6 +31,10 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 
 		Enable();
 	}
+	x = Vec3(1.0f, 0.0f, 0.0f);
+	y = Vec3(0.0f, 1.0f, 0.0f);
+	z = Vec3(0.0f, 0.0f, 1.0f);
+	changeViewMatrix();
 }
 
 ComponentCamera::~ComponentCamera()
@@ -39,6 +43,7 @@ ComponentCamera::~ComponentCamera()
 
 void ComponentCamera::Enable()
 {
+	App->camera->camArray.push_back(this);
 	CalculatePoints();
 }
 
@@ -54,21 +59,63 @@ void ComponentCamera::Disable()
 
 void ComponentCamera::OnEditor(int i)
 {
+	if (ImGui::Checkbox("Is The Main Camera", &isTheMainCamera))
+	{
+		
+		
+		if (isTheMainCamera == false) 
+		{
+			
+			App->camera->cam = App->camera->originCam;
+			
+		}
+		if (isTheMainCamera == true)
+		{
+			
+			for (int a = 0; a < App->camera->camArray.size(); a++)
+			{
+				if (App->camera->camArray[a] != this) {
+					App->camera->camArray[a]->isTheMainCamera = false;
+				}
+				else {
+					App->camera->camArray[a]->isTheMainCamera = true;
+					App->camera->cam = this;
+				}
+			}
+			
+
+		}
+		
+	}
 	if (ImGui::SliderFloat("FOV", &horizontalFov, 55.0f, 110.0f))
 	{
 		frustum.horizontalFov = math::DegToRad(horizontalFov); // Convert from deg to rads (All maths works with rads but user will see the info in degs)
 		frustum.verticalFov = 2 * Atan((Tan(frustum.horizontalFov / 2)) * ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH));
+		changeViewMatrix();
+		App->renderer3D->OnResize((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 	}
 	if (ImGui::DragFloat("Near Plane Distance", &nearPlaneDistance, 0.5f, 1, 5))
 	{
 		frustum.nearPlaneDistance = nearPlaneDistance;
+		changeViewMatrix();
+		App->renderer3D->OnResize((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 	}
-	if (ImGui::DragFloat("Far Plane Distance", &farPlaneDistance, 0.5f, 4, 50))
+	if (ImGui::DragFloat("Far Plane Distance", &farPlaneDistance, 0.5f, 4, 500))
 	{
 		frustum.farPlaneDistance = farPlaneDistance;
+		changeViewMatrix();
+		App->renderer3D->OnResize((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
 	}
+	
 }
-
+void ComponentCamera::changeViewMatrix() {
+	viewMatrix=perspective(horizontalFov, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, nearPlaneDistance, farPlaneDistance);
+	
+	
+}
+mat4x4 ComponentCamera::getViewmatrix() {
+	return viewMatrix;
+}
 void ComponentCamera::Draw()
 {
 	glLineWidth(3.0f);

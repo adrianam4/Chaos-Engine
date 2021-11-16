@@ -18,15 +18,18 @@ public:
 	void Draw() override;
 
 public:
+	Vec3 position, reference, x, y, z;
 	Frustum frustum;
 	unsigned int VBO;
 	unsigned int EBO;
 	std::vector<float3> vertices;
 	std::vector<uint> indices;
-
+	bool isTheMainCamera;
 	float frontRotation;
 	float upRotation;
-
+	void changeViewMatrix();
+	mat4x4 viewMatrix;
+	mat4x4 getViewmatrix();
 	void RecalculateRotation(float xDegrees, float yDegrees);
 	void RecalculateCamera();
 	void CalculatePoints();

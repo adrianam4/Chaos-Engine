@@ -6,16 +6,21 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
+	
+
+	
+
+	
+	
+
+	cam = new ComponentCamera(float3(0, 0, 5), 60, 1, 500, false);
+	cam->reference = Vec3(0.0f, 0.0f, 0.0f);
+	cam->position = Vec3(0.0f, 0.0f, 5.0f);
+	cam->x = Vec3(1.0f, 0.0f, 0.0f);
+	cam->y = Vec3(0.0f, 1.0f, 0.0f);
+	cam->z = Vec3(0.0f, 0.0f, 1.0f);
 	CalculateViewMatrix();
-
-	x = Vec3(1.0f, 0.0f, 0.0f);
-	y = Vec3(0.0f, 1.0f, 0.0f);
-	z = Vec3(0.0f, 0.0f, 1.0f);
-
-	position = Vec3(0.0f, 0.0f, 5.0f);
-	reference = Vec3(0.0f, 0.0f, 0.0f);
-
-	cam = new ComponentCamera(float3(0, 0, 5), 60, 1, 20, false);
+	originCam = cam;
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -58,9 +63,9 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= Vec3(cam->frustum.WorldRight().x, cam->frustum.WorldRight().y, cam->frustum.WorldRight().z) * speed * 2;
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += Vec3(cam->frustum.WorldRight().x, cam->frustum.WorldRight().y, cam->frustum.WorldRight().z) * speed * 2;
 
-	position += newPos;
-	cam->frustum.SetPos(vec(position.x, position.y, position.z));
-	reference += newPos;
+	//position += newPos;
+	cam->frustum.SetPos(vec(cam->position.x += newPos.x, cam->position.y += newPos.y, cam->position.z += newPos.z));
+	cam->reference += newPos;
 
 	// Mouse motion ----------------
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT || (App->input->GetMouseButton(SDL_BUTTON_LEFT) && App->input->GetKey(SDL_SCANCODE_LALT)))
@@ -72,34 +77,34 @@ update_status ModuleCamera3D::Update(float dt)
 
 		cam->RecalculateRotation((App->input->GetMouseXMotion()) * -1, (App->input->GetMouseYMotion()) * -1); //Recalculate rotation (???)
 
-		position -= reference;
-		cam->frustum.SetPos(vec(position.x, position.y, position.z));
+		//position -= reference;
+		cam->frustum.SetPos(vec(cam->position.x -= cam->reference.x, cam->position.y -= cam->reference.y, cam->position.z -= cam->reference.z));
 
 		if (dx != 0)
 		{
 			float deltaX = (float)dx * sensitivity;
 
-			x = rotate(x, deltaX, Vec3(0.0f, 1.0f, 0.0f));
-			y = rotate(y, deltaX, Vec3(0.0f, 1.0f, 0.0f));
-			z = rotate(z, deltaX, Vec3(0.0f, 1.0f, 0.0f));
+			cam->x = rotate(cam->x, deltaX, Vec3(0.0f, 1.0f, 0.0f));
+			cam->y = rotate(cam->y, deltaX, Vec3(0.0f, 1.0f, 0.0f));
+			cam->z = rotate(cam->z, deltaX, Vec3(0.0f, 1.0f, 0.0f));
 		}
 
 		if (dy != 0)
 		{
 			float deltaY = (float)dy * sensitivity;
 
-			y = rotate(y, deltaY, x);
-			z = rotate(z, deltaY, x);
+			cam->y = rotate(cam->y, deltaY, cam->x);
+			cam->z = rotate(cam->z, deltaY, cam->x);
 
-			if (y.y < 0.0f)
+			if (cam->y.y < 0.0f)
 			{
-				z = Vec3(0.0f, z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				y = cross(z, x);
+				cam->z = Vec3(0.0f, cam->z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+				cam->y = cross(cam->z, cam->x);
 			}
 		}
 
-		position = reference + z * length(position);
-		cam->frustum.SetPos(vec(position.x, position.y, position.z));
+		cam->position = cam->reference + cam->z * length(cam->position);
+		cam->frustum.SetPos(vec(cam->position.x, cam->position.y, cam->position.z));
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F))
@@ -157,13 +162,13 @@ update_status ModuleCamera3D::Update(float dt)
 					Max = App->editor->objectSelected->aabb[0]->maxPoint;
 					Min = App->editor->objectSelected->aabb[0]->minPoint;
 				}
-				position.y = (objectPoition.y + ((objectScale.y * (Max.y - Min.y)) / 2));
+				cam->position.y = (objectPoition.y + ((objectScale.y * (Max.y - Min.y)) / 2));
 				float h = ((Max.y - Min.y) * objectScale.y) + ((Max.x - Min.x) * objectScale.x) + ((Max.z - Min.z) * objectScale.z);
 				float distance = h / math::Atan(75 / 2);
-				position.z = (objectPoition.z + distance);
-				position.x = (objectPoition.x + distance);
+				cam->position.z = (objectPoition.z + distance);
+				cam->position.x = (objectPoition.x + distance);
 				LookAt({ (((Max.x - Min.x) / 2) + objectPoition.x),(objectPoition.y + ((objectScale.y * (Max.y - Min.y)) / 2)),(((Max.z - Min.z) / 2) + objectPoition.z) });
-				cam->frustum.SetPos(vec(position.x, position.y, position.z));
+				cam->frustum.SetPos(vec(cam->position.x, cam->position.y, cam->position.z));
 			}
 		}
 	}
@@ -200,17 +205,17 @@ update_status ModuleCamera3D::Update(float dt)
 // -----------------------------------------------------------------
 void ModuleCamera3D::Look(const Vec3& position, const Vec3& reference, bool rotateAroundReference)
 {
-	this->position = position;
-	this->reference = reference;
+	cam->position = position;
+	cam->reference = reference;
 
-	z = normalize(position - reference);
-	x = normalize(cross(Vec3(0.0f, 1.0f, 0.0f), z));
-	y = cross(z, x);
+	cam->z = normalize(position - reference);
+	cam->x = normalize(cross(Vec3(0.0f, 1.0f, 0.0f), cam->z));
+	cam->y = cross(cam->z, cam->x);
 
 	if (!rotateAroundReference)
 	{
-		this->reference = this->position;
-		this->position += z * 0.05f;
+		cam->reference = cam->position;
+		cam->position += cam->z * 0.05f;
 	}
 
 	CalculateViewMatrix();
@@ -219,11 +224,11 @@ void ModuleCamera3D::Look(const Vec3& position, const Vec3& reference, bool rota
 // -----------------------------------------------------------------
 void ModuleCamera3D::LookAt(const Vec3& spot)
 {
-	reference = spot;
+	cam->reference = spot;
 
-	z = normalize(position - reference);
-	x = normalize(cross(Vec3(0.0f, 1.0f, 0.0f), z));
-	y = cross(z, x);
+	cam->z = normalize(cam->position - cam->reference);
+	cam->x = normalize(cross(Vec3(0.0f, 1.0f, 0.0f), cam->z));
+	cam->y = cross(cam->z, cam->x);
 
 	CalculateViewMatrix();
 }
@@ -241,8 +246,8 @@ void ModuleCamera3D::RecalculateProjection()
 // -----------------------------------------------------------------
 void ModuleCamera3D::Move(const Vec3& movement)
 {
-	position += movement;
-	reference += movement;
+	cam->position += movement;
+	cam->reference += movement;
 
 	CalculateViewMatrix();
 }
@@ -256,6 +261,6 @@ float* ModuleCamera3D::GetViewMatrix()
 // -----------------------------------------------------------------
 void ModuleCamera3D::CalculateViewMatrix()
 {
-	viewMatrix = mat4x4(x.x, y.x, z.x, 0.0f, x.y, y.y, z.y, 0.0f, x.z, y.z, z.z, 0.0f, -dot(x, position), -dot(y, position), -dot(z, position), 1.0f);
+	viewMatrix = mat4x4(cam->x.x, cam->y.x, cam->z.x, 0.0f, cam->x.y, cam->y.y, cam->z.y, 0.0f, cam->x.z, cam->y.z, cam->z.z, 0.0f, -dot(cam->x, cam->position), -dot(cam->y, cam->position), -dot(cam->z, cam->position), 1.0f);
 	viewMatrixInverse = inverse(viewMatrix);
 }
