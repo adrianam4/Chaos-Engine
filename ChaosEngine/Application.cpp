@@ -88,6 +88,12 @@ void Application::FinishUpdate()
 // Call PreUpdate, Update and PostUpdate on all modules
 update_status Application::Update()
 {
+	float time = (float)SDL_GetTicks();
+	Timestep timestep = time - mLastFrameTime;
+	mLastFrameTime = time;
+
+	//App->editor->AddLog("Delta time: %d s\n", timestep.GetMilliseonds());
+
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
 	

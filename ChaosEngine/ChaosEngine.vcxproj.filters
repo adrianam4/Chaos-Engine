@@ -175,6 +175,9 @@
       <Filter>Engine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Parson\parson.h" />
+    <ClInclude Include="Timestep.h">
+      <Filter>Engine\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">

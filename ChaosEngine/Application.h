@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "Timer.h"
+#include "Timestep.h"
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -34,6 +35,7 @@ private:
 	Timer	msTimer;
 	float	dt;
 	std::list<Module*> listModules;
+	float mLastFrameTime = 0.0f;
 public:
 	int maxMs;
 

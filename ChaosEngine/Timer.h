@@ -16,9 +16,10 @@ public:
 
 	Uint32 Read();
 
+	bool running;
+
 private:
 
-	bool	running;
 	Uint32	startedAt;
 	Uint32	stoppedAt;
 };

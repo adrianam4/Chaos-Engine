@@ -118,6 +118,7 @@
     <ClInclude Include="Parson\parson.h" />
     <ClInclude Include="Primitives.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Timestep.h" />
     <ClInclude Include="TransformComponent.h" />
   </ItemGroup>
   <ItemGroup>

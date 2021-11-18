@@ -62,17 +62,9 @@ bool ModuleEditor::Start()
 	return ret;
 }
 
-update_status ModuleEditor::PreUpdate(float dt) {
-	if (start == true)
-		return UPDATE_CONTINUE;
-	if (stop == true)
-		return UPDATE_STOP;
-	if (advance == true)
-	{
-		return UPDATE_CONTINUE;
-		return UPDATE_STOP;
-	}
-}
+//update_status ModuleEditor::PreUpdate(float dt) {
+//	
+//}
 
 // Load assets
 bool ModuleEditor::CleanUp()
@@ -767,6 +759,9 @@ update_status ModuleEditor::Update(float dt)
 			}
 		}
 	}
+
+	App->editor->AddLog("%d\n", SDL_GetTicks());
+
 	static bool showDemoWindow;
 	static bool showAnotherWindow;
 	static bool showCloseWindow;
@@ -779,6 +774,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool showInspector;
 	static bool showConsoleMenu;
 	static bool showSceneWindow;
+	static bool showScene2Window;
 	static bool showFileWindow;
 	static bool showTimeWindow;
 	static bool showOptions;
@@ -801,8 +797,9 @@ update_status ModuleEditor::Update(float dt)
 		showInspector = true;
 		showConsoleMenu = true;
 		showSceneWindow = true;
+		showScene2Window = true;
 		showFileWindow = false;
-		showTimeWindow = false;
+		showTimeWindow = true;
 		showOptions = true;
 		isActive = true;
 		isActive2 = true;
@@ -823,6 +820,7 @@ update_status ModuleEditor::Update(float dt)
 		showInspector = false;
 		showConsoleMenu = false;
 		showSceneWindow = true;
+		showScene2Window = false;
 		showFileWindow = false;
 		showTimeWindow = false;
 		showOptions = true;
@@ -1561,6 +1559,26 @@ update_status ModuleEditor::Update(float dt)
 		ImVec2 viewportSize = ImGui::GetCurrentWindow()->Size;
 		if (viewportSize.x != lastViewportSize.x || viewportSize.y != lastViewportSize.y)
 		{
+
+			App->camera->aspectRatio = viewportSize.x / viewportSize.y;
+			App->camera->RecalculateProjection();
+		}
+		lastViewportSize = viewportSize;
+		ImGui::Image((ImTextureID)App->viewportBuffer->texture, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::End();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT2 WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+
+	if (showScene2Window)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Camera", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
+
+		ImVec2 viewportSize = ImGui::GetCurrentWindow()->Size;
+		if (viewportSize.x != lastViewportSize.x || viewportSize.y != lastViewportSize.y)
+		{
+	
 			App->camera->aspectRatio = viewportSize.x / viewportSize.y;
 			App->camera->RecalculateProjection();
 		}
@@ -1620,15 +1638,16 @@ update_status ModuleEditor::Update(float dt)
 	{
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Time", &showTimeWindow, ImGuiWindowFlags_NoScrollbar);
+		Timer time;
 
 		if (ImGui::Button("PLAY")); ImGui::SameLine(); {
-			start = true;
+			time.Start();
 		}
 		if (ImGui::Button("STOP")); ImGui::SameLine(); {
-			stop = true;
+			time.Stop();
 		}
 		if (ImGui::Button("ADVANCE")); ImGui::SameLine(); {
-			advance = true;
+			time.Read();
 		}
 		if (ImGui::Button("SPEED UP")); ImGui::SameLine(); {
 			dt = dt * 2;

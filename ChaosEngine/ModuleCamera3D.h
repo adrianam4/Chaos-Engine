@@ -30,7 +30,7 @@ public:
 	LineSegment myRay;
 	
 	//Frustum frustum;
-	 ComponentCamera* originCam;
+	ComponentCamera* originCam;
 	ComponentCamera *cam;
 	float aspectRatio = 16/9;
 	float verticalFOV = 75.0f;
