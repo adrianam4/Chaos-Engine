@@ -24,164 +24,38 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 
 	name = "Transform Component";
 
-
-	GameObject* auxiliar;
-	auxiliar = *App->scene->gameObjects.end()._Ptr;
-
-	Model* auxiliar1;
-	auxiliar1 = App->renderer3D->models.end()._Ptr;
-	
-	float4x4 aux2;
-	transMatrix = aux2.FromTRS(position, rotationQuat, scale);
-	transMatrix = transMatrix.Transposed();
-	
-		
-	AABB* aux;
-	OBB* aux1;
-	BoundingBoxes* auxiliarCube;
 	ComponentType t = getComponentType();
-	switch (t)
-	{
-	case ComponentType::MESH:
-		for (int b = 0; b < App->renderer3D->models[App->renderer3D->models.size() - 1].meshes.size(); b++)
-		{
-			aux = new AABB();
-			aux1 = new OBB();
-			aux->SetNegativeInfinity();
-			for (int a = 0; a < App->renderer3D->models[App->renderer3D->models.size() - 1].meshes[b].vertices.size(); a++) {
-
-				vertices_aux.push_back(App->renderer3D->models[App->renderer3D->models.size() - 1].meshes[b].vertices[a].position);
-
-			}
-			aux->Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
-			(*aux1) = (*aux);
-			aux1->Transform(transMatrix);
-			aux->SetNegativeInfinity();
-			aux->Enclose(*aux1);
-			App->scene->gameObjects[App->scene->gameObjects.size() - 1]->aabb.push_back(aux);
-
-			App->scene->gameObjects[App->scene->gameObjects.size() - 1]->obb.push_back(aux1);
-			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			auxiliarCube = new BoundingBoxes({0,0,0}, scale, aux->maxPoint, aux->minPoint);
-			App->scene->gameObjects[App->scene->gameObjects.size() - 1]->boundingBoxes.push_back(auxiliarCube);
-		}
-
-		break;
-	case ComponentType::CUBE:
-		aux = new AABB();
-		aux1 = new OBB();
-		aux->SetNegativeInfinity();
-		vertices_aux = App->editor->cubes[App->editor->cubes.size() - 1]->getVertex();
-		aux->Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
-		(*aux1) = (*aux);
-		aux1->Transform(transMatrix);
-		aux->SetNegativeInfinity();
-		aux->Enclose(*aux1);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->aabb.push_back(aux);
-
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->obb.push_back(aux1);
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		auxiliarCube = new BoundingBoxes({0,0,0}, scale, aux->maxPoint, aux->minPoint);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->boundingBoxes.push_back(auxiliarCube);
-		break;
-	case ComponentType::PYRAMID:
-		aux = new AABB();
-		aux1 = new OBB();
-		aux->SetNegativeInfinity();
-		vertices_aux = App->editor->pyramids[App->editor->pyramids.size() - 1]->getVertex();
-		aux->Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
-		(*aux1) = (*aux);
-		aux1->Transform(transMatrix);
-		aux->SetNegativeInfinity();
-		aux->Enclose(*aux1);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->aabb.push_back(aux);
-
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->obb.push_back(aux1);
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->boundingBoxes.push_back(auxiliarCube);
-		break;
-	case ComponentType::SPHERE:
-		aux = new AABB();
-		aux1 = new OBB();
-		aux->SetNegativeInfinity();
-		vertices_aux = App->editor->spheres[App->editor->spheres.size() - 1]->getVertex();
-		aux->Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
-		(*aux1) = (*aux);
-		aux1->Transform(transMatrix);
-		aux->SetNegativeInfinity();
-		aux->Enclose(*aux1);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->aabb.push_back(aux);
-
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->obb.push_back(aux1);
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->boundingBoxes.push_back(auxiliarCube);
-		break;
-	case ComponentType::CYLINDER:
-		aux = new AABB();
-		aux1 = new OBB();
-		aux->SetNegativeInfinity();
-		vertices_aux = App->editor->cylinders[App->editor->cylinders.size() - 1]->getVertex();
-		aux->Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
-		(*aux1) = (*aux);
-		aux1->Transform(transMatrix);
-		aux->SetNegativeInfinity();
-		aux->Enclose(*aux1);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->aabb.push_back(aux);
-
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->obb.push_back(aux1);
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->boundingBoxes.push_back(auxiliarCube);
-		break;
-	case ComponentType::PLANE:
-		aux = new AABB();
-		aux1 = new OBB();
-		aux->SetNegativeInfinity();
-		vertices_aux = App->editor->planes[App->editor->planes.size() - 1]->getVertex();
-		aux->Enclose((float3*)vertices_aux.data(), (size_t)vertices_aux.size());
-		(*aux1) = (*aux);
-		aux1->Transform(transMatrix);
-		aux->SetNegativeInfinity();
-		aux->Enclose(*aux1);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->aabb.push_back(aux);
-
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->obb.push_back(aux1);
-		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->boundingBoxes.push_back(auxiliarCube);
-		break;
-	default:
-		break;
-	}			
+	CreateAABB(t, App->scene->gameObjects[App->scene->gameObjects.size() - 1], true);
 }
 ComponentType ComponentTransform::getComponentType() 
 {
-	
-	for (int b = 0; b < App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components.size(); b++) {
-		if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::MESH) {
+	for (int b = 0; b < App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components.size(); b++) 
+	{
+		if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::MESH) 
+		{
 			return ComponentType::MESH;
-		}else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::CUBE) {
-			return ComponentType::CUBE;
-		}else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::PYRAMID) {
-			return ComponentType::PYRAMID;
-
 		}
-		else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::SPHERE) {
-
+		else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::CUBE) 
+		{
+			return ComponentType::CUBE;
+		}
+		else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::PYRAMID) 
+		{
+			return ComponentType::PYRAMID;
+		}
+		else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::SPHERE) 
+		{
 			return ComponentType::SPHERE;
 		}
-		else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::CYLINDER) {
+		else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::CYLINDER) 
+		{
 			return ComponentType::CYLINDER;
-
 		}
-		else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::PLANE) {
+		else if (App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components[b]->type == ComponentType::PLANE) 
+		{
 			return ComponentType::PLANE;
-
 		}
 	}
-
 }
 ComponentTransform::~ComponentTransform()
 {
@@ -193,6 +67,9 @@ void ComponentTransform::Enable()
 
 void ComponentTransform::Update()
 {
+	App->editor->objectSelected->aabb.clear();
+	ComponentType type = getComponentType();
+	CreateAABB(type, App->editor->objectSelected, false);
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	float4x4 aux;
@@ -236,41 +113,47 @@ void ComponentTransform::OnEditor(int i)
 	if (ImGui::Button("Load"))
 		Load("Settings/TransformComponent.json");
 
+	static bool changed = false;
 	lastScale = scale;
 	lastPosition = position;
 	lastRotation = rotationEuler;
 	lastGeneralScale = generalScale;
+
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
 	if (ImGui::DragFloat("Position X", &position.x))
-		Update();
+		changed = true;
 	if (ImGui::DragFloat("Position Y", &position.y))
-		Update();
+		changed = true;
 	if (ImGui::DragFloat("Position Z", &position.z))
-		Update();
-
+		changed = true;
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Scale");
 	if (ImGui::DragFloat("General Scale", &generalScale))
 	{
+		changed = true;
 		scale.x = generalScale;
 		scale.y = generalScale;
 		scale.z = generalScale;
-		Update();
 	}
 	ImGui::Spacing();
 	if (ImGui::DragFloat("Scale X", &scale.x))
-		Update();
+		changed = true;
 	if (ImGui::DragFloat("Scale Y", &scale.y))
-		Update();
+		changed = true;
 	if (ImGui::DragFloat("Scale Z", &scale.z))
-		Update();
-
+		changed = true;
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Rotation");
 	if (ImGui::DragFloat("Rotation X", &rotationEuler.x))
-		Update();
+		changed = true;
 	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y))
-		Update();
+		changed = true;
 	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z))
+		changed = true;
+
+	if (changed && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP))
+	{
 		Update();
+		changed = false;
+	}
 }
 
 void ComponentTransform::Load(const char* path)
@@ -339,7 +222,275 @@ float3 ComponentTransform::FromQuatToEuler(Quat quatAngles)
 	return angles;
 }
 
-//void ComponentTransform::CalculateTransMatrix(mat4x4 parentsMatrix, mat4x4 localMatrix)
-//{
-//	transMatrix = parentsMatrix * localMatrix;
-//}
+void ComponentTransform::CreateAABB(ComponentType type, GameObject* go, bool firstTime)
+{
+	GameObject* auxiliar = go;
+	Model* model = nullptr;
+	MyCube* cube = nullptr;
+	MyPyramid* pyramid = nullptr;
+	MyCylinder* cylinder = nullptr;
+	MySphere* sphere = nullptr;
+	MyPlane* plane = nullptr;
+
+	switch (type)
+	{
+	case ComponentType::MESH:
+		for (int i = 0; i < App->renderer3D->models.size(); i++)
+		{
+			if (go->id == App->renderer3D->models[i].id)
+			{
+				model = &App->renderer3D->models[i];
+				break;
+			}
+		}
+		break;
+	case ComponentType::CUBE:
+		for (int i = 0; i < App->editor->cubes.size(); i++)
+		{
+			if (go->id == App->editor->cubes[i]->id)
+			{
+				cube = App->editor->cubes[i];
+				break;
+			}
+		}
+		break;
+	case ComponentType::PYRAMID:
+		for (int i = 0; i < App->editor->pyramids.size(); i++)
+		{
+			if (go->id == App->editor->pyramids[i]->id)
+			{
+				pyramid = App->editor->pyramids[i];
+				break;
+			}
+		}
+		break;
+	case ComponentType::SPHERE:
+		for (int i = 0; i < App->editor->spheres.size(); i++)
+		{
+			if (go->id == App->editor->spheres[i]->id)
+			{
+				sphere = App->editor->spheres[i];
+				break;
+			}
+		}
+		break;
+	case ComponentType::CYLINDER:
+		for (int i = 0; i < App->editor->cylinders.size(); i++)
+		{
+			if (go->id == App->editor->cylinders[i]->id)
+			{
+				cylinder = App->editor->cylinders[i];
+				break;
+			}
+		}
+		break;
+	case ComponentType::PLANE:
+		for (int i = 0; i < App->editor->planes.size(); i++)
+		{
+			if (go->id == App->editor->planes[i]->id)
+			{
+				plane = App->editor->planes[i];
+				break;
+			}
+		}
+		break;
+	default:
+		break;
+	}
+
+	float4x4 aux2;
+	transMatrix = aux2.FromTRS(position, rotationQuat, scale);
+	transMatrix = transMatrix.Transposed();
+
+	AABB* aux;
+	OBB* aux1;
+	BoundingBoxes* auxiliarCube;
+
+	std::vector<float4> aabbVertexAux;
+	std::vector<float3> aabbVertex;
+	switch (type)
+	{
+	case ComponentType::MESH:
+		for (int b = 0; b < model->meshes.size(); b++)
+		{
+			aux = new AABB();
+			aux1 = new OBB();
+			aux->SetNegativeInfinity();
+			for (int a = 0; a < model->meshes[b].vertices.size(); a++)
+			{
+				vertices_aux.push_back(model->meshes[b].vertices[a].position);
+			}
+			for (int i = 0; i < vertices_aux.size(); i++)
+			{
+				float4 vertex(vertices_aux[i].x, vertices_aux[i].y, vertices_aux[i].z, 1);
+				vertex = vertex * transMatrix;
+				aabbVertexAux.push_back(vertex);
+			}
+			for (int i = 0; i < aabbVertexAux.size(); i++)
+			{
+				float3 vertex(aabbVertexAux[i].x, aabbVertexAux[i].y, aabbVertexAux[i].z);
+				aabbVertex.push_back(vertex);
+			}
+			aux->Enclose((float3*)aabbVertex.data(), (size_t)aabbVertex.size());
+			(*aux1) = (*aux);
+			aux1->Transform(transMatrix);
+			aux->SetNegativeInfinity();
+			aux->Enclose(*aux1);
+			go->aabb.push_back(aux);
+			go->obb.push_back(aux1);
+			if (firstTime)
+			{
+				auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
+				go->boundingBoxes.push_back(auxiliarCube);
+			}
+		}
+		break;
+	case ComponentType::CUBE:
+		aux = new AABB();
+		aux1 = new OBB();
+		aux->SetNegativeInfinity();
+		vertices_aux = cube->getVertex();
+		for (int i = 0; i < vertices_aux.size(); i++)
+		{
+			float4 vertex(vertices_aux[i].x, vertices_aux[i].y, vertices_aux[i].z, 1);
+			vertex = vertex * transMatrix;
+			aabbVertexAux.push_back(vertex);
+		}
+		for (int i = 0; i < aabbVertexAux.size(); i++)
+		{
+			float3 vertex(aabbVertexAux[i].x, aabbVertexAux[i].y, aabbVertexAux[i].z);
+			aabbVertex.push_back(vertex);
+		}
+		aux->Enclose((float3*)aabbVertex.data(), (size_t)aabbVertex.size());
+		(*aux1) = (*aux);
+		aux1->Transform(transMatrix);
+		aux->SetNegativeInfinity();
+		aux->Enclose(*aux1);
+		go->aabb.push_back(aux);
+		go->obb.push_back(aux1);
+		if (firstTime)
+		{
+			auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
+			go->boundingBoxes.push_back(auxiliarCube);
+		}
+		break;
+	case ComponentType::PYRAMID:
+		aux = new AABB();
+		aux1 = new OBB();
+		aux->SetNegativeInfinity();
+		vertices_aux = pyramid->getVertex();
+		for (int i = 0; i < vertices_aux.size(); i++)
+		{
+			float4 vertex(vertices_aux[i].x, vertices_aux[i].y, vertices_aux[i].z, 1);
+			vertex = vertex * transMatrix;
+			aabbVertexAux.push_back(vertex);
+		}
+		for (int i = 0; i < aabbVertexAux.size(); i++)
+		{
+			float3 vertex(aabbVertexAux[i].x, aabbVertexAux[i].y, aabbVertexAux[i].z);
+			aabbVertex.push_back(vertex);
+		}
+		aux->Enclose((float3*)aabbVertex.data(), (size_t)aabbVertex.size());
+		(*aux1) = (*aux);
+		aux1->Transform(transMatrix);
+		aux->SetNegativeInfinity();
+		aux->Enclose(*aux1);
+		go->aabb.push_back(aux);
+		go->obb.push_back(aux1);
+		if (firstTime)
+		{
+			auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
+			go->boundingBoxes.push_back(auxiliarCube);
+		}
+		break;
+	case ComponentType::SPHERE:
+		aux = new AABB();
+		aux1 = new OBB();
+		aux->SetNegativeInfinity();
+		vertices_aux = sphere->getVertex();
+		for (int i = 0; i < vertices_aux.size(); i++)
+		{
+			float4 vertex(vertices_aux[i].x, vertices_aux[i].y, vertices_aux[i].z, 1);
+			vertex = vertex * transMatrix;
+			aabbVertexAux.push_back(vertex);
+		}
+		for (int i = 0; i < aabbVertexAux.size(); i++)
+		{
+			float3 vertex(aabbVertexAux[i].x, aabbVertexAux[i].y, aabbVertexAux[i].z);
+			aabbVertex.push_back(vertex);
+		}
+		aux->Enclose((float3*)aabbVertex.data(), (size_t)aabbVertex.size());
+		(*aux1) = (*aux);
+		aux1->Transform(transMatrix);
+		aux->SetNegativeInfinity();
+		aux->Enclose(*aux1);
+		go->aabb.push_back(aux);
+		go->obb.push_back(aux1);
+		if (firstTime)
+		{
+			auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
+			go->boundingBoxes.push_back(auxiliarCube);
+		}
+		break;
+	case ComponentType::CYLINDER:
+		aux = new AABB();
+		aux1 = new OBB();
+		aux->SetNegativeInfinity();
+		vertices_aux = cylinder->getVertex();
+		for (int i = 0; i < vertices_aux.size(); i++)
+		{
+			float4 vertex(vertices_aux[i].x, vertices_aux[i].y, vertices_aux[i].z, 1);
+			vertex = vertex * transMatrix;
+			aabbVertexAux.push_back(vertex);
+		}
+		for (int i = 0; i < aabbVertexAux.size(); i++)
+		{
+			float3 vertex(aabbVertexAux[i].x, aabbVertexAux[i].y, aabbVertexAux[i].z);
+			aabbVertex.push_back(vertex);
+		}
+		aux->Enclose((float3*)aabbVertex.data(), (size_t)aabbVertex.size());
+		(*aux1) = (*aux);
+		aux1->Transform(transMatrix);
+		aux->SetNegativeInfinity();
+		aux->Enclose(*aux1);
+		go->aabb.push_back(aux);
+		go->obb.push_back(aux1);
+		if (firstTime)
+		{
+			auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
+			go->boundingBoxes.push_back(auxiliarCube);
+		}
+		break;
+	case ComponentType::PLANE:
+		aux = new AABB();
+		aux1 = new OBB();
+		aux->SetNegativeInfinity();
+		vertices_aux = plane->getVertex();
+		for (int i = 0; i < vertices_aux.size(); i++)
+		{
+			float4 vertex(vertices_aux[i].x, vertices_aux[i].y, vertices_aux[i].z, 1);
+			vertex = vertex * transMatrix;
+			aabbVertexAux.push_back(vertex);
+		}
+		for (int i = 0; i < aabbVertexAux.size(); i++)
+		{
+			float3 vertex(aabbVertexAux[i].x, aabbVertexAux[i].y, aabbVertexAux[i].z);
+			aabbVertex.push_back(vertex);
+		}
+		aux->Enclose((float3*)aabbVertex.data(), (size_t)aabbVertex.size());
+		(*aux1) = (*aux);
+		aux1->Transform(transMatrix);
+		aux->SetNegativeInfinity();
+		aux->Enclose(*aux1);
+		go->aabb.push_back(aux);
+		go->obb.push_back(aux1);
+		if (firstTime)
+		{
+			auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
+			go->boundingBoxes.push_back(auxiliarCube);
+		}
+		break;
+	default:
+		break;
+	}
+}

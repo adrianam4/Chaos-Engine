@@ -40,4 +40,5 @@ public:
 	std::vector<ComponentCamera*>camArray;
 private:
 	mat4x4 viewMatrix, viewMatrixInverse;
+	std::vector<GameObject*> hitObjs;
 };

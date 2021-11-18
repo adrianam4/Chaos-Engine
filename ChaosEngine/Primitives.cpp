@@ -229,6 +229,9 @@ void MyCube::DrawCube()
 
 	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 	
 	//Draw
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0); 
@@ -339,6 +342,9 @@ void MyPyramid::DrawPyramid()
 
 	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 
 	//Draw
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
@@ -579,6 +585,9 @@ void MyCylinder::DrawCylinder()
 	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
+
 	//Draw
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
 
@@ -782,6 +791,9 @@ void MySphere::DrawSphere()
 	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
+
 	//Draw
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, 0);
 
@@ -889,6 +901,9 @@ void MyPlane::DrawPlane()
 
 	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	aabb.SetNegativeInfinity();
+	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 
 	//Draw
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, 0);

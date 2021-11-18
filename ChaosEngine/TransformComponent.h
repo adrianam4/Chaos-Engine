@@ -28,6 +28,5 @@ public:
 	std::vector<float3> vertices_aux;
 	float4x4 transMatrix;
 
-	//mat4x4 transMatrix;
-	//void CalculateTransMatrix(mat4x4 parentsMatrix, mat4x4 localMatrix);
+	void CreateAABB(ComponentType type, GameObject* go, bool firstTime);
 };

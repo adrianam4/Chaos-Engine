@@ -6,14 +6,7 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
-	
-
-	
-
-	
-	
-
-	cam = new ComponentCamera(float3(0, 0, 5), 60, 1, 500, false);
+	cam = new ComponentCamera(float3(0, 0, 5), 75, 1, 100, false);
 	cam->reference = Vec3(0.0f, 0.0f, 0.0f);
 	cam->position = Vec3(0.0f, 0.0f, 5.0f);
 	cam->x = Vec3(1.0f, 0.0f, 0.0f);
@@ -190,12 +183,36 @@ update_status ModuleCamera3D::Update(float dt)
 			GameObject* go = App->scene->gameObjects[i];
 			for (int j = 0; j < go->boundingBoxes.size(); j++)
 			{
-				bool hit = myRay.Intersects(*go->aabb[j]);
-				if (hit)
+				if (bool hit = myRay.Intersects(*go->aabb[j]))
 				{
-					App->editor->AddLog("HIT TRUE\n");
+					App->editor->AddLog("HIT\n");
+					hitObjs.push_back(go);
 				}
 			}
+
+		}
+		if (hitObjs.size() > 0)
+		{
+			std::vector<float> distance;
+			float nearDist = 500.0f;
+			int nearObj = 0;
+			for (int i = 0; i < hitObjs.size(); ++i)
+			{
+				int myComp = hitObjs[i]->SearchComponent(hitObjs[i], ComponentType::TRANSFORM);
+				float3 distnceVec = hitObjs[i]->components[myComp]->position - cam->frustum.pos;
+				float finalDistance = math::Sqrt((distnceVec.x * distnceVec.x) + (distnceVec.y * distnceVec.y) + (distnceVec.z * distnceVec.z));
+				distance.push_back(finalDistance);
+			}
+			for (int i = 0; i < distance.size(); i++)
+			{
+				if (distance[i] < nearDist)
+				{
+					nearDist = distance[i];
+					nearObj = i;
+				}
+			}
+			App->editor->objectSelected = hitObjs[nearObj];
+			hitObjs.clear();
 		}
 	}
 

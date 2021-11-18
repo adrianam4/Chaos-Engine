@@ -269,7 +269,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	// Rendering
 	DrawMeshes();
-	DrawCameras();
+	//DrawCameras();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(App->window->window);
