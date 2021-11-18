@@ -12,6 +12,7 @@
 class GameObject
 {
 public:
+	virtual ~GameObject();
 	void Update();
 	Component* CreateComponent2(ComponentType type, float3 pos, double hFov, double nPlane, double fPlane, bool isObj);
 	Component* CreateComponent(ComponentType type, float3* pos = nullptr, float3* measures = nullptr, float3* rotation = nullptr);

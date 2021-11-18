@@ -39,6 +39,21 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 
 ComponentCamera::~ComponentCamera()
 {
+	if (App->camera->camArray.size() - 1 != 0&&App->camera->camArray.size() - 1 != 1&& App->camera->camArray.size() - 1 != -1) {
+		for (int a = 0; a < App->camera->camArray.size(); a++)
+		{
+			if (App->camera->camArray[a] == this) {
+				App->camera->camArray.erase(App->camera->camArray.begin() + a);
+			}
+			else {
+				App->camera->camArray[a]->isTheMainCamera = true;
+				App->camera->cam = App->camera->camArray[a];
+			}
+		}
+	}
+	else {
+		App->camera->cam = App->camera->originCam;
+	}
 }
 
 void ComponentCamera::Enable()
@@ -159,14 +174,17 @@ void ComponentCamera::RecalculateRotation(float xDegrees, float yDegrees)
 
 void ComponentCamera::RecalculateCamera()
 {
-	for (int i = 0; i < App->editor->objectSelected->components.size(); i++)
-	{
-		if (App->editor->objectSelected->components[i]->type == ComponentType::TRANSFORM)
+	if (App->editor->objectSelected != nullptr) {
+		for (int i = 0; i < App->editor->objectSelected->components.size(); i++)
 		{
-			frustum.SetPos(App->editor->objectSelected->components[i]->position);
-			break;
+			if (App->editor->objectSelected->components[i]->type == ComponentType::TRANSFORM)
+			{
+				frustum.SetPos(App->editor->objectSelected->components[i]->position);
+				break;
+			}
 		}
 	}
+	
 }
 
 void ComponentCamera::CalculatePoints()

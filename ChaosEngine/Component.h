@@ -25,6 +25,7 @@ enum class ComponentType
 class Component
 {
 public:
+	virtual ~Component();
 	ComponentType type;
 	bool active;
 	bool drawNormals = false;

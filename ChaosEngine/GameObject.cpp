@@ -22,7 +22,11 @@ Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double h
 
 	return component;
 }
-
+GameObject::~GameObject() {
+	for (int a = 0; a < components.size(); a++) {
+		delete (*(components.begin() + a));
+	}
+}
 Component* GameObject::CreateComponent(ComponentType type, const char* name, bool isDropped)
 {
 	Component* component = nullptr;

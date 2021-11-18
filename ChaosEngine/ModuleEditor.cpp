@@ -732,6 +732,7 @@ update_status ModuleEditor::Update(float dt)
 					//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
 					
 				}
+				delete (*(App->scene->gameObjects.begin() + i));
 				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
 				
 				break;

@@ -9,7 +9,7 @@ class ComponentCamera : public Component
 {
 public:
 	ComponentCamera(float3 pos, double hFov, double nPlane, double fPlane, bool isGameObj);
-	~ComponentCamera();
+	~ComponentCamera()override;
 
 	void Enable() override;
 	void Update() override;
