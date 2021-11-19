@@ -59,6 +59,7 @@ public:
 	bool showAABB;
 	bool scrollToBottom;
 	GameObject* objectSelected;
+	float4 viewport;
 
 	std::vector<MyCube*> cubes;
 	std::vector<MyCylinder*> cylinders;

@@ -16,6 +16,7 @@ public:
 	update_status PostUpdate(float dt) override;
 	bool CleanUp();
 
+	void Resize(uint width, uint height);
 	void Bind();
 	void UnBind();
 
@@ -25,5 +26,5 @@ public:
 	uint renderBufferoutput = 0;
 	uint texture = 0;
 	bool show_viewport_window = true;
-
+	float2 size;
 };

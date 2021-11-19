@@ -760,8 +760,6 @@ update_status ModuleEditor::Update(float dt)
 		}
 	}
 
-	App->editor->AddLog("%d\n", SDL_GetTicks());
-
 	static bool showDemoWindow;
 	static bool showAnotherWindow;
 	static bool showCloseWindow;
@@ -1073,7 +1071,6 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::EndMainMenuBar();
 		}
 	}
-	
 
 	//////////////////////////////////////////////////////////////////////////////////////////// HIERARCHY WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1082,9 +1079,6 @@ update_status ModuleEditor::Update(float dt)
 		objectToChildren = nullptr;
 		objectSelected = nullptr;
 	}
-
-
-
 
 	if (showHierarchy)
 	{
@@ -1099,12 +1093,8 @@ update_status ModuleEditor::Update(float dt)
 				{
 					if (ImGui::IsItemHovered() && ImGui::GetIO().MouseClicked[0])
 					{
-
 						childrenManage(i);
 					}
-
-
-
 					for (int j = 0; j < App->scene->gameObjects[i]->childrens.size(); j++)
 					{
 						if (App->scene->gameObjects[i]->childrens.size() > 0)
@@ -1556,15 +1546,16 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Scene", &showSceneWindow, ImGuiWindowFlags_NoScrollbar);
 
-		ImVec2 viewportSize = ImGui::GetCurrentWindow()->Size;
-		if (viewportSize.x != lastViewportSize.x || viewportSize.y != lastViewportSize.y)
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (viewportSize.x != App->viewportBuffer->size.x || viewportSize.y != App->viewportBuffer->size.y)
 		{
-
-			App->camera->aspectRatio = viewportSize.x / viewportSize.y;
-			App->camera->RecalculateProjection();
+			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y);
+			App->viewportBuffer->size = { viewportSize.x, viewportSize.y };
+			App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
+			//App->camera->aspectRatio = viewportSize.x / viewportSize.y;
 		}
-		lastViewportSize = viewportSize;
-		ImGui::Image((ImTextureID)App->viewportBuffer->texture, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
+		ImGui::Image((ImTextureID)App->viewportBuffer->texture, { App->viewportBuffer->size.x, App->viewportBuffer->size.y }, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 	}
 
@@ -1578,7 +1569,6 @@ update_status ModuleEditor::Update(float dt)
 		ImVec2 viewportSize = ImGui::GetCurrentWindow()->Size;
 		if (viewportSize.x != lastViewportSize.x || viewportSize.y != lastViewportSize.y)
 		{
-	
 			App->camera->aspectRatio = viewportSize.x / viewportSize.y;
 			App->camera->RecalculateProjection();
 		}

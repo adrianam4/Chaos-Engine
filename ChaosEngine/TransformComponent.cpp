@@ -67,9 +67,6 @@ void ComponentTransform::Enable()
 
 void ComponentTransform::Update()
 {
-	App->editor->objectSelected->aabb.clear();
-	ComponentType type = getComponentType();
-	CreateAABB(type, App->editor->objectSelected, false);
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	float4x4 aux;
@@ -81,9 +78,9 @@ void ComponentTransform::Update()
 	{
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
 	}
-	
+
 	float4x4 aux1;
-	
+
 	for (int a = 0; a < App->editor->objectSelected->childrens.size(); a++) {
 		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {
 			if (App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM)
@@ -119,40 +116,70 @@ void ComponentTransform::OnEditor(int i)
 	lastRotation = rotationEuler;
 	lastGeneralScale = generalScale;
 
+	if (changed && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP))
+	{
+		App->editor->objectSelected->aabb.clear();
+		ComponentType type = getComponentType();
+		CreateAABB(type, App->editor->objectSelected, false);
+		changed = false;
+	}
+
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
 	if (ImGui::DragFloat("Position X", &position.x))
+	{
 		changed = true;
+		Update();
+	}
 	if (ImGui::DragFloat("Position Y", &position.y))
+	{
 		changed = true;
+		Update();
+	}
 	if (ImGui::DragFloat("Position Z", &position.z))
+	{
 		changed = true;
+		Update();
+	}
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Scale");
 	if (ImGui::DragFloat("General Scale", &generalScale))
 	{
 		changed = true;
+		Update();
 		scale.x = generalScale;
 		scale.y = generalScale;
 		scale.z = generalScale;
 	}
 	ImGui::Spacing();
 	if (ImGui::DragFloat("Scale X", &scale.x))
+	{
 		changed = true;
+		Update();
+	}
 	if (ImGui::DragFloat("Scale Y", &scale.y))
+	{
 		changed = true;
+		Update();
+	}
 	if (ImGui::DragFloat("Scale Z", &scale.z))
+	{
 		changed = true;
+		Update();
+	}
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Rotation");
 	if (ImGui::DragFloat("Rotation X", &rotationEuler.x))
-		changed = true;
-	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y))
-		changed = true;
-	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z))
-		changed = true;
-
-	if (changed && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP))
 	{
+		changed = true;
 		Update();
-		changed = false;
+	}
+	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y))
+	{
+		changed = true;
+		Update();
+	}
+	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z))
+	{
+		changed = true;
+		Update();
 	}
 }
 

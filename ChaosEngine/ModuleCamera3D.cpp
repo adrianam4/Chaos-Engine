@@ -56,7 +56,6 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= Vec3(cam->frustum.WorldRight().x, cam->frustum.WorldRight().y, cam->frustum.WorldRight().z) * speed * 2;
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += Vec3(cam->frustum.WorldRight().x, cam->frustum.WorldRight().y, cam->frustum.WorldRight().z) * speed * 2;
 
-	//position += newPos;
 	cam->frustum.SetPos(vec(cam->position.x += newPos.x, cam->position.y += newPos.y, cam->position.z += newPos.z));
 	cam->reference += newPos;
 
@@ -100,6 +99,10 @@ update_status ModuleCamera3D::Update(float dt)
 		cam->frustum.SetPos(vec(cam->position.x, cam->position.y, cam->position.z));
 	}
 
+	glBegin(GL_LINES);
+	glVertex3f(myRay.pos.x,myRay.pos.y,myRay.pos.z);
+	glVertex3f(myRay.pos.x + myRay.dir.x * 1000, myRay.pos.y + myRay.dir.y * 1000, myRay.pos.z + myRay.dir.z * 1000);
+	glEnd();
 	if (App->input->GetKey(SDL_SCANCODE_F))
 	{
 		if (App->editor->objectSelected == NULL)
@@ -174,45 +177,54 @@ update_status ModuleCamera3D::Update(float dt)
 	//Test if a ray intersects with gameobjects
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
-		float normalized_x = -1 + 2 * (float)App->input->GetMouseX() / App->window->width;
-		float normalized_y = -1 + 2 * (float)App->input->GetMouseY() / App->window->height;
-		myRay = cam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
+		float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
+		float4 viewport = App->editor->viewport;
 
-		for (int i = 0; i < App->scene->gameObjects.size(); i++)
+		if (mousePos.x > viewport.x && mousePos.x < viewport.x + viewport.z && mousePos.y > viewport.y && mousePos.y < viewport.y + viewport.w)
 		{
-			GameObject* go = App->scene->gameObjects[i];
-			for (int j = 0; j < go->boundingBoxes.size(); j++)
-			{
-				if (bool hit = myRay.Intersects(*go->aabb[j]))
-				{
-					App->editor->AddLog("HIT\n");
-					hitObjs.push_back(go);
-				}
-			}
+			
+			float normalized_x = -1 + 2 * mousePos.x / SCREEN_WIDTH;
+			float normalized_y = (-1 + 2 * mousePos.y / SCREEN_HEIGHT) * -1;
+			App->editor->AddLog("x: %.1f y:%.1f\n", normalized_x, normalized_y);
+			/*myRay = cam->frustum.UnProjectLineSegment(normalized_x, normalized_y);*/
+			myRay = Ray(cam->frustum.UnProjectLineSegment(normalized_x, normalized_y));
 
-		}
-		if (hitObjs.size() > 0)
-		{
-			std::vector<float> distance;
-			float nearDist = 500.0f;
-			int nearObj = 0;
-			for (int i = 0; i < hitObjs.size(); ++i)
+			for (int i = 0; i < App->scene->gameObjects.size(); i++)
 			{
-				int myComp = hitObjs[i]->SearchComponent(hitObjs[i], ComponentType::TRANSFORM);
-				float3 distnceVec = hitObjs[i]->components[myComp]->position - cam->frustum.pos;
-				float finalDistance = math::Sqrt((distnceVec.x * distnceVec.x) + (distnceVec.y * distnceVec.y) + (distnceVec.z * distnceVec.z));
-				distance.push_back(finalDistance);
-			}
-			for (int i = 0; i < distance.size(); i++)
-			{
-				if (distance[i] < nearDist)
+				GameObject* go = App->scene->gameObjects[i];
+				for (int j = 0; j < go->boundingBoxes.size(); j++)
 				{
-					nearDist = distance[i];
-					nearObj = i;
+					if (bool hit = myRay.Intersects(*go->aabb[j]))
+					{
+						App->editor->AddLog("HIT\n");
+						hitObjs.push_back(go);
+					}
 				}
+
 			}
-			App->editor->objectSelected = hitObjs[nearObj];
-			hitObjs.clear();
+			if (hitObjs.size() > 0)
+			{
+				std::vector<float> distance;
+				float nearDist = 500.0f;
+				int nearObj = 0;
+				for (int i = 0; i < hitObjs.size(); ++i)
+				{
+					int myComp = hitObjs[i]->SearchComponent(hitObjs[i], ComponentType::TRANSFORM);
+					float3 distnceVec = hitObjs[i]->components[myComp]->position - cam->frustum.pos;
+					float finalDistance = math::Sqrt((distnceVec.x * distnceVec.x) + (distnceVec.y * distnceVec.y) + (distnceVec.z * distnceVec.z));
+					distance.push_back(finalDistance);
+				}
+				for (int i = 0; i < distance.size(); i++)
+				{
+					if (distance[i] < nearDist)
+					{
+						nearDist = distance[i];
+						nearObj = i;
+					}
+				}
+				App->editor->objectSelected = hitObjs[nearObj];
+				hitObjs.clear();
+			}
 		}
 	}
 

@@ -27,7 +27,7 @@ private:
 	void CalculateViewMatrix();
 
 public:
-	LineSegment myRay;
+	Ray myRay;
 	
 	//Frustum frustum;
 	ComponentCamera* originCam;
