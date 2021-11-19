@@ -6,7 +6,7 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
-	cam = new ComponentCamera(float3(0, 0, 5), 75, 1, 100, false);
+	cam = new ComponentCamera(float3(0, 0, 5), 75, .01f, 100, false);
 	cam->reference = Vec3(0.0f, 0.0f, 0.0f);
 	cam->position = Vec3(0.0f, 0.0f, 5.0f);
 	cam->x = Vec3(1.0f, 0.0f, 0.0f);
@@ -98,11 +98,43 @@ update_status ModuleCamera3D::Update(float dt)
 		cam->position = cam->reference + cam->z * length(cam->position);
 		cam->frustum.SetPos(vec(cam->position.x, cam->position.y, cam->position.z));
 	}
+	glBegin(GL_LINES);	
+	glColor3f(1.f, 0.f, 0.f);
+	glVertex3f(myRay.a.x,myRay.a.y,myRay.a.z);
+	glColor3f(0.f, 0.f, 0.f);
+	glVertex3f(myRay.b.x, myRay.b.y, myRay.b.z);
+	glColor3f(1.f, 1.f, 1.f);
+	glEnd();
+
+	//Tienes el frustrum mal formado y por eso los rayos no estan funcionando. Haz click en la pantalla y luego alejate pulsando S
+	// veras como tienes el frustrum como torcido hacia arriba - El centro de la X formada por el frustrum debería estar en el centro de la pantalla
+	// La parte del rayo parece correcta mira a ver que esta pasando con el frustum 
 
 	glBegin(GL_LINES);
-	glVertex3f(myRay.pos.x,myRay.pos.y,myRay.pos.z);
-	glVertex3f(myRay.pos.x + myRay.dir.x * 1000, myRay.pos.y + myRay.dir.y * 1000, myRay.pos.z + myRay.dir.z * 1000);
+
+	glColor3f(1.f, 0.f, 0.f);
+	glVertex3f(corners[0].x, corners[0].y, corners[0].z);
+	glColor3f(0.f, 0.f, 0.f);
+	glVertex3f(corners[4].x, corners[4].y, corners[4].z);
+
+	glColor3f(1.f, 0.f, 0.f);
+	glVertex3f(corners[1].x, corners[1].y, corners[1].z);
+	glColor3f(0.f, 0.f, 0.f);
+	glVertex3f(corners[5].x, corners[5].y, corners[5].z);
+
+	glColor3f(1.f, 0.f, 0.f);
+	glVertex3f(corners[2].x, corners[2].y, corners[2].z);
+	glColor3f(0.f, 0.f, 0.f);
+	glVertex3f(corners[6].x, corners[6].y, corners[6].z);
+
+	glColor3f(1.f, 0.f, 0.f);
+	glVertex3f(corners[3].x, corners[3].y, corners[3].z);
+	glColor3f(0.f, 0.f, 0.f);
+	glVertex3f(corners[7].x, corners[7].y, corners[7].z);
+
+	glColor3f(1.f, 1.f, 1.f);
 	glEnd();
+
 	if (App->input->GetKey(SDL_SCANCODE_F))
 	{
 		if (App->editor->objectSelected == NULL)
@@ -182,12 +214,17 @@ update_status ModuleCamera3D::Update(float dt)
 
 		if (mousePos.x > viewport.x && mousePos.x < viewport.x + viewport.z && mousePos.y > viewport.y && mousePos.y < viewport.y + viewport.w)
 		{
+			int w, h;
+			SDL_GetWindowSize(App->window->window, &w, &h); // Si el tamaño de la ventana cambia no te va funcionar usar SCREEN_WIDTH o SCREEN_HEIGHT
 			
-			float normalized_x = -1 + 2 * mousePos.x / SCREEN_WIDTH;
-			float normalized_y = (-1 + 2 * mousePos.y / SCREEN_HEIGHT) * -1;
+			float normalized_x = Lerp(-1, 1, mousePos.x / w);
+			float normalized_y = Lerp(1, -1, mousePos.y / h);
+
 			App->editor->AddLog("x: %.1f y:%.1f\n", normalized_x, normalized_y);
-			/*myRay = cam->frustum.UnProjectLineSegment(normalized_x, normalized_y);*/
-			myRay = Ray(cam->frustum.UnProjectLineSegment(normalized_x, normalized_y));
+
+			cam->frustum.GetCornerPoints(&corners[0]);
+			myRay = cam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
+			//myRay = cam->frustum.UnProject(normalized_x, normalized_y);
 
 			for (int i = 0; i < App->scene->gameObjects.size(); i++)
 			{
