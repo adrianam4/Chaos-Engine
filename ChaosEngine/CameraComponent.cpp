@@ -31,6 +31,7 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 
 		Enable();
 	}
+	
 	x = Vec3(1.0f, 0.0f, 0.0f);
 	y = Vec3(0.0f, 1.0f, 0.0f);
 	z = Vec3(0.0f, 0.0f, 1.0f);
@@ -52,7 +53,7 @@ ComponentCamera::~ComponentCamera()
 		}
 	}
 	else {
-		App->camera->cam = App->camera->originCam;
+		//App->camera->cam = App->camera->originCam;
 	}
 }
 
@@ -61,11 +62,20 @@ void ComponentCamera::Enable()
 	App->camera->camArray.push_back(this);
 	CalculatePoints();
 }
-
+void ComponentCamera::pre() {
+	if (start) {
+		App->viewportBuffer->enableStart(this);
+		start = false;
+	}
+	App->viewportBuffer->pre(this);
+}
+void ComponentCamera::post() {
+	App->viewportBuffer->post(this);
+}
 void ComponentCamera::Update()
 {
 	CalculatePoints();
-	RecalculateCamera();
+	RecalculateCamera();	
 }
 
 void ComponentCamera::Disable()
@@ -81,13 +91,13 @@ void ComponentCamera::OnEditor(int i)
 		if (isTheMainCamera == false) 
 		{
 			
-			App->camera->cam = App->camera->originCam;
+			//App->camera->cam = App->camera->originCam;
 			
 		}
 		if (isTheMainCamera == true)
 		{
-			
-			for (int a = 0; a < App->camera->camArray.size(); a++)
+			App->camera->GameCam = this;
+			/*for (int a = 0; a < App->camera->camArray.size(); a++)
 			{
 				if (App->camera->camArray[a] != this) {
 					App->camera->camArray[a]->isTheMainCamera = false;
@@ -96,7 +106,7 @@ void ComponentCamera::OnEditor(int i)
 					App->camera->camArray[a]->isTheMainCamera = true;
 					App->camera->cam = this;
 				}
-			}
+			}*/
 			
 
 		}

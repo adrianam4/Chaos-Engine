@@ -3,7 +3,7 @@
 #include "Globals.h"
 
 #include <string>
-
+class ComponentCamera;
 class ModuleViewportFrameBuffer : public Module
 {
 public:
@@ -15,16 +15,13 @@ public:
 	update_status PreUpdate(float dt) override;
 	update_status PostUpdate(float dt) override;
 	bool CleanUp();
-
-	void Resize(uint width, uint height);
-	void Bind();
+	void pre(ComponentCamera* camera);
+	void post(ComponentCamera* camera);
+	void Resize(uint width, uint height, ComponentCamera* camera);
+	void Bind(ComponentCamera* camera);
 	void UnBind();
-
+	void enableStart(ComponentCamera* camera);
 public:
-
-	uint frameBuffer = 0;
-	uint renderBufferoutput = 0;
-	uint texture = 0;
-	bool show_viewport_window = true;
-	float2 size;
+	
+	
 };

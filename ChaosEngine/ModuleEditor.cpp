@@ -12,7 +12,7 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 #include "Parson/parson.h"
-
+#include "CameraComponent.h"
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 
@@ -639,6 +639,10 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 // Update: draw background
 update_status ModuleEditor::Update(float dt)
 {
+	if (App->camera->GameCam != nullptr) {
+		App->camera->GameCam->Update();
+	}
+	App->camera->cam->Update();
 	grid->DrawGrid();
 	//Creating MenuBar item as a root for docking windows
 
@@ -1547,35 +1551,38 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Begin("Scene", &showSceneWindow, ImGuiWindowFlags_NoScrollbar);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		if (viewportSize.x != App->viewportBuffer->size.x || viewportSize.y != App->viewportBuffer->size.y)
+		if (viewportSize.x != App->camera->cam->size.x || viewportSize.y != App->camera->cam->size.y)
 		{
-			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y);
-			App->viewportBuffer->size = { viewportSize.x, viewportSize.y };
+			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y, App->camera->cam);
+			App->camera->cam->size = { viewportSize.x, viewportSize.y };
 			App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
 			//App->camera->aspectRatio = viewportSize.x / viewportSize.y;
 		}
 		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
-		ImGui::Image((ImTextureID)App->viewportBuffer->texture, { App->viewportBuffer->size.x, App->viewportBuffer->size.y }, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)App->camera->cam->texture, { App->camera->cam->size.x, App->camera->cam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT2 WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-
-	if (showScene2Window)
+	
+	if (showScene2Window&& App->camera->GameCam!=nullptr)
 	{
 		ImGui::CloseCurrentPopup();
-		ImGui::Begin("Camera", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
+		ImGui::Begin("Game", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
 
-		ImVec2 viewportSize = ImGui::GetCurrentWindow()->Size;
-		if (viewportSize.x != lastViewportSize.x || viewportSize.y != lastViewportSize.y)
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (viewportSize.x != App->camera->GameCam->size.x || viewportSize.y != App->camera->GameCam->size.y)
 		{
-			App->camera->aspectRatio = viewportSize.x / viewportSize.y;
-			App->camera->RecalculateProjection();
+			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y, App->camera->GameCam);
+			App->camera->GameCam->size = { viewportSize.x, viewportSize.y };
+			App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
+			//App->camera->aspectRatio = viewportSize.x / viewportSize.y;
 		}
-		lastViewportSize = viewportSize;
-		ImGui::Image((ImTextureID)App->viewportBuffer->texture, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
+		ImGui::Image((ImTextureID)App->camera->GameCam->texture, { App->camera->GameCam->size.x, App->camera->GameCam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
 		ImGui::End();
 	}
+	
 
 	//////////////////////////////////////////////////////////////////////////////////////////// WARNING WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1653,12 +1660,22 @@ update_status ModuleEditor::Update(float dt)
 
 	return UPDATE_CONTINUE;
 }
-
+update_status  ModuleEditor::PreUpdate(float dt) {
+	if (App->camera->GameCam != nullptr) {
+		App->camera->GameCam->pre();
+	}
+	App->camera->cam->pre();
+	return UPDATE_CONTINUE;
+}
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
 	grid->DrawGrid();
-
+	if (App->camera->GameCam != nullptr) {
+		App->camera->GameCam->post();
+	}
+	
+	App->camera->cam->post();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	// Rendering

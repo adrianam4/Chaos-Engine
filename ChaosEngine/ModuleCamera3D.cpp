@@ -13,7 +13,8 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app
 	cam->y = Vec3(0.0f, 1.0f, 0.0f);
 	cam->z = Vec3(0.0f, 0.0f, 1.0f);
 	CalculateViewMatrix();
-	originCam = cam;
+	
+	//originCam = cam;
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -201,7 +202,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 	}
 
-	frustumMatrix = cam->frustum.ViewMatrix(); //Get CameraViewMatrix
+	cam->frustumMatrix = cam->frustum.ViewMatrix(); //Get CameraViewMatrix
 
 	// Recalculate matrix -------------
 	CalculateViewMatrix();

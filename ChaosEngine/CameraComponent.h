@@ -4,7 +4,7 @@
 #include <vector>
 
 class Component;
-
+class ModuleViewportFrameBuffer;
 class ComponentCamera : public Component
 {
 public:
@@ -15,6 +15,8 @@ public:
 	void Update() override;
 	void Disable() override;
 	void OnEditor(int i) override;
+	void pre();
+	void post();
 	void Draw() override;
 
 public:
@@ -33,4 +35,11 @@ public:
 	void RecalculateRotation(float xDegrees, float yDegrees);
 	void RecalculateCamera();
 	void CalculatePoints();
+	float4x4 frustumMatrix;
+	bool start = true;
+	uint frameBuffer = 0;
+	uint renderBufferoutput = 0;
+	uint texture = 0;
+	bool show_viewport_window = true;
+	float2 size;
 };
