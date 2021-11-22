@@ -6,7 +6,7 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
-	cam = new ComponentCamera(float3(0, 0, 5), 75, .01f, 100, false);
+	cam = new ComponentCamera(float3(0, 0, 5), 70, .01f, 100, false);
 	cam->reference = Vec3(0.0f, 0.0f, 0.0f);
 	cam->position = Vec3(0.0f, 0.0f, 5.0f);
 	cam->x = Vec3(1.0f, 0.0f, 0.0f);
@@ -217,21 +217,17 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
 	{
 		float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
+		float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };
 		float4 viewport = App->editor->viewport;
 
 		if (mousePos.x > viewport.x && mousePos.x < viewport.x + viewport.z && mousePos.y > viewport.y && mousePos.y < viewport.y + viewport.w)
-		{
-			int w, h;
-			SDL_GetWindowSize(App->window->window, &w, &h); // Si el tamaño de la ventana cambia no te va funcionar usar SCREEN_WIDTH o SCREEN_HEIGHT
-			
-			float normalized_x = Lerp(-1, 1, mousePos.x / w);
-			float normalized_y = Lerp(1, -1, mousePos.y / h);
-
-			App->editor->AddLog("x: %.1f y:%.1f\n", normalized_x, normalized_y);
+		{	
+			float2 fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y};
+			float normalized_x = Lerp(-1, 1, fMousePos.x / viewport.z);
+			float normalized_y = Lerp(1, -1, fMousePos.y / viewport.w);
 
 			cam->frustum.GetCornerPoints(&corners[0]);
 			myRay = cam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
-			//myRay = cam->frustum.UnProject(normalized_x, normalized_y);
 
 			for (int i = 0; i < App->scene->gameObjects.size(); i++)
 			{

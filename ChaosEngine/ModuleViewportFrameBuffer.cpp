@@ -101,7 +101,7 @@ void ModuleViewportFrameBuffer::Resize(uint width, uint height, ComponentCamera*
 void ModuleViewportFrameBuffer::Bind(ComponentCamera* camera)
 {
 	glBindFramebuffer(GL_FRAMEBUFFER, camera->frameBuffer);
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT); // ¿?¿?¿?
+	glViewport(0, 0, camera->size.x, camera->size.y);
 }
 
 void ModuleViewportFrameBuffer::UnBind()

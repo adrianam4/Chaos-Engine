@@ -36,6 +36,7 @@ public:
 	void RecalculateCamera();
 	void CalculatePoints();
 	float4x4 frustumMatrix;
+	float4x4 projMatrix;
 	bool start = true;
 	uint frameBuffer = 0;
 	uint renderBufferoutput = 0;

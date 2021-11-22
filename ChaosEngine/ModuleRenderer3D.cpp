@@ -267,21 +267,25 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	for (int a = 0; a < 2; a++) {
 
-		if (a == 0) {
+		if (a == 0) 
+		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glLoadIdentity();
 
+			glMatrixMode(GL_PROJECTION);
+			glLoadMatrixf(App->camera->cam->frustum.ProjectionMatrix().Transposed().ptr());
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixf(App->camera->cam->frustumMatrix.Transposed().ptr());
 
 			DrawMeshes(App->camera->cam);
-
 		}
-		else if (App->camera->GameCam != nullptr) {
-
+		else if (App->camera->GameCam != nullptr) 
+		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glLoadIdentity();
 
+			glMatrixMode(GL_PROJECTION);
+			glLoadMatrixf(App->camera->cam->frustum.ProjectionMatrix().Transposed().ptr());
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixf(App->camera->GameCam->frustumMatrix.Transposed().ptr());
 
@@ -322,13 +326,12 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	projectionMatrix = App->camera->cam->getViewmatrix(); //OJO AQUI QUE ESTAS MEZCLANDO COSAS -> VIEW Y PROJECTION
-	//projectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&projectionMatrix);
-
+	glLoadMatrixf(App->camera->cam->frustum.ProjectionMatrix().Transposed().ptr());
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	float4x4 viewMatrix = App->camera->cam->frustum.ViewMatrix();
+	glLoadMatrixf(viewMatrix.Transposed().ptr());
+
+
 }
 
 void ModuleRenderer3D::DrawMeshes(ComponentCamera* cam)
