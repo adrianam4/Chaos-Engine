@@ -4,7 +4,7 @@
 #include "Light.h"
 
 #define MAX_LIGHTS 8
-
+class ComponentCamera;
 class Model;
 
 class ModuleRenderer3D : public Module
@@ -21,7 +21,7 @@ public:
 	void InitModelPath(char *path);
 	void OnResize(int width, int height);
 	void InitMesh(char* path, GameObject* selectedObj);
-	void DrawMeshes();
+	void DrawMeshes(ComponentCamera*cam);
 	void DrawCameras();
 public:
 

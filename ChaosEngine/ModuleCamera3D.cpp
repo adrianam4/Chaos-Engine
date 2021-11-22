@@ -12,7 +12,7 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app
 	cam->x = Vec3(1.0f, 0.0f, 0.0f);
 	cam->y = Vec3(0.0f, 1.0f, 0.0f);
 	cam->z = Vec3(0.0f, 0.0f, 1.0f);
-	CalculateViewMatrix();
+	CalculateViewMatrix(cam);
 	
 	//originCam = cam;
 }
@@ -205,7 +205,13 @@ update_status ModuleCamera3D::Update(float dt)
 	cam->frustumMatrix = cam->frustum.ViewMatrix(); //Get CameraViewMatrix
 
 	// Recalculate matrix -------------
-	CalculateViewMatrix();
+	CalculateViewMatrix(cam);
+	if (GameCam != nullptr) {
+		GameCam->frustumMatrix = GameCam->frustum.ViewMatrix(); //Get CameraViewMatrix
+
+	// Recalculate matrix -------------
+		CalculateViewMatrix(GameCam);
+	}
 
 	//Test if a ray intersects with gameobjects
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
@@ -285,7 +291,7 @@ void ModuleCamera3D::Look(const Vec3& position, const Vec3& reference, bool rota
 		cam->position += cam->z * 0.05f;
 	}
 
-	CalculateViewMatrix();
+	CalculateViewMatrix(cam);
 }
 
 // -----------------------------------------------------------------
@@ -297,7 +303,7 @@ void ModuleCamera3D::LookAt(const Vec3& spot)
 	cam->x = normalize(cross(Vec3(0.0f, 1.0f, 0.0f), cam->z));
 	cam->y = cross(cam->z, cam->x);
 
-	CalculateViewMatrix();
+	CalculateViewMatrix(cam);
 }
 
 void ModuleCamera3D::RecalculateProjection()
@@ -316,7 +322,7 @@ void ModuleCamera3D::Move(const Vec3& movement)
 	cam->position += movement;
 	cam->reference += movement;
 
-	CalculateViewMatrix();
+	CalculateViewMatrix(cam);
 }
 
 // -----------------------------------------------------------------
@@ -326,7 +332,7 @@ float* ModuleCamera3D::GetViewMatrix()
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::CalculateViewMatrix()
+void ModuleCamera3D::CalculateViewMatrix(ComponentCamera* cam)
 {
 	viewMatrix = mat4x4(cam->x.x, cam->y.x, cam->z.x, 0.0f, cam->x.y, cam->y.y, cam->z.y, 0.0f, cam->x.z, cam->y.z, cam->z.z, 0.0f, -dot(cam->x, cam->position), -dot(cam->y, cam->position), -dot(cam->z, cam->position), 1.0f);
 	viewMatrixInverse = inverse(viewMatrix);

@@ -24,7 +24,7 @@ public:
 	void RecalculateProjection();
 private:
 
-	void CalculateViewMatrix();
+	void CalculateViewMatrix(ComponentCamera* cam);
 
 public:
 	LineSegment myRay;

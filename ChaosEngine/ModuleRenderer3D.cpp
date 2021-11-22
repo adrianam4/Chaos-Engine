@@ -163,45 +163,15 @@ void ModuleRenderer3D::InitModel(std::vector<theBuffer*>* theArray) {
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
 	
-	for (int a=0; a < 2; a++) {
-		
-		if (a == 0) {
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glBindFramebuffer(GL_FRAMEBUFFER, App->camera->cam->frameBuffer);
-			glViewport(0, 0, App->camera->cam->width, App->camera->cam->height);
-			
+	
 
-			glLoadIdentity();
 
-			glMatrixMode(GL_MODELVIEW);
-			glLoadMatrixf(App->camera->cam->frustumMatrix.Transposed().ptr());
+	lights[0].SetPos(App->camera->cam->position.x, App->camera->cam->position.y, App->camera->cam->position.z);
 
-			//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		}
-		else if(App->camera->GameCam!=nullptr){
-			/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			glBindFramebuffer(GL_FRAMEBUFFER, App->camera->GameCam->frameBuffer);
-			glViewport(0, 0, App->camera->GameCam->width, App->camera->GameCam->height);
-			glLoadIdentity();
+	for (uint i = 0; i < MAX_LIGHTS; ++i)
+		lights[i].Render();
 
-			glMatrixMode(GL_MODELVIEW);
-			glLoadMatrixf(App->camera->GameCam->frustumMatrix.Transposed().ptr());
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
 
-			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		}
-		
-
-		// light 0 on cam pos
-		lights[0].SetPos(App->camera->cam->position.x, App->camera->cam->position.y, App->camera->cam->position.z);
-
-		for (uint i = 0; i < MAX_LIGHTS; ++i)
-			lights[i].Render();
-
-		// Start the Dear ImGui frame
-		
-		
-	}
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(App->window->window);
 	
@@ -295,8 +265,30 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
-	// Rendering
-	DrawMeshes();
+	for (int a = 0; a < 2; a++) {
+
+		if (a == 0) {
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glLoadIdentity();
+
+			glMatrixMode(GL_MODELVIEW);
+			glLoadMatrixf(App->camera->cam->frustumMatrix.Transposed().ptr());
+
+			DrawMeshes(App->camera->cam);
+
+		}
+		else if (App->camera->GameCam != nullptr) {
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glLoadIdentity();
+
+			glMatrixMode(GL_MODELVIEW);
+			glLoadMatrixf(App->camera->GameCam->frustumMatrix.Transposed().ptr());
+
+			DrawMeshes(App->camera->GameCam);
+		}
+	}
+
 	//DrawCameras();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -339,29 +331,10 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::DrawMeshes()
+void ModuleRenderer3D::DrawMeshes(ComponentCamera* cam)
 {
-	App->viewportBuffer->Bind(App->camera->cam);
-	for (int i = 0; i < App->scene->gameObjects.size(); i++)
-	{
-		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
-		{
-			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
-			{
-				int auxId = App->scene->gameObjects[i]->id;
-				for (int k = 0; k < models.size(); k++)
-				{
-					if (models[k].id == auxId)
-					{
-						models[k].Draw(App->scene->gameObjects[i]->matrix);
-					}
-				}
-			}
-		}
-	}
-	App->viewportBuffer->UnBind();
-	if (App->camera->GameCam != nullptr) {
-		App->viewportBuffer->Bind(App->camera->GameCam);
+	if (cam != nullptr) {
+		App->viewportBuffer->Bind(cam);
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
 			for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
@@ -381,6 +354,7 @@ void ModuleRenderer3D::DrawMeshes()
 		}
 		App->viewportBuffer->UnBind();
 	}
+	
 }
 
 void ModuleRenderer3D::DrawCameras()
