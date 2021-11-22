@@ -59,6 +59,8 @@ bool ModuleEditor::Start()
 	ImGui_ImplOpenGL3_Init();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
+	guizmoType = ImGuizmo::OPERATION::TRANSLATE;
+
 	return ret;
 }
 
@@ -441,6 +443,85 @@ void ModuleEditor::AddPlane(float3 pos, float3 sca)
 	auxPlane = new MyPlane(pos, sca);
 	planes.push_back(auxPlane);
 }
+void ModuleEditor::DrawPrimitives()
+{
+	for (int i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		if (showAABB)
+		{
+			for (int a = 0; a < App->scene->gameObjects[i]->boundingBoxes.size(); a++)
+			{
+				App->scene->gameObjects[i]->boundingBoxes[a]->DrawCube();
+			}
+		}
+
+		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+		{
+			//Cubes
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::CUBE && App->scene->gameObjects[i]->components[j]->active)
+			{
+				int auxId = App->scene->gameObjects[i]->id;
+				for (int k = 0; k < cubes.size(); k++)
+				{
+					if (cubes[k]->id == auxId)
+					{
+						cubes[k]->DrawCube();
+					}
+				}
+			}
+			//Pyranids
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::PYRAMID && App->scene->gameObjects[i]->components[j]->active)
+			{
+				int auxId = App->scene->gameObjects[i]->id;
+				for (int k = 0; k < pyramids.size(); k++)
+				{
+					if (pyramids[k]->id == auxId)
+					{
+						pyramids[k]->DrawPyramid();
+					}
+				}
+			}
+			//Cylinders
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::CYLINDER && App->scene->gameObjects[i]->components[j]->active)
+			{
+				int auxId = App->scene->gameObjects[i]->id;
+				for (int k = 0; k < cylinders.size(); k++)
+				{
+					if (cylinders[k]->id == auxId)
+					{
+						cylinders[k]->DrawCylinder();
+					}
+				}
+			}
+			//Spheres
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::SPHERE && App->scene->gameObjects[i]->components[j]->active)
+			{
+				int auxId = App->scene->gameObjects[i]->id;
+				for (int k = 0; k < spheres.size(); k++)
+				{
+					if (spheres[k]->id == auxId)
+					{
+						spheres[k]->DrawSphere();
+					}
+				}
+			}
+			//Planes
+			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::PLANE && App->scene->gameObjects[i]->components[j]->active)
+			{
+				int auxId = App->scene->gameObjects[i]->id;
+				for (int k = 0; k < planes.size(); k++)
+				{
+					if (planes[k]->id == auxId)
+					{
+						planes[k]->DrawPlane();
+					}
+				}
+			}
+
+		}
+	}
+}
+
 void ModuleEditor::UpdateAll()
 {
 	for (size_t i = 0; i < App->scene->gameObjects.size(); i++)
@@ -456,13 +537,16 @@ void ModuleEditor::UpdateAll()
 	}
 	App->editor->objectSelected = nullptr;
 }
+
 void ModuleEditor::AddCylinder(float3 pos, float3 sca)
 {
 	MyCylinder* auxCylinder;
 	auxCylinder = new MyCylinder(pos,sca);
 	cylinders.push_back(auxCylinder);
 }
-void ModuleEditor::DOptionsmenu(ComponentType type) {
+
+void ModuleEditor::DOptionsmenu(ComponentType type) 
+{
 	
 	switch (type)
 	{
@@ -481,7 +565,8 @@ void ModuleEditor::DOptionsmenu(ComponentType type) {
 		ImGui::DragFloat("Z Scale", &M.z);
 
 
-		if (ImGui::Button("Create Cube")) {
+		if (ImGui::Button("Create Cube")) 
+		{
 			if (cubes.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Cube "));
 			else
@@ -642,50 +727,22 @@ update_status ModuleEditor::Update(float dt)
 	if (App->camera->GameCam != nullptr) {
 		App->camera->GameCam->Update();
 	}
-	App->camera->cam->Update();
+	App->camera->editorCam->Update();
 	grid->DrawGrid();
-	//Creating MenuBar item as a root for docking windows
 
-	//////////////////////////////////////////////////////////////////////////// GUIZMOS ///////////////////////////////////////////////////////////////////////
-	/*if (objectSelected)
+	// Change Guizmo types
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
-		ImGuizmo::SetOrthographic(false);
-		ImGuizmo::SetDrawlist();
-		float windowWidth = (float)ImGui::GetWindowWidth();
-		float windowHeight = (float)ImGui::GetWindowHeight();
-		ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
-
-		auto cameraEntity = App->camera->GetViewMatrix();
-		const auto& camera = cameraEntity->GetComponentType();
-
-
-		auto& tc = objectSelected->components;
-
-		ImGuizmo::Manipulate(App->camera->GetViewMatrix(), App->camera->GetViewMatrix(),
-			ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, App->camera->GetViewMatrix());
-
-	}*/
-
-	//int gizmoCount = 1;
-	//static ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
-	//static ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
-	//static bool useSnap = false;
-	//static float snap[3] = { 1.f, 1.f, 1.f };
-	//static float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
-	//static float boundsSnap[] = { 0.1f, 0.1f, 0.1f };
-	//static bool boundSizing = false;
-	//static bool boundSizingSnap = false;
-
-	//ImGuizmo::SetDrawlist();
-	//ImGuizmo::BeginFrame();
-
-	//if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
-	//	mCurrentGizmoOperation = ImGuizmo::TRANSLATE;
-	//if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
-	//	mCurrentGizmoOperation = ImGuizmo::ROTATE;
-	//if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
-	//	mCurrentGizmoOperation = ImGuizmo::SCALE;
-
+		guizmoType = ImGuizmo::OPERATION::TRANSLATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+	{
+		guizmoType = ImGuizmo::OPERATION::ROTATE;
+	}
+	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+	{
+		guizmoType = ImGuizmo::OPERATION::SCALE;
+	}
 
 	if (DockingRootItem("Viewport", ImGuiWindowFlags_MenuBar)) {
 		ImGui::End();
@@ -1551,15 +1608,52 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Begin("Scene", &showSceneWindow, ImGuiWindowFlags_NoScrollbar);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		if (viewportSize.x != App->camera->cam->size.x || viewportSize.y != App->camera->cam->size.y)
+		if (viewportSize.x != App->camera->editorCam->size.x || viewportSize.y != App->camera->editorCam->size.y)
 		{
-			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y, App->camera->cam);
-			App->camera->cam->size = { viewportSize.x, viewportSize.y };
+			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y, App->camera->editorCam);
+			App->camera->editorCam->size = { viewportSize.x, viewportSize.y };
 			App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
 			//App->camera->aspectRatio = viewportSize.x / viewportSize.y;
 		}
 		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
-		ImGui::Image((ImTextureID)App->camera->cam->texture, { App->camera->cam->size.x, App->camera->cam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
+		ImGui::Image((ImTextureID)App->camera->editorCam->texture, { App->camera->editorCam->size.x, App->camera->editorCam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
+
+		//Guizmos
+		if (objectSelected && guizmoType != -1)
+		{
+			ImGuizmo::Enable(true);
+
+			float windowWidth = (float)ImGui::GetWindowWidth();
+			float windowHeight = (float)ImGui::GetWindowHeight();
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+			ImGuizmo::SetDrawlist();
+
+			//Camera
+			ComponentCamera *myCamera = App->camera->editorCam;
+			float4x4 cameraProjection = myCamera->frustum.ProjectionMatrix();
+			float4x4 cameraView = myCamera->frustum.ViewMatrix();
+
+			//Game Object transform
+			ComponentTransform* transComponent = objectSelected->getTransform();
+			float4x4 transformMatrix = transComponent->transmat;
+			float3 originalRotation = transComponent->rotationEuler;
+
+			ImGuizmo::Manipulate(cameraView.Transposed().ptr(),cameraProjection.Transposed().ptr(),(ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
+
+			if (ImGuizmo::IsUsing())
+			{
+				float3 position, rotation, scale;
+				position = transComponent->position;
+				rotation = transComponent->rotationEuler;
+				scale = transComponent->scale;
+
+				float3 deltaRotation = rotation - originalRotation;
+				transComponent->position = position;
+				transComponent->rotationEuler += deltaRotation;
+				transComponent->scale = scale;
+			}
+		}
+
 		ImGui::End();
 	}
 
@@ -1660,11 +1754,20 @@ update_status ModuleEditor::Update(float dt)
 
 	return UPDATE_CONTINUE;
 }
-update_status  ModuleEditor::PreUpdate(float dt) {
-	if (App->camera->GameCam != nullptr) {
+update_status  ModuleEditor::PreUpdate(float dt) 
+{
+	if (App->camera->GameCam != nullptr) 
+	{
 		App->camera->GameCam->pre();
 	}
-	App->camera->cam->pre();
+
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame(App->window->window);
+
+	ImGui::NewFrame();
+	ImGuizmo::BeginFrame();
+
+	App->camera->editorCam->pre();
 	return UPDATE_CONTINUE;
 }
 
@@ -1675,12 +1778,11 @@ update_status ModuleEditor::PostUpdate(float dt)
 		App->camera->GameCam->post();
 	}
 	
-	App->camera->cam->post();
+	App->camera->editorCam->post();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 
 	// Rendering
 	ImGui::Render();
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 
 	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
@@ -1690,82 +1792,6 @@ update_status ModuleEditor::PostUpdate(float dt)
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault();
 		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-	}
-
-	for (int i = 0; i < App->scene->gameObjects.size(); i++)
-	{
-		if (showAABB)
-		{
-			for (int a = 0; a < App->scene->gameObjects[i]->boundingBoxes.size(); a++)
-			{
-				App->scene->gameObjects[i]->boundingBoxes[a]->DrawCube();
-			}
-		}
-
-		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
-		{
-			//Cubes
-			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::CUBE && App->scene->gameObjects[i]->components[j]->active)
-			{
-				int auxId = App->scene->gameObjects[i]->id;
-				for (int k = 0; k < cubes.size(); k++)
-				{
-					if (cubes[k]->id == auxId)
-					{
-						cubes[k]->DrawCube();
-					}
-				}
-			}
-			//Pyranids
-			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::PYRAMID && App->scene->gameObjects[i]->components[j]->active)
-			{
-				int auxId = App->scene->gameObjects[i]->id;
-				for (int k = 0; k < pyramids.size(); k++)
-				{
-					if (pyramids[k]->id == auxId)
-					{
-						pyramids[k]->DrawPyramid();
-					}
-				}
-			}
-			//Cylinders
-			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::CYLINDER && App->scene->gameObjects[i]->components[j]->active)
-			{
-				int auxId = App->scene->gameObjects[i]->id;
-				for (int k = 0; k < cylinders.size(); k++)
-				{
-					if (cylinders[k]->id == auxId)
-					{
-						cylinders[k]->DrawCylinder();
-					}
-				}
-			}
-			//Spheres
-			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::SPHERE && App->scene->gameObjects[i]->components[j]->active)
-			{
-				int auxId = App->scene->gameObjects[i]->id;
-				for (int k = 0; k < spheres.size(); k++)
-				{
-					if (spheres[k]->id == auxId)
-					{
-						spheres[k]->DrawSphere();
-					}
-				}
-			}
-			//Planes
-			if (App->scene->gameObjects[i]->components[j]->type == ComponentType::PLANE && App->scene->gameObjects[i]->components[j]->active)
-			{
-				int auxId = App->scene->gameObjects[i]->id;
-				for (int k = 0; k < planes.size(); k++)
-				{
-					if (planes[k]->id == auxId)
-					{
-						planes[k]->DrawPlane();
-					}
-				}
-			}
-			
-		}
 	}
 
 	return UPDATE_CONTINUE;

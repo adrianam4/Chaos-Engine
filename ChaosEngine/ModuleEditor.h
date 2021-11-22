@@ -35,9 +35,11 @@ public:
 	void AddSphere(float3 pos, float3 sca);
 	void AddCylinder(float3 pos, float3 sca);
 	void AddPlane(float3 pos, float3 sca);
+	void DrawPrimitives();
 	void UpdateAll();
 
 private:
+	uint guizmoType;
 	int maxFPS;
 	int width = 1280;
 	int height = 720;

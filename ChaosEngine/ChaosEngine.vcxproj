@@ -49,7 +49,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(ProjectDir)Assimp\include;$(ProjectDir)Glew\include;$(ProjectDir)PhysFS\include;%(AdditionalIncludeDirectories);$(ProjectDir)MathGeoLib\src;$(ProjectDir)DevIL\include;$(ProjectDir)ImGui;$(ProjectDir)SDL\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WINDOWS_IGNORE_PACKING_MISMATCH;GLEW_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WINDOWS_IGNORE_PACKING_MISMATCH;GLEW_STATIC;USE_IMGUI_API</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -69,7 +69,7 @@
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(ProjectDir)Assimp\include;$(ProjectDir)Glew\include;$(ProjectDir)PhysFS\include;%(AdditionalIncludeDirectories);$(ProjectDir)MathGeoLib\src;$(ProjectDir)DevIL\include;$(ProjectDir)ImGui;$(ProjectDir)SDL\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WINDOWS_IGNORE_PACKING_MISMATCH;GLEW_STATIC</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WINDOWS_IGNORE_PACKING_MISMATCH;GLEW_STATIC;USE_IMGUI_API</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

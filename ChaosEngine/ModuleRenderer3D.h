@@ -21,7 +21,7 @@ public:
 	void InitModelPath(char *path);
 	void OnResize(int width, int height);
 	void InitMesh(char* path, GameObject* selectedObj);
-	void DrawMeshes(ComponentCamera*cam);
+	void DrawMeshes(ComponentCamera*editorCam);
 	void DrawCameras();
 public:
 

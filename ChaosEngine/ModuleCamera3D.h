@@ -24,14 +24,14 @@ public:
 	void RecalculateProjection();
 private:
 
-	void CalculateViewMatrix(ComponentCamera* cam);
+	void CalculateViewMatrix(ComponentCamera* editorCam);
 
 public:
 	LineSegment myRay;
 	float3 corners[8];
 	//Frustum frustum;
 	ComponentCamera* GameCam=nullptr;
-	ComponentCamera *cam;
+	ComponentCamera *editorCam;
 	float aspectRatio = 16/9;
 	float verticalFOV = 75.0f;
 	float nearPlaneDistance = 1.0f;

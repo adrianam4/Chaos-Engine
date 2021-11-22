@@ -12,6 +12,7 @@
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
+#include "ImGuizmo.h"
 
 #include "DevIL/include/il.h"
 #include "DevIL/include/ilu.h"
@@ -162,20 +163,10 @@ void ModuleRenderer3D::InitModel(std::vector<theBuffer*>* theArray) {
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	
-	
-
-
-	lights[0].SetPos(App->camera->cam->position.x, App->camera->cam->position.y, App->camera->cam->position.z);
+	lights[0].SetPos(App->camera->editorCam->position.x, App->camera->editorCam->position.y, App->camera->editorCam->position.z);
 
 	for (uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
-
-
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(App->window->window);
-	
-	ImGui::NewFrame();
 
 	static bool depth;
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
@@ -273,11 +264,11 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			glLoadIdentity();
 
 			glMatrixMode(GL_PROJECTION);
-			glLoadMatrixf(App->camera->cam->frustum.ProjectionMatrix().Transposed().ptr());
+			glLoadMatrixf(App->camera->editorCam->frustum.ProjectionMatrix().Transposed().ptr());
 			glMatrixMode(GL_MODELVIEW);
-			glLoadMatrixf(App->camera->cam->frustumMatrix.Transposed().ptr());
+			glLoadMatrixf(App->camera->editorCam->frustumMatrix.Transposed().ptr());
 
-			DrawMeshes(App->camera->cam);
+			DrawMeshes(App->camera->editorCam);
 		}
 		else if (App->camera->GameCam != nullptr) 
 		{
@@ -285,7 +276,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			glLoadIdentity();
 
 			glMatrixMode(GL_PROJECTION);
-			glLoadMatrixf(App->camera->cam->frustum.ProjectionMatrix().Transposed().ptr());
+			glLoadMatrixf(App->camera->editorCam->frustum.ProjectionMatrix().Transposed().ptr());
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixf(App->camera->GameCam->frustumMatrix.Transposed().ptr());
 
@@ -326,18 +317,18 @@ void ModuleRenderer3D::OnResize(int width, int height)
 	glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
-	glLoadMatrixf(App->camera->cam->frustum.ProjectionMatrix().Transposed().ptr());
+	glLoadMatrixf(App->camera->editorCam->frustum.ProjectionMatrix().Transposed().ptr());
 	glMatrixMode(GL_MODELVIEW);
-	float4x4 viewMatrix = App->camera->cam->frustum.ViewMatrix();
+	float4x4 viewMatrix = App->camera->editorCam->frustum.ViewMatrix();
 	glLoadMatrixf(viewMatrix.Transposed().ptr());
 
 
 }
 
-void ModuleRenderer3D::DrawMeshes(ComponentCamera* cam)
+void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 {
-	if (cam != nullptr) {
-		App->viewportBuffer->Bind(cam);
+	if (editorCam != nullptr) {
+		App->viewportBuffer->Bind(editorCam);
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
 			for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
@@ -355,6 +346,7 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* cam)
 				}
 			}
 		}
+		App->editor->DrawPrimitives();
 		App->viewportBuffer->UnBind();
 	}
 	
@@ -363,7 +355,7 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* cam)
 void ModuleRenderer3D::DrawCameras()
 {
 	
-	App->viewportBuffer->Bind(App->camera->cam);
+	App->viewportBuffer->Bind(App->camera->editorCam);
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
 		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)

@@ -22,6 +22,12 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
+	float4x4 aux;
+	transMatrix = aux.FromTRS(position, rotationQuat, scale);
+	transmat = transMatrix;
+	transMatrix = transMatrix.Transposed();
+	App->editor->objectSelected->matrix = transMatrix.ptr();
+
 	name = "Transform Component";
 
 	ComponentType t = getComponentType();
@@ -71,6 +77,7 @@ void ComponentTransform::Update()
 
 	float4x4 aux;
 	transMatrix = aux.FromTRS(position, rotationQuat, scale);
+	transmat = transMatrix;
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
 

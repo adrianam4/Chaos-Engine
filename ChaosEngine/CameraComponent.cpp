@@ -48,7 +48,7 @@ ComponentCamera::~ComponentCamera()
 			}
 			else {
 				App->camera->camArray[a]->isTheMainCamera = true;
-				App->camera->cam = App->camera->camArray[a];
+				App->camera->editorCam = App->camera->camArray[a];
 			}
 		}
 	}
