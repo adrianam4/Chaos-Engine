@@ -260,27 +260,42 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 		if (a == 0) 
 		{
+			glPushMatrix();
+			
+			App->viewportBuffer->Bind(App->camera->editorCam);
+
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
 			glLoadIdentity();
 
 			glMatrixMode(GL_PROJECTION);
 			glLoadMatrixf(App->camera->editorCam->frustum.ProjectionMatrix().Transposed().ptr());
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixf(App->camera->editorCam->frustumMatrix.Transposed().ptr());
-
+			App->editor->grid->DrawGrid();
+			
 			DrawMeshes(App->camera->editorCam);
+
+			App->viewportBuffer->UnBind();
+			glPopMatrix();
 		}
 		else if (App->camera->GameCam != nullptr) 
 		{
+			glPushMatrix();
+			App->viewportBuffer->Bind(App->camera->GameCam);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glLoadIdentity();
 
 			glMatrixMode(GL_PROJECTION);
-			glLoadMatrixf(App->camera->editorCam->frustum.ProjectionMatrix().Transposed().ptr());
+			glLoadMatrixf(App->camera->GameCam->frustum.ProjectionMatrix().Transposed().ptr());
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixf(App->camera->GameCam->frustumMatrix.Transposed().ptr());
-
+			
+			
 			DrawMeshes(App->camera->GameCam);
+
+			App->viewportBuffer->UnBind();
+			glPopMatrix();
 		}
 	}
 

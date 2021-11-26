@@ -728,7 +728,7 @@ update_status ModuleEditor::Update(float dt)
 		App->camera->GameCam->Update();
 	}
 	App->camera->editorCam->Update();
-	grid->DrawGrid();
+	
 
 	// Change Guizmo types
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -1773,7 +1773,7 @@ update_status  ModuleEditor::PreUpdate(float dt)
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
-	grid->DrawGrid();
+	
 	if (App->camera->GameCam != nullptr) {
 		App->camera->GameCam->post();
 	}

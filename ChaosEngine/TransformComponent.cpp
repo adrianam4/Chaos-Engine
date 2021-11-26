@@ -122,8 +122,9 @@ void ComponentTransform::OnEditor(int i)
 	lastPosition = position;
 	lastRotation = rotationEuler;
 	lastGeneralScale = generalScale;
-
-	if (changed && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP))
+	UINT isCamera = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+	
+	if (changed && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)&& isCamera==-1)
 	{
 		App->editor->objectSelected->aabb.clear();
 		ComponentType type = getComponentType();

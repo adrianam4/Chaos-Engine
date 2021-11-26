@@ -48,7 +48,7 @@ private:
 	bool resizable = true;
 	bool borderless = false;
 	bool dekstop = false;
-	Grid* grid;
+	
 	ComponentType showOptionsMenu;
 	float3 position;
 	float3 M;
@@ -56,6 +56,7 @@ private:
 	void childrenManage(int i);
 
 public:
+	Grid* grid;
 	ImGuiTextBuffer consoleBuffer;
 	ImGuiWindowFlags sceneWindow = 0;
 	ImVec2 lastViewportSize;
