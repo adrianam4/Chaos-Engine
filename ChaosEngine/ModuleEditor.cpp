@@ -837,6 +837,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool showFileWindow;
 	static bool showTimeWindow;
 	static bool showOptions;
+	static bool showAssets;
 	static bool isActive;
 	static bool isActive2;
 	static bool isActive3;
@@ -864,6 +865,7 @@ update_status ModuleEditor::Update(float dt)
 		isActive2 = true;
 		isActive3 = true;
 		isActive4 = true;
+		showAssets = false;
 	}
 
 	if (App->gameMode == true) {
@@ -887,6 +889,7 @@ update_status ModuleEditor::Update(float dt)
 		isActive2 = true;
 		isActive3 = true;
 		isActive4 = true;
+		showAssets = true;
 	}
 	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
@@ -1677,6 +1680,45 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////////////// ASSETS WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+	showAssets = true;
+	const  std::string libraryPath = "Library/";
+	static std::string prevPath = "";
+	static std::string currentPath = libraryPath;
+	std::vector<std::string> fileList;
+	std::vector<std::string> dirList;
+	
+	if (showAssets)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Content Browser", &showAssets);
+
+		//Fill my list of files and folders
+		App->fileSystem->DiscoverFiles(currentPath.c_str(), fileList, dirList);
+		if (libraryPath != currentPath)
+		{
+			if (ImGui::Button("<-"))
+			{
+				prevPath = currentPath;
+				currentPath = libraryPath;
+			}
+		}
+		for (int i = 0; i < dirList.size(); i++)
+		{
+			if (ImGui::Button(dirList[i].c_str()))
+			{
+				prevPath = currentPath;
+				std::string newDirectory = currentPath + '/' + dirList[i] + '/';
+				currentPath = newDirectory;
+			}
+		}
+		for (int i = 0; i < fileList.size(); i++)
+		{
+			ImGui::Text(fileList[i].c_str());
+		}
+
+		ImGui::End();
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////// WARNING WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
