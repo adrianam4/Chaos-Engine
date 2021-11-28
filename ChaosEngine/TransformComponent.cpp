@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "TransformComponent.h"
 #include <math.h>
-
+#include"CameraComponent.h"
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
@@ -87,7 +87,7 @@ void ComponentTransform::Update()
 	}
 
 	float4x4 aux1;
-
+	
 	for (int a = 0; a < App->editor->objectSelected->childrens.size(); a++) {
 		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {
 			if (App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM)
@@ -176,16 +176,25 @@ void ComponentTransform::OnEditor(int i)
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Rotation");
 	if (ImGui::DragFloat("Rotation X", &rotationEuler.x))
 	{
+		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+			App->camera->GameCam->Rotate(rotationEuler.x-lastRotation.x, "X");
+		}
 		changed = true;
 		Update();
 	}
 	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y))
 	{
+		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+			App->camera->GameCam->Rotate(rotationEuler.y - lastRotation.y, "Y");
+		}
 		changed = true;
 		Update();
 	}
 	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z))
 	{
+		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+			App->camera->GameCam->Rotate(rotationEuler.z - lastRotation.z, "Z");
+		}
 		changed = true;
 		Update();
 	}

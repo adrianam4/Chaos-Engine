@@ -18,7 +18,7 @@ public:
 	void pre();
 	void post();
 	void Draw() override;
-
+	void Rotate(float angle,const char* axis);
 public:
 	Vec3 position, reference, x, y, z;
 	Frustum frustum;
