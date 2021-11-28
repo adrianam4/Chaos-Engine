@@ -115,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="ResourceMaterial.cpp">
       <Filter>Engine\Resources</Filter>
+	</ClCompile>
+    <ClCompile Include="GameTime.cpp">
+      <Filter>Engine\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -240,6 +243,9 @@
     </ClInclude>
     <ClInclude Include="ResourceMaterial.h">
       <Filter>Engine\Resources</Filter>
+	</ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>Engine\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,6 +4,7 @@
 #include "ModuleScene.h"
 #include "Mesh.h"
 #include "Importer.h"
+#include "GameTime.h"
 #include "shellapi.h"
 #include <GL/GL.h>
 #include "ImGuizmo.h"
@@ -1781,25 +1782,45 @@ update_status ModuleEditor::Update(float dt)
 	{
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Time", &showTimeWindow, ImGuiWindowFlags_NoScrollbar);
-		Timer time;
 
-		if (ImGui::Button("PLAY")); ImGui::SameLine(); {
-			time.Start();
-		}
-		if (ImGui::Button("STOP")); ImGui::SameLine(); {
-			time.Stop();
-		}
-		if (ImGui::Button("ADVANCE")); ImGui::SameLine(); {
-			time.Read();
-		}
-		if (ImGui::Button("SPEED UP")); ImGui::SameLine(); {
-			dt = dt * 2;
-		}
-		if (ImGui::Button("SPEED DOWN")); ImGui::SameLine(); {
-			dt = dt / 2;
-		}
+		ImGui::Text("Game Time: %.3f", App->gameTimeNum);
 
-		SDL_GetBasePath();
+		if (ImGui::Button("PLAY")) {
+			App->playGameTime = !App->playGameTime;
+			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("STOP")) {
+			App->stopGameTime = !App->stopGameTime;
+			App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("PAUSE")) {
+			App->pauseGameTime = !App->pauseGameTime;
+			App->editor->AddLog("Game Clock Paused\n");
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("ADVANCE")) {
+			App->advanceGameTime = !App->advanceGameTime;
+			App->editor->AddLog("Game Clock Advanced 1 frame\n");
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("SPEED UP"))  {
+			App->fasterGameTime = !App->fasterGameTime;
+			App->editor->AddLog("Game Clock Speed Up (x%d)\n");
+
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("SPEED DOWN")) {
+			App->slowerGameTime = !App->slowerGameTime;
+			App->editor->AddLog("Game Clock Speed Down (x%d)\n");
+
+		}
+		ImGui::SameLine();
 
 		ImGui::End();
 	}

@@ -2,6 +2,7 @@
 
 #include "Globals.h"
 #include "Timer.h"
+#include "GameTime.h"
 #include "Module.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
@@ -36,7 +37,20 @@ private:
 	Timer	msTimer;
 	float	dt;
 	std::list<Module*> listModules;
-	float mLastFrameTime = 0.0f;
+	float lastFrameTime = 0.0f;
+
+public:
+
+	GameTime gameTime;
+	float gameTimeNum = 0.0f;
+
+	bool playGameTime = false;
+	bool pauseGameTime = false;
+	bool stopGameTime = false;
+	bool slowerGameTime = false;
+	bool fasterGameTime = false;
+	bool advanceGameTime = false;
+
 public:
 	int maxMs;
 
