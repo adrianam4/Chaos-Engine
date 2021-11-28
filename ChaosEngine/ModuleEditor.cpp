@@ -724,6 +724,9 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 // Update: draw background
 update_status ModuleEditor::Update(float dt)
 {
+	if (App->camera->camArray.size() == 0) {
+		App->camera->GameCam = nullptr;
+	}
 	if (App->camera->GameCam != nullptr) {
 		App->camera->GameCam->Update();
 	}

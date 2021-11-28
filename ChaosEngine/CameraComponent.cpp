@@ -40,7 +40,7 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 
 ComponentCamera::~ComponentCamera()
 {
-	if (App->camera->camArray.size() - 1 != 0&&App->camera->camArray.size() - 1 != 1&& App->camera->camArray.size() - 1 != -1) {
+	if (App->camera->camArray.size() - 1 > 0) {
 		for (int a = 0; a < App->camera->camArray.size(); a++)
 		{
 			if (App->camera->camArray[a] == this) {
@@ -48,12 +48,12 @@ ComponentCamera::~ComponentCamera()
 			}
 			else {
 				App->camera->camArray[a]->isTheMainCamera = true;
-				App->camera->editorCam = App->camera->camArray[a];
+				App->camera->GameCam = App->camera->camArray[a];
 			}
 		}
 	}
 	else {
-		//App->camera->cam = App->camera->originCam;
+		App->camera->GameCam = nullptr;
 	}
 }
 
@@ -92,21 +92,33 @@ void ComponentCamera::OnEditor(int i)
 		{
 			
 			//App->camera->cam = App->camera->originCam;
-			
+			if (App->camera->camArray.size() - 1 > 0) {
+				for (int a = 0; a < App->camera->camArray.size(); a++)
+				{
+					if (App->camera->camArray[a] != this) {
+						App->camera->camArray[a]->isTheMainCamera = true;
+						App->camera->GameCam = App->camera->camArray[a];
+					}
+					
+				}
+			}
+			else {
+				App->camera->GameCam = nullptr;
+			}
 		}
 		if (isTheMainCamera == true)
 		{
-			App->camera->GameCam = this;
-			/*for (int a = 0; a < App->camera->camArray.size(); a++)
+			//App->camera->GameCam = this;
+			for (int a = 0; a < App->camera->camArray.size(); a++)
 			{
 				if (App->camera->camArray[a] != this) {
 					App->camera->camArray[a]->isTheMainCamera = false;
 				}
 				else {
 					App->camera->camArray[a]->isTheMainCamera = true;
-					App->camera->cam = this;
+					App->camera->GameCam = this;
 				}
-			}*/
+			}
 			
 
 		}
