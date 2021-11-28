@@ -1,15 +1,15 @@
 #include"Importer.h"
 
 #include"Application.h"
-FBXmporter::FBXmporter() {}
-FBXmporter::~FBXmporter() {
+FBXimporter::FBXimporter() {}
+FBXimporter::~FBXimporter() {
 	for (int a = 0; a < bufferArray.size(); a++) {
 		delete[] bufferArray[a]->buffer;
 		delete bufferArray[a];
 	}
 	bufferArray.clear();
 }
-std::vector<theBuffer*>* FBXmporter::saveToOurFile(const char* originPath, const char* destinationPath) {
+std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, const char* destinationPath) {
 	//////////////////////////////////////////// read the fbx file and save de data in buffers ////////////////////////////////////////////
 	readFromFBX(originPath);
 
@@ -42,7 +42,7 @@ std::vector<theBuffer*>* FBXmporter::saveToOurFile(const char* originPath, const
 	}
 	return &bufferArray;
 }
-void  FBXmporter::readFromFBX(const char* originPath) {
+void  FBXimporter::readFromFBX(const char* originPath) {
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_SplitLargeMeshes | aiProcess_OptimizeMeshes);
 
@@ -57,7 +57,7 @@ void  FBXmporter::readFromFBX(const char* originPath) {
 
 	
 }
-std::vector<theBuffer*>* FBXmporter::loadFromOurFile(const char* originPath, const char* UID, const char* mesh, const char* Numbermesh, const char* extension)
+std::vector<theBuffer*>* FBXimporter::loadFromOurFile(const char* originPath, const char* UID, const char* mesh, const char* Numbermesh, const char* extension)
 {
 	std::string first = originPath;
 	std::string Mesh = mesh;
@@ -119,7 +119,7 @@ std::vector<theBuffer*>* FBXmporter::loadFromOurFile(const char* originPath, con
 	return &bufferArray;
 	
 }
-theBuffer* FBXmporter::procesOneOfOurFile(char* data,int size) {
+theBuffer* FBXimporter::procesOneOfOurFile(char* data,int size) {
 	
 	int numVertex;
 	int numIndex;
@@ -163,7 +163,7 @@ theBuffer* FBXmporter::procesOneOfOurFile(char* data,int size) {
 	theBuffer* buff = new theBuffer(buffer,pointer);
 	return buff;
 }
-void FBXmporter::ProcessNode(aiNode* node, const aiScene* scene)
+void FBXimporter::ProcessNode(aiNode* node, const aiScene* scene)
 {
 	// process all the node's meshes
 	
@@ -202,7 +202,7 @@ void FBXmporter::ProcessNode(aiNode* node, const aiScene* scene)
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = translation.z;
 	App->editor->AddLog("Processing Node\n");
 }
-theBuffer* FBXmporter::ProcessMesh(aiMesh* mesh, const aiScene* scene,int numOfMesh)
+theBuffer* FBXimporter::ProcessMesh(aiMesh* mesh, const aiScene* scene,int numOfMesh)
 {
 	unsigned currentSize = 0u;
 	int pos = 0;
@@ -297,7 +297,7 @@ theBuffer* FBXmporter::ProcessMesh(aiMesh* mesh, const aiScene* scene,int numOfM
 	theBuffer* buff = new theBuffer(buffer, pos);
 	return buff;
 }
-bool FBXmporter::saveMesh(const char* destinationPath, Mesh* object) 
+bool FBXimporter::saveMesh(const char* destinationPath, Mesh* object) 
 {
 	unsigned currentSize=0u;
 	int pos = 0;
@@ -358,7 +358,7 @@ bool FBXmporter::saveMesh(const char* destinationPath, Mesh* object)
 	delete[] buffer;
 	return true;
 }
-char* FBXmporter::assingToBufferFBX(char* buffer, void* data, int* arrayPos, int dataSize)
+char* FBXimporter::assingToBufferFBX(char* buffer, void* data, int* arrayPos, int dataSize)
 {
 
 
@@ -376,7 +376,7 @@ char* FBXmporter::assingToBufferFBX(char* buffer, void* data, int* arrayPos, int
 	(*arrayPos) += dataSize;
 	return newBuffer;
 }
-bool FBXmporter::saveInFile(const char* path, void* data, int size) {
+bool FBXimporter::saveInFile(const char* path, void* data, int size) {
 	
 		//PHYSFS_setWriteDir(prefPath.c_str());
 	
@@ -394,7 +394,7 @@ bool FBXmporter::saveInFile(const char* path, void* data, int size) {
 	return true;
 }
 
-int  FBXmporter::getFileSize(const char* path, PHYSFS_File* file) {
+int  FBXimporter::getFileSize(const char* path, PHYSFS_File* file) {
 	
 	if (file == nullptr) {
 		App->editor->AddLog("Error reading in %s -> %s", path, PHYSFS_getLastError());
@@ -402,7 +402,7 @@ int  FBXmporter::getFileSize(const char* path, PHYSFS_File* file) {
 	}
 	return PHYSFS_fileLength(file);
 }
-Mesh* FBXmporter::readFile(const char* path) {
+Mesh* FBXimporter::readFile(const char* path) {
 	
 	PHYSFS_File* file = PHYSFS_openRead(path);
 	if (file == nullptr) {
@@ -419,7 +419,7 @@ Mesh* FBXmporter::readFile(const char* path) {
 	PHYSFS_close(file);		
 	return getNewMeshFBX(bufferData);
 }
-Mesh* FBXmporter::getNewMeshFBX(char* data) {
+Mesh* FBXimporter::getNewMeshFBX(char* data) {
 	int pointer=0;
 	int numVertex;
 	int numIndex;

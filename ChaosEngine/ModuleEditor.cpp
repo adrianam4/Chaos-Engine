@@ -318,7 +318,7 @@ void ModuleEditor::LoadScene()
 				bool nor = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Normals");
 				const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
 
-				FBXmporter importer;
+				FBXimporter importer;
 
 				std::string firstNum = std::string(modelPath);
 				unsigned firstNumPos = firstNum.find_last_of("/");
@@ -1014,7 +1014,7 @@ update_status ModuleEditor::Update(float dt)
 					houses++;
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
-					FBXmporter importer;
+					FBXimporter importer;
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "29403208", "0", "2", ".msh"), "Library/Models/2940320802.msh"));
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Assets/Textures/BakerHouse.png", false));
@@ -1030,7 +1030,7 @@ update_status ModuleEditor::Update(float dt)
 					penguins++;
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
-					FBXmporter importer;
+					FBXimporter importer;
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "21274500", "0", "1", ".msh"), "Library/Models/2127450001.msh"));
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Penguin.dds", false));
@@ -1047,7 +1047,7 @@ update_status ModuleEditor::Update(float dt)
 					cars++;
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
-					FBXmporter importer;
+					FBXimporter importer;
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", "21854936", "0", "5", ".msh"), "Library/Models/2185493605.msh"));
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Car.dds", false));

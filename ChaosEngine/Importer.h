@@ -15,10 +15,10 @@ public:
 	char* buffer;
 	int size;
 };
-class FBXmporter {
+class FBXimporter {
 public:
-	FBXmporter();
-	~FBXmporter();
+	FBXimporter();
+	~FBXimporter();
 	std::vector<theBuffer*>* saveToOurFile(const char* originPath, const char* destinationPath);
 	bool saveMesh(const char* destinationPath, Mesh* object);
 	Mesh* readFile(const char* path);

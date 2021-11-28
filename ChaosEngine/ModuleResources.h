@@ -18,14 +18,16 @@ public:
 	void ReleaseResource(u32 UID);
 
 	bool Init();
-	update_status PreUpdate(float dt);
-	update_status Update(float dt);
-	update_status PostUpdate(float dt);
+	//update_status PreUpdate(float dt);
+	//update_status Update(float dt);
+	//update_status PostUpdate(float dt);
 	bool CleanUp();
 
 	Resource* CreateNewResource(const char* assetsFile, ResourceType type);
 	Resource* TryToLoadResource();
 	std::string GenerateLibraryFile(const char* assetsFile);
+	ResourceType GetResourceType(const char* assetsFile);
+	void SaveResource(Resource* resource, std::string assetsFile);
 private:
 	std::map<u32, Resource*> resources;
 };

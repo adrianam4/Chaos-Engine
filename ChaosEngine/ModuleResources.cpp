@@ -2,6 +2,7 @@
 #include "ModuleResources.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
+#include "ResourceScene.h"
 
 ModuleResources::ModuleResources(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -25,20 +26,33 @@ u32 ModuleResources::Find(const char* fileInAssets)
 
 u32 ModuleResources::ImportFile(const char* newFileInAssets)
 {
-	Resource* resource = CreateNewResource(newFileInAssets, ResourceType::UNKNOWN);
+	ResourceType type = GetResourceType(newFileInAssets);
+	Resource* resource = CreateNewResource(newFileInAssets, type);
 	u32 ret = 0;
-	SDL_RWops* fileBuffer = App->fileSystem->Load(newFileInAssets);
-	ResourceType type = resource->GetType();
+	char** fileBuffer;
+	unsigned int buffer = App->fileSystem->Load(newFileInAssets, fileBuffer);
+
+	FBXimporter meshImporter;
+	MaterialImporter texImporter;
 	switch (type)
 	{
 	case ResourceType::MESH:
+		meshImporter.saveToOurFile(newFileInAssets, GenerateLibraryFile(newFileInAssets).c_str()); // TODO
 		break;
 	case ResourceType::TEXTURE:
+		texImporter.ImportMaterial(std::string(newFileInAssets), 0, 0, false, nullptr); // TODO
+		break;
+	case ResourceType::SCENE: 
+		// TODO
 		break;
 	default:
 		break;
 	}
-	
+	SaveResource(resource, newFileInAssets);
+	ret = resource->GetUID();
+	delete[] fileBuffer;
+	ReleaseResource(resource->GetUID());
+
 	return ret;
 }
 
@@ -57,7 +71,7 @@ Resource* ModuleResources::RequestResource(u32 UID)
 		return it->second;
 	}
 
-	return TryToLoadResource();
+	return TryToLoadResource(); // TODO
 }
 
 void ModuleResources::ReleaseResource(u32 UID)
@@ -70,20 +84,20 @@ bool ModuleResources::Init()
 	return true;
 }
 
-update_status ModuleResources::PreUpdate(float dt)
-{
-	return update_status::UPDATE_CONTINUE;
-}
-
-update_status ModuleResources::Update(float dt)
-{
-	return update_status::UPDATE_CONTINUE;
-}
-
-update_status ModuleResources::PostUpdate(float dt)
-{
-	return update_status::UPDATE_CONTINUE;
-}
+//update_status ModuleResources::PreUpdate(float dt)
+//{
+//	return update_status::UPDATE_CONTINUE;
+//}
+//
+//update_status ModuleResources::Update(float dt)
+//{
+//	return update_status::UPDATE_CONTINUE;
+//}
+//
+//update_status ModuleResources::PostUpdate(float dt)
+//{
+//	return update_status::UPDATE_CONTINUE;
+//}
 
 bool ModuleResources::CleanUp()
 {
@@ -102,16 +116,15 @@ Resource* ModuleResources::CreateNewResource(const char* assetsFile, ResourceTyp
 	case ResourceType::MESH:
 		ret = (Resource*) new ResourceMesh(uid);
 		break;
+	case ResourceType::SCENE:
+		ret = (Resource*) new ResourceScene(uid);
+		break;
 	default:
 		break;
 	}
 
 	if (ret != nullptr)
-	{
-		resources[uid] = ret;
-		ret->assetsFile = assetsFile;
-		ret->libraryFile = GenerateLibraryFile(assetsFile);
-	}
+		SaveResource(ret, assetsFile);
 
 	return ret;
 }
@@ -143,4 +156,28 @@ std::string ModuleResources::GenerateLibraryFile(const char* assetsFile)
 	}
 
 	return fileName;
+}
+
+ResourceType ModuleResources::GetResourceType(const char* assetsFile)
+{
+	std::string determinesType = std::string(assetsFile);
+	unsigned start = determinesType.find_last_of(".");
+	determinesType = determinesType.substr(start, determinesType.length() - start);
+	if (determinesType == ".png" || determinesType == ".PNG" || determinesType == ".dds" || determinesType == ".DDS")
+	{
+		return ResourceType::TEXTURE;
+	}
+	if (determinesType == ".fbx" || determinesType == ".FBX" || determinesType == ".msh" || determinesType == ".MSH")
+	{
+		return ResourceType::MESH;
+	}
+	
+	return ResourceType::NONE;
+}
+
+void ModuleResources::SaveResource(Resource* resource, std::string assetsFile)
+{
+	resources[resource->GetUID()] = resource;
+	resource->assetsFile = assetsFile;
+	resource->libraryFile = GenerateLibraryFile(assetsFile.c_str());
 }

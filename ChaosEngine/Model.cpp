@@ -28,7 +28,7 @@ Model::Model(std::vector<theBuffer*>* theArray) {
 
 }
 Mesh Model::createMesh(char* buffer) {
-	FBXmporter i;
+	FBXimporter i;
 
 	return (*i.getNewMeshFBX(buffer));
 }

@@ -116,6 +116,9 @@
     <ClCompile Include="ResourceMaterial.cpp">
       <Filter>Engine\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceScene.cpp">
+      <Filter>Engine\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -239,6 +242,9 @@
       <Filter>Engine\Resources</Filter>
     </ClInclude>
     <ClInclude Include="ResourceMaterial.h">
+      <Filter>Engine\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceScene.h">
       <Filter>Engine\Resources</Filter>
     </ClInclude>
   </ItemGroup>
