@@ -10,24 +10,24 @@ public:
 	ModuleResources(Application* app, bool startEnabled = true);
 	~ModuleResources();
 
+	bool Init();
+	bool CleanUp();
+
 	u32 Find(const char* fileInAssets);
 	u32 ImportFile(const char* newFileInAssets);
 	u32 GenerateUID();
 
 	Resource* RequestResource(u32 UID);
 	void ReleaseResource(u32 UID);
-
-	bool Init();
-	//update_status PreUpdate(float dt);
-	//update_status Update(float dt);
-	//update_status PostUpdate(float dt);
-	bool CleanUp();
-
+	void SaveUID();
+	void LoadUID();
 	Resource* CreateNewResource(const char* assetsFile, ResourceType type);
+	Resource* GetResource(u32 UID);
 	Resource* TryToLoadResource();
 	std::string GenerateLibraryFile(const char* assetsFile);
 	ResourceType GetResourceType(const char* assetsFile);
 	void SaveResource(Resource* resource, std::string assetsFile);
 private:
 	std::map<u32, Resource*> resources;
+	std::vector<Resource*> deleted;
 };

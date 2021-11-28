@@ -10,6 +10,7 @@ ModuleResources::ModuleResources(Application* app, bool startEnabled) : Module(a
 
 ModuleResources::~ModuleResources()
 {
+	CleanUp();
 }
 
 u32 ModuleResources::Find(const char* fileInAssets)
@@ -64,44 +65,53 @@ u32 ModuleResources::GenerateUID()
 
 Resource* ModuleResources::RequestResource(u32 UID)
 {
-	std::map<u32, Resource*>::iterator it = resources.find(UID);
-	if (it != resources.end())
+	Resource* resource = nullptr;
+	resource = GetResource(UID);
+	if (resource != nullptr)
 	{
-		it->second->referenceCount++;
-		return it->second;
+		return resource;
 	}
-
 	return TryToLoadResource(); // TODO
 }
 
 void ModuleResources::ReleaseResource(u32 UID)
 {
+	deleted.push_back(GetResource(UID));
 	resources.erase(UID);
+}
+
+void ModuleResources::SaveUID()
+{
+}
+
+void ModuleResources::LoadUID()
+{
 }
 
 bool ModuleResources::Init()
 {
-	return true;
+	App->editor->AddLog("Loading Resources...\n");
+	bool ret = true;
+	return ret;
 }
-
-//update_status ModuleResources::PreUpdate(float dt)
-//{
-//	return update_status::UPDATE_CONTINUE;
-//}
-//
-//update_status ModuleResources::Update(float dt)
-//{
-//	return update_status::UPDATE_CONTINUE;
-//}
-//
-//update_status ModuleResources::PostUpdate(float dt)
-//{
-//	return update_status::UPDATE_CONTINUE;
-//}
 
 bool ModuleResources::CleanUp()
 {
-	return true;
+	App->editor->AddLog("Unloading Resources...\n");
+	bool ret = true;
+
+	for (auto it = resources.begin(); it != resources.end(); ++it)
+	{
+		delete[] it->second;
+	}
+	resources.clear();
+	for (int i = 0; i < deleted.size(); ++i)
+	{
+		delete[] deleted[i];
+	}
+	deleted.clear();
+
+	return ret;
 }
 
 Resource* ModuleResources::CreateNewResource(const char* assetsFile, ResourceType type)
@@ -127,6 +137,18 @@ Resource* ModuleResources::CreateNewResource(const char* assetsFile, ResourceTyp
 		SaveResource(ret, assetsFile);
 
 	return ret;
+}
+
+Resource* ModuleResources::GetResource(u32 UID)
+{
+	std::map<u32, Resource*>::iterator it = resources.find(UID);
+	if (it != resources.end())
+	{
+		it->second->referenceCount++;
+		return it->second;
+	}
+
+	return nullptr;
 }
 
 Resource* ModuleResources::TryToLoadResource()
