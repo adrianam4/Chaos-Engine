@@ -1715,8 +1715,15 @@ update_status ModuleEditor::Update(float dt)
 		for (int i = 0; i < fileList.size(); i++)
 		{
 			ImGui::Text(fileList[i].c_str());
+			/*ImGui::Button(fileList[i].c_str());
+			if (ImGui::BeginDragDropSource())
+			{
+				const char* itemPath = currentPath.c_str();
+				size_t size = App->fileSystem->GetFileSize(itemPath);
+				ImGui::SetDragDropPayload("CONTENT BROWSER ITEM", itemPath, size);
+				ImGui::EndDragDropSource();
+			}*/
 		}
-
 		ImGui::End();
 	}
 

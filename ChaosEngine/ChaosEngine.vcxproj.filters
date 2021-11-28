@@ -104,6 +104,18 @@
     <ClCompile Include="Color.cpp">
       <Filter>External</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleResources.cpp">
+      <Filter>Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Engine\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMesh.cpp">
+      <Filter>Engine\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMaterial.cpp">
+      <Filter>Engine\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -217,6 +229,18 @@
     <ClInclude Include="Color.h">
       <Filter>External</Filter>
     </ClInclude>
+    <ClInclude Include="ModuleResources.h">
+      <Filter>Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Engine\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMesh.h">
+      <Filter>Engine\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMaterial.h">
+      <Filter>Engine\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -236,6 +260,9 @@
     </Filter>
     <Filter Include="Engine\GameObjects">
       <UniqueIdentifier>{bd1b0edb-d6fc-41f4-97e9-ca2ed78e8e61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Resources">
+      <UniqueIdentifier>{493b5924-9e6b-48cc-b5e5-eb6d3475265b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
