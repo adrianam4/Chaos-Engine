@@ -115,6 +115,9 @@
     </ClCompile>
     <ClCompile Include="ResourceMaterial.cpp">
       <Filter>Engine\Resources</Filter>
+	</ClCompile>
+    <ClCompile Include="GameTime.cpp">
+      <Filter>Engine\Tools</Filter>
     </ClCompile>
     <ClCompile Include="ResourceScene.cpp">
       <Filter>Engine\Resources</Filter>
@@ -243,6 +246,9 @@
     </ClInclude>
     <ClInclude Include="ResourceMaterial.h">
       <Filter>Engine\Resources</Filter>
+	</ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>Engine\Tools</Filter>
     </ClInclude>
     <ClInclude Include="ResourceScene.h">
       <Filter>Engine\Resources</Filter>

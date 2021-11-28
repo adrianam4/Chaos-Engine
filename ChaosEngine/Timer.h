@@ -3,12 +3,13 @@
 
 #include "Globals.h"
 #include "SDL\include\SDL.h"
+#include <chrono>
 
 class Timer
 {
 public:
 
-	Timer::Timer(float time = 0.0f) : mTime(time)
+	Timer::Timer(float time = 0.0f) : rTime(time)
 	{
 		Start();
 	}
@@ -23,23 +24,23 @@ public:
 
 	operator float() const
 	{
-		return mTime;
+		return rTime;
 	}
 
 	float GetSeconds() const
 	{
-		return mTime / 10000000.0f;
+		return rTime / 10000000.0f;
 	}
 	float GetMilliseconds() const
 	{
-		return mTime / 10000.0f;
+		return rTime / 10000.0f;
 	}
 
 private:
 
 	Uint32	startedAt;
 	Uint32	stoppedAt;
-	float mTime;
+	float rTime;
 };
 
 #endif //__TIMER_H__

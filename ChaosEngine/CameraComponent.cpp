@@ -35,12 +35,12 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 	x = Vec3(1.0f, 0.0f, 0.0f);
 	y = Vec3(0.0f, 1.0f, 0.0f);
 	z = Vec3(0.0f, 0.0f, 1.0f);
-	changeViewMatrix();
+	//changeViewMatrix();
 }
 
 ComponentCamera::~ComponentCamera()
 {
-	if (App->camera->camArray.size() - 1 != 0&&App->camera->camArray.size() - 1 != 1&& App->camera->camArray.size() - 1 != -1) {
+	if (App->camera->camArray.size() - 1 > 0) {
 		for (int a = 0; a < App->camera->camArray.size(); a++)
 		{
 			if (App->camera->camArray[a] == this) {
@@ -48,12 +48,12 @@ ComponentCamera::~ComponentCamera()
 			}
 			else {
 				App->camera->camArray[a]->isTheMainCamera = true;
-				App->camera->editorCam = App->camera->camArray[a];
+				App->camera->GameCam = App->camera->camArray[a];
 			}
 		}
 	}
 	else {
-		//App->camera->cam = App->camera->originCam;
+		App->camera->GameCam = nullptr;
 	}
 }
 
@@ -92,21 +92,33 @@ void ComponentCamera::OnEditor(int i)
 		{
 			
 			//App->camera->cam = App->camera->originCam;
-			
+			if (App->camera->camArray.size() - 1 > 0) {
+				for (int a = 0; a < App->camera->camArray.size(); a++)
+				{
+					if (App->camera->camArray[a] != this) {
+						App->camera->camArray[a]->isTheMainCamera = true;
+						App->camera->GameCam = App->camera->camArray[a];
+					}
+					
+				}
+			}
+			else {
+				App->camera->GameCam = nullptr;
+			}
 		}
 		if (isTheMainCamera == true)
 		{
-			App->camera->GameCam = this;
-			/*for (int a = 0; a < App->camera->camArray.size(); a++)
+			//App->camera->GameCam = this;
+			for (int a = 0; a < App->camera->camArray.size(); a++)
 			{
 				if (App->camera->camArray[a] != this) {
 					App->camera->camArray[a]->isTheMainCamera = false;
 				}
 				else {
 					App->camera->camArray[a]->isTheMainCamera = true;
-					App->camera->cam = this;
+					App->camera->GameCam = this;
 				}
-			}*/
+			}
 			
 
 		}
@@ -134,12 +146,33 @@ void ComponentCamera::OnEditor(int i)
 	
 }
 void ComponentCamera::changeViewMatrix() {
-	viewMatrix=perspective(horizontalFov, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, nearPlaneDistance, farPlaneDistance);
-	
+	//viewMatrix=perspective(horizontalFov, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, nearPlaneDistance, farPlaneDistance);
+	frustum.SetViewPlaneDistances(nearPlaneDistance, farPlaneDistance);
+	float hFovR = DegToRad(horizontalFov);
+	float vFovR = 2 * Atan((Tan(hFovR / 2)) * size.y / size.x);
+	frustum.SetPerspective(hFovR, vFovR);
 	
 }
 mat4x4 ComponentCamera::getViewmatrix() {
 	return viewMatrix;
+}
+void ComponentCamera::Rotate(float angle, const char* axis){
+	if (axis == "Y") {
+		x = rotate(x, angle, Vec3(0.0f, 1.0f, 0.0f));
+		z = rotate(z, angle, Vec3(0.0f, 1.0f, 0.0f));
+		RecalculateRotation(angle,0 );
+	}
+	else if (axis == "X") {
+		y = rotate(y, angle, Vec3(1.0f, 0.0f, 0.0f));
+		z = rotate(z, angle, Vec3(1.0f, 0.0f, 0.0f));
+		RecalculateRotation(0, angle);
+	}
+	else {
+		y = rotate(y, angle, Vec3(0.0f, 0.0f, 1.0f));
+		x = rotate(x, angle, Vec3(0.0f, 0.0f, 1.0f));
+	}
+	
+
 }
 void ComponentCamera::Draw()
 {

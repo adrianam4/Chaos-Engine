@@ -74,6 +74,34 @@ void Application::PrepareUpdate()
 {
 	dt = (float)msTimer.Read() / 1000.0f;
 	msTimer.Start();
+
+	if (playGameTime)
+	{
+		if (gameTime.IsActive() && gameTime.IsPaused())
+			gameTime.Play();
+		else
+			gameTime.Start();
+	}
+
+	if (stopGameTime)
+		gameTime.Stop();
+
+	if (pauseGameTime)
+		gameTime.Pause();
+
+	if (advanceGameTime) {
+		gameTime.Start();
+		gameTime.Pause();
+	}
+
+	playGameTime = false;
+	pauseGameTime = false;
+	stopGameTime = false;
+	slowerGameTime = false;
+	fasterGameTime = false;
+	advanceGameTime = false;
+
+	gameTimeNum = gameTime.ReadSec();
 }
 
 // ---------------------------------------------
@@ -91,10 +119,10 @@ void Application::FinishUpdate()
 update_status Application::Update()
 {
 	float time = (float)SDL_GetPerformanceCounter();
-	Timer timestep = time - mLastFrameTime;
-	mLastFrameTime = time;
+	Timer timestep = time - lastFrameTime;
+	lastFrameTime = time;
 
-	App->editor->AddLog("Delta time: %fs (%fms)\n", timestep.GetSeconds(), timestep.GetMilliseconds());
+	//App->editor->AddLog("Delta time: %fs (%fms)\n", timestep.GetSeconds(), timestep.GetMilliseconds());
 
 	update_status ret = UPDATE_CONTINUE;
 	PrepareUpdate();
