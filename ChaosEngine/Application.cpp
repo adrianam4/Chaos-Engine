@@ -64,14 +64,17 @@ bool Application::Init()
 		ret = (*item)->Start();
 		*item++;
 	}
-	
+
 	msTimer.Start();
+	gameTime.Stop();
+
 	return ret;
 }
 
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
+
 	dt = (float)msTimer.Read() / 1000.0f;
 	msTimer.Start();
 
