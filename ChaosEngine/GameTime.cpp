@@ -18,8 +18,6 @@ void GameTime::Stop()
 
 void GameTime::Play()
 {
-	if (!isPaused)
-		return;
 
 	isPaused = false;
 	startedAt = (SDL_GetTicks() + startedAt) - pausedAt;

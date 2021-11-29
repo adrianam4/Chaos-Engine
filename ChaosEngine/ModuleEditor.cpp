@@ -887,13 +887,13 @@ update_status ModuleEditor::Update(float dt)
 		showSceneWindow = true;
 		showScene2Window = false;
 		showFileWindow = false;
-		showTimeWindow = false;
+		showTimeWindow = true;
 		showOptions = true;
 		isActive = true;
 		isActive2 = true;
 		isActive3 = true;
 		isActive4 = true;
-		showAssets = true;
+		showAssets = false;
 	}
 	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
@@ -1688,7 +1688,6 @@ update_status ModuleEditor::Update(float dt)
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////// ASSETS WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-	showAssets = true;
 	const  std::string libraryPath = "Library/";
 	static std::string prevPath = "";
 	static std::string currentPath = libraryPath;
@@ -1786,44 +1785,52 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Time", &showTimeWindow, ImGuiWindowFlags_NoScrollbar);
 
+		if (App->gameMode == true)
+		{
 		ImGui::Text("Game Time: %.3f", App->gameTimeNum);
 		ImGui::SameLine();
 		if (ImGui::Button("STOP")) {
 			App->stopGameTime = !App->stopGameTime;
 			App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
-
+			App->gameMode = false;
+		}
 		}
 
 		if (ImGui::Button("PLAY")) {
 			App->playGameTime = !App->playGameTime;
 			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
+			App->gameMode = true;
 
 		}
-		ImGui::SameLine();
-		if (ImGui::Button("PAUSE")) {
-			App->pauseGameTime = !App->pauseGameTime;
-			App->editor->AddLog("Game Clock Paused\n");
 
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("ADVANCE")) {
-			App->advanceGameTime = !App->advanceGameTime;
-			App->editor->AddLog("Game Clock Advanced 1 frame\n");
+		if (App->gameMode == true)
+		{
+			ImGui::SameLine();
+			if (ImGui::Button("PAUSE")) {
+				App->pauseGameTime = !App->pauseGameTime;
+				App->editor->AddLog("Game Clock Paused\n");
 
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("SPEED UP"))  {
-			App->fasterGameTime = !App->fasterGameTime;
-			App->editor->AddLog("Game Clock Speed Up (x%d)\n");
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("ADVANCE")) {
+				App->advanceGameTime = !App->advanceGameTime;
+				App->editor->AddLog("Game Clock Advanced 1 frame\n");
 
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("SPEED DOWN")) {
-			App->slowerGameTime = !App->slowerGameTime;
-			App->editor->AddLog("Game Clock Speed Down (x%d)\n");
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("SPEED UP")) {
+				App->fasterGameTime = !App->fasterGameTime;
+				App->editor->AddLog("Game Clock Speed Up (x%d)\n");
 
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("SPEED DOWN")) {
+				App->slowerGameTime = !App->slowerGameTime;
+				App->editor->AddLog("Game Clock Speed Down (x%d)\n");
+
+			}
+			ImGui::SameLine();
 		}
-		ImGui::SameLine();
 
 		ImGui::End();
 	}
