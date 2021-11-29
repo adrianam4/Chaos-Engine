@@ -1784,16 +1784,16 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Begin("Time", &showTimeWindow, ImGuiWindowFlags_NoScrollbar);
 
 		ImGui::Text("Game Time: %.3f", App->gameTimeNum);
-
-		if (ImGui::Button("PLAY")) {
-			App->playGameTime = !App->playGameTime;
-			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
-
-		}
 		ImGui::SameLine();
 		if (ImGui::Button("STOP")) {
 			App->stopGameTime = !App->stopGameTime;
 			App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
+
+		}
+
+		if (ImGui::Button("PLAY")) {
+			App->playGameTime = !App->playGameTime;
+			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
 
 		}
 		ImGui::SameLine();

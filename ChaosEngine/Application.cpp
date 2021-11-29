@@ -75,23 +75,48 @@ void Application::PrepareUpdate()
 	dt = (float)msTimer.Read() / 1000.0f;
 	msTimer.Start();
 
+	if (advance = false)
+	{
+		gameTime.IsPaused();
+		advance = true;
+	}
+
 	if (playGameTime)
 	{
-		if (gameTime.IsActive() && gameTime.IsPaused())
-			gameTime.Play();
-		else
-			gameTime.Start();
+		gameTime.Start();
 	}
 
 	if (stopGameTime)
 		gameTime.Stop();
 
 	if (pauseGameTime)
-		gameTime.Pause();
+	{
+		if (gameTime.IsPaused())
+			gameTime.Play();
+		else
+			gameTime.Pause();
+	}
 
-	if (advanceGameTime) {
-		gameTime.Start();
-		gameTime.Pause();
+	if (advanceGameTime) 
+	{
+		if (gameTime.IsPaused())
+		{
+			if (advance)
+			{
+				gameTime.Play();
+				advance = false;
+			}
+		}
+	}
+
+	if (fasterGameTime)
+	{
+		msTimer * 2;
+	}
+
+	if (slowerGameTime)
+	{
+		msTimer / 2;
 	}
 
 	playGameTime = false;

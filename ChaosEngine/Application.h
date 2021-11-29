@@ -44,6 +44,8 @@ public:
 	GameTime gameTime;
 	float gameTimeNum = 0.0f;
 
+	bool advance = true;
+
 	bool playGameTime = false;
 	bool pauseGameTime = false;
 	bool stopGameTime = false;
