@@ -23,6 +23,8 @@ public:
 public:
 	std::vector<float3> GetVertices(int id);
 	std::vector<float3> GetNormals(int id);
+	std::vector<float2> GetTexCoords(int id);
+	std::vector<uint> GetIndices(int id);
 
 	u32 UID;
 	u32 parentUID;

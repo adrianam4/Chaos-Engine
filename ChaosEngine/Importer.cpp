@@ -188,18 +188,18 @@ void FBXimporter::ProcessNode(aiNode* node, const aiScene* scene)
 	//lastObj->trans = translation;
 	//lastObj->sca = scale;
 
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = rotation.w;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = rotation.x;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = rotation.y;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = rotation.z;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = rotation.w;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.x = rotation.x;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.y = rotation.y;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.z = rotation.z;
 
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = scale.x;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = scale.y;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = scale.z;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.x = scale.x;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.y = scale.y;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->sca.z = scale.z;
 
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = translation.x;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = translation.y;
-	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = translation.z;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.x = translation.x;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.y = translation.y;
+	//App->scene->gameObjects[App->scene->gameObjects.size() - 1]->trans.z = translation.z;
 	App->editor->AddLog("Processing Node\n");
 }
 theBuffer* FBXimporter::ProcessMesh(aiMesh* mesh, const aiScene* scene,int numOfMesh)

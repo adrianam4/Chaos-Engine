@@ -1608,7 +1608,10 @@ update_status ModuleEditor::Update(float dt)
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-
+	//App->resources->ImportFile("Assets/Textures/Penguin.png");
+	//u32 test = App->resources->Find("Assets/Textures/Penguin.png");
+	//App->resources->LoadResource(test);
+	//Resource* res = App->resources->GetResource(test);
 	if (showSceneWindow)
 	{
 		ImGui::CloseCurrentPopup();

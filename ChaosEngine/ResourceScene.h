@@ -15,6 +15,7 @@ public:
 	uint GetReferenceCount() override;
 	bool IsLoadedToMemory() override;
 	bool LoadToMemory() override;
+	void UnloadFromMemory() override;
 	//ComponentMaterial* GetMaterial();
 
 private:

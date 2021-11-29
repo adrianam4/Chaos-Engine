@@ -55,7 +55,7 @@ void MaterialImporter::ImportMaterial(std::string sourcePath, int* width, int* h
 
 	ilGenImages(1, &imageID);
 	ilBindImage(imageID);
-	myImageId = &imageID;
+	(*myImageId) = imageID;
 
 	success = ilLoadImage(sourcePath.c_str());
 
@@ -63,8 +63,8 @@ void MaterialImporter::ImportMaterial(std::string sourcePath, int* width, int* h
 
 	int w = ilGetInteger(IL_IMAGE_WIDTH);
 	int h = ilGetInteger(IL_IMAGE_HEIGHT);
-	width = &w;
-	height = &h;
+	(*width) = w;
+	(*height) = h;
 
 	if (success)
 	{

@@ -45,3 +45,7 @@ bool ResourceScene::LoadToMemory()
 {
 	return false;
 }
+
+void ResourceScene::UnloadFromMemory()
+{
+}

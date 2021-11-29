@@ -9,6 +9,8 @@ ResourceMesh::ResourceMesh(u32 _UID)
 
 ResourceMesh::~ResourceMesh()
 {
+	vertices.clear();
+	indices.clear();
 }
 
 ResourceType ResourceMesh::GetType()
@@ -38,15 +40,37 @@ uint ResourceMesh::GetReferenceCount()
 
 bool ResourceMesh::IsLoadedToMemory()
 {
-	return false;
+	return isLoaded;
 }
 
-bool ResourceMesh::LoadToMemory()
+bool ResourceMesh::LoadToMemory(Mesh* mesh)
 {
-	return false;
+	bool ret = false;
+
+	if (mesh != nullptr)
+	{
+		for (int i = 0; i < mesh->vertices.size(); ++i)
+		{
+			vertices.push_back(mesh->vertices[i]);
+		}
+		for (int i = 0; i < mesh->indices.size(); ++i)
+		{
+			indices.push_back(mesh->indices[i]);
+		}
+		ret = true;
+		isLoaded = true;
+	}
+	return ret;
 }
 
-std::vector<float3> ResourceMesh::GetVerticesVector() const
+void ResourceMesh::UnloadFromMemory()
+{
+	vertices.clear();
+	indices.clear();
+	isLoaded = false;
+}
+
+std::vector<Vertex> ResourceMesh::GetVerticesVector() const
 {
 	return vertices;
 }

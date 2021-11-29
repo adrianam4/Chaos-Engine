@@ -38,15 +38,30 @@ uint ResourceMatertial::GetReferenceCount()
 
 bool ResourceMatertial::IsLoadedToMemory()
 {
-	return false;
+	return isLoaded;
 }
 
-bool ResourceMatertial::LoadToMemory()
+bool ResourceMatertial::LoadToMemory(int* _width, int* _height, ILuint* _imageId)
 {
-	return false;
+	bool ret = false;
+	if (_width != 0)
+	{
+		width = *_width;
+		height = *_height;
+		gpuId = *_imageId;
+		bytes = App->fileSystem->GetFileSize(GetLibraryFile());
+		isLoaded = true;
+		ret = true;
+	}
+	return ret;
 }
 
-ComponentMaterial* ResourceMatertial::GetMaterial()
+void ResourceMatertial::UnloadFromMemory()
 {
-	return material;
+	width = 0;
+	height = 0;
+	bytes = 0;
+	gpuId = 0;
+	isLoaded = false;
 }
+

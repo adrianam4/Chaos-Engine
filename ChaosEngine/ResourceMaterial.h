@@ -15,9 +15,13 @@ public:
 	const char* GetLibraryFile() override;
 	uint GetReferenceCount() override;
 	bool IsLoadedToMemory() override;
-	bool LoadToMemory() override;
-	ComponentMaterial* GetMaterial();
+	bool LoadToMemory(int* width, int* height, ILuint* imageId) override;
+	void UnloadFromMemory() override;
 
 private:
-	ComponentMaterial* material;
+	uint width = 0;
+	uint height = 0;
+	uint bytes = 0;
+	uint gpuId = 0;
+	bool isLoaded = false;
 };

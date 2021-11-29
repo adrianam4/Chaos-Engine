@@ -22,6 +22,7 @@ public:
 	void SaveUID();
 	void LoadUID();
 	Resource* CreateNewResource(const char* assetsFile, ResourceType type);
+	bool LoadResource(u32 UID);
 	Resource* GetResource(u32 UID);
 	Resource* TryToLoadResource();
 	std::string GenerateLibraryFile(const char* assetsFile);
@@ -30,4 +31,5 @@ public:
 private:
 	std::map<u32, Resource*> resources;
 	std::vector<Resource*> deleted;
+	Component* componentToLoad;
 };

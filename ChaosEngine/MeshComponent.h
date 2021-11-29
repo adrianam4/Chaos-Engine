@@ -4,6 +4,7 @@
 #include "glmath.h"
 #include <vector>
 
+#include "Mesh.h"
 #include "Component.h"
 
 enum class MeshType

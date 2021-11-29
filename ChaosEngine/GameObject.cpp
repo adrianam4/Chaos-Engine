@@ -161,3 +161,41 @@ std::vector<float3> GameObject::GetNormals(int _id)
 	}
 	return normals;
 }
+
+std::vector<float2> GameObject::GetTexCoords(int _id)
+{
+	std::vector<float2> texCoords;
+	for (int i = 0; i < App->renderer3D->models.size(); i++)
+	{
+		if (App->renderer3D->models[i].id == _id)
+		{
+			for (int j = 0; j < App->renderer3D->models[i].meshes.size(); j++)
+			{
+				for (int k = 0; k < App->renderer3D->models[i].meshes[j].vertices.size(); k++)
+				{
+					texCoords.push_back(App->renderer3D->models[i].meshes[j].vertices[k].texCoords);
+				}
+			}
+		}
+	}
+	return texCoords;
+}
+
+std::vector<uint> GameObject::GetIndices(int _id)
+{
+	std::vector<uint> indices;
+	for (int i = 0; i < App->renderer3D->models.size(); i++)
+	{
+		if (App->renderer3D->models[i].id == _id)
+		{
+			for (int j = 0; j < App->renderer3D->models[i].meshes.size(); j++)
+			{
+				for (int k = 0; k < App->renderer3D->models[i].meshes[j].indices.size(); k++)
+				{
+					indices.push_back(App->renderer3D->models[i].meshes[j].indices[k]);
+				}
+			}
+		}
+	}
+	return indices;
+}

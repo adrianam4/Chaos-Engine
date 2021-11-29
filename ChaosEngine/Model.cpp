@@ -17,19 +17,17 @@ void Model::Draw(float* matrix)
 	}
 	//App->editor->AddLog("Drawing Model\n");
 }
-Model::Model(std::vector<theBuffer*>* theArray) {
-
-	for (int a = 0; a < theArray->size(); a++) {
-
+Model::Model(std::vector<theBuffer*>* theArray) 
+{
+	for (int a = 0; a < theArray->size(); a++) 
+	{
 		char* pointer = (*theArray)[a]->buffer;
 		meshes.push_back(createMesh(pointer));
-
 	}
-
 }
-Mesh Model::createMesh(char* buffer) {
+Mesh Model::createMesh(char* buffer) 
+{
 	FBXimporter i;
-
 	return (*i.getNewMeshFBX(buffer));
 }
 void Model::LoadModel(std::string path, GameObject* lastObj)
