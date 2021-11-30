@@ -72,8 +72,6 @@ public:
 	std::vector<MyPlane*> planes;
 	GameObject* objectToChildren;
 
-	std::vector<MaterialImporter*> m_TexturesLoaded;
-
 	int lastId;
 	bool isSelected;
 	bool start = true;

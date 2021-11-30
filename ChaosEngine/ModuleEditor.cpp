@@ -6,8 +6,6 @@
 #include "Importer.h"
 #include "GameTime.h"
 #include "shellapi.h"
-#include "MaterialImporter.h"
-#include "MaterialComponent.h"
 #include <GL/GL.h>
 #include "ImGuizmo.h"
 #include "imgui.h"
@@ -1824,15 +1822,6 @@ update_status ModuleEditor::Update(float dt)
 
 	//////////////////////////////////////////////////////////////////////////////////////////// TIME WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
-	MaterialImporter* play = nullptr;
-	MaterialImporter* stop = nullptr;
-	MaterialImporter* pause = nullptr;
-	MaterialImporter* advance = nullptr;
-	MaterialImporter* faster = nullptr;
-	MaterialImporter* slower = nullptr;
-
-	play->CreateTexture("Assets/Textures/Play.png");
-
 	if (showTimeWindow)
 	{
 		ImGui::CloseCurrentPopup();
@@ -1849,7 +1838,7 @@ update_status ModuleEditor::Update(float dt)
 		    }
 		}
 		ImGui::SameLine();
-		if (ImGui::ImageButton(TOTEX play->GetTextureID(), ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+		if (ImGui::ImageButton("Assets/Textures/Start.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 			App->playGameTime = !App->playGameTime;
 			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
 			App->gameMode = true;
