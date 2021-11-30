@@ -6,6 +6,8 @@
 #include "Importer.h"
 #include "GameTime.h"
 #include "shellapi.h"
+#include "MaterialImporter.h"
+#include "MaterialComponent.h"
 #include <GL/GL.h>
 #include "ImGuizmo.h"
 #include "imgui.h"
@@ -18,6 +20,8 @@
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 
 #define DIV 1048576
+
+#define TOTEX (void*)(intptr_t)
 
 ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -53,12 +57,50 @@ bool ModuleEditor::Start()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	sceneWindow |= ImGuiWindowFlags_NoScrollbar;
 
+	float fontSize = 18.0f;// *2.0f;
+	io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Bold.ttf", fontSize);
+	io.FontDefault = io.Fonts->AddFontFromFileTTF("Assets/Fonts/OpenSans-Regular.ttf", fontSize);
+
 	// Setup ImGui style by default
 	ImGui::StyleColorsDark();
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplOpenGL3_Init();
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
+
+	ImGuiStyle* style = &ImGui::GetStyle();
+	
+	style->WindowTitleAlign = ImVec2(0.5, 0.5);
+
+	style->Colors[ImGuiCol_TitleBg] = ImColor(200, 200, 200, 255);
+	style->Colors[ImGuiCol_TitleBgActive] = ImColor(200, 200, 200, 255);
+	style->Colors[ImGuiCol_TitleBgCollapsed] = ImColor(0, 0, 0, 130);
+
+	style->Colors[ImGuiCol_Button] = ImColor(31, 30, 31, 255);
+	style->Colors[ImGuiCol_ButtonActive] = ImColor(31, 30, 31, 255);
+	style->Colors[ImGuiCol_ButtonHovered] = ImColor(41, 40, 41, 255);
+
+	style->Colors[ImGuiCol_Separator] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_SeparatorActive] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_SeparatorHovered] = ImColor(76, 76, 76, 255);
+
+	style->Colors[ImGuiCol_Header] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_HeaderActive] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_HeaderHovered] = ImColor(76, 76, 76, 255);
+
+	style->Colors[ImGuiCol_Tab] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_TabActive] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_TabHovered] = ImColor(76, 76, 76, 255);
+	style->Colors[ImGuiCol_TabUnfocused] = ImColor(70, 70, 70, 255);
+	style->Colors[ImGuiCol_TabUnfocusedActive] = ImColor(70, 70, 70, 255);
+
+	style->Colors[ImGuiCol_CheckMark] = ImColor(20, 20, 20, 255);
+	style->Colors[ImGuiCol_FrameBg] = ImColor(70, 70, 70, 255);
+
+	style->Colors[ImGuiCol_WindowBg] = ImColor(20, 20, 20, 255);
+
+	style->Colors[ImGuiCol_DockingPreview] = ImColor(150, 150, 150, 255);
+	
 
 	guizmoType = ImGuizmo::OPERATION::TRANSLATE;
 
@@ -869,7 +911,7 @@ update_status ModuleEditor::Update(float dt)
 		isActive2 = true;
 		isActive3 = true;
 		isActive4 = true;
-		showAssets = false;
+		showAssets = true;
 	}
 
 	if (App->gameMode == true) {
@@ -1782,6 +1824,15 @@ update_status ModuleEditor::Update(float dt)
 
 	//////////////////////////////////////////////////////////////////////////////////////////// TIME WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
+	MaterialImporter* play = nullptr;
+	MaterialImporter* stop = nullptr;
+	MaterialImporter* pause = nullptr;
+	MaterialImporter* advance = nullptr;
+	MaterialImporter* faster = nullptr;
+	MaterialImporter* slower = nullptr;
+
+	play->CreateTexture("Assets/Textures/Play.png");
+
 	if (showTimeWindow)
 	{
 		ImGui::CloseCurrentPopup();
@@ -1791,42 +1842,41 @@ update_status ModuleEditor::Update(float dt)
 		{
 		ImGui::Text("Game Time: %.3f", App->gameTimeNum);
 		ImGui::SameLine();
-		if (ImGui::Button("STOP")) {
-			App->stopGameTime = !App->stopGameTime;
-			App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
-			App->gameMode = false;
+		    if (ImGui::ImageButton("Assets/Textures/Stop.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+			    App->stopGameTime = !App->stopGameTime;
+			    App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
+			    App->gameMode = false;
+		    }
 		}
-		}
-
-		if (ImGui::Button("PLAY")) {
+		ImGui::SameLine();
+		if (ImGui::ImageButton(TOTEX play->GetTextureID(), ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 			App->playGameTime = !App->playGameTime;
 			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
 			App->gameMode = true;
 
 		}
-
 		if (App->gameMode == true)
 		{
 			ImGui::SameLine();
-			if (ImGui::Button("PAUSE")) {
+			if (ImGui::ImageButton("Assets/Textures/Pause.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 				App->pauseGameTime = !App->pauseGameTime;
 				App->editor->AddLog("Game Clock Paused\n");
 
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("ADVANCE")) {
+			if (ImGui::ImageButton("Assets/Textures/Advance.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 				App->advanceGameTime = !App->advanceGameTime;
 				App->editor->AddLog("Game Clock Advanced 1 frame\n");
 
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("SPEED UP")) {
+			if (ImGui::ImageButton("Assets/Textures/SpeedUp.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 				App->fasterGameTime = !App->fasterGameTime;
 				App->editor->AddLog("Game Clock Speed Up (x%d)\n");
 
 			}
 			ImGui::SameLine();
-			if (ImGui::Button("SPEED DOWN")) {
+			if (ImGui::ImageButton("Assets/Textures/SpeedDown.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 				App->slowerGameTime = !App->slowerGameTime;
 				App->editor->AddLog("Game Clock Speed Down (x%d)\n");
 
