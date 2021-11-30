@@ -1609,8 +1609,8 @@ update_status ModuleEditor::Update(float dt)
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-	//App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
-	//u32 test = App->resources->Find("Assets/Models/BakerHouse.fbx");
+	//App->resources->ImportFile("Assets/Models/Car.fbx");
+	//u32 test = App->resources->Find("Assets/Models/Car.fbx");
 	//App->resources->LoadResource(test);
 	//Resource* res = App->resources->GetResource(test);
 
