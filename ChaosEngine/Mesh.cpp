@@ -20,6 +20,16 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 	drawWireframe = false;
 }
 
+Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices)
+{
+	this->vertices = vertices;
+	this->indices = indices;
+
+	setupMesh();
+	drawNormals = false;
+	drawWireframe = false;
+}
+
 void Mesh::Draw(float* matrix)
 {
 	// THIS IS FOR DRAWING TEXTURES ----------------------------------------------------- 

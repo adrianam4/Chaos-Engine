@@ -57,6 +57,15 @@ bool ResourceMesh::LoadToMemory(Mesh* mesh)
 		{
 			indices.push_back(mesh->indices[i]);
 		}
+		for (int i = 0; i < mesh->textures.size(); ++i)
+		{
+			textures.push_back(mesh->textures[i]);
+		}
+		for (int i = 0; i < mesh->texCoords.size(); ++i)
+		{
+			texCoords.push_back(mesh->texCoords[i]);
+		}
+
 		ret = true;
 		isLoaded = true;
 	}
@@ -67,15 +76,28 @@ void ResourceMesh::UnloadFromMemory()
 {
 	vertices.clear();
 	indices.clear();
+	textures.clear();
+	texCoords.clear();
+
 	isLoaded = false;
 }
 
-std::vector<Vertex> ResourceMesh::GetVerticesVector() const
+std::vector<Vertex> ResourceMesh::GetVertex()
 {
 	return vertices;
 }
 
-std::vector<uint> ResourceMesh::GetIndicesVector() const
+std::vector<uint> ResourceMesh::GetIndices()
 {
 	return indices;
+}
+
+std::vector<Textures> ResourceMesh::GetTextures()
+{
+	return textures;
+}
+
+std::vector<float> ResourceMesh::GetTexCoords()
+{
+	return texCoords;
 }

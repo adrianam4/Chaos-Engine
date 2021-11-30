@@ -22,11 +22,15 @@ Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double h
 
 	return component;
 }
-GameObject::~GameObject() {
-	for (int a = 0; a < components.size(); a++) {
+
+GameObject::~GameObject() 
+{
+	for (int a = 0; a < components.size(); a++) 
+	{
 		delete (*(components.begin() + a));
 	}
 }
+
 Component* GameObject::CreateComponent(ComponentType type, const char* name, bool isDropped)
 {
 	Component* component = nullptr;
@@ -46,11 +50,21 @@ Component* GameObject::CreateComponent(ComponentType type, const char* name, boo
 		
 	return component;
 }
-Component* GameObject::CreateMeshComponent(std::vector<theBuffer*>* theArray,const char* path) {
+
+Component* GameObject::CreateMeshComponent(std::vector<theBuffer*>* theArray,const char* path) 
+{
 	Component* component = nullptr;
 	component = new ComponentMesh(theArray, path);
 	return component;
 }
+
+Component* GameObject::CreateMeshComponentWithResource(Resource* meshResource)
+{
+	Component* component = nullptr;
+	component = new ComponentMesh(meshResource->GetIndices(), meshResource->GetVertex(), meshResource->GetTextures(), meshResource->GetTexCoords(), meshResource->GetLibraryFile());
+	return component;
+}
+
 Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* measures, float3* rot)
 {
 	Component* component = nullptr;
@@ -98,10 +112,12 @@ void GameObject::Update()
 
 }
 
-ComponentTransform* GameObject::getTransform() {
+ComponentTransform* GameObject::getTransform() 
+{
 	for (int i = 0; i < components.size(); i++)
 	{
-		if (components[i]->type == ComponentType::TRANSFORM) {
+		if (components[i]->type == ComponentType::TRANSFORM) 
+		{
 			return (ComponentTransform*)components[i];
 		}
 

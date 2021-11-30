@@ -51,16 +51,30 @@ ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 		break;
 	}
 }
-ComponentMesh::ComponentMesh(std::vector<theBuffer*>* theArray, const char* mName) {
+
+ComponentMesh::ComponentMesh(std::vector<uint> indices, std::vector<Vertex> vertices, std::vector<Textures> textures, std::vector<float> texCoords, std::string mName)
+{
+	type = ComponentType::MESH;
+	modelPath = mName.c_str();
+
+	App->renderer3D->InitModel(indices, vertices, textures, texCoords);
+	App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
+	App->editor->lastId++;
+
+	name = "Mesh Component";
+}
+
+ComponentMesh::ComponentMesh(std::vector<theBuffer*>* theArray, const char* mName) 
+{
 	type = ComponentType::MESH;
 	modelPath = mName;
-	if (theArray) {
+
+	if (theArray) 
+	{
 		App->renderer3D->InitModel(theArray);
 		App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
 		App->editor->lastId++;
 	}
-	
-	
 
 	name = "Mesh Component";
 }

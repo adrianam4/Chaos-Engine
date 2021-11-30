@@ -16,10 +16,14 @@ public:
 	bool IsLoadedToMemory() override;
 	bool LoadToMemory(Mesh* mesh) override;
 	void UnloadFromMemory() override;
-	std::vector<Vertex> GetVerticesVector() const;
-	std::vector<uint> GetIndicesVector() const;
+	std::vector<Vertex> GetVertex() override;
+	std::vector<uint> GetIndices() override;
+	std::vector<Textures> GetTextures() override;
+	std::vector<float> GetTexCoords() override;
 private:
 	std::vector<uint> indices;
 	std::vector<Vertex> vertices;
+	std::vector<float> texCoords;
+	std::vector<Textures> textures;
 	bool isLoaded = false;
 };

@@ -77,4 +77,8 @@ public:
 	bool start = true;
 	bool stop = false;
 	bool advance = false;
+
+	u32 houseId;
+	u32 penguinId;
+	u32 carId;
 };

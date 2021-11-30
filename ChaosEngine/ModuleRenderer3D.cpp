@@ -154,11 +154,20 @@ bool ModuleRenderer3D::Init()
 
 	return ret;
 }
-void ModuleRenderer3D::InitModelPath(char* path) {
+
+void ModuleRenderer3D::InitModelPath(char* path) 
+{
 	models.push_back(Model());
 }
-void ModuleRenderer3D::InitModel(std::vector<theBuffer*>* theArray) {
+
+void ModuleRenderer3D::InitModel(std::vector<theBuffer*>* theArray) 
+{
 	models.push_back(Model(theArray));
+}
+
+void ModuleRenderer3D::InitModel(std::vector<uint> indices, std::vector<Vertex> vertices, std::vector<Textures> textures, std::vector<float> texCoords)
+{
+	models.push_back(Model(indices, vertices, textures, texCoords));
 }
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)

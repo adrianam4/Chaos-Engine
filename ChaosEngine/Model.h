@@ -17,6 +17,7 @@ class Model
 public:
 	Model();
 	Model(std::vector<theBuffer*>* theArray);
+	Model(std::vector<uint> indices, std::vector<Vertex> vertices, std::vector<Textures> textures, std::vector<float> texCoords);
 	Model(char* path, GameObject* objSelected);
 	void Draw(float* matrix);
 	Mesh createMesh(char* buffer);

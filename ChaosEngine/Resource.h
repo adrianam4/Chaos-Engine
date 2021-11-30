@@ -30,7 +30,10 @@ public:
 	virtual bool LoadToMemory(Mesh* mesh) { return false; }
 	virtual bool LoadToMemory() { return false; }
 	virtual void UnloadFromMemory() {}
-
+	virtual std::vector<Vertex> GetVertex() { return std::vector<Vertex>(); }
+	virtual std::vector<uint> GetIndices() { return std::vector<uint>(); }
+	virtual std::vector<Textures> GetTextures() { return std::vector<Textures>(); }
+	virtual std::vector<float> GetTexCoords() { return std::vector<float>(); }
 public:
 	u32 UID = 0;
 	std::string assetsFile;

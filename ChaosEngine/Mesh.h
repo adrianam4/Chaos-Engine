@@ -24,8 +24,8 @@ public:
 	std::vector<Textures> textures;
 	std::vector<float> texCoords;
 	
-	
 	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Textures> textures, std::vector<float> texCoord);
+	Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
 	void Draw(float* matrix);
 	bool drawNormals;
 	bool drawWireframe;
