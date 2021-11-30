@@ -134,10 +134,10 @@ bool ModuleResources::LoadResource(u32 UID)
 			std::vector<Mesh*> meshInfo;
 
 			std::string path = resourceToLoad->libraryFile;
-			unsigned start = path.find_last_of("/");
-			std::string pathUID = path.substr(start+1, 8);
-			std::string pathMesh = path.substr(start + 9, 1);
-			std::string pathNumMeshes = path.substr(start + 10, 1);
+			unsigned start = path.find_last_of("/") + 1;
+			std::string pathUID = path.substr(start, 8);
+			std::string pathMesh = path.substr(start + 8, 1);
+			std::string pathNumMeshes = path.substr(start + 9, 1);
 
 			info = importer.loadFromOurFile("Library/Models/", pathUID.c_str(), pathMesh.c_str(), pathNumMeshes.c_str(), ".msh"); // TODO
 			for (int i = 0; i < info->size(); i++)
@@ -239,10 +239,11 @@ void ModuleResources::SaveResource(Resource* resource, std::string assetsFile) /
 	}
 	else if (resource->GetType() == ResourceType::MESH)
 	{
-		for (int i = 0; i < resource->aux[0].size(); i++)
-		{
-			resource->libraryFile = resource->aux[0][i]->libraryDir; // TODO
-		}
+		resource->libraryFile = resource->aux[0][0]->libraryDir; // TODO
+		//for (int i = 0; i < resource->aux[0].size(); i++)
+		//{
+		//	
+		//}
 	}
 	
 }
