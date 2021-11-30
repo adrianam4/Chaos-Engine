@@ -84,11 +84,6 @@ void ComponentMesh::Disable()
 
 void ComponentMesh::OnEditor(int i)
 {
-	if (ImGui::Button("Save"))
-		Save("Settings/MeshComponent.json");
-	ImGui::SameLine();
-	if (ImGui::Button("Load"))
-		Load("Settings/MeshComponent.json");
 	//Draw Mesh
 	ImGui::Checkbox("Active", &App->editor->objectSelected->components[i]->active);
 	//Draw Normals

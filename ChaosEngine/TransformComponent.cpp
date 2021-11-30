@@ -26,7 +26,7 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 	transMatrix = aux.FromTRS(position, rotationQuat, scale);
 	transmat = transMatrix;
 	transMatrix = transMatrix.Transposed();
-	App->editor->objectSelected->matrix = transMatrix.ptr();
+	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->matrix = transMatrix.ptr();
 
 	name = "Transform Component";
 
@@ -111,12 +111,6 @@ void ComponentTransform::Disable()
 
 void ComponentTransform::OnEditor(int i)
 {
-	if (ImGui::Button("Save"))
-		Save("Settings/TransformComponent.json");
-	ImGui::SameLine();
-	if (ImGui::Button("Load"))
-		Load("Settings/TransformComponent.json");
-
 	static bool changed = false;
 	lastScale = scale;
 	lastPosition = position;

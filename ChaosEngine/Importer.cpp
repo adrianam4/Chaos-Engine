@@ -22,12 +22,14 @@ std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, cons
 	for (int a = 0; a < 11; a++) {
 		
 		i += std::to_string(uidGenerator.IntFast());
-		if (i.size() > 8) {
+		if (i.size() > 8) 
+		{
 			int v = i.size()-8;
 			i=i.substr(0, 8);
 			break;
 		}
-		else if (i.size() == 8) {
+		else if (i.size() == 8) 
+		{
 			break;
 		}
 	}
@@ -37,6 +39,7 @@ std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, cons
 		path = path + std::to_string(bufferArray.size());
 		path = path + ".msh";
 		saveInFile(path.c_str(), bufferArray[a]->buffer, bufferArray[a]->size);
+		bufferArray[a]->libraryDir = path;
 		path.clear();
 		path = destinationPath;
 	}
@@ -86,7 +89,8 @@ std::vector<theBuffer*>* FBXimporter::loadFromOurFile(const char* originPath, co
 	PHYSFS_close(file);
 	delete[] bufferData;
 	bufferData = nullptr;
-	for (int a = 1; a < numMeshes; a++) {
+	for (int a = 1; a < numMeshes; a++) 
+	{
 		int theMesh = std::stoi(Mesh);
 		theMesh++;
 		first = originPath;
@@ -98,12 +102,14 @@ std::vector<theBuffer*>* FBXimporter::loadFromOurFile(const char* originPath, co
 		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		file = nullptr;
 		file = PHYSFS_openRead(first.c_str());
-		if (file == nullptr) {
+		if (file == nullptr) 
+		{
 			App->editor->AddLog("Error openenig the file %s", first.c_str());
 			return NULL;
 		}
 		int size = getFileSize(first.c_str(), file);
-		if (size == -1) {
+		if (size == -1) 
+		{
 			App->editor->AddLog("the file cannot be opened for reading");
 			return NULL;
 		}
@@ -119,6 +125,7 @@ std::vector<theBuffer*>* FBXimporter::loadFromOurFile(const char* originPath, co
 	return &bufferArray;
 	
 }
+
 theBuffer* FBXimporter::procesOneOfOurFile(char* data,int size) {
 	
 	int numVertex;

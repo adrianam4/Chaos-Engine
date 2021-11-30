@@ -2,18 +2,11 @@
     "GameObjects": [
         {
             "UID": 27273779,
-            "Name": "Camera _1",
+            "Name": "Camera _1_1",
             "Components": {
-                "Camera": {
-                    "Type": 9,
-                    "UID": 43495472,
-                    "FOV": 75,
-                    "NearPlane": 1,
-                    "FarPlane": 20
-                },
                 "Transform": {
                     "Type": 1,
-                    "UID": 2183062053,
+                    "UID": 3289333712,
                     "Position": {
                         "x": 0,
                         "y": 0,
@@ -30,16 +23,23 @@
                         "y": 0,
                         "z": 0
                     }
+                },
+                "Camera": {
+                    "Type": 9,
+                    "UID": 3320384678,
+                    "FOV": 75,
+                    "NearPlane": 1,
+                    "FarPlane": 20
                 }
             }
         },
         {
             "UID": 1277612714,
-            "Name": "Empty _1",
+            "Name": "Empty _1_1",
             "Components": {
                 "Transform": {
                     "Type": 1,
-                    "UID": 1282764668,
+                    "UID": 3349973603,
                     "Position": {
                         "x": 0,
                         "y": 0,
@@ -61,7 +61,7 @@
         },
         {
             "UID": 2652784408,
-            "Name": "House _1",
+            "Name": "House _1_1",
             "Components": {
                 "Mesh": {
                     "Type": 2,
@@ -73,9 +73,9 @@
                 },
                 "Transform": {
                     "Type": 1,
-                    "UID": 4046523031,
+                    "UID": 1459180494,
                     "Position": {
-                        "x": 0,
+                        "x": 5,
                         "y": 0,
                         "z": 0
                     },
@@ -93,16 +93,16 @@
                 },
                 "Material": {
                     "Type": 8,
-                    "UID": 1359104625,
+                    "UID": 388709813,
                     "TexturePath": "Library\/Textures\/BakerHouse.dds",
-                    "Width": -842150451,
-                    "Height": -842150451
+                    "Width": 1024,
+                    "Height": 1024
                 }
             }
         },
         {
             "UID": 2481772109,
-            "Name": "Penguin _1",
+            "Name": "Penguin _1_1",
             "Components": {
                 "Mesh": {
                     "Type": 2,
@@ -114,7 +114,7 @@
                 },
                 "Transform": {
                     "Type": 1,
-                    "UID": 3030578683,
+                    "UID": 3063828986,
                     "Position": {
                         "x": 0,
                         "y": 0,
@@ -134,20 +134,20 @@
                 },
                 "Material": {
                     "Type": 8,
-                    "UID": 2543845744,
+                    "UID": 872739624,
                     "TexturePath": "Library\/Textures\/Penguin.dds",
-                    "Width": -842150451,
-                    "Height": -842150451
+                    "Width": 2048,
+                    "Height": 2048
                 }
             }
         },
         {
             "UID": 1483303567,
-            "Name": "Empty _2",
+            "Name": "Empty _2_2",
             "Components": {
                 "Transform": {
                     "Type": 1,
-                    "UID": 1489430215,
+                    "UID": 2510685529,
                     "Position": {
                         "x": 0,
                         "y": 0,
@@ -169,18 +169,11 @@
         },
         {
             "UID": 999316077,
-            "Name": "Camera _2",
+            "Name": "Camera _2_2",
             "Components": {
-                "Camera": {
-                    "Type": 9,
-                    "UID": 1026885993,
-                    "FOV": 75,
-                    "NearPlane": 1,
-                    "FarPlane": 20
-                },
                 "Transform": {
                     "Type": 1,
-                    "UID": 1056962265,
+                    "UID": 2548559353,
                     "Position": {
                         "x": 0,
                         "y": 0,
@@ -197,6 +190,13 @@
                         "y": 0,
                         "z": 0
                     }
+                },
+                "Camera": {
+                    "Type": 9,
+                    "UID": 2558306293,
+                    "FOV": 75,
+                    "NearPlane": 1,
+                    "FarPlane": 20
                 }
             }
         }

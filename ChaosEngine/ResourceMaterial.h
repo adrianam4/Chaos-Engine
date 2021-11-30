@@ -15,7 +15,7 @@ public:
 	const char* GetLibraryFile() override;
 	uint GetReferenceCount() override;
 	bool IsLoadedToMemory() override;
-	bool LoadToMemory(int* width, int* height, ILuint* imageId) override;
+	bool LoadToMemory(int width, int height, ILuint imageId) override;
 	void UnloadFromMemory() override;
 
 private:

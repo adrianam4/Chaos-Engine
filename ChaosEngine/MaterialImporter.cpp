@@ -44,27 +44,26 @@ void MaterialImporter::SaveMaterial(const char* sourcePath)
 	ddsPath = auxPath;
 }
 
-void MaterialImporter::ImportMaterial(std::string sourcePath, int* width, int* height, bool isDropped, ILuint* myImageId)
+std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool isDropped)
 {
+	std::vector<int> toReturn;
 	ILboolean success;
-	ILuint imageID;
-	GLuint textId;
 
 	glGenTextures(1, &textId);
 	glBindTexture(GL_TEXTURE_2D, textId);
 
-	ilGenImages(1, &imageID);
-	ilBindImage(imageID);
-	(*myImageId) = imageID;
+	ilGenImages(1, &imageId);
+	ilBindImage(imageId);
+	toReturn.push_back(imageId);
 
 	success = ilLoadImage(sourcePath.c_str());
 
 	SaveMaterial(sourcePath.c_str());
 
-	int w = ilGetInteger(IL_IMAGE_WIDTH);
-	int h = ilGetInteger(IL_IMAGE_HEIGHT);
-	(*width) = w;
-	(*height) = h;
+	w = ilGetInteger(IL_IMAGE_WIDTH);
+	h = ilGetInteger(IL_IMAGE_HEIGHT);
+	toReturn.push_back(w);
+	toReturn.push_back(h);
 
 	if (success)
 	{
@@ -72,14 +71,14 @@ void MaterialImporter::ImportMaterial(std::string sourcePath, int* width, int* h
 		if (!success)
 		{
 			std::cout << "Could not convert image :: " << sourcePath << std::endl;
-			ilDeleteImages(1, &imageID);
+			ilDeleteImages(1, &imageId);
 		}
 	}
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, *width, *height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	int toFound;
@@ -94,7 +93,7 @@ void MaterialImporter::ImportMaterial(std::string sourcePath, int* width, int* h
 				for (int b = 0; b < App->renderer3D->models[a].meshes.size(); b++)
 				{
 					glDeleteTextures(1, &App->renderer3D->models[a].meshes[b].textureId);
-					ilDeleteImages(1, myImageId);
+					ilDeleteImages(1, &imageId);
 					App->renderer3D->models[a].meshes[b].textureId = textId;
 				}
 				break;
@@ -179,7 +178,7 @@ void MaterialImporter::ImportMaterial(std::string sourcePath, int* width, int* h
 							for (int b = 0; b < App->renderer3D->models[a].meshes.size(); b++)
 							{
 								glDeleteTextures(1, &App->renderer3D->models[a].meshes[b].textureId);
-								ilDeleteImages(1, myImageId);
+								ilDeleteImages(1, &imageId);
 								App->renderer3D->models[a].meshes[b].textureId = textId;
 							}
 
@@ -207,11 +206,19 @@ void MaterialImporter::ImportMaterial(std::string sourcePath, int* width, int* h
 			}
 		}
 	}
+	return toReturn;
 }
 
-void MaterialImporter::LoadMaterial(std::string sourcePath, int* width, int* height, bool isDropped, ILuint* myImageId)
+std::vector<int> MaterialImporter::LoadMaterial(std::string sourcePath, bool isDropped)
 {
-	ImportMaterial(sourcePath, width, height, isDropped, myImageId);
-	ImportMaterial(ddsPath, width, height, isDropped, myImageId);
+	ImportMaterial(sourcePath, isDropped);
+	std::vector<int> aux = ImportMaterial(ddsPath, isDropped);
+	return aux;
+}
+
+std::vector<int> MaterialImporter::GetMaterialData()
+{
+	
+	return std::vector<int>();
 }
 

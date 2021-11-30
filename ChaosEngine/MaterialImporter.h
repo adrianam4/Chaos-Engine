@@ -10,7 +10,14 @@ public:
 	~MaterialImporter();
 
 	void SaveMaterial(const char* sourcePath);
-	void ImportMaterial(std::string sourcePath, int* width, int* height, bool isDropped, ILuint* myImageId);
-	void LoadMaterial(std::string sourcePath, int* width, int* height, bool isDropped, ILuint* myImageId);
+	std::vector<int> ImportMaterial(std::string sourcePath, bool isDropped);
+	std::vector<int> LoadMaterial(std::string sourcePath, bool isDropped);
+	std::vector<int> GetMaterialData();
 	std::string ddsPath;
+
+private:
+	int w;
+	int h;
+	ILuint imageId;
+	GLuint textId;
 };

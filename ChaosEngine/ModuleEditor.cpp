@@ -265,14 +265,14 @@ void ModuleEditor::SaveScene()
 		json_array_append_value(myArray, gameObjectValue);
 	}
 
-	json_serialize_to_file_pretty(root, "Assets/SceneFile.json");
+	json_serialize_to_file_pretty(root, "Settings/SceneFile.json");
 
 	AddLog("Saved Scene Data\n");
 }
 
 void ModuleEditor::LoadScene()
 {
-	JSON_Value* root = json_parse_file("Assets/SceneFile.json");
+	JSON_Value* root = json_parse_file("Settings/SceneFile.json");
 	JSON_Array* gameObjectsInfo = json_object_dotget_array(json_value_get_object(root), "GameObjects");
 
 	for (size_t i = 0; i < json_array_get_count(gameObjectsInfo); i++)
@@ -938,6 +938,7 @@ update_status ModuleEditor::Update(float dt)
 				if (ImGui::MenuItem("Load Scene"))
 				{
 					showWarningMenu = !showWarningMenu;
+					LoadScene();
 				}
 				ImGui::EndMenu();
 			}
@@ -1608,10 +1609,11 @@ update_status ModuleEditor::Update(float dt)
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-	//App->resources->ImportFile("Assets/Textures/Penguin.png");
-	//u32 test = App->resources->Find("Assets/Textures/Penguin.png");
+	//App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
+	//u32 test = App->resources->Find("Assets/Models/BakerHouse.fbx");
 	//App->resources->LoadResource(test);
 	//Resource* res = App->resources->GetResource(test);
+
 	if (showSceneWindow)
 	{
 		ImGui::CloseCurrentPopup();

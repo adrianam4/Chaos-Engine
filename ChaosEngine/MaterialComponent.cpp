@@ -17,7 +17,10 @@ ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path, boo
 	texturePath = _path;
 	isDropped = _isDropped;
 
-	importer.LoadMaterial(std::string(texturePath), &width, &height, isDropped, &myImageId);
+	std::vector<int> aux = importer.LoadMaterial(std::string(texturePath), isDropped);
+	myImageId = aux[0];
+	width = aux[1];
+	height = aux[2];
 	if (texturePath != importer.ddsPath.c_str())
 		texturePath = importer.ddsPath.c_str();
 	TexturePathConst = texturePath;
@@ -36,17 +39,18 @@ void ComponentMaterial::Update()
 {
 	if (showCheckerTexture)
 	{
-		for (int i = 0; i < App->renderer3D->models[0].meshes.size(); i++)
-		{
-			std::string checkersPath= "Library/Textures/Checker.dds";
-			importer.ImportMaterial(checkersPath, &width, &height, isDropped, &myImageId);
-		}
-
+		std::string checkersPath = "Library/Textures/Checker.dds";
+		std::vector<int> aux = importer.ImportMaterial(checkersPath, isDropped);
+		myImageId = aux[0];
+		width = aux[1];
+		height = aux[2];
 	}
 	else
 	{
-		
-		importer.ImportMaterial(TexturePathConst, &width, &height, isDropped, &myImageId);
+		std::vector<int> aux = importer.ImportMaterial(TexturePathConst, isDropped);
+		myImageId = aux[0];
+		width = aux[1];
+		height = aux[2];
 	}
 }
 
@@ -56,12 +60,6 @@ void ComponentMaterial::Disable()
 
 void ComponentMaterial::OnEditor(int i)
 {
-	if (ImGui::Button("Save"))
-		Save("Settings/MaterialComponent.json");
-	ImGui::SameLine();
-	if (ImGui::Button("Load"))
-		Load("Settings/MaterialComponent.json");
-
 	if (ImGui::Checkbox("Checkers Texture", &showCheckerTexture))
 	{
 		Update();

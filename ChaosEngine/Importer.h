@@ -6,6 +6,7 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postProcess.h"
+
 class theBuffer {
 public:
 	theBuffer(char* THbuffer, int THsize) {
@@ -14,7 +15,9 @@ public:
 	}
 	char* buffer;
 	int size;
+	std::string libraryDir;
 };
+
 class FBXimporter {
 public:
 	FBXimporter();

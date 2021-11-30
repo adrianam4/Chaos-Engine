@@ -41,14 +41,14 @@ bool ResourceMatertial::IsLoadedToMemory()
 	return isLoaded;
 }
 
-bool ResourceMatertial::LoadToMemory(int* _width, int* _height, ILuint* _imageId)
+bool ResourceMatertial::LoadToMemory(int _width, int _height, ILuint _imageId)
 {
 	bool ret = false;
 	if (_width != 0)
 	{
-		width = *_width;
-		height = *_height;
-		gpuId = *_imageId;
+		width = _width;
+		height = _height;
+		gpuId = _imageId;
 		bytes = App->fileSystem->GetFileSize(GetLibraryFile());
 		isLoaded = true;
 		ret = true;

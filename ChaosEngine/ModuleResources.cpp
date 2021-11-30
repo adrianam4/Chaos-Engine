@@ -36,9 +36,9 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 	MaterialImporter texImporter;
 
 	if (type == ResourceType::MESH)
-		meshImporter.saveToOurFile(newFileInAssets, GenerateLibraryFile(newFileInAssets).c_str());
+		resource->aux = meshImporter.saveToOurFile(newFileInAssets, "Library/Models/");
 	else if (type == ResourceType::TEXTURE)
-		texImporter.ImportMaterial(newFileInAssets, nullptr, nullptr, false, nullptr);
+		texImporter.ImportMaterial(newFileInAssets, false);
 	else if (type == ResourceType::SCENE)
 		int a = 0; //TODO
 
@@ -116,9 +116,6 @@ Resource* ModuleResources::CreateNewResource(const char* assetsFile, ResourceTyp
 		break;
 	}
 
-	if (ret != nullptr)
-		SaveResource(ret, assetsFile);
-
 	return ret;
 }
 
@@ -135,7 +132,14 @@ bool ModuleResources::LoadResource(u32 UID)
 			FBXimporter importer;
 			std::vector<theBuffer*>* info;
 			std::vector<Mesh*> meshInfo;
-			info = importer.loadFromOurFile("Library/Models/", "21274500", "0", "1", ".msh"); // MAKE IT FOR ALL MESHES, TODO
+
+			std::string path = resourceToLoad->libraryFile;
+			unsigned start = path.find_last_of("/");
+			std::string pathUID = path.substr(start+1, 8);
+			std::string pathMesh = path.substr(start + 9, 1);
+			std::string pathNumMeshes = path.substr(start + 10, 1);
+
+			info = importer.loadFromOurFile("Library/Models/", pathUID.c_str(), pathMesh.c_str(), pathNumMeshes.c_str(), ".msh"); // TODO
 			for (int i = 0; i < info->size(); i++)
 			{
 				char* pointer = (*info)[i]->buffer;
@@ -148,11 +152,11 @@ bool ModuleResources::LoadResource(u32 UID)
 		}
 		else if (type == ResourceType::TEXTURE)
 		{
-			MaterialImporter importer; // TODO
-			int *width = nullptr;
-			int *height = nullptr;
-			ILuint *imageId = nullptr;
-			importer.ImportMaterial(resourceToLoad->GetLibraryFile(), width, height, false, imageId);
+			MaterialImporter importer;
+			std::vector<int> aux = importer.ImportMaterial(resourceToLoad->GetLibraryFile(), false); //MHEE
+			ILuint imageId = aux[0];
+			int width = aux[1];
+			int height = aux[2];
 			resourceToLoad->LoadToMemory(width,height,imageId);
 		}
 		else if (type == ResourceType::SCENE)
@@ -197,13 +201,13 @@ std::string ModuleResources::GenerateLibraryFile(const char* assetsFile) // OK
 			start = fileName.find_last_of("/");
 		fileName = "Library/Textures/" + fileName.substr(start + 1, fileName.length() - start - 4) + "dds";
 	}
-	if (createPath == ".fbx" || createPath == ".FBX")
-	{
-		unsigned start = fileName.find_last_of("\\");
-		if (start > 10000)
-			start = fileName.find_last_of("/");
-		fileName = "Library/Models/" + fileName.substr(start + 1, fileName.length() - start - 4) + "msh";
-	}
+	//if (createPath == ".fbx" || createPath == ".FBX")
+	//{
+	//	unsigned start = fileName.find_last_of("\\");
+	//	if (start > 10000)
+	//		start = fileName.find_last_of("/");
+	//	fileName = "Library/Models/" + fileName.substr(start + 1, fileName.length() - start - 4) + "msh";
+	//}
 
 	return fileName;
 }
@@ -229,5 +233,16 @@ void ModuleResources::SaveResource(Resource* resource, std::string assetsFile) /
 {
 	resources[resource->GetUID()] = resource;
 	resource->assetsFile = assetsFile;
-	resource->libraryFile = GenerateLibraryFile(assetsFile.c_str());
+	if (resource->GetType() == ResourceType::TEXTURE)
+	{
+		resource->libraryFile = GenerateLibraryFile(assetsFile.c_str());
+	}
+	else if (resource->GetType() == ResourceType::MESH)
+	{
+		for (int i = 0; i < resource->aux[0].size(); i++)
+		{
+			resource->libraryFile = resource->aux[0][i]->libraryDir; // TODO
+		}
+	}
+	
 }

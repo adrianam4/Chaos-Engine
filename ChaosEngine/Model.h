@@ -31,5 +31,4 @@ private:
 	void LoadModel(std::string path, GameObject* objSelected);
 	void ProcessNode(aiNode* node, const aiScene* scene, GameObject* objSelected);
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	//std::vector<Textures> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 };
