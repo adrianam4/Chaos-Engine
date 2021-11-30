@@ -346,18 +346,28 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 		App->viewportBuffer->Bind(editorCam);
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
-			{
-				if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
-				{
-					int auxId = App->scene->gameObjects[i]->id;
-					for (int k = 0; k < models.size(); k++)
+			if (App->scene->gameObjects[i]->SearchComponent(App->scene->gameObjects[i], ComponentType::CAMERA) == -1) {
+				int y = App->scene->gameObjects[i]->aabb.size();
+				math::AABB* e = App->scene->gameObjects[i]->aabb[y - 1];
+
+				if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) {
+					for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 					{
-						if (models[k].id == auxId)
+						if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
 						{
-							models[k].Draw(App->scene->gameObjects[i]->matrix);
+							int auxId = App->scene->gameObjects[i]->id;
+							for (int k = 0; k < models.size(); k++)
+							{
+								if (models[k].id == auxId)
+								{
+									models[k].Draw(App->scene->gameObjects[i]->matrix);
+								}
+							}
 						}
 					}
+				}
+				else {
+					App->editor->AddLog("is outside\n");
 				}
 			}
 		}

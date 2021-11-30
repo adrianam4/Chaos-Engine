@@ -129,16 +129,25 @@ void ComponentTransform::OnEditor(int i)
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
 	if (ImGui::DragFloat("Position X", &position.x))
 	{
+		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+			App->camera->GameCam->Move(position);
+		}
 		changed = true;
 		Update();
 	}
 	if (ImGui::DragFloat("Position Y", &position.y))
 	{
+		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+			App->camera->GameCam->Move(position);
+		}
 		changed = true;
 		Update();
 	}
 	if (ImGui::DragFloat("Position Z", &position.z))
 	{
+		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+			App->camera->GameCam->Move(position);
+		}
 		changed = true;
 		Update();
 	}

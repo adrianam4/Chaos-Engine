@@ -37,7 +37,11 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 	z = Vec3(0.0f, 0.0f, 1.0f);
 	//changeViewMatrix();
 }
-
+void ComponentCamera::CalculateViewMatrix()
+{
+	viewMatrix = mat4x4(x.x, y.x, z.x, 0.0f, x.y, y.y, z.y, 0.0f, x.z, y.z, z.z, 0.0f, -dot(x, position), -dot(y, position), -dot(z, position), 1.0f);
+	
+}
 ComponentCamera::~ComponentCamera()
 {
 	if (App->camera->camArray.size() - 1 > 0) {
@@ -75,7 +79,12 @@ void ComponentCamera::post() {
 void ComponentCamera::Update()
 {
 	CalculatePoints();
-	RecalculateCamera();	
+	RecalculateCamera();
+	math::vec positionAuxiliar = { position.x,position.y,position.z};
+	float3 UP = { y.x,y.y,y.z };
+	float3 FRONT = { z.x,z.y,z.z };
+	frustum.SetFrame(positionAuxiliar, -FRONT, UP);
+	frustum.ComputeProjectionMatrix();
 }
 
 void ComponentCamera::Disable()
@@ -199,7 +208,12 @@ void ComponentCamera::Draw()
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
-
+void ComponentCamera::Move(float3 newPosition) {
+	position.x = newPosition.x;
+	position.y = newPosition.y;
+	position.z = newPosition.z;
+	CalculateViewMatrix();
+}
 void ComponentCamera::RecalculateRotation(float xDegrees, float yDegrees)
 {
 	xDegrees = math::DegToRad(xDegrees);

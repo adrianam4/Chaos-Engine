@@ -19,6 +19,8 @@ public:
 	void post();
 	void Draw() override;
 	void Rotate(float angle,const char* axis);
+	void Move(float3 newPosition);
+	void CalculateViewMatrix();
 public:
 	Vec3 position, reference, x, y, z;
 	Frustum frustum;
