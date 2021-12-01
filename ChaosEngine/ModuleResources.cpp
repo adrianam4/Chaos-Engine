@@ -30,7 +30,7 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 	ResourceType type = GetResourceType(newFileInAssets);
 	Resource* resource = CreateNewResource(newFileInAssets, type);
 	u32 ret = 0;
-	char* fileBuffer;
+	char* fileBuffer = nullptr;
 	unsigned int buffer = App->fileSystem->Load(newFileInAssets, &fileBuffer);
 	FBXimporter meshImporter;
 	MaterialImporter texImporter;
@@ -44,7 +44,7 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 
 	SaveResource(resource, newFileInAssets);
 	ret = resource->GetUID();
-	delete[] fileBuffer;
+	RELEASE_ARRAY(fileBuffer);
 
 	return ret;
 }
@@ -172,6 +172,24 @@ bool ModuleResources::LoadResource(u32 UID)
 	return ret;
 }
 
+u32 ModuleResources::RecoveryFile(const char* file)
+{
+	ResourceType type = GetResourceType(file);
+	Resource* resource = CreateNewResource(file, type);
+	u32 ret = 0;
+	char* fileBuffer = nullptr;
+	unsigned int buffer = App->fileSystem->Load(file, &fileBuffer);
+
+	resources[resource->GetUID()] = resource;
+	resource->assetsFile = file;
+	resource->libraryFile = file;
+
+	ret = resource->GetUID();
+	RELEASE_ARRAY(fileBuffer);
+
+	return ret;
+}
+
 ImTextureID ModuleResources::LoadIcons(u32 UID)
 {
 	Resource* resourceToLoad = nullptr;
@@ -251,10 +269,6 @@ void ModuleResources::SaveResource(Resource* resource, std::string assetsFile) /
 	else if (resource->GetType() == ResourceType::MESH)
 	{
 		resource->libraryFile = resource->aux[0][0]->libraryDir; // TODO
-		//for (int i = 0; i < resource->aux[0].size(); i++)
-		//{
-		//	
-		//}
 	}
 	
 }

@@ -32,7 +32,7 @@ public:
 	bool drawWireframe = false;
 	GameObject* owner;
 	const char* name;
-	const char* modelPath;
+	std::string modelPath;
 	const char* texturePath;
 	int width;
 	int height;

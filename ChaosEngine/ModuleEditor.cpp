@@ -297,7 +297,7 @@ void ModuleEditor::SaveScene()
 			{
 				json_object_dotset_number(gameObjObject, "Components.Mesh.Type", (double)go->components[j]->type);
 				json_object_dotset_number(gameObjObject, "Components.Mesh.UID", go->components[j]->UID);
-				json_object_dotset_string(gameObjObject, "Components.Mesh.Path", go->components[j]->modelPath);
+				json_object_dotset_string(gameObjObject, "Components.Mesh.Path", go->components[j]->modelPath.c_str());
 				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Active", go->components[j]->active);
 				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Normals", go->components[j]->drawNormals);
 				json_object_dotset_boolean(gameObjObject, "Components.Mesh.Wireframe", go->components[j]->drawWireframe);
@@ -401,21 +401,23 @@ void ModuleEditor::LoadScene()
 				bool nor = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Normals");
 				const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
 
-				FBXimporter importer;
+				u32 modelId = App->resources->RecoveryFile(modelPath);
+				App->resources->LoadResource(modelId);
+				//FBXimporter importer;
 
-				std::string firstNum = std::string(modelPath);
-				unsigned firstNumPos = firstNum.find_last_of("/");
-				firstNum = firstNum.substr(firstNumPos+1+8, 1);
+				//std::string firstNum = std::string(modelPath);
+				//unsigned firstNumPos = firstNum.find_last_of("/");
+				//firstNum = firstNum.substr(firstNumPos+1+8, 1);
 
-				std::string Uid = std::string(modelPath);
-				unsigned UidNumPos = Uid.find_last_of("/");
-				Uid = Uid.substr(UidNumPos + 1, 8);
+				//std::string Uid = std::string(modelPath);
+				//unsigned UidNumPos = Uid.find_last_of("/");
+				//Uid = Uid.substr(UidNumPos + 1, 8);
 
-				std::string secondNum = std::string(modelPath);
-				unsigned secondNumPos = secondNum.find_last_of("/");
-				secondNum = secondNum.substr(secondNumPos + 2+8, 1);
+				//std::string secondNum = std::string(modelPath);
+				//unsigned secondNumPos = secondNum.find_last_of("/");
+				//secondNum = secondNum.substr(secondNumPos + 2+8, 1);
 
-				lastGO->components.push_back(lastGO->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", Uid.c_str(), firstNum.c_str(), secondNum.c_str(), ".msh"), modelPath));
+				//lastGO->components.push_back(lastGO->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", Uid.c_str(), firstNum.c_str(), secondNum.c_str(), ".msh"), modelPath));
 			}
 			if (auxType == 3)
 				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CUBE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
@@ -427,6 +429,8 @@ void ModuleEditor::LoadScene()
 				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PYRAMID, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 			if (auxType == 5)
 				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::SPHERE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+
+			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
 
 			/*   TRANSFORMATIONS   */
 			//Position
@@ -446,6 +450,7 @@ void ModuleEditor::LoadScene()
 			float3 rotation = float3(rotation_x, rotation_y, rotation_z);
 			
 			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::TRANSFORM, &position, &scale, &rotation));
+			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
 
 			/*   MATERIALS   */
 			auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Type");
@@ -456,7 +461,9 @@ void ModuleEditor::LoadScene()
 				double width = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Width");
 				double height = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Height");
 
-				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::MATERIAL, textPath, false));
+				u32 materialId = App->resources->RecoveryFile(textPath);
+				App->resources->LoadResource(materialId);
+				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
 			}
 
 			/*   CAMERAS   */
