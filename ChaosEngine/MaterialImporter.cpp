@@ -15,7 +15,7 @@ MaterialImporter::~MaterialImporter()
 {
 }
 
-void MaterialImporter::SaveMaterial(const char* sourcePath)
+void MaterialImporter::SaveMaterial(std::string sourcePath)
 {
 	ILuint size;
 	ILubyte* data;
@@ -51,10 +51,10 @@ std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool i
 
 	glGenTextures(1, &textId);
 	glBindTexture(GL_TEXTURE_2D, textId);
+	toReturn.push_back(textId);
 
 	ilGenImages(1, &imageId);
 	ilBindImage(imageId);
-	toReturn.push_back(imageId);
 
 	success = ilLoadImage(sourcePath.c_str());
 
@@ -78,9 +78,18 @@ std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool i
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, ilGetData());
+	data = ilGetData();
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	unsigned start = sourcePath.find_last_of(".");
+	if (sourcePath.substr(start,sourcePath.length()-start) != ".dds")
+	{
+		glDeleteTextures(1, &textId);
+	}
+	ilDeleteImages(1, &imageId);
+
 	int toFound;
 	int a;
 

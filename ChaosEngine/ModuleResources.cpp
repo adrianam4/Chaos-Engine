@@ -45,7 +45,7 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 	SaveResource(resource, newFileInAssets);
 	ret = resource->GetUID();
 	delete[] fileBuffer;
-	//ReleaseResource(resource->GetUID());
+
 	return ret;
 }
 
@@ -126,6 +126,7 @@ bool ModuleResources::LoadResource(u32 UID)
 	resourceToLoad = GetResource(UID);
 	if (resourceToLoad != nullptr)
 	{
+		GameObject* gObj = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
 		ResourceType type = resourceToLoad->GetType();
 		if (type == ResourceType::MESH)
 		{
@@ -149,15 +150,17 @@ bool ModuleResources::LoadResource(u32 UID)
 			{
 				resourceToLoad->LoadToMemory(meshInfo[i]);	
 			}
+			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
 		}
 		else if (type == ResourceType::TEXTURE)
 		{
-			MaterialImporter importer;
-			std::vector<int> aux = importer.ImportMaterial(resourceToLoad->GetLibraryFile(), false); //MHEE
-			ILuint imageId = aux[0];
-			int width = aux[1];
-			int height = aux[2];
-			resourceToLoad->LoadToMemory(width,height,imageId);
+			//MaterialImporter importer;
+			//std::vector<int> aux = importer.ImportMaterial(resourceToLoad->GetLibraryFile(), false); //MHEE
+			//GLuint imageId = aux[0];
+			//int width = aux[1];
+			//int height = aux[2];
+			resourceToLoad->LoadToMemory();
+			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
 		}
 		else if (type == ResourceType::SCENE)
 		{

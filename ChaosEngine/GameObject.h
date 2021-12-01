@@ -21,7 +21,7 @@ public:
 	int SearchComponent(GameObject* gameObject, ComponentType type);
 	u32 GenerateUID();
 	Component* CreateMeshComponent(std::vector<theBuffer*>* theArray,const char* path);
-	Component* CreateMeshComponentWithResource(Resource* meshResource);
+	Component* CreateComponentWithResource(Resource* meshResource);
 public:
 	std::vector<float3> GetVertices(int id);
 	std::vector<float3> GetNormals(int id);

@@ -4,6 +4,8 @@
 #include "TransformComponent.h"
 #include "MaterialComponent.h"
 #include "CameraComponent.h"
+#include "Resource.h"
+#include "ResourceMaterial.h"
 
 #include "MathGeoLib/src/MathGeoLib.h"
 
@@ -58,10 +60,16 @@ Component* GameObject::CreateMeshComponent(std::vector<theBuffer*>* theArray,con
 	return component;
 }
 
-Component* GameObject::CreateMeshComponentWithResource(Resource* meshResource)
+Component* GameObject::CreateComponentWithResource(Resource* resource)
 {
 	Component* component = nullptr;
-	component = new ComponentMesh(meshResource->GetIndices(), meshResource->GetVertex(), meshResource->GetTextures(), meshResource->GetTexCoords(), meshResource->GetLibraryFile());
+	ResourceType type = resource->GetType();
+
+	if (type == ResourceType::TEXTURE)
+		component = new ComponentMaterial(resource->GetLibraryFile(), (GLuint)resource->GetTextureId(), resource->GetWidth(), resource->GetHeight(), false);
+	else if (type == ResourceType::MESH)
+		component = new ComponentMesh(resource->GetIndices(), resource->GetVertex(), resource->GetTextures(), resource->GetTexCoords(), resource->GetLibraryFile());
+	
 	return component;
 }
 

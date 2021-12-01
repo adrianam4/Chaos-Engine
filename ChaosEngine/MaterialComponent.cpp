@@ -27,6 +27,20 @@ ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path, boo
 	showCheckerTexture = false;
 }
 
+ComponentMaterial::ComponentMaterial(const char* _path, GLuint _imageId, uint _width, uint _height, bool _isDropped)
+{
+	type = ComponentType::MATERIAL;
+	UID = GenerateUID();
+	name = "Material Component";
+	texturePath = _path;
+	isDropped = _isDropped;
+	myImageId = _imageId;
+	width = _width;
+	height = _height;
+	TexturePathConst = texturePath;
+	showCheckerTexture = false;
+}
+
 ComponentMaterial::~ComponentMaterial()
 {
 }

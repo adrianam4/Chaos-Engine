@@ -78,7 +78,12 @@ public:
 	bool stop = false;
 	bool advance = false;
 
-	u32 houseId;
-	u32 penguinId;
-	u32 carId;
+	//Models
+	u32 houseModelId;
+	u32 penguinModelId;
+	u32 carModelId;
+	//Materials
+	u32 houseMaterialId;
+	u32 penguinMaterialId;
+	u32 carMaterialId;
 };

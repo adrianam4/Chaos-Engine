@@ -81,7 +81,7 @@ public:
 	~MyCube();
 	void DrawCube();
 public:
-	ILuint imageID;
+	GLuint imageID;
 	std::vector<float3> getVertex()override;
 	std::vector<float3> vertices;
 	std::vector<uint> indices;
@@ -95,7 +95,7 @@ public:
 	~MyPyramid();
 	void DrawPyramid();
 public:
-	ILuint imageID;
+	GLuint imageID;
 	std::vector<float3> getVertex()override;
 
 public:
@@ -115,7 +115,7 @@ public:
 	void DrawCylinder();
 	void Initialize();
 public:
-	ILuint imageID;
+	GLuint imageID;
 	std::vector<float3> getVertex()override;
 
 private:
@@ -141,7 +141,7 @@ public:
 class MySphere : public Primitives
 {
 public:
-	ILuint imageID;
+	GLuint imageID;
 	std::vector<float3> getVertex()override;
 
 public:
@@ -168,7 +168,7 @@ public:
 	void DrawGrid() const;
 
 public:
-	ILuint imageID;
+	GLuint imageID;
 
 public:
 	Vec3 normal;
@@ -185,7 +185,7 @@ public:
 	std::vector<float3> getVertex()override;
 
 public:
-	ILuint imageID;
+	GLuint imageID;
 
 public:
 	std::vector<GLushort> indices;

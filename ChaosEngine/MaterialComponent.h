@@ -11,6 +11,7 @@ class ComponentMaterial : public Component
 {
 public:
 	ComponentMaterial(ComponentType type, const char* path, bool isDropped);
+	ComponentMaterial(const char* path, GLuint imageId, uint width, uint height, bool isDropped);
 	~ComponentMaterial();
 
 	void Enable() override;
@@ -22,7 +23,7 @@ public:
 
 private:
 	MaterialImporter importer;
-	ILuint myImageId;
+	GLuint myImageId;
 	bool showCheckerTexture;
 	GLubyte checkerImageData[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	const char* checkerTextPath;

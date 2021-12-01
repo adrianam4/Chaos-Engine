@@ -102,17 +102,20 @@ bool ModuleEditor::Start()
 
 	guizmoType = ImGuizmo::OPERATION::TRANSLATE;
 
+	//Models
 	App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
-	houseId = App->resources->Find("Assets/Models/BakerHouse.fbx");
-	App->resources->LoadResource(houseId);
-
+	houseModelId = App->resources->Find("Assets/Models/BakerHouse.fbx");
 	App->resources->ImportFile("Assets/Models/Car.fbx");
-	carId = App->resources->Find("Assets/Models/Car.fbx");
-	App->resources->LoadResource(carId);
-
+	carModelId = App->resources->Find("Assets/Models/Car.fbx");
 	App->resources->ImportFile("Assets/Models/Penguin.fbx");
-	penguinId = App->resources->Find("Assets/Models/Penguin.fbx");
-	App->resources->LoadResource(penguinId);
+	penguinModelId = App->resources->Find("Assets/Models/Penguin.fbx");
+	//Materials
+	App->resources->ImportFile("Assets/Textures/BakerHouse.png");
+	houseMaterialId = App->resources->Find("Assets/Textures/BakerHouse.png");
+	App->resources->ImportFile("Assets/Textures/Car.png");
+	carMaterialId = App->resources->Find("Assets/Textures/Car.png");
+	App->resources->ImportFile("Assets/Textures/Penguin.png");
+	penguinMaterialId = App->resources->Find("Assets/Textures/Penguin.png");
 
 	return ret;
 }
@@ -1072,12 +1075,12 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponentWithResource(App->resources->GetResource(houseId)));
-					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/BakerHouse.dds", false));
-					App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
+					App->resources->LoadResource(houseModelId);
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[1]->owner = objectSelected;
+					App->resources->LoadResource(houseMaterialId);
+					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("House Created\n");
 				}
@@ -1089,12 +1092,12 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponentWithResource(App->resources->GetResource(penguinId)));
-					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Penguin.dds", false));
-					App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
+					App->resources->LoadResource(penguinModelId);
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[1]->owner = objectSelected;
+					App->resources->LoadResource(penguinMaterialId);
+					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("Penguin Created\n");
 				}
@@ -1106,12 +1109,12 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponentWithResource(App->resources->GetResource(carId)));
-					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Car.dds", false));
-					App->scene->gameObjects[lastComponent]->components[2]->owner = App->scene->gameObjects[lastComponent];
+					App->resources->LoadResource(carModelId);
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[1]->owner = objectSelected;
+					App->resources->LoadResource(carMaterialId);
+					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("Car Created\n");
 				}

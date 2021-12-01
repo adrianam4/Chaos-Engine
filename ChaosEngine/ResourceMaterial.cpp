@@ -5,6 +5,8 @@ ResourceMatertial::ResourceMatertial(u32 _UID)
 {
 	type = ResourceType::TEXTURE;
 	UID = _UID;
+
+	
 }
 
 ResourceMatertial::~ResourceMatertial()
@@ -41,14 +43,14 @@ bool ResourceMatertial::IsLoadedToMemory()
 	return isLoaded;
 }
 
-bool ResourceMatertial::LoadToMemory(int _width, int _height, ILuint _imageId)
+bool ResourceMatertial::LoadToMemory(int _width, int _height, GLuint _imageId)
 {
 	bool ret = false;
 	if (_width != 0)
 	{
 		width = _width;
 		height = _height;
-		gpuId = _imageId;
+		textureId = _imageId;
 		bytes = App->fileSystem->GetFileSize(GetLibraryFile());
 		isLoaded = true;
 		ret = true;
@@ -56,12 +58,24 @@ bool ResourceMatertial::LoadToMemory(int _width, int _height, ILuint _imageId)
 	return ret;
 }
 
+bool ResourceMatertial::LoadToMemory()
+{
+	MaterialImporter importer;
+	std::vector<int> data = importer.ImportMaterial(GetLibraryFile(), false);
+	width = data[1];
+	height = data[2];
+	textureId = data[0];
+	bytes = App->fileSystem->GetFileSize(GetLibraryFile());
+	isLoaded = true;
+
+	return true;
+}
+
 void ResourceMatertial::UnloadFromMemory()
 {
 	width = 0;
 	height = 0;
 	bytes = 0;
-	gpuId = 0;
+	textureId = 0;
 	isLoaded = false;
 }
-
