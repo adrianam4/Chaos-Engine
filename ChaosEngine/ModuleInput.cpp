@@ -118,13 +118,22 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 				if ((aux[0] == 'f' && aux[1] == 'b' && aux[2] == 'x') || (aux[0] == 'o' && aux[1] == 'b' && aux[2] == 'j') || (aux[0] == 'F' && aux[1] == 'B' && aux[2] == 'X'))
 				{
-					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, fileDir));
-					int lastComponent = App->scene->gameObjects.size() - 1;
-					FBXimporter importer;
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateMeshComponent(importer.saveToOurFile(fileDir, "Library/Models/"), "Library/Models/02.msh"));
-					App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-					App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
-					App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+					static uint gObjs = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, gObjs, "Game Object"));
+					gObjs++;
+					GameObject* gObj = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+					App->editor->objectSelected = gObj;
+					
+					model = App->resources->ImportFile((const char*)fileDir);
+					App->resources->LoadResource(model);
+					gObj->components[0]->owner = gObj;
+					gObj->components.push_back(gObj->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					gObj->components[1]->owner = gObj;
+					tex = App->resources->ImportFile("Assets/Textures/Checker.png");
+					App->resources->LoadResource(tex);
+					gObj->components[2]->owner = gObj;
+					gObj->components.erase(gObj->components.begin() + 2);
+
 					SDL_free(&fileDir);
 					App->editor->AddLog("Loaded %s\n", fileDir);
 				}
@@ -138,7 +147,8 @@ update_status ModuleInput::PreUpdate(float dt)
 						{
 							App->editor->objectSelected->components.erase(App->editor->objectSelected->components.begin() + oldMaterialId);
 						}
-						App->editor->objectSelected->components.push_back(App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, fileDir, true));
+						u32 textId = App->resources->ImportFile(fileDir);
+						App->resources->LoadResource(textId);
 						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
 						SDL_free(&fileDir);
 					}

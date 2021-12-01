@@ -1,20 +1,20 @@
 {
     "GameObjects": [
         {
-            "UID": 2521967575,
-            "Name": "House _1",
+            "UID": 2202436440,
+            "Name": "Game Object_1",
             "Components": {
                 "Mesh": {
                     "Type": 2,
                     "UID": 3452816845,
-                    "Path": "Library\/Models\/2622136402.msh",
+                    "Path": "Library\/Models\/3366850702.msh",
                     "Active": true,
                     "Normals": false,
                     "Wireframe": false
                 },
                 "Transform": {
                     "Type": 1,
-                    "UID": 4229187745,
+                    "UID": 2059452545,
                     "Position": {
                         "x": 0,
                         "y": 0,
@@ -27,14 +27,14 @@
                         "z": 1
                     },
                     "Rotation": {
-                        "x": 0,
+                        "x": 64,
                         "y": 0,
                         "z": 0
                     }
                 },
                 "Material": {
                     "Type": 8,
-                    "UID": 2672149359,
+                    "UID": 1789437876,
                     "TexturePath": "Library\/Textures\/BakerHouse.dds",
                     "Width": 1024,
                     "Height": 1024
@@ -42,22 +42,22 @@
             }
         },
         {
-            "UID": 585834617,
-            "Name": "Penguin _1",
+            "UID": 3839571401,
+            "Name": "Game Object_2",
             "Components": {
                 "Mesh": {
                     "Type": 2,
                     "UID": 3452816845,
-                    "Path": "Library\/Models\/2189842901.msh",
+                    "Path": "Library\/Models\/5243326305.msh",
                     "Active": true,
                     "Normals": false,
                     "Wireframe": false
                 },
                 "Transform": {
                     "Type": 1,
-                    "UID": 1929931161,
+                    "UID": 618334446,
                     "Position": {
-                        "x": 6,
+                        "x": 5,
                         "y": 0,
                         "z": 0
                     },
@@ -75,31 +75,31 @@
                 },
                 "Material": {
                     "Type": 8,
-                    "UID": 1848068022,
-                    "TexturePath": "Library\/Textures\/Penguin.dds",
-                    "Width": 2048,
-                    "Height": 2048
+                    "UID": 4042763068,
+                    "TexturePath": "Library\/Textures\/Car.dds",
+                    "Width": 512,
+                    "Height": 512
                 }
             }
         },
         {
-            "UID": 1826134481,
-            "Name": "Car _1",
+            "UID": 3407053906,
+            "Name": "Game Object_3",
             "Components": {
                 "Mesh": {
                     "Type": 2,
                     "UID": 3452816845,
-                    "Path": "Library\/Models\/1452825705.msh",
+                    "Path": "Library\/Models\/3904689001.msh",
                     "Active": true,
                     "Normals": false,
                     "Wireframe": false
                 },
                 "Transform": {
                     "Type": 1,
-                    "UID": 1262082778,
+                    "UID": 1330803481,
                     "Position": {
-                        "x": 5,
-                        "y": 2,
+                        "x": 6,
+                        "y": 4,
                         "z": 0
                     },
                     "GeneralScale": 1,
@@ -109,17 +109,131 @@
                         "z": 1
                     },
                     "Rotation": {
-                        "x": 150,
+                        "x": 0,
                         "y": 0,
                         "z": 0
                     }
                 },
                 "Material": {
                     "Type": 8,
-                    "UID": 2077062028,
-                    "TexturePath": "Library\/Textures\/Car.dds",
-                    "Width": 512,
-                    "Height": 512
+                    "UID": 3118045616,
+                    "TexturePath": "Library\/Textures\/Penguin.dds",
+                    "Width": 2048,
+                    "Height": 2048
+                }
+            }
+        },
+        {
+            "UID": 2026463257,
+            "Name": "Game Object_4",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Library\/Models\/5314744802.msh",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 2538056004,
+                    "Position": {
+                        "x": -5,
+                        "y": -4,
+                        "z": 0
+                    },
+                    "GeneralScale": 4,
+                    "Scale": {
+                        "x": 4,
+                        "y": 4,
+                        "z": 4
+                    },
+                    "Rotation": {
+                        "x": 129,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 2019434225,
+                    "TexturePath": "Library\/Textures\/BakerHouse.dds",
+                    "Width": 1024,
+                    "Height": 1024
+                }
+            }
+        },
+        {
+            "UID": 1490085328,
+            "Name": "House _1",
+            "Components": {
+                "Mesh": {
+                    "Type": 2,
+                    "UID": 3452816845,
+                    "Path": "Library\/Models\/4266982202.msh",
+                    "Active": true,
+                    "Normals": false,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3782678867,
+                    "Position": {
+                        "x": -5,
+                        "y": 0,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 0,
+                        "y": 0,
+                        "z": 0
+                    }
+                },
+                "Material": {
+                    "Type": 8,
+                    "UID": 3589933596,
+                    "TexturePath": "Library\/Textures\/BakerHouse.dds",
+                    "Width": 1024,
+                    "Height": 1024
+                }
+            }
+        },
+        {
+            "UID": 3721171056,
+            "Name": "Cube _1",
+            "Components": {
+                "Mesh": {
+                    "Type": 3,
+                    "UID": 3724930590,
+                    "Active": true,
+                    "Wireframe": false
+                },
+                "Transform": {
+                    "Type": 1,
+                    "UID": 3593647199,
+                    "Position": {
+                        "x": 0,
+                        "y": 3,
+                        "z": 0
+                    },
+                    "GeneralScale": 1,
+                    "Scale": {
+                        "x": 1,
+                        "y": 1,
+                        "z": 1
+                    },
+                    "Rotation": {
+                        "x": 47,
+                        "y": 40,
+                        "z": 51
+                    }
                 }
             }
         }

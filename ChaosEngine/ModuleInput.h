@@ -72,4 +72,7 @@ public:
 	const Uint8* keys;
 	KEY_STATE* keyboard;
 	char* fileDir = ".";
+private:
+	u32 model;
+	u32 tex;
 };
