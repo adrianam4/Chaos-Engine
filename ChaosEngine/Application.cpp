@@ -112,22 +112,30 @@ void Application::PrepareUpdate()
 		}
 	}
 
-	if (fasterGameTime)
-	{
-		msTimer * 2;
-	}
-
-	if (slowerGameTime)
-	{
-		msTimer / 2;
-	}
-
 	playGameTime = false;
 	pauseGameTime = false;
 	stopGameTime = false;
 	slowerGameTime = false;
 	fasterGameTime = false;
 	advanceGameTime = false;
+
+	if (fasterGameTime)
+	{
+		gameTimeNum = timestep * 2.0f;
+	}
+
+	if (slowerGameTime)
+	{
+		gameTimeNum = timestep / 2.0f;
+	}
+
+	if(gameTime.IsActive() && gameTime.IsPaused()) 
+		gameTimeNum = 0.0f;
+	if (advance && gameTime.IsPaused())
+	{
+		gameTimeNum = timestep;
+		advance = false;
+	}
 
 	gameTimeNum = gameTime.ReadSec();
 }

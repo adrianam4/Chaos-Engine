@@ -172,6 +172,14 @@ bool ModuleResources::LoadResource(u32 UID)
 	return ret;
 }
 
+ImTextureID ModuleResources::LoadIcons(u32 UID)
+{
+	Resource* resourceToLoad = nullptr;
+	resourceToLoad = GetResource(UID);
+	resourceToLoad->LoadToMemory();
+	return ImTextureID(resourceToLoad->GetTextureId());
+}
+
 Resource* ModuleResources::GetResource(u32 UID) // OK
 {
 	std::map<u32, Resource*>::iterator it = resources.find(UID);

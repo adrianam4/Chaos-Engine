@@ -14,6 +14,8 @@
 #include "imgui_internal.h"
 #include "Parson/parson.h"
 #include "CameraComponent.h"
+#include "MaterialComponent.h"
+
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 
@@ -116,6 +118,31 @@ bool ModuleEditor::Start()
 	carMaterialId = App->resources->Find("Assets/Textures/Car.png");
 	App->resources->ImportFile("Assets/Textures/Penguin.png");
 	penguinMaterialId = App->resources->Find("Assets/Textures/Penguin.png");
+    //Icons
+	App->resources->ImportFile("Assets/Textures/DirectoryIcon.png");
+	folderId = App->resources->Find("Assets/Textures/DirectoryIcon.png");
+	folderIcon = App->resources->LoadIcons(folderId);
+	App->resources->ImportFile("Assets/Textures/Play.png");
+	playId = App->resources->Find("Assets/Textures/Play.png");
+	playIcon = App->resources->LoadIcons(playId);
+	App->resources->ImportFile("Assets/Textures/Stop.png");
+	stopId = App->resources->Find("Assets/Textures/Stop.png");
+	stopIcon = App->resources->LoadIcons(stopId);
+	App->resources->ImportFile("Assets/Textures/Pause.png");
+	pauseId = App->resources->Find("Assets/Textures/Pause.png");
+	pauseIcon = App->resources->LoadIcons(pauseId);
+	App->resources->ImportFile("Assets/Textures/Advance.png");
+	advanceId = App->resources->Find("Assets/Textures/Advance.png");
+	advanceIcon = App->resources->LoadIcons(advanceId);
+	App->resources->ImportFile("Assets/Textures/SpeedUp.png");
+	speedUpId = App->resources->Find("Assets/Textures/SpeedUp.png");
+	speedUpIcon = App->resources->LoadIcons(speedUpId);
+	App->resources->ImportFile("Assets/Textures/SpeedDown.png");
+	speedDownId = App->resources->Find("Assets/Textures/SpeedDown.png");
+	speedDownIcon = App->resources->LoadIcons(speedDownId);
+	App->resources->ImportFile("Assets/Textures/Back.png");
+	backId = App->resources->Find("Assets/Textures/Back.png");
+	backIcon = App->resources->LoadIcons(backId);
 
 	return ret;
 }
@@ -1747,17 +1774,27 @@ update_status ModuleEditor::Update(float dt)
 	static std::string currentPath = libraryPath;
 	std::vector<std::string> fileList;
 	std::vector<std::string> dirList;
-	
+
 	if (showAssets)
 	{
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Content Browser", &showAssets);
 
+		static float padding = 16.0f;
+		static float thumbnailSize = 128.0f;
+		float cellSize = thumbnailSize + padding;
+
+		float panelWidth = ImGui::GetContentRegionAvail().x;
+		int columnCount = (int)(panelWidth / cellSize);
+		if (columnCount < 1)
+			columnCount = 1;
+		ImGui::Columns(columnCount, 0, false);
+
 		//Fill my list of files and folders
 		App->fileSystem->DiscoverFiles(currentPath.c_str(), fileList, dirList);
 		if (libraryPath != currentPath)
 		{
-			if (ImGui::Button("<-"))
+			if (ImGui::ImageButton(backIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1))
 			{
 				prevPath = currentPath;
 				currentPath = libraryPath;
@@ -1765,25 +1802,31 @@ update_status ModuleEditor::Update(float dt)
 		}
 		for (int i = 0; i < dirList.size(); i++)
 		{
-			if (ImGui::Button(dirList[i].c_str()))
+			dirList[i].c_str();
+			if (ImGui::ImageButton(folderIcon, ImVec2(70, 70), ImVec2(0, 0), ImVec2(1, 1), -1))
 			{
 				prevPath = currentPath;
 				std::string newDirectory = currentPath + '/' + dirList[i] + '/';
 				currentPath = newDirectory;
 			}
+			ImGui::Text(dirList[i].c_str());
+			ImGui::NextColumn();
 		}
 		for (int i = 0; i < fileList.size(); i++)
 		{
 			ImGui::Text(fileList[i].c_str());
-			/*ImGui::Button(fileList[i].c_str());
-			if (ImGui::BeginDragDropSource())
-			{
-				const char* itemPath = currentPath.c_str();
-				size_t size = App->fileSystem->GetFileSize(itemPath);
-				ImGui::SetDragDropPayload("CONTENT BROWSER ITEM", itemPath, size);
-				ImGui::EndDragDropSource();
-			}*/
+			//ImGui::Button(fileList[i].c_str());
+			//if (ImGui::BeginDragDropSource())
+			//{
+			//	const char* itemPath = currentPath.c_str();
+			//	size_t size = App->fileSystem->GetFileSize(itemPath);
+			//	ImGui::SetDragDropPayload("CONTENT BROWSER ITEM", itemPath, size);
+			//	ImGui::EndDragDropSource();
+			//}
 		}
+
+		ImGui::Columns(1);
+
 		ImGui::End();
 	}
 
@@ -1843,14 +1886,14 @@ update_status ModuleEditor::Update(float dt)
 		{
 		ImGui::Text("Game Time: %.3f", App->gameTimeNum);
 		ImGui::SameLine();
-		    if (ImGui::ImageButton("Assets/Textures/Stop.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+		    if (ImGui::ImageButton(stopIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 			    App->stopGameTime = !App->stopGameTime;
 			    App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
 			    App->gameMode = false;
 		    }
 		}
 		ImGui::SameLine();
-		if (ImGui::ImageButton("Assets/Textures/Start.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+		if (ImGui::ImageButton(playIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 			App->playGameTime = !App->playGameTime;
 			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
 			App->gameMode = true;
@@ -1859,27 +1902,27 @@ update_status ModuleEditor::Update(float dt)
 		if (App->gameMode == true)
 		{
 			ImGui::SameLine();
-			if (ImGui::ImageButton("Assets/Textures/Pause.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+			if (ImGui::ImageButton(pauseIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 				App->pauseGameTime = !App->pauseGameTime;
 				App->editor->AddLog("Game Clock Paused\n");
 
 			}
 			ImGui::SameLine();
-			if (ImGui::ImageButton("Assets/Textures/Advance.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+			if (ImGui::ImageButton(advanceIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 				App->advanceGameTime = !App->advanceGameTime;
 				App->editor->AddLog("Game Clock Advanced 1 frame\n");
 
 			}
 			ImGui::SameLine();
-			if (ImGui::ImageButton("Assets/Textures/SpeedUp.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
-				App->fasterGameTime = !App->fasterGameTime;
-				App->editor->AddLog("Game Clock Speed Up (x%d)\n");
+			if (ImGui::ImageButton(speedDownIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+				App->slowerGameTime = !App->slowerGameTime;
+				App->editor->AddLog("Game Clock Speed Down (x%d)\n");
 
 			}
 			ImGui::SameLine();
-			if (ImGui::ImageButton("Assets/Textures/SpeedDown.png", ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
-				App->slowerGameTime = !App->slowerGameTime;
-				App->editor->AddLog("Game Clock Speed Down (x%d)\n");
+			if (ImGui::ImageButton(speedUpIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+				App->fasterGameTime = !App->fasterGameTime;
+				App->editor->AddLog("Game Clock Speed Up (x%d)\n");
 
 			}
 			ImGui::SameLine();

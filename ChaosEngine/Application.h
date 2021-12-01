@@ -37,7 +37,8 @@ private:
 	Timer	msTimer;
 	float	dt;
 	std::list<Module*> listModules;
-	float lastFrameTime = 0.0f;
+    Timer lastFrameTime = 0.0f;
+	float timestep = 0.0f;
 
 public:
 
