@@ -17,7 +17,9 @@ void Model::Draw(float* matrix)
 	}
 	//App->editor->AddLog("Drawing Model\n");
 }
-
+Model::Model(theBuffer* theArray) {
+	meshes.push_back(createMesh(theArray->buffer));
+}
 Model::Model(std::vector<theBuffer*>* theArray) 
 {
 	for (int a = 0; a < theArray->size(); a++) 
@@ -31,7 +33,10 @@ Model::Model(std::vector<uint> indices, std::vector<Vertex> vertices, std::vecto
 {
 	meshes.push_back(Mesh(vertices, indices, textures, texCoords));
 }
-
+Mesh Model::createSpecialMesh(char* buffer) {
+	FBXimporter i;
+	return (*i.getNewMeshFBX(buffer));
+}
 Mesh Model::createMesh(char* buffer) 
 {
 	FBXimporter i;

@@ -1901,19 +1901,23 @@ update_status ModuleEditor::Update(float dt)
 		}
 		for (int i = 0; i < dirList.size(); i++)
 		{
-			ImGui::ImageButton(folderIcon, ImVec2(70, 70), ImVec2(0, 0), ImVec2(1, 1), -1);
+			ImGui::ImageButton(folderIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1);
 			if (ImGui::Button(dirList[i].c_str()))
 			{
 				prevPath = currentPath;
 				std::string newDirectory = currentPath + dirList[i] + '/';
 				currentPath = newDirectory;
+				toDelete = currentPath;
 			}
 			ImGui::NextColumn();
 		}
 		for (int i = 0; i < fileList.size(); i++)
 		{
-			ImGui::ImageButton(fileIcon, ImVec2(70, 70), ImVec2(0, 0), ImVec2(1, 1), -1);
-			ImGui::Button(fileList[i].c_str());
+			ImGui::ImageButton(fileIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1);
+			if (ImGui::Button(fileList[i].c_str()))
+			{
+				toDelete = currentPath + fileList[i];
+			}
 			if (ImGui::BeginDragDropSource())
 			{
 				std::string itemPath = currentPath + fileList[i];
@@ -1924,6 +1928,41 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::NextColumn();
 		}
 		ImGui::Columns(1);
+
+		if (App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN && toDelete != "empty")
+		{
+			u32 toDeleteId = App->resources->Find(toDelete.c_str());
+			Resource* toDeleteResource = App->resources->GetResource(toDeleteId);
+			if (toDeleteResource != nullptr)
+			{
+				App->resources->ReleaseResource(toDeleteId);
+			}
+			else if (toDeleteResource == nullptr)
+			{
+				std::string isFolder;
+				unsigned start = 0;
+				start = toDelete.find_last_of(".");
+				if (start > 300 || start < 0)
+				{
+					fileList.clear();
+					dirList.clear();
+					App->fileSystem->DiscoverFiles(currentPath.c_str(), fileList, dirList);
+					for (uint i = 0; i < fileList.size(); i++)
+					{
+						std::string fileToDelete = currentPath + fileList[i];
+						App->fileSystem->Remove(fileToDelete.c_str());
+					}
+					App->fileSystem->Remove(currentPath.c_str());
+					currentPath = libraryPath;
+					prevPath = currentPath;
+				}
+				else
+				{
+					bool hasRemovedFromAssets = App->fileSystem->Remove(toDelete.c_str());
+				}
+			}
+			toDelete = "empty";
+		}
 		ImGui::End();
 	}
 
