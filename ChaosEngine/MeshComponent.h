@@ -20,6 +20,7 @@ class ComponentMesh : public Component
 {
 public:
 	ComponentMesh(std::vector<theBuffer*>* theArray , const char* mName);
+	ComponentMesh(theBuffer* theArray);
 	ComponentMesh(ComponentType mType, float3* pos=nullptr, float3* measures = nullptr);
 	ComponentMesh(std::vector<uint> indices, std::vector<Vertex> vertices, std::vector<Textures> textures, std::vector<float> texCoords, std::string mName);
 	

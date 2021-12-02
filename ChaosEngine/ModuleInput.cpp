@@ -118,7 +118,24 @@ update_status ModuleInput::PreUpdate(float dt)
 				}
 				if ((aux[0] == 'f' && aux[1] == 'b' && aux[2] == 'x') || (aux[0] == 'o' && aux[1] == 'b' && aux[2] == 'j') || (aux[0] == 'F' && aux[1] == 'B' && aux[2] == 'X'))
 				{
-					static uint gObjs = 1;
+
+					FBXimporter importer;
+					importer.SpecialreadFromFBX(fileDir);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+					/*static uint gObjs = 1;
 					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, gObjs, "Game Object"));
 					gObjs++;
 					GameObject* gObj = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
@@ -132,7 +149,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					tex = App->resources->ImportFile("Assets/Textures/Checker.png");
 					App->resources->LoadResource(tex);
 					gObj->components[2]->owner = gObj;
-					gObj->components.erase(gObj->components.begin() + 2);
+					gObj->components.erase(gObj->components.begin() + 2);*/
 
 					SDL_free(&fileDir);
 					App->editor->AddLog("Loaded %s\n", fileDir);

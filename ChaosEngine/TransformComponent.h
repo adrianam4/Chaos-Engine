@@ -14,6 +14,7 @@ class Component;
 class ComponentTransform : public Component
 {
 public:
+	ComponentTransform(const char* ID,float3 pos, float3 sca, float3 rot);
 	ComponentTransform(float3 pos, float3 sca, float3 rot);
 	~ComponentTransform();
 	ComponentType getComponentType();
@@ -27,6 +28,7 @@ public:
 	float3 FromQuatToEuler(Quat quatAngles);
 	std::vector<float3> vertices_aux;
 	float4x4 transMatrix;
-
+	void setOwner();
 	void CreateAABB(ComponentType type, GameObject* go, bool firstTime);
+	
 };

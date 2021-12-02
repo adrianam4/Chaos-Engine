@@ -7,7 +7,31 @@
 #include "imgui_impl_opengl3.h"
 
 #include "Parson/parson.h"
+ComponentTransform::ComponentTransform(const char* ID, float3 pos, float3 sca, float3 rot)
+{
+	UID = GenerateUID();
+	lastPosition = { 0,0,0 };
+	lastRotation = { 0,0,0 };
+	type = ComponentType::TRANSFORM;
 
+	position = pos;
+	scale = sca;
+	rotationEuler = rot;
+	generalScale = 1.0f;
+
+	rotationQuat = FromEulerToQuat(rotationEuler);
+
+	float4x4 aux;
+	transMatrix = aux.FromTRS(position, rotationQuat, scale);
+	transmat = transMatrix;
+	transMatrix = transMatrix.Transposed();
+
+
+	name = "Transform Component";
+
+	/*ComponentType t = getComponentType();
+	CreateAABB(t, App->scene->gameObjects[App->scene->gameObjects.size() - 1], true);*/
+}
 ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 {
 	UID = GenerateUID();
@@ -31,8 +55,9 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 	name = "Transform Component";
 
 	ComponentType t = getComponentType();
-	CreateAABB(t, App->scene->gameObjects[App->scene->gameObjects.size() - 1], true);
+	CreateAABB(t, App->editor->objectSelected, true);
 }
+
 ComponentType ComponentTransform::getComponentType() 
 {
 	for (int b = 0; b < App->scene->gameObjects[App->scene->gameObjects.size() - 1]->components.size(); b++) 
@@ -244,7 +269,9 @@ void ComponentTransform::Save(const char* path)
 
 	App->editor->AddLog("Saved Transform Component Data\n");
 }
-
+void ComponentTransform::setOwner() {
+	owner->matrix = transMatrix.ptr();
+}
 Quat ComponentTransform::FromEulerToQuat(float3 eulerAngles)
 {
 	eulerAngles.x = math::DegToRad(eulerAngles.x);

@@ -9,7 +9,7 @@
 #include"Importer.h"
 #include"TransformComponent.h"
 #include "Resource.h"
-
+class theBuffer;
 class GameObject
 {
 public:
@@ -19,6 +19,7 @@ public:
 	Component* CreateComponent(ComponentType type, float3* pos = nullptr, float3* measures = nullptr, float3* rotation = nullptr);
 	Component* CreateComponent(ComponentType type, const char* name, bool isDropped);
 	int SearchComponent(GameObject* gameObject, ComponentType type);
+	Component*  CreateOneMeshComponent(theBuffer* temporal, const char* name);
 	u32 GenerateUID();
 	Component* CreateMeshComponent(std::vector<theBuffer*>* theArray,const char* path);
 	Component* CreateComponentWithResource(Resource* meshResource);
@@ -27,7 +28,7 @@ public:
 	std::vector<float3> GetNormals(int id);
 	std::vector<float2> GetTexCoords(int id);
 	std::vector<uint> GetIndices(int id);
-
+	bool isImported = false;
 	u32 UID;
 	u32 parentUID;
 	uint id;
@@ -46,4 +47,5 @@ public:
 	float3 sca;
 	Quat rot;
 	float* matrix;
+	theBuffer buffer;
 };

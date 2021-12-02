@@ -53,7 +53,7 @@ public:
 	float horizontalFov;
 	float nearPlaneDistance;
 	float farPlaneDistance;
-
+	virtual void setOwner(){}
 	virtual void Enable() {}
 	virtual void Update() {}
 	virtual void Disable() {}

@@ -1,6 +1,7 @@
 #include"Importer.h"
-
+#include<stack>
 #include"Application.h"
+#include"TransformComponent.h"
 FBXimporter::FBXimporter() {}
 FBXimporter::~FBXimporter() {
 	for (int a = 0; a < bufferArray.size(); a++) {
@@ -8,6 +9,9 @@ FBXimporter::~FBXimporter() {
 		delete bufferArray[a];
 	}
 	bufferArray.clear();
+}
+theBuffer* SpecialsaveToOurFile(const char* originPath, const char* destinationPath) {
+	return nullptr;
 }
 std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, const char* destinationPath) {
 	//////////////////////////////////////////// read the fbx file and save de data in buffers ////////////////////////////////////////////
@@ -44,6 +48,120 @@ std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, cons
 		path = destinationPath;
 	}
 	return &bufferArray;
+}
+void FBXimporter::SpecialsaveToOurFile(const char* originPath, const char* destinationPath) {
+	
+}
+void  FBXimporter::SpecialreadFromFBX(const char* originPath) {
+	
+	Assimp::Importer import;
+	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_SplitLargeMeshes | aiProcess_OptimizeMeshes);
+
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+		return;
+	}
+
+
+	SpecialProcessNode(scene->mRootNode, scene);
+
+
+}
+void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene) 
+{
+	// process all the node's meshes
+	aiVector3D translation = { 0,0,0 };
+	aiVector3D scale = { 1,1,1 };
+	aiQuaternion rotation = { 1,0,0,0 };
+
+
+	aiVector3D Auxtranslation = { 0,0,0 };
+	aiVector3D Auxscale = { 1,1,1 };
+	aiQuaternion Auxrotation = { 1,0,0,0 };
+	std::stack<aiNode*> stackNode;
+	std::stack<GameObject*> stackParent;
+	GameObject* aux = new GameObject();
+	for (int a = 0; a < node->mNumChildren; a++) {
+		stackNode.push(node->mChildren[a]);
+
+
+		stackParent.push(aux);
+	}
+	while (!stackNode.empty())
+	{
+		aiNode* Thenode = stackNode.top();
+		stackNode.pop();
+		GameObject* aux = App->scene->CreateGameObject(false, 1, "sfe");
+
+		GameObject* parent = stackParent.top();
+		stackParent.pop();
+		parent->childrens.push_back(aux);
+		for (unsigned i = 0; i < Thenode->mNumChildren; ++i)
+		{
+			stackNode.push(Thenode->mChildren[i]);
+			stackParent.push(aux);
+		}
+
+
+
+
+		unsigned nMeshes = Thenode->mNumMeshes;
+
+
+
+
+		Thenode->mTransformation.Decompose(scale, rotation, translation);
+
+
+
+		aux->buffer.position.x = translation.x;
+		aux->buffer.position.y = translation.y;
+		aux->buffer.position.z = translation.z;
+		Quat q(rotation.x, rotation.y, rotation.z, rotation.w);
+		aux->buffer.Rotation = FromQuatToEuler(q);
+
+		Component* e;
+		e = new ComponentTransform("ed",aux->buffer.position, float3(1, 1, 1), aux->buffer.Rotation);
+		//e = new ComponentTransform(&aux->buffer.position, &float3(1, 1, 1), &aux->buffer.Rotation, "hh");
+		//e = aux->CreateComponent(ComponentType::TRANSFORM, &aux->buffer.position, &float3(1, 1, 1), &aux->buffer.Rotation);
+		e->owner = aux;
+		aux->components.push_back(e);
+		e->setOwner();
+
+		for (int q = 0; q < nMeshes; q++) {
+			aiMesh* mesh = scene->mMeshes[Thenode->mMeshes[q]];
+			theBuffer* temporal = ProcessMesh(mesh, scene, Thenode->mNumMeshes);
+
+			e = aux->CreateOneMeshComponent(temporal, "hsjbvjh");
+
+			aux->components.push_back(e);
+			e->owner = aux;
+
+
+
+			aux->buffer.buffer = temporal->buffer;
+			aux->buffer.size = temporal->size;
+		}
+
+
+
+	}
+	//setTransform(aux);
+	App->scene->gameObjects.push_back(aux);
+	aux->isImported = true;
+	App->editor->AddLog("Processing Node\n");
+}
+float3 FBXimporter::FromQuatToEuler(Quat quatAngles) {
+	float3 angles;
+
+	angles = quatAngles.ToEulerXYZ();
+
+	angles.x = math::RadToDeg(angles.x);
+	angles.y = math::RadToDeg(angles.y);
+	angles.z = math::RadToDeg(angles.z);
+
+	return angles;
 }
 void  FBXimporter::readFromFBX(const char* originPath) {
 	Assimp::Importer import;

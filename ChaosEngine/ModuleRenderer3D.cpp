@@ -8,7 +8,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "Model.h"
-
+#include<stack>
 #include "imgui.h"
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
@@ -164,7 +164,9 @@ void ModuleRenderer3D::InitModel(std::vector<theBuffer*>* theArray)
 {
 	models.push_back(Model(theArray));
 }
-
+void ModuleRenderer3D::InitModel(theBuffer* theArray) {
+	models.push_back(Model(theArray));
+}
 void ModuleRenderer3D::InitModel(std::vector<uint> indices, std::vector<Vertex> vertices, std::vector<Textures> textures, std::vector<float> texCoords)
 {
 	models.push_back(Model(indices, vertices, textures, texCoords));
@@ -355,35 +357,84 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 		App->viewportBuffer->Bind(editorCam);
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
-			if (App->scene->gameObjects[i]->SearchComponent(App->scene->gameObjects[i], ComponentType::CAMERA) == -1) {
-				int y = App->scene->gameObjects[i]->aabb.size();
-				math::AABB* e = App->scene->gameObjects[i]->aabb[y - 1];
+			if (editorCam != nullptr) {
+				if (App->scene->gameObjects[i]->isImported) {
+					App->viewportBuffer->Bind(editorCam);
 
-				if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) {
-					for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+
+					std::stack<GameObject*>stackNode;
+					GameObject* theObject;
+					for (int i = 0; i < App->scene->gameObjects.size(); i++)
 					{
-						if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
+
+						for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++) {
+							stackNode.push(App->scene->gameObjects[i]->childrens[a]);
+						}
+						while (!stackNode.empty())
 						{
-							int auxId = App->scene->gameObjects[i]->id;
-							for (int k = 0; k < models.size(); k++)
+							theObject = stackNode.top();
+							stackNode.pop();
+							/*int y = App->scene->gameObjects[i]->aabb.size();
+							math::AABB* e = theObject->aabb[y - 1];*/
+							for (int j = 0; j < theObject->components.size(); j++)
 							{
-								if (models[k].id == auxId)
+								if (theObject->components[j]->type == ComponentType::MESH && theObject->components[j]->active)
 								{
-									models[k].Draw(App->scene->gameObjects[i]->matrix);
+									int auxId = theObject->id;
+									for (int k = 0; k < models.size(); k++)
+									{
+										models[k].Draw(theObject->matrix);
+										if (models[k].id == auxId)
+										{
+
+										}
+									}
 								}
+							}
+							for (unsigned i = 0; i < theObject->childrens.size(); ++i)
+							{
+								stackNode.push(theObject->childrens[i]);
 							}
 						}
 					}
+					App->editor->DrawPrimitives();
+					App->viewportBuffer->UnBind();
 				}
 				else {
-					App->editor->AddLog("is outside\n");
+					App->viewportBuffer->Bind(editorCam);
+					if (App->scene->gameObjects[i]->SearchComponent(App->scene->gameObjects[i], ComponentType::CAMERA) == -1) {
+						int y = App->scene->gameObjects[i]->aabb.size();
+						math::AABB* e = App->scene->gameObjects[i]->aabb[y - 1];
+
+						if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) {
+							for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+							{
+								if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
+								{
+									int auxId = App->scene->gameObjects[i]->id;
+									for (int k = 0; k < models.size(); k++)
+									{
+										if (models[k].id == auxId)
+										{
+											models[k].Draw(App->scene->gameObjects[i]->matrix);
+										}
+									}
+								}
+							}
+						}
+						else {
+							App->editor->AddLog("is outside\n");
+						}
+					}
+					App->editor->DrawPrimitives();
+					App->viewportBuffer->UnBind();
 				}
+				
+				
 			}
+			
 		}
-		App->editor->DrawPrimitives();
-		App->viewportBuffer->UnBind();
 	}
-	
 }
 
 void ModuleRenderer3D::DrawCameras()
