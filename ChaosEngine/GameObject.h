@@ -33,6 +33,7 @@ public:
 	uint id;
 	bool active;
 	bool selected;
+	bool isStatic = false;
 	std::string name;
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;

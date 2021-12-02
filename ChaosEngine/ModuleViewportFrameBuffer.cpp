@@ -69,7 +69,7 @@ update_status ModuleViewportFrameBuffer::PreUpdate(float dt)
 }
 void ModuleViewportFrameBuffer::pre(ComponentCamera* camera) {
 	Bind(camera);
-	glClearColor(0.20f, 0.20f, 0.20f, 1.0f);
+	glClearColor(0.30f, 0.30f, 0.30f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 void ModuleViewportFrameBuffer::post(ComponentCamera* camera) {

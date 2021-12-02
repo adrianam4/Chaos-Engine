@@ -15,6 +15,7 @@
 #include "Parson/parson.h"
 #include "CameraComponent.h"
 #include "MaterialComponent.h"
+#include "Component.h"
 
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
@@ -76,7 +77,7 @@ bool ModuleEditor::Start()
 	style->Colors[ImGuiCol_TitleBgActive] = ImColor(200, 200, 200, 255);
 	style->Colors[ImGuiCol_TitleBgCollapsed] = ImColor(0, 0, 0, 130);
 
-	style->Colors[ImGuiCol_Button] = ImColor(31, 30, 31, 255);
+	style->Colors[ImGuiCol_Button] = ImColor(31, 30, 31, 0);
 	style->Colors[ImGuiCol_ButtonActive] = ImColor(31, 30, 31, 255);
 	style->Colors[ImGuiCol_ButtonHovered] = ImColor(41, 40, 41, 255);
 
@@ -108,6 +109,14 @@ bool ModuleEditor::Start()
 	houseModelId = App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
 	carModelId = App->resources->ImportFile("Assets/Models/Car.fbx");
 	penguinModelId = App->resources->ImportFile("Assets/Models/Penguin.fbx");
+	App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
+	houseModelId = App->resources->Find("Assets/Models/BakerHouse.fbx");
+	App->resources->ImportFile("Assets/Models/Car.fbx");
+	carModelId = App->resources->Find("Assets/Models/Car.fbx");
+	App->resources->ImportFile("Assets/Models/Penguin.fbx");
+	penguinModelId = App->resources->Find("Assets/Models/Penguin.fbx");
+	App->resources->ImportFile("Assets/Models/Street.FBX");
+	sceneId = App->resources->Find("Assets/Models/Street.FBX");
 	//Materials
 	houseMaterialId = App->resources->ImportFile("Assets/Textures/BakerHouse.png");
 	carMaterialId = App->resources->ImportFile("Assets/Textures/Car.png");
@@ -1136,6 +1145,23 @@ update_status ModuleEditor::Update(float dt)
 
 					App->editor->AddLog("Car Created\n");
 				}
+				if (ImGui::MenuItem("Create Scene"))
+				{
+					static int scenes = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, scenes, "Scene "));
+					scenes++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+
+					App->resources->LoadResource(sceneId);
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[1]->owner = objectSelected;
+					App->resources->LoadResource(sceneMaterialId);
+					objectSelected->components[2]->owner = objectSelected;
+
+					App->editor->AddLog("Scene Created\n");
+				}
 				if (ImGui::MenuItem("Create Cube"))
 				{
 					showOptionsMenu = ComponentType::CUBE;
@@ -1694,8 +1720,8 @@ update_status ModuleEditor::Update(float dt)
 		{
 			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y, App->camera->editorCam);
 			App->camera->editorCam->size = { viewportSize.x, viewportSize.y };
-			App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
-			//App->camera->aspectRatio = viewportSize.x / viewportSize.y;
+            App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
+            //App->camera->aspectRatio = viewportSize.x / viewportSize.y;
 		}
 		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
 		ImGui::Image((ImTextureID)App->camera->editorCam->texture, { App->camera->editorCam->size.x, App->camera->editorCam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
@@ -1744,24 +1770,23 @@ update_status ModuleEditor::Update(float dt)
 		//Guizmos
 		if (objectSelected && guizmoType != -1)
 		{
-			ImGuizmo::Enable(true);
+			ImGuizmo::SetOrthographic(false);
+			ImGuizmo::SetDrawlist();
 
 			float windowWidth = (float)ImGui::GetWindowWidth();
 			float windowHeight = (float)ImGui::GetWindowHeight();
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
-			ImGuizmo::SetDrawlist();
 
-			//Camera
-			ComponentCamera *myCamera = App->camera->editorCam;
+			ComponentCamera* myCamera = App->camera->editorCam;
 			float4x4 cameraProjection = myCamera->frustum.ProjectionMatrix();
 			float4x4 cameraView = myCamera->frustum.ViewMatrix();
 
-			//Game Object transform
 			ComponentTransform* transComponent = objectSelected->getTransform();
 			float4x4 transformMatrix = transComponent->transmat;
 			float3 originalRotation = transComponent->rotationEuler;
 
-			ImGuizmo::Manipulate(cameraView.Transposed().ptr(),cameraProjection.Transposed().ptr(),(ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
+			ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.Transposed().ptr());
+			ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, transformMatrix.ptr();
 
 			if (ImGuizmo::IsUsing())
 			{
@@ -1781,11 +1806,11 @@ update_status ModuleEditor::Update(float dt)
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT2 WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-	
-	if (showScene2Window&& App->camera->GameCam!=nullptr)
+
+	if (showScene2Window && App->camera->GameCam != nullptr)
 	{
 		ImGui::CloseCurrentPopup();
-		ImGui::Begin("Game", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
+		ImGui::Begin("Camera", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		if (viewportSize.x != App->camera->GameCam->size.x || viewportSize.y != App->camera->GameCam->size.y)
@@ -1838,8 +1863,9 @@ update_status ModuleEditor::Update(float dt)
 			}
 			ImGui::EndDragDropTarget();
 		}
+		ImGui::End();
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////// ASSETS WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 	const  std::string libraryPath = "Assets/";
 	static std::string prevPath = "";
