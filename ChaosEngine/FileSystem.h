@@ -32,6 +32,7 @@ public:
 	void SplitFilePath(const char* fullPath, std::string* texturePath, std::string* file = nullptr, std::string* extension = nullptr) const;
 	void NormalizePath(char* fullPath) const;
 	void NormalizePath(std::string& fullPath) const;
+	void DeleteLibraryFiles();
 	unsigned GetFileSize(const char* texturePath) const;
 
 	// Open for Read/Write

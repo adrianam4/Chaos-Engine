@@ -2,7 +2,6 @@
 #include "ModuleResources.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
-#include "ResourceScene.h"
 
 ModuleResources::ModuleResources(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -39,8 +38,6 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 		resource->aux = meshImporter.saveToOurFile(newFileInAssets, "Library/Models/");
 	else if (type == ResourceType::TEXTURE)
 		texImporter.ImportMaterial(newFileInAssets, false);
-	else if (type == ResourceType::SCENE)
-		int a = 0; //TODO
 
 	SaveResource(resource, newFileInAssets);
 	ret = resource->GetUID();
@@ -112,9 +109,6 @@ Resource* ModuleResources::CreateNewResource(const char* assetsFile, ResourceTyp
 	case ResourceType::MESH:
 		ret = (Resource*) new ResourceMesh(uid);
 		break;
-	case ResourceType::SCENE:
-		ret = (Resource*) new ResourceScene(uid);
-		break;
 	default:
 		break;
 	}
@@ -157,18 +151,10 @@ bool ModuleResources::LoadResource(u32 UID)
 		}
 		else if (type == ResourceType::TEXTURE)
 		{
-			//MaterialImporter importer;
-			//std::vector<int> aux = importer.ImportMaterial(resourceToLoad->GetLibraryFile(), false); //MHEE
-			//GLuint imageId = aux[0];
-			//int width = aux[1];
-			//int height = aux[2];
 			resourceToLoad->LoadToMemory();
 			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
 		}
-		else if (type == ResourceType::SCENE)
-		{
-			
-		}
+
 		ret = true;
 	}
 
@@ -233,13 +219,6 @@ std::string ModuleResources::GenerateLibraryFile(const char* assetsFile) // OK
 			start = fileName.find_last_of("/");
 		fileName = "Library/Textures/" + fileName.substr(start + 1, fileName.length() - start - 4) + "dds";
 	}
-	//if (createPath == ".fbx" || createPath == ".FBX")
-	//{
-	//	unsigned start = fileName.find_last_of("\\");
-	//	if (start > 10000)
-	//		start = fileName.find_last_of("/");
-	//	fileName = "Library/Models/" + fileName.substr(start + 1, fileName.length() - start - 4) + "msh";
-	//}
 
 	return fileName;
 }
@@ -265,13 +244,10 @@ void ModuleResources::SaveResource(Resource* resource, std::string assetsFile) /
 {
 	resources[resource->GetUID()] = resource;
 	resource->assetsFile = assetsFile;
-	if (resource->GetType() == ResourceType::TEXTURE)
-	{
+
+	if (resource->GetType() == ResourceType::MESH)
+		resource->libraryFile = resource->aux[0][0]->libraryDir;
+	else
 		resource->libraryFile = GenerateLibraryFile(assetsFile.c_str());
-	}
-	else if (resource->GetType() == ResourceType::MESH)
-	{
-		resource->libraryFile = resource->aux[0][0]->libraryDir; // TODO
-	}
 	
 }

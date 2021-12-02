@@ -26,6 +26,7 @@ FileSystem::FileSystem(Application* app, bool startEnabled) : Module(app, startE
 // Destructor
 FileSystem::~FileSystem()
 {
+	DeleteLibraryFiles();
 	RELEASE(AssimpIO);
 	PHYSFS_deinit();
 }
@@ -226,6 +227,25 @@ void FileSystem::NormalizePath(std::string & full_path) const
 			*it = '/';
 		else
 			*it = tolower(*it);
+	}
+}
+
+void FileSystem::DeleteLibraryFiles()
+{
+	std::vector<std::string> files;
+	std::vector<std::string> directories;
+	DiscoverFiles("Library/", files, directories);
+	for (uint i = 0; i < directories.size(); i++)
+	{
+		std::string toDelete = "Library/" + directories[i] + "/";
+		std::vector<std::string> files2;
+		std::vector<std::string> directories2;
+		DiscoverFiles(toDelete.c_str(), files2, directories2);
+		for (uint j = 0; j < files2.size(); j++)
+		{
+			std::string toDelete2 = toDelete + files2[j];
+			Remove(toDelete2.c_str());
+		}
 	}
 }
 

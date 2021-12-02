@@ -20,8 +20,8 @@ public:
 	bool CleanUp();
 	void SaveConfig();
 	void LoadConfig();
-	void LoadScene();
-	void SaveScene();
+	void LoadScene(const char* fileToLoad);
+	void SaveScene(const char* fileToLoad);
 	void ComproveScreen();
 
 	//Docking Helper functions

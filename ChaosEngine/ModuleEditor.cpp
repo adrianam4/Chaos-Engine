@@ -16,6 +16,7 @@
 #include "CameraComponent.h"
 #include "MaterialComponent.h"
 #include "Component.h"
+#include "FileDialog.h"
 
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
@@ -267,7 +268,7 @@ void ModuleEditor::LoadConfig()
 	AddLog("Loaded Config Data\n");
 }
 
-void ModuleEditor::SaveScene()
+void ModuleEditor::SaveScene(const char* fileToLoad)
 {
 	JSON_Value* root = json_value_init_object();
 	JSON_Value* arr = json_value_init_array();
@@ -340,14 +341,13 @@ void ModuleEditor::SaveScene()
 		json_array_append_value(myArray, gameObjectValue);
 	}
 
-	json_serialize_to_file_pretty(root, "Settings/SceneFile.json");
-
+	json_serialize_to_file_pretty(root, fileToLoad);
 	AddLog("Saved Scene Data\n");
 }
 
-void ModuleEditor::LoadScene()
+void ModuleEditor::LoadScene(const char* fileToLoad)
 {
-	JSON_Value* root = json_parse_file("Settings/SceneFile.json");
+	JSON_Value* root = json_parse_file(fileToLoad);
 	JSON_Array* gameObjectsInfo = json_object_dotget_array(json_value_get_object(root), "GameObjects");
 
 	for (size_t i = 0; i < json_array_get_count(gameObjectsInfo); i++)
@@ -396,21 +396,6 @@ void ModuleEditor::LoadScene()
 
 				u32 modelId = App->resources->RecoveryFile(modelPath);
 				App->resources->LoadResource(modelId);
-				//FBXimporter importer;
-
-				//std::string firstNum = std::string(modelPath);
-				//unsigned firstNumPos = firstNum.find_last_of("/");
-				//firstNum = firstNum.substr(firstNumPos+1+8, 1);
-
-				//std::string Uid = std::string(modelPath);
-				//unsigned UidNumPos = Uid.find_last_of("/");
-				//Uid = Uid.substr(UidNumPos + 1, 8);
-
-				//std::string secondNum = std::string(modelPath);
-				//unsigned secondNumPos = secondNum.find_last_of("/");
-				//secondNum = secondNum.substr(secondNumPos + 2+8, 1);
-
-				//lastGO->components.push_back(lastGO->CreateMeshComponent(importer.loadFromOurFile("Library/Models/", Uid.c_str(), firstNum.c_str(), secondNum.c_str(), ".msh"), modelPath));
 			}
 			if (auxType == 3)
 				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CUBE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
@@ -1015,12 +1000,16 @@ update_status ModuleEditor::Update(float dt)
 			{
 				if (ImGui::MenuItem("Save Scene"))
 				{
-					SaveScene();
+					FileDialog fileDialog;
+					std::string fileToLoad = fileDialog.SaveScene("Chaos Scene (*.chaos)\0*.chaos\0");
+					SaveScene(fileToLoad.c_str());
 				}
 				if (ImGui::MenuItem("Load Scene"))
 				{
 					showWarningMenu = !showWarningMenu;
-					LoadScene();
+					FileDialog fileDialog;
+					std::string fileToLoad = fileDialog.LoadScene("Chaos Scene (*.chaos)\0*.chaos\0");
+					LoadScene(fileToLoad.c_str());
 				}
 				ImGui::EndMenu();
 			}
@@ -1733,7 +1722,13 @@ update_status ModuleEditor::Update(float dt)
 				const char* path = (const char*)payload->Data;
 				u32 importedFile = App->resources->ImportFile(path);
 				Resource* newResource = App->resources->GetResource(importedFile);
-				
+
+				if (newResource == nullptr)
+				{
+					FileDialog fileDialog;
+					std::string fileToLoad = fileDialog.LoadScene("Chaos Scene (*.chaos)\0*.chaos\0");
+					LoadScene(fileToLoad.c_str());
+				}
 				if (newResource->type == ResourceType::MESH)
 				{
 					static uint importedGobjs = 1;
@@ -1983,7 +1978,9 @@ update_status ModuleEditor::Update(float dt)
 				if (App->scene->gameObjects.size() > 0) 
 					App->scene->gameObjects.erase(App->scene->gameObjects.begin());
 			}
-			LoadScene();
+			FileDialog fileDialog;
+			std::string fileToLoad = fileDialog.LoadScene("Chaos Scene (*.chaos)\0*.chaos\0");
+			LoadScene(fileToLoad.c_str());
 			showWarningMenu = !showWarningMenu;
 		}
 		if (ImGui::MenuItem("No"))

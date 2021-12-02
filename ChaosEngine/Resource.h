@@ -9,7 +9,6 @@ enum class ResourceType
 {
 	TEXTURE = 1,
 	MESH,
-	SCENE,
 	UNKNOWN,
 	NONE,
 };

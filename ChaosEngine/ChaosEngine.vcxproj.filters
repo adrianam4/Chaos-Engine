@@ -119,8 +119,8 @@
     <ClCompile Include="GameTime.cpp">
       <Filter>Engine\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceScene.cpp">
-      <Filter>Engine\Resources</Filter>
+    <ClCompile Include="FileDialog.cpp">
+      <Filter>Engine\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -250,8 +250,8 @@
     <ClInclude Include="GameTime.h">
       <Filter>Engine\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceScene.h">
-      <Filter>Engine\Resources</Filter>
+    <ClInclude Include="FileDialog.h">
+      <Filter>Engine\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
