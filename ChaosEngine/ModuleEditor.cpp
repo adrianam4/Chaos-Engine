@@ -966,8 +966,8 @@ update_status ModuleEditor::Update(float dt)
 		showHierarchy = false;
 		showInspector = false;
 		showConsoleMenu = false;
-		showSceneWindow = true;
-		showScene2Window = false;
+		showSceneWindow = false;
+		showScene2Window = true;
 		showFileWindow = false;
 		showTimeWindow = true;
 		showOptions = true;
@@ -1810,7 +1810,7 @@ update_status ModuleEditor::Update(float dt)
 	if (showScene2Window && App->camera->GameCam != nullptr)
 	{
 		ImGui::CloseCurrentPopup();
-		ImGui::Begin("Camera", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
+		ImGui::Begin("Game Camera", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
 
 		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 		if (viewportSize.x != App->camera->GameCam->size.x || viewportSize.y != App->camera->GameCam->size.y)
