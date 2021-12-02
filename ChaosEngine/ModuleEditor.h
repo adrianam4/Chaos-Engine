@@ -88,6 +88,7 @@ public:
 	u32 carMaterialId;
 	//Icons
 	u32 folderId;
+	u32 fileId;
 	u32 playId;
 	u32 stopId;
 	u32 pauseId;
@@ -97,6 +98,7 @@ public:
 	u32 backId;
 
 	ImTextureID folderIcon;
+	ImTextureID fileIcon;
 	ImTextureID playIcon;
 	ImTextureID stopIcon;
 	ImTextureID pauseIcon;

@@ -105,51 +105,35 @@ bool ModuleEditor::Start()
 	guizmoType = ImGuizmo::OPERATION::TRANSLATE;
 
 	//Models
-	App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
-	houseModelId = App->resources->Find("Assets/Models/BakerHouse.fbx");
-	App->resources->ImportFile("Assets/Models/Car.fbx");
-	carModelId = App->resources->Find("Assets/Models/Car.fbx");
-	App->resources->ImportFile("Assets/Models/Penguin.fbx");
-	penguinModelId = App->resources->Find("Assets/Models/Penguin.fbx");
+	houseModelId = App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
+	carModelId = App->resources->ImportFile("Assets/Models/Car.fbx");
+	penguinModelId = App->resources->ImportFile("Assets/Models/Penguin.fbx");
 	//Materials
-	App->resources->ImportFile("Assets/Textures/BakerHouse.png");
-	houseMaterialId = App->resources->Find("Assets/Textures/BakerHouse.png");
-	App->resources->ImportFile("Assets/Textures/Car.png");
-	carMaterialId = App->resources->Find("Assets/Textures/Car.png");
-	App->resources->ImportFile("Assets/Textures/Penguin.png");
-	penguinMaterialId = App->resources->Find("Assets/Textures/Penguin.png");
+	houseMaterialId = App->resources->ImportFile("Assets/Textures/BakerHouse.png");
+	carMaterialId = App->resources->ImportFile("Assets/Textures/Car.png");
+	penguinMaterialId = App->resources->ImportFile("Assets/Textures/Penguin.png");
     //Icons
-	App->resources->ImportFile("Assets/Textures/DirectoryIcon.png");
-	folderId = App->resources->Find("Assets/Textures/DirectoryIcon.png");
+	folderId = App->resources->ImportFile("Assets/Textures/DirectoryIcon.png");
 	folderIcon = App->resources->LoadIcons(folderId);
-	App->resources->ImportFile("Assets/Textures/Play.png");
-	playId = App->resources->Find("Assets/Textures/Play.png");
+	playId = App->resources->ImportFile("Assets/Textures/Play.png");
 	playIcon = App->resources->LoadIcons(playId);
-	App->resources->ImportFile("Assets/Textures/Stop.png");
-	stopId = App->resources->Find("Assets/Textures/Stop.png");
+	stopId = App->resources->ImportFile("Assets/Textures/Stop.png");
 	stopIcon = App->resources->LoadIcons(stopId);
-	App->resources->ImportFile("Assets/Textures/Pause.png");
-	pauseId = App->resources->Find("Assets/Textures/Pause.png");
+	pauseId = App->resources->ImportFile("Assets/Textures/Pause.png");
 	pauseIcon = App->resources->LoadIcons(pauseId);
-	App->resources->ImportFile("Assets/Textures/Advance.png");
-	advanceId = App->resources->Find("Assets/Textures/Advance.png");
+	advanceId = App->resources->ImportFile("Assets/Textures/Advance.png");
 	advanceIcon = App->resources->LoadIcons(advanceId);
-	App->resources->ImportFile("Assets/Textures/SpeedUp.png");
-	speedUpId = App->resources->Find("Assets/Textures/SpeedUp.png");
+	speedUpId = App->resources->ImportFile("Assets/Textures/SpeedUp.png");
 	speedUpIcon = App->resources->LoadIcons(speedUpId);
-	App->resources->ImportFile("Assets/Textures/SpeedDown.png");
-	speedDownId = App->resources->Find("Assets/Textures/SpeedDown.png");
+	speedDownId = App->resources->ImportFile("Assets/Textures/SpeedDown.png");
 	speedDownIcon = App->resources->LoadIcons(speedDownId);
-	App->resources->ImportFile("Assets/Textures/Back.png");
-	backId = App->resources->Find("Assets/Textures/Back.png");
+	backId = App->resources->ImportFile("Assets/Textures/Back.png");
 	backIcon = App->resources->LoadIcons(backId);
+	fileId = App->resources->ImportFile("Assets/Textures/FileIcon.png");
+	fileIcon = App->resources->LoadIcons(fileId);
 
 	return ret;
 }
-
-//update_status ModuleEditor::PreUpdate(float dt) {
-//	
-//}
 
 // Load assets
 bool ModuleEditor::CleanUp()
@@ -1716,6 +1700,47 @@ update_status ModuleEditor::Update(float dt)
 		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
 		ImGui::Image((ImTextureID)App->camera->editorCam->texture, { App->camera->editorCam->size.x, App->camera->editorCam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const char* path = (const char*)payload->Data;
+				u32 importedFile = App->resources->ImportFile(path);
+				Resource* newResource = App->resources->GetResource(importedFile);
+				
+				if (newResource->type == ResourceType::MESH)
+				{
+					static uint importedGobjs = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
+					importedGobjs++;
+					objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+					App->resources->LoadResource(importedFile);
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					u32 tex = App->resources->ImportFile("Assets/Textures/Checker.png");
+					App->resources->LoadResource(tex);
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					objectSelected->components.erase(objectSelected->components.begin() + 2);
+				}
+				else if (newResource->type == ResourceType::TEXTURE)
+				{
+					if (App->editor->objectSelected != nullptr)
+					{
+						int oldMaterialId;
+						oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
+						if (oldMaterialId != -1)
+						{
+							objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
+						}
+						App->resources->LoadResource(importedFile);
+						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					}
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+
 		//Guizmos
 		if (objectSelected && guizmoType != -1)
 		{
@@ -1772,11 +1797,51 @@ update_status ModuleEditor::Update(float dt)
 		}
 		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
 		ImGui::Image((ImTextureID)App->camera->GameCam->texture, { App->camera->GameCam->size.x, App->camera->GameCam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
-		ImGui::End();
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const char* path = (const char*)payload->Data;
+				u32 importedFile = App->resources->ImportFile(path);
+				Resource* newResource = App->resources->GetResource(importedFile);
+
+				if (newResource->type == ResourceType::MESH)
+				{
+					static uint importedGobjs = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
+					importedGobjs++;
+					objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+					App->resources->LoadResource(importedFile);
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					u32 tex = App->resources->ImportFile("Assets/Textures/Checker.png");
+					App->resources->LoadResource(tex);
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					objectSelected->components.erase(objectSelected->components.begin() + 2);
+				}
+				else if (newResource->type == ResourceType::TEXTURE)
+				{
+					if (App->editor->objectSelected != nullptr)
+					{
+						int oldMaterialId;
+						oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
+						if (oldMaterialId != -1)
+						{
+							objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
+						}
+						App->resources->LoadResource(importedFile);
+						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					}
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
 	}
 	
 	//////////////////////////////////////////////////////////////////////////////////////////// ASSETS WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-	const  std::string libraryPath = "Library/";
+	const  std::string libraryPath = "Assets/";
 	static std::string prevPath = "";
 	static std::string currentPath = libraryPath;
 	std::vector<std::string> fileList;
@@ -1787,7 +1852,7 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Content Browser", &showAssets);
 
-		static float padding = 16.0f;
+		static float padding = 1.0f;
 		static float thumbnailSize = 128.0f;
 		float cellSize = thumbnailSize + padding;
 
@@ -1801,39 +1866,38 @@ update_status ModuleEditor::Update(float dt)
 		App->fileSystem->DiscoverFiles(currentPath.c_str(), fileList, dirList);
 		if (libraryPath != currentPath)
 		{
-			if (ImGui::ImageButton(backIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1))
+			if (ImGui::ImageButton(backIcon, ImVec2(30, 30), ImVec2(0, 0), ImVec2(1, 1), -1))
 			{
 				prevPath = currentPath;
 				currentPath = libraryPath;
 			}
+			ImGui::NextColumn();
 		}
 		for (int i = 0; i < dirList.size(); i++)
 		{
-			dirList[i].c_str();
-			if (ImGui::ImageButton(folderIcon, ImVec2(70, 70), ImVec2(0, 0), ImVec2(1, 1), -1))
+			ImGui::ImageButton(folderIcon, ImVec2(70, 70), ImVec2(0, 0), ImVec2(1, 1), -1);
+			if (ImGui::Button(dirList[i].c_str()))
 			{
 				prevPath = currentPath;
-				std::string newDirectory = currentPath + '/' + dirList[i] + '/';
+				std::string newDirectory = currentPath + dirList[i] + '/';
 				currentPath = newDirectory;
 			}
-			ImGui::Text(dirList[i].c_str());
 			ImGui::NextColumn();
 		}
 		for (int i = 0; i < fileList.size(); i++)
 		{
-			ImGui::Text(fileList[i].c_str());
-			//ImGui::Button(fileList[i].c_str());
-			//if (ImGui::BeginDragDropSource())
-			//{
-			//	const char* itemPath = currentPath.c_str();
-			//	size_t size = App->fileSystem->GetFileSize(itemPath);
-			//	ImGui::SetDragDropPayload("CONTENT BROWSER ITEM", itemPath, size);
-			//	ImGui::EndDragDropSource();
-			//}
+			ImGui::ImageButton(fileIcon, ImVec2(70, 70), ImVec2(0, 0), ImVec2(1, 1), -1);
+			ImGui::Button(fileList[i].c_str());
+			if (ImGui::BeginDragDropSource())
+			{
+				std::string itemPath = currentPath + fileList[i];
+				size_t size = strlen(itemPath.c_str());
+				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath.c_str(), size + 1, ImGuiCond_Once);
+				ImGui::EndDragDropSource();
+			}
+			ImGui::NextColumn();
 		}
-
 		ImGui::Columns(1);
-
 		ImGui::End();
 	}
 
