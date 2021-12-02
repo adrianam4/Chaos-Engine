@@ -106,4 +106,6 @@ public:
 	ImTextureID speedUpIcon;
 	ImTextureID speedDownIcon;
 	ImTextureID backIcon;
+
+	std::string toDelete = "empty";
 };

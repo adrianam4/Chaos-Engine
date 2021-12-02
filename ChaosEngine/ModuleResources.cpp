@@ -68,8 +68,11 @@ Resource* ModuleResources::RequestResource(u32 UID)
 
 void ModuleResources::ReleaseResource(u32 UID) // OK
 {
+	Resource* toDeleteResource = GetResource(UID);
 	deleted.push_back(GetResource(UID));
 	resources.erase(UID);
+	bool hasRemovedFromAssets = App->fileSystem->Remove(toDeleteResource->GetAssetFile());
+	bool hasRemovedFromLibrary = App->fileSystem->Remove(toDeleteResource->GetLibraryFile());
 }
 
 void ModuleResources::SaveUID()
