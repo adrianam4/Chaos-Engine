@@ -3,12 +3,8 @@
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h" 
 #include "CameraComponent.h"
-<<<<<<< Updated upstream
 #include "mmgr.h"
 
-=======
-#include<stack>
->>>>>>> Stashed changes
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	editorCam = new ComponentCamera(float3(0, 0, 5), 70, .01f, 100, false);
@@ -200,35 +196,6 @@ update_status ModuleCamera3D::Update(float dt)
 			myRay = editorCam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
 			App->editor->AddLog("-------------------------------------------------------\nRay Data:\n aX: %.1f aY: %.1f aZ: %.1f\n bX: %.1f bY: %.1f bZ: %.1f\n", myRay.a.x, myRay.a.y, myRay.a.z, myRay.b.x, myRay.b.y, myRay.b.z);
 
-			std::stack<GameObject*>stackNode;
-			GameObject* theObject;
-			for (int i = 0; i < App->scene->gameObjects.size(); i++)
-			{
-
-				for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++) {
-					stackNode.push(App->scene->gameObjects[i]->childrens[a]);
-				}
-				while (!stackNode.empty())
-				{
-					theObject = stackNode.top();
-					stackNode.pop();
-					/*int y = App->scene->gameObjects[i]->aabb.size();
-					math::AABB* e = theObject->aabb[y - 1];*/
-					GameObject* go = theObject;
-					for (int j = 0; j < go->boundingBoxes.size(); j++)
-					{
-						if (bool hit = myRay.Intersects(*go->aabb[j]))
-						{
-							hitObjs.push_back(go);
-							App->editor->AddLog("The ray has impacted with %s!\n", go->name.c_str());
-						}
-					}
-					for (unsigned i = 0; i < theObject->childrens.size(); ++i)
-					{
-						stackNode.push(theObject->childrens[i]);
-					}
-				}
-			}
 			for (int i = 0; i < App->scene->gameObjects.size(); i++)
 			{
 				GameObject* go = App->scene->gameObjects[i];

@@ -76,7 +76,6 @@ Component* GameObject::CreateComponentWithResource(Resource* resource)
 Component* GameObject::CreateOneMeshComponent(theBuffer* temporal, const char* name) {
 	Component* component = nullptr;
 	component = new ComponentMesh(temporal);
-	
 	return component;
 }
 Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* measures, float3* rot)

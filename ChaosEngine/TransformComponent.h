@@ -14,7 +14,7 @@ class Component;
 class ComponentTransform : public Component
 {
 public:
-	ComponentTransform(GameObject* theObject, float3 pos, float3 sca, float3 rot);
+	ComponentTransform(const char* ID,float3 pos, float3 sca, float3 rot);
 	ComponentTransform(float3 pos, float3 sca, float3 rot);
 	~ComponentTransform();
 	ComponentType getComponentType();
@@ -29,6 +29,6 @@ public:
 	std::vector<float3> vertices_aux;
 	float4x4 transMatrix;
 	void setOwner();
-	void CreateAABB(ComponentType type, GameObject* go, bool firstTime)override;
+	void CreateAABB(ComponentType type, GameObject* go, bool firstTime);
 	
 };

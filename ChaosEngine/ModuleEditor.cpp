@@ -17,12 +17,8 @@
 #include "MaterialComponent.h"
 #include "Component.h"
 #include "FileDialog.h"
-<<<<<<< Updated upstream
 #include "mmgr.h"
 
-=======
-#include<stack>
->>>>>>> Stashed changes
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 
@@ -523,45 +519,15 @@ void ModuleEditor::AddPlane(float3 pos, float3 sca)
 }
 void ModuleEditor::DrawPrimitives()
 {
-
-	std::stack<GameObject*>stackNode;
-	GameObject* theObject;
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
-
-		for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++) {
-			stackNode.push(App->scene->gameObjects[i]->childrens[a]);
-		}
-		while (!stackNode.empty())
-		{
-			theObject = stackNode.top();
-			stackNode.pop();
-			/*int y = App->scene->gameObjects[i]->aabb.size();
-			math::AABB* e = theObject->aabb[y - 1];*/
-			
-			if (showAABB)
-			{
-				for (int a = 0; a < theObject->boundingBoxes.size(); a++)
-				{
-					theObject->boundingBoxes[a]->DrawCube();
-				}
-			}
-					
-			for (unsigned i = 0; i < theObject->childrens.size(); ++i)
-			{
-				stackNode.push(theObject->childrens[i]);
-			}
-		}
-	}
-	for (int i = 0; i < App->scene->gameObjects.size(); i++)
-	{
-		/*if (showAABB)
+		if (showAABB)
 		{
 			for (int a = 0; a < App->scene->gameObjects[i]->boundingBoxes.size(); a++)
 			{
 				App->scene->gameObjects[i]->boundingBoxes[a]->DrawCube();
 			}
-		}*/
+		}
 
 		for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 		{

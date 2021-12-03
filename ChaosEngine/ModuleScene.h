@@ -20,7 +20,6 @@ public:
 public:
 	GameObject* CreateGameObject(bool select, int number, const char* fmt, ...);
 	std::vector<GameObject*> gameObjects;
-	int lastId;
 private:
-	
+	int lastId;
 };
