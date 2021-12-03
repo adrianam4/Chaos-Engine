@@ -1793,30 +1793,38 @@ update_status ModuleEditor::Update(float dt)
 			float3 originalRotation = transComponent->rotationEuler;
 
 			//CUIDADO! LAS ROTACIONES SON EN LOCAL!! SI LA OPERACION ES ROTAR USA ImGuizmo::LOCAL
-			ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::WORLD, transformMatrix.ptr());
+			switch (guizmoType)
+			{
+			case ImGuizmo::OPERATION::TRANSLATE:
+				ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::WORLD, transformMatrix.ptr());
+				break;
+			case ImGuizmo::OPERATION::ROTATE:
+				ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
+				break;
+			case ImGuizmo::OPERATION::SCALE:
+				ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
+				break;
+			default:
+				break;
+			}
 
+			bool mouseReleased = false;
 			if (ImGuizmo::IsUsing())
 			{
-				//transformMatrix.Transpose();
 				transComponent->transMatrix = transformMatrix; 
-				//AQUI TENDRIAS QUE EXTRAER LA POSICION LA ROTACION Y LA ESCALA CON EL DECOMPOSE Y ACTUALIZAR EL COMPONENT TRANSFORM
-				/*float3 pos, scale;
-				Quat rot;
-				transformMatrix.Decompose(pos, rot, scale);
-				transComponent->position = position;
-				transComponent->Update();
-				/*
-				static float3 position, rotation, scale;
-				position = transComponent->position;
-				rotation = transComponent->rotationEuler;
-				scale = transComponent->scale;
 
-				static float3 deltaRotation = rotation - originalRotation;
-				transComponent->position = position;
-				transComponent->rotationEuler += deltaRotation;
+				float3 pos, scale;
+				Quat rot;
+				transComponent->transMatrix.Transposed().Decompose(pos, rot, scale);
+				transComponent->position = pos;
+				transComponent->rotationEuler = transComponent->FromQuatToEuler(rot);
 				transComponent->scale = scale;
-				*/
+				float3 rotEuler = transComponent->FromQuatToEuler(rot);
 			}
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+				transComponent->Update(true);
+			else
+				transComponent->Update(false);
 		}
 
 		ImGui::End();
@@ -1932,6 +1940,7 @@ update_status ModuleEditor::Update(float dt)
 		}
 		for (int i = 0; i < fileList.size(); i++)
 		{
+			ImGui::PushID(fileList[i].c_str());
 			if (ImGui::ImageButton(fileIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1))
 			{
 				toDelete = currentPath + fileList[i];
@@ -1944,7 +1953,7 @@ update_status ModuleEditor::Update(float dt)
 				ImGui::EndDragDropSource();
 			}
 			ImGui::Text(fileList[i].c_str());
-			
+			ImGui::PopID();
 			ImGui::NextColumn();
 		}
 		ImGui::Columns(1);

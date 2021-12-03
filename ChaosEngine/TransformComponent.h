@@ -19,7 +19,7 @@ public:
 	~ComponentTransform();
 	ComponentType getComponentType();
 	void Enable() override;
-	void Update() override;
+	void Update(bool releaseMouse);
 	void Disable() override;
 	void OnEditor(int i) override;
 	void Load(const char* path) override;

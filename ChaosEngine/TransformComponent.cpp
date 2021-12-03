@@ -97,9 +97,8 @@ void ComponentTransform::Enable()
 {
 }
 
-void ComponentTransform::Update()
+void ComponentTransform::Update(bool releaseMouse)
 {
-	
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	float4x4 aux;
@@ -108,6 +107,40 @@ void ComponentTransform::Update()
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
 	
+	if (releaseMouse)
+	{
+		lastScale = scale;
+		lastPosition = position;
+		lastRotation = rotationEuler;
+		lastGeneralScale = generalScale;
+
+		UINT isCamera = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+
+		if (isCamera == -1)
+		{
+			GameObject* go = App->editor->objectSelected;
+			go->aabb.clear();
+			ComponentType type;
+
+			if (go->SearchComponent(go, ComponentType::CUBE) != -1)
+				type = ComponentType::CUBE;
+			else if (go->SearchComponent(go, ComponentType::CYLINDER) != -1)
+				type = ComponentType::CYLINDER;
+			else if (go->SearchComponent(go, ComponentType::MESH) != -1)
+				type = ComponentType::MESH;
+			else if (go->SearchComponent(go, ComponentType::PLANE) != -1)
+				type = ComponentType::PLANE;
+			else if (go->SearchComponent(go, ComponentType::PYRAMID) != -1)
+				type = ComponentType::PYRAMID;
+			else if (go->SearchComponent(go, ComponentType::SPHERE) != -1)
+				type = ComponentType::SPHERE;
+
+			CreateAABB(type, go, false);
+			go = nullptr;
+			delete go;
+		}
+	}
+
 	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
 	{
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
@@ -139,49 +172,13 @@ void ComponentTransform::Disable()
 
 void ComponentTransform::OnEditor(int i)
 {
-	static bool changed = false;
-	lastScale = scale;
-	lastPosition = position;
-	lastRotation = rotationEuler;
-	lastGeneralScale = generalScale;
-	UINT isCamera = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
-	
-	if (changed && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)&& isCamera==-1)
-	{
-		GameObject* go = App->editor->objectSelected;
-		go->aabb.clear();
-		ComponentType type;
-
-		if (go->SearchComponent(go, ComponentType::CUBE) != -1)
-			type = ComponentType::CUBE;
-		else if (go->SearchComponent(go, ComponentType::CYLINDER) != -1)
-			type = ComponentType::CYLINDER;
-		else if (go->SearchComponent(go, ComponentType::MESH) != -1)
-			type = ComponentType::MESH;
-		else if (go->SearchComponent(go, ComponentType::PLANE) != -1)
-			type = ComponentType::PLANE;
-		else if (go->SearchComponent(go, ComponentType::PYRAMID) != -1)
-			type = ComponentType::PYRAMID;
-		else if (go->SearchComponent(go, ComponentType::SPHERE) != -1)
-			type = ComponentType::SPHERE;
-
-		if (go->SearchComponent(go, ComponentType::EMPTY) != -1 || go->SearchComponent(go, ComponentType::CAMERA) != -1)
-		{
-			CreateAABB(type, go, false);
-			changed = false;
-		}
-		
-		go = nullptr;
-		delete go;
-	}
-
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
 
 	static bool wasNull = true;
 	if (App->camera->GameCam != nullptr)
 		wasNull = false;
 
-	if (ImGui::DragFloat("Position X", &position.x))
+	if (ImGui::DragFloat("Position X", &position.x, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)
 			wasNull = true;
@@ -193,10 +190,12 @@ void ComponentTransform::OnEditor(int i)
 			if (wasNull)
 				App->camera->GameCam = nullptr;
 		}
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
-	if (ImGui::DragFloat("Position Y", &position.y))
+	if (ImGui::DragFloat("Position Y", &position.y, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)
 			wasNull = true;
@@ -208,10 +207,12 @@ void ComponentTransform::OnEditor(int i)
 			if (wasNull)
 				App->camera->GameCam = nullptr;
 		}
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
-	if (ImGui::DragFloat("Position Z", &position.z))
+	if (ImGui::DragFloat("Position Z", &position.z, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)
 			wasNull = true;
@@ -223,36 +224,46 @@ void ComponentTransform::OnEditor(int i)
 			if (wasNull)
 				App->camera->GameCam = nullptr;
 		}
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Scale");
-	if (ImGui::DragFloat("General Scale", &generalScale))
+	if (ImGui::DragFloat("General Scale", &generalScale, 0.1f, 0.0f,1000.0f))
 	{
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 		scale.x = generalScale;
 		scale.y = generalScale;
 		scale.z = generalScale;
 	}
 	ImGui::Spacing();
-	if (ImGui::DragFloat("Scale X", &scale.x))
+	if (ImGui::DragFloat("Scale X", &scale.x, 0.1f, 0.0f, 1000.0f))
 	{
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
-	if (ImGui::DragFloat("Scale Y", &scale.y))
+	if (ImGui::DragFloat("Scale Y", &scale.y, 0.1f, 0.0f, 1000.0f))
 	{
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
-	if (ImGui::DragFloat("Scale Z", &scale.z))
+	if (ImGui::DragFloat("Scale Z", &scale.z, 0.1f, 0.0f, 1000.0f))
 	{
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Rotation");
-	if (ImGui::DragFloat("Rotation X", &rotationEuler.x))
+	if (ImGui::DragFloat("Rotation X", &rotationEuler.x, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)
 			wasNull = true;
@@ -265,10 +276,12 @@ void ComponentTransform::OnEditor(int i)
 			if (wasNull)
 				App->camera->GameCam = nullptr;
 		}
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
-	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y))
+	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)
 			wasNull = true;
@@ -281,10 +294,12 @@ void ComponentTransform::OnEditor(int i)
 			if (wasNull)
 				App->camera->GameCam = nullptr;
 		}
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
-	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z))
+	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)
 			wasNull = true;
@@ -297,8 +312,10 @@ void ComponentTransform::OnEditor(int i)
 			if (wasNull)
 				App->camera->GameCam = nullptr;
 		}
-		changed = true;
-		Update();
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
 	}
 }
 
@@ -320,7 +337,7 @@ void ComponentTransform::Load(const char* path)
 
 	App->editor->AddLog("Loaded Transform Component Data\n");
 
-	Update();
+	Update(false);
 }
 
 void ComponentTransform::Save(const char* path)
