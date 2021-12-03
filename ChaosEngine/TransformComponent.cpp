@@ -164,7 +164,6 @@ void ComponentTransform::Update(bool releaseMouse)
 			}
 		}
 	}
-	
 }
 
 void ComponentTransform::Disable()

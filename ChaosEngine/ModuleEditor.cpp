@@ -144,6 +144,18 @@ bool ModuleEditor::Start()
 	fileId = App->resources->ImportFile("Assets/Textures/FileIcon.png");
 	fileIcon = App->resources->LoadIcons(fileId);
 
+	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
+	int lastComponent = App->scene->gameObjects.size() - 1;
+	App->editor->objectSelected = App->scene->gameObjects[lastComponent];
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20, true));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
+	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
+	objectSelected = App->scene->gameObjects[lastComponent];
+	App->camera->camArray[lastComponent]->isTheMainCamera = true;
+	App->camera->GameCam = App->camera->camArray[lastComponent];
+
+
 	return ret;
 }
 
@@ -863,73 +875,84 @@ update_status ModuleEditor::Update(float dt)
 
 	if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 	{
-		int i;
-		int id = objectSelected->id;
-		for (i = 0; i < App->scene->gameObjects.size(); i++)
+		if (App->scene->gameObjects.size() >= 1 && showOptionsMenu == ComponentType::CAMERA)
 		{
-			if (id == App->scene->gameObjects[i]->id)
+			App->editor->AddLog("You can't delete the Game Camera\n");
+		}
+		else
+		{
+			int i;
+			int id = objectSelected->id;
+			for (i = 0; i < App->scene->gameObjects.size(); i++)
 			{
-				objectSelected = nullptr;
-
-				for (int b = 0; b < App->scene->gameObjects.size(); b++)
+				if (id == App->scene->gameObjects[i]->id)
 				{
-					for (int a = 0; a < App->scene->gameObjects[b]->childrens.size(); a++)
-					{
-						if (App->scene->gameObjects[i] == App->scene->gameObjects[b]->childrens[a])
-						{
-							App->scene->gameObjects[b]->childrens.erase(App->scene->gameObjects[b]->childrens.begin() + a);
-							//App->scene->gameObjects.erase(App->scene->gameObjects[b]->childrens.begin() + a);
-						}
+					objectSelected = nullptr;
 
-					}
-					//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
-				}
-
-				for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++)
-				{
 					for (int b = 0; b < App->scene->gameObjects.size(); b++)
 					{
-						if (App->scene->gameObjects[i]->childrens[a] == App->scene->gameObjects[b])
+						for (int a = 0; a < App->scene->gameObjects[b]->childrens.size(); a++)
 						{
-							App->scene->gameObjects.erase(App->scene->gameObjects.begin() + b);
+							if (App->scene->gameObjects[i] == App->scene->gameObjects[b]->childrens[a])
+							{
+								App->scene->gameObjects[b]->childrens.erase(App->scene->gameObjects[b]->childrens.begin() + a);
+								//App->scene->gameObjects.erase(App->scene->gameObjects[b]->childrens.begin() + a);
+							}
+
 						}
+						//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
+					}
+
+					for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++)
+					{
+						for (int b = 0; b < App->scene->gameObjects.size(); b++)
+						{
+							if (App->scene->gameObjects[i]->childrens[a] == App->scene->gameObjects[b])
+							{
+								App->scene->gameObjects.erase(App->scene->gameObjects.begin() + b);
+							}
+
+						}
+						//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
 
 					}
-					//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
+					delete (*(App->scene->gameObjects.begin() + i));
+					App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
 
+					break;
 				}
-				delete (*(App->scene->gameObjects.begin() + i));
-				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
-
-				break;
-			}
-			if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
-			{
-				App->editor->AddLog("Cube Deleted\n");
-			}
-			if (App->editor->objectSelected->components[i]->type == ComponentType::PYRAMID)
-			{
-				App->editor->AddLog("Pyramid Deleted\n");
-			}
-			if (App->editor->objectSelected->components[i]->type == ComponentType::CYLINDER)
-			{
-				App->editor->AddLog("Cylinder Deleted\n");
-			}
-			if (App->editor->objectSelected->components[i]->type == ComponentType::SPHERE)
-			{
-				App->editor->AddLog("Sphere Deleted\n");
-			}
-			if (App->editor->objectSelected->components[i]->type == ComponentType::PLANE)
-			{
-				App->editor->AddLog("Plane Deleted\n");
-			}
-			if (App->editor->objectSelected->components[i]->type == ComponentType::MESH)
-			{
-				App->editor->AddLog("Mesh Deleted\n");
-			}
-			if (App->editor->objectSelected->components[i]->type == ComponentType::EMPTY)
-			{
-				App->editor->AddLog("Empty Object Deleted\n");
+				if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
+				{
+					App->editor->AddLog("Cube Deleted\n");
+				}
+				if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
+				{
+					App->editor->AddLog("Camera Deleted\n");
+				}
+				if (App->editor->objectSelected->components[i]->type == ComponentType::PYRAMID)
+				{
+					App->editor->AddLog("Pyramid Deleted\n");
+				}
+				if (App->editor->objectSelected->components[i]->type == ComponentType::CYLINDER)
+				{
+					App->editor->AddLog("Cylinder Deleted\n");
+				}
+				if (App->editor->objectSelected->components[i]->type == ComponentType::SPHERE)
+				{
+					App->editor->AddLog("Sphere Deleted\n");
+				}
+				if (App->editor->objectSelected->components[i]->type == ComponentType::PLANE)
+				{
+					App->editor->AddLog("Plane Deleted\n");
+				}
+				if (App->editor->objectSelected->components[i]->type == ComponentType::MESH)
+				{
+					App->editor->AddLog("Mesh Deleted\n");
+				}
+				if (App->editor->objectSelected->components[i]->type == ComponentType::EMPTY)
+				{
+					App->editor->AddLog("Empty Object Deleted\n");
+				}
 			}
 		}
 	}
@@ -1175,23 +1198,6 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("Car Created\n");
-				}
-				if (ImGui::MenuItem("Create Scene"))
-				{
-					static int scenes = 1;
-					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, scenes, "Scene "));
-					scenes++;
-					int lastComponent = App->scene->gameObjects.size() - 1;
-					objectSelected = App->scene->gameObjects[lastComponent];
-
-					App->resources->LoadResource(sceneId);
-					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-					objectSelected->components[1]->owner = objectSelected;
-					App->resources->LoadResource(sceneMaterialId);
-					objectSelected->components[2]->owner = objectSelected;
-
-					App->editor->AddLog("Scene Created\n");
 				}
 				if (ImGui::MenuItem("Create Cube"))
 				{
@@ -1847,22 +1853,28 @@ update_status ModuleEditor::Update(float dt)
 			bool mouseReleased = false;
 			if (ImGuizmo::IsUsing())
 			{
+
 				transComponent->transMatrix = transformMatrix; 
 
 				float3 pos, scale;
-				Quat rot;
-				transComponent->transMatrix.Transposed().Decompose(pos, rot, scale);
-				transComponent->position = pos;
-				transComponent->rotationEuler = transComponent->FromQuatToEuler(rot);
-				transComponent->scale = scale;
-				float3 rotEuler = transComponent->FromQuatToEuler(rot);
+
+				//transformMatrix.Transpose();
+				transComponent->transMatrix = transformMatrix;
+				//AQUI TENDRIAS QUE EXTRAER LA POSICION LA ROTACION Y LA ESCALA CON EL DECOMPOSE Y ACTUALIZAR EL COMPONENT TRANSFORM
+				//float3 pos, scale;
+				//Quat rot;
+				//transComponent->transMatrix.Transposed().Decompose(pos, rot, scale);
+				//transComponent->position = pos;
+				//transComponent->rotationEuler = transComponent->FromQuatToEuler(rot);
+				//transComponent->scale = scale;
+				//float3 rotEuler = transComponent->FromQuatToEuler(rot);
 			}
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 				transComponent->Update(true);
 			else
 				transComponent->Update(false);
 		}
-
+		
 		ImGui::End();
 	}
 
