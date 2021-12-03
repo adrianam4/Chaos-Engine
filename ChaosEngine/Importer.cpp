@@ -77,6 +77,7 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 	aiVector3D scale = { 1,1,1 };
 	aiQuaternion rotation = { 1,0,0,0 };
 
+	bool toAABB=false;
 
 	aiVector3D Auxtranslation = { 0,0,0 };
 	aiVector3D Auxscale = { 1,1,1 };
@@ -122,30 +123,42 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 		aux->buffer.position.z = translation.z;
 		Quat q(rotation.x, rotation.y, rotation.z, rotation.w);
 		aux->buffer.Rotation = FromQuatToEuler(q);
+		aux->name=Thenode->mName.C_Str();
 
 		Component* e;
-		e = new ComponentTransform("ed",aux->buffer.position, float3(1, 1, 1), aux->buffer.Rotation);
-		//e = new ComponentTransform(&aux->buffer.position, &float3(1, 1, 1), &aux->buffer.Rotation, "hh");
-		//e = aux->CreateComponent(ComponentType::TRANSFORM, &aux->buffer.position, &float3(1, 1, 1), &aux->buffer.Rotation);
-		e->owner = aux;
-		aux->components.push_back(e);
-		e->setOwner();
+		
+
+		
 
 		for (int q = 0; q < nMeshes; q++) {
 			aiMesh* mesh = scene->mMeshes[Thenode->mMeshes[q]];
 			theBuffer* temporal = ProcessMesh(mesh, scene, Thenode->mNumMeshes);
 
 			e = aux->CreateOneMeshComponent(temporal, "hsjbvjh");
-
+			
 			aux->components.push_back(e);
 			e->owner = aux;
+			toAABB = true;
+			/*e=aux->CreateComponent(ComponentType::MATERIAL, aux->name.c_str(), true);
 
-
+			e->owner = aux;*/
 
 			aux->buffer.buffer = temporal->buffer;
 			aux->buffer.size = temporal->size;
+			
 		}
-
+		e = new ComponentTransform(aux, aux->buffer.position, float3(1, 1, 1), aux->buffer.Rotation);
+		//e = new ComponentTransform(&aux->buffer.position, &float3(1, 1, 1), &aux->buffer.Rotation, "hh");
+		//e = aux->CreateComponent(ComponentType::TRANSFORM, &aux->buffer.position, &float3(1, 1, 1), &aux->buffer.Rotation);
+		e->owner = aux;
+		aux->components.push_back(e);
+		e->setOwner();
+		Thenode->mTransformation.Decompose(scale, rotation, translation);
+		if (toAABB) {
+			e->CreateAABB(ComponentType::MESH, aux,true);
+			toAABB = false;
+		}
+		
 
 
 	}

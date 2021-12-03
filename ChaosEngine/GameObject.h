@@ -49,4 +49,5 @@ public:
 	Quat rot;
 	float* matrix;
 	theBuffer buffer;
+	
 };

@@ -68,12 +68,15 @@ ComponentMesh::ComponentMesh(theBuffer* theArray) {
 	type = ComponentType::MESH;
 	//modelPath = mName;
 
-	if (theArray)
+	if (theArray!=nullptr)
 	{
 		App->renderer3D->InitModel(theArray);
-		App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
-		App->editor->lastId++;
+		App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->scene->lastId;
+		App->scene->lastId++;
+		this->name = "Mesh Component";
+		
 	}
+	
 }
 ComponentMesh::ComponentMesh(std::vector<theBuffer*>* theArray, const char* mName) 
 {
