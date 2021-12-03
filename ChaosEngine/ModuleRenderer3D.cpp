@@ -359,88 +359,94 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
 			if (editorCam != nullptr) {
-				if (App->scene->gameObjects[i]->isImported) {
-					App->viewportBuffer->Bind(editorCam);
+
+				App->viewportBuffer->Bind(editorCam);
 
 
-					std::stack<GameObject*>stackNode;
-					GameObject* theObject;
-					for (int i = 0; i < App->scene->gameObjects.size(); i++)
+				std::stack<GameObject*>stackNode;
+				GameObject* theObject;
+				for (int i = 0; i < App->scene->gameObjects.size(); i++)
+				{
+					for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++)
 					{
-						for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++) 
+						stackNode.push(App->scene->gameObjects[i]->childrens[a]);
+					}
+					while (!stackNode.empty())
+					{
+						theObject = stackNode.top();
+						stackNode.pop();
+						/*int y = App->scene->gameObjects[i]->aabb.size();
+						math::AABB* e = theObject->aabb[y - 1];*/
+						for (int j = 0; j < theObject->components.size(); j++)
 						{
-							stackNode.push(App->scene->gameObjects[i]->childrens[a]);
-						}
-						while (!stackNode.empty())
-						{
-							theObject = stackNode.top();
-							stackNode.pop();
-							/*int y = App->scene->gameObjects[i]->aabb.size();
-							math::AABB* e = theObject->aabb[y - 1];*/
-							for (int j = 0; j < theObject->components.size(); j++)
+							if (theObject->components[j]->type == ComponentType::MESH && theObject->components[j]->active)
 							{
-								if (theObject->components[j]->type == ComponentType::MESH && theObject->components[j]->active)
+								int auxId = theObject->id;
+								for (int k = 0; k < models.size(); k++)
 								{
-									int auxId = theObject->id;
-									for (int k = 0; k < models.size(); k++)
-									{
-										models[k].Draw(theObject->matrix);
+									if (theObject->isImported) {
 										if (models[k].id == auxId)
 										{
+											models[k].Draw(theObject->matrix);
+
 
 										}
+
 									}
+
 								}
 							}
-							for (unsigned i = 0; i < theObject->childrens.size(); ++i)
-							{
-								stackNode.push(theObject->childrens[i]);
-							}
+						}
+						for (unsigned i = 0; i < theObject->childrens.size(); ++i)
+						{
+							stackNode.push(theObject->childrens[i]);
 						}
 					}
-					App->editor->DrawPrimitives();
-					App->viewportBuffer->UnBind();
 				}
-				else {
-					App->viewportBuffer->Bind(editorCam);
-					if (App->scene->gameObjects[i]->SearchComponent(App->scene->gameObjects[i], ComponentType::CAMERA) == -1) 
+				App->editor->DrawPrimitives();
+				App->viewportBuffer->UnBind();
+
+				App->viewportBuffer->Bind(editorCam);
+				if (App->scene->gameObjects[i]->SearchComponent(App->scene->gameObjects[i], ComponentType::CAMERA) == -1)
+				{
+					int y = App->scene->gameObjects[i]->aabb.size();
+
+					math::AABB* e = nullptr;
+					if (App->scene->gameObjects[i]->aabb.size() > 0)
 					{
-						int y = App->scene->gameObjects[i]->aabb.size();
+						math::AABB* e = App->scene->gameObjects[i]->aabb[y - 1];
 
-						math::AABB* e = nullptr;
-						if (App->scene->gameObjects[i]->aabb.size() > 0)
-						{
-							math::AABB* e = App->scene->gameObjects[i]->aabb[y - 1];
-
-							if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) {
-								for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+						if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) {
+							for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
+							{
+								if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
 								{
-									if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
+									int auxId = App->scene->gameObjects[i]->id;
+									for (int k = 0; k < models.size(); k++)
 									{
-										int auxId = App->scene->gameObjects[i]->id;
-										for (int k = 0; k < models.size(); k++)
+										if (models[k].id == auxId)
 										{
-											if (models[k].id == auxId)
-											{
+											if (App->scene->gameObjects[i]->isImported == false) {
 												models[k].Draw(App->scene->gameObjects[i]->matrix);
 											}
 										}
 									}
 								}
 							}
-							else 
-							{
-								App->editor->AddLog("is outside\n");
-							}
+						}
+						else
+						{
+							App->editor->AddLog("is outside\n");
 						}
 					}
-					App->editor->DrawPrimitives();
-					App->viewportBuffer->UnBind();
 				}
-				
-				
+				App->editor->DrawPrimitives();
+				App->viewportBuffer->UnBind();
+
+
+
 			}
-			
+
 		}
 	}
 }

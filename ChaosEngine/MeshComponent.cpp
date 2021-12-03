@@ -59,7 +59,7 @@ ComponentMesh::ComponentMesh(std::vector<uint> indices, std::vector<Vertex> vert
 	modelPath = mName.c_str();
 
 	App->renderer3D->InitModel(indices, vertices, textures, texCoords);
-	App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->editor->lastId + 1;
+	App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->scene->lastId;
 	App->editor->lastId++;
 
 	name = "Mesh Component";

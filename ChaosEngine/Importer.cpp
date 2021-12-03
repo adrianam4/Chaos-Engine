@@ -135,7 +135,7 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 			theBuffer* temporal = ProcessMesh(mesh, scene, Thenode->mNumMeshes);
 
 			e = aux->CreateOneMeshComponent(temporal, "hsjbvjh");
-			
+			aux->isImported = true;
 			aux->components.push_back(e);
 			e->owner = aux;
 			toAABB = true;

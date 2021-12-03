@@ -121,8 +121,8 @@ void ComponentTransform::Update(bool releaseMouse)
 		{
 			GameObject* go = App->editor->objectSelected;
 			go->aabb.clear();
-			ComponentType type;
-
+			
+			ComponentType type = ComponentType::MESH;
 			if (go->SearchComponent(go, ComponentType::CUBE) != -1)
 			{
 				type = ComponentType::CUBE;
