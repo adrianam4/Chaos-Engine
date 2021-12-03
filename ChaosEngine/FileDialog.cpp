@@ -1,6 +1,7 @@
 #include "FileDialog.h"
 #include <commdlg.h>
 #include <Windows.h> 
+#include "mmgr.h"
 
 std::string FileDialog::LoadScene(const char* filter)
 {

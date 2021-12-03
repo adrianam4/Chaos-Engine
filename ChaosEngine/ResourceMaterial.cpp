@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ResourceMaterial.h"
+#include "mmgr.h"
 
 ResourceMatertial::ResourceMatertial(u32 _UID)
 {

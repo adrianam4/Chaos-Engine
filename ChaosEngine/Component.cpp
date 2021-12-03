@@ -1,5 +1,6 @@
 #include "Component.h"
 #include "GameObject.h"
+#include "mmgr.h"
 Component::~Component() {
 	int a = 0;
 }

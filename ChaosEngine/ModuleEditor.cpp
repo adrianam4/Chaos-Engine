@@ -17,6 +17,7 @@
 #include "MaterialComponent.h"
 #include "Component.h"
 #include "FileDialog.h"
+#include "mmgr.h"
 
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
@@ -49,7 +50,7 @@ bool ModuleEditor::Start()
 
 	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(Vec3(0, 0, 0));
-	
+
 	LoadConfig();
 	ComproveScreen();
 
@@ -71,7 +72,7 @@ bool ModuleEditor::Start()
 	ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer3D->context);
 
 	ImGuiStyle* style = &ImGui::GetStyle();
-	
+
 	style->WindowTitleAlign = ImVec2(0.5, 0.5);
 
 	style->Colors[ImGuiCol_TitleBg] = ImColor(200, 200, 200, 255);
@@ -102,7 +103,7 @@ bool ModuleEditor::Start()
 	style->Colors[ImGuiCol_WindowBg] = ImColor(20, 20, 20, 255);
 
 	style->Colors[ImGuiCol_DockingPreview] = ImColor(150, 150, 150, 255);
-	
+
 
 	guizmoType = ImGuizmo::OPERATION::TRANSLATE;
 
@@ -122,7 +123,7 @@ bool ModuleEditor::Start()
 	houseMaterialId = App->resources->ImportFile("Assets/Textures/BakerHouse.png");
 	carMaterialId = App->resources->ImportFile("Assets/Textures/Car.png");
 	penguinMaterialId = App->resources->ImportFile("Assets/Textures/Penguin.png");
-    //Icons
+	//Icons
 	folderId = App->resources->ImportFile("Assets/Textures/DirectoryIcon.png");
 	folderIcon = App->resources->LoadIcons(folderId);
 	playId = App->resources->ImportFile("Assets/Textures/Play.png");
@@ -359,111 +360,114 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 		u32 UID = json_object_get_number(json_value_get_object(auxValue), "UID");
 		const char* name = json_object_get_string(json_value_get_object(auxValue), "Name");
 
-		bool createGameObject = true;
-		for (size_t j = 0; j < App->scene->gameObjects.size(); j++)
+		std::string futureNumber = std::string(name);
+		size_t start = futureNumber.find_last_of("_");
+		futureNumber = futureNumber.substr(start + 1, futureNumber.length() - start);
+		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, atoi(futureNumber.c_str()), name)); // Create GO with name
+		objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+		GameObject* lastGO = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+		lastGO->UID = UID; //UID
+
+		std::string isEmpty = std::string(name);
+		isEmpty = isEmpty.substr(0, 5);
+		if (isEmpty == "Empty")
 		{
-			if (App->scene->gameObjects[j]->UID == UID)
-			{
-				createGameObject = false;
-				break;
-			}
+			App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = lastId + 1;
+			lastId++;
 		}
-		if (createGameObject)
+
+		/*  MESH   */
+		int auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.Type");
+		u32 compUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.UID");
+		bool wire = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Wireframe");
+		bool act = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Active");
+
+		if (auxType == 2)
 		{
-			std::string futureNumber = std::string(name);
-			size_t start = futureNumber.find_last_of("_");
-			futureNumber = futureNumber.substr(start + 1, futureNumber.length() - start);
-			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, atoi(futureNumber.c_str()), name)); // Create GO with name
-			objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-			GameObject* lastGO = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-			lastGO->UID = UID; //UID
+			bool nor = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Normals");
+			const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
 
-			std::string isEmpty = std::string(name);
-			isEmpty = isEmpty.substr(0, 5);
-			if (isEmpty == "Empty")
-			{
-				App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = lastId + 1;
-				lastId++;
-			}
-			/*  MESH   */
-			int auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.Type");
-			u32 compUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.UID");
-			bool wire = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Wireframe");
-			bool act = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Active");
-			ComponentType type;
-			if (auxType == 2)
-			{
-				bool nor = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Normals");
-				const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
-
-				u32 modelId = App->resources->RecoveryFile(modelPath);
-				App->resources->LoadResource(modelId);
-			}
-			if (auxType == 3)
-				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CUBE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			if (auxType == 6)
-				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CYLINDER, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			if (auxType == 7)
-				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			if (auxType == 4)
-				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PYRAMID, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			if (auxType == 5)
-				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::SPHERE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-
+			u32 modelId = App->resources->RecoveryFile(modelPath);
+			App->resources->LoadResource(modelId);
 			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-
-			/*   TRANSFORMATIONS   */
-			//Position
-			double position_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.x");
-			double position_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.y");
-			double position_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.z");
-			float3 position = float3(position_x, position_y, position_z);
-			//Scale
-			double scale_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.x");
-			double scale_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.y");
-			double scale_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.z");
-			float3 scale = float3(scale_x, scale_y, scale_z);
-			//Rotation
-			double rotation_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.x");
-			double rotation_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.y");
-			double rotation_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.z");
-			float3 rotation = float3(rotation_x, rotation_y, rotation_z);
-			
-			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::TRANSFORM, &position, &scale, &rotation));
+		}
+		if (auxType == 3)
+		{
+			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CUBE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+		}
+		if (auxType == 6)
+		{
+			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CYLINDER, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+		}
+		if (auxType == 7)
+		{
+			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+		}
+		if (auxType == 4)
+		{
+			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PYRAMID, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+		}
+		if (auxType == 5)
+		{
+			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::SPHERE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+		}
 
-			/*   MATERIALS   */
-			auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Type");
-			if (auxType==8) 
-			{
-				u32 materialUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.UID");
-				const char* textPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Material.TexturePath");
-				double width = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Width");
-				double height = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Height");
+		/*   CAMERAS   */
+		auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
+		if (auxType == 9)
+		{
+			u32 cameraUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.UID");
+			int Type = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
+			double horizontalFov = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FOV");
+			double nearPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.NearPlane");
+			double farPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FarPlane");
+			lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane, true));
+		}
 
-				u32 materialId = App->resources->RecoveryFile(textPath);
-				App->resources->LoadResource(materialId);
-				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-			}
+		/*   TRANSFORMATIONS   */
+		//Position
+		double position_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.x");
+		double position_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.y");
+		double position_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.z");
+		float3 position = float3(position_x, position_y, position_z);
+		//Scale
+		double scale_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.x");
+		double scale_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.y");
+		double scale_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.z");
+		float3 scale = float3(scale_x, scale_y, scale_z);
+		//Rotation
+		double rotation_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.x");
+		double rotation_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.y");
+		double rotation_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.z");
+		float3 rotation = float3(rotation_x, rotation_y, rotation_z);
 
-			/*   CAMERAS   */
-			auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
-			if (auxType == 9)
-			{
-				u32 cameraUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.UID");
-				int Type = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
-				double horizontalFov = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FOV");
-				double nearPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.NearPlane");
-				double farPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FarPlane");
-				lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane, true));
-			}
+		lastGO->components.push_back(lastGO->CreateComponent(ComponentType::TRANSFORM, &position, &scale, &rotation));
+		lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+
+		/*   MATERIALS   */
+		auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Type");
+		if (auxType == 8)
+		{
+			u32 materialUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.UID");
+			const char* textPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Material.TexturePath");
+			double width = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Width");
+			double height = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Height");
+
+			u32 materialId = App->resources->RecoveryFile(textPath);
+			App->resources->LoadResource(materialId);
+			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
 		}
 	}
-	
 	UpdateAll();
-
 	AddLog("Loaded Scene Data\n");
 }
+
+
 
 void ModuleEditor::ComproveScreen()
 {
@@ -479,18 +483,18 @@ void ModuleEditor::ComproveScreen()
 
 void ModuleEditor::AddLog(const char* fmt, ...)
 {
-		LOGCE(fmt);
-		va_list args;
-		va_start(args, fmt);
-		consoleBuffer.appendfv(fmt, args);
-		va_end(args);
-		scrollToBottom = true;
+	LOGCE(fmt);
+	va_list args;
+	va_start(args, fmt);
+	consoleBuffer.appendfv(fmt, args);
+	va_end(args);
+	scrollToBottom = true;
 }
 
 void ModuleEditor::AddCube(float3 pos, float3 sca)
 {
-	MyCube *auxCube;
-	auxCube = new MyCube(pos,sca);
+	MyCube* auxCube;
+	auxCube = new MyCube(pos, sca);
 	cubes.push_back(auxCube);
 }
 
@@ -602,7 +606,7 @@ void ModuleEditor::UpdateAll()
 			{
 				App->editor->objectSelected = App->scene->gameObjects[i];
 				App->scene->gameObjects[i]->components[j]->Update();
-			}	
+			}
 		}
 	}
 	App->editor->objectSelected = nullptr;
@@ -611,13 +615,13 @@ void ModuleEditor::UpdateAll()
 void ModuleEditor::AddCylinder(float3 pos, float3 sca)
 {
 	MyCylinder* auxCylinder;
-	auxCylinder = new MyCylinder(pos,sca);
+	auxCylinder = new MyCylinder(pos, sca);
 	cylinders.push_back(auxCylinder);
 }
 
-void ModuleEditor::DOptionsmenu(ComponentType type) 
+void ModuleEditor::DOptionsmenu(ComponentType type)
 {
-	
+
 	switch (type)
 	{
 	case ComponentType::CUBE:
@@ -635,7 +639,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 		ImGui::DragFloat("Z Scale", &M.z);
 
 
-		if (ImGui::Button("Create Cube")) 
+		if (ImGui::Button("Create Cube"))
 		{
 			if (cubes.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Cube "));
@@ -644,17 +648,17 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 
 			int lastComponent = App->scene->gameObjects.size() - 1;
 			objectSelected = App->scene->gameObjects[lastComponent];
-			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position,&M,&float3(0,0,0)));
+			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
-			
+
 			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Cube Created\n");
 		}
 		ImGui::End();
 		break;
-	
+
 	case ComponentType::PYRAMID:
 
 		ImGui::Begin("Options");
@@ -669,7 +673,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 		ImGui::DragFloat("Y Scale", &M.y);
 		ImGui::DragFloat("Z Scale", &M.z);
 
-		if (ImGui::Button("Create Pyramid")) 
+		if (ImGui::Button("Create Pyramid"))
 		{
 			if (pyramids.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Pyramid "));
@@ -683,7 +687,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
-			
+
 			App->editor->AddLog("Pyramid Created\n");
 		}
 		ImGui::End();
@@ -701,7 +705,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 		//ImGui::DragFloat("Y Scale", &M.y);
 		//ImGui::DragFloat("Z Scale", &M.z);
 
-		if (ImGui::Button("Create Cylindrer")) 
+		if (ImGui::Button("Create Cylindrer"))
 		{
 			if (cylinders.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Cylinder "));
@@ -715,7 +719,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
-			
+
 			App->editor->AddLog("Cylinder Created\n");
 		}
 		ImGui::End();
@@ -734,7 +738,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 		//ImGui::DragFloat("Y Scale", &M.y);
 		//ImGui::DragFloat("Z Scale", &M.z);
 
-		if (ImGui::Button("Create Sphere")) 
+		if (ImGui::Button("Create Sphere"))
 		{
 			if (spheres.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Sphere "));
@@ -748,12 +752,12 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
-		
+
 			App->editor->AddLog("Sphere Created\n");
 		}
 		ImGui::End();
 		break;
-		
+
 	case ComponentType::PLANE:
 
 		ImGui::Begin("Options");
@@ -782,7 +786,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 			App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 			showOptionsMenu = ComponentType::NONE;
-			
+
 			App->editor->AddLog("Plane Created\n");
 		}
 		ImGui::End();
@@ -801,7 +805,7 @@ update_status ModuleEditor::Update(float dt)
 		App->camera->GameCam->Update();
 	}
 	App->camera->editorCam->Update();
-	
+
 
 	// Change Guizmo types
 	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
@@ -830,7 +834,7 @@ update_status ModuleEditor::Update(float dt)
 			if (id == App->scene->gameObjects[i]->id)
 			{
 				objectSelected = nullptr;
-				
+
 				for (int b = 0; b < App->scene->gameObjects.size(); b++)
 				{
 					for (int a = 0; a < App->scene->gameObjects[b]->childrens.size(); a++)
@@ -845,22 +849,22 @@ update_status ModuleEditor::Update(float dt)
 					//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
 				}
 
-				for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++) 
+				for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++)
 				{
 					for (int b = 0; b < App->scene->gameObjects.size(); b++)
 					{
-						if (App->scene->gameObjects[i]->childrens[a] == App->scene->gameObjects[b]) 
+						if (App->scene->gameObjects[i]->childrens[a] == App->scene->gameObjects[b])
 						{
 							App->scene->gameObjects.erase(App->scene->gameObjects.begin() + b);
 						}
-						
+
 					}
 					//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
-					
+
 				}
 				delete (*(App->scene->gameObjects.begin() + i));
 				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
-				
+
 				break;
 			}
 			if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
@@ -1405,7 +1409,7 @@ update_status ModuleEditor::Update(float dt)
 					SDL_SetWindowSize(App->window->window, width, height);
 				if (ImGui::SliderInt("Heigh", &height, 0, 1440))
 					SDL_SetWindowSize(App->window->window, width, height);
-				
+
 				int displayCount = 0, displayIndex = 0, modeIndex = 0;
 				SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
 
@@ -1631,9 +1635,9 @@ update_status ModuleEditor::Update(float dt)
 
 		ImGui::End();
 	}
-	
+
 	//////////////////////////////////////////////////////////////////////////////////////////// CONSOLE WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	if (showConsoleMenu)
 	{
 		ImGui::CloseCurrentPopup();
@@ -1643,7 +1647,7 @@ update_status ModuleEditor::Update(float dt)
 
 		if (scrollToBottom)
 			ImGui::SetScrollHereY(1.0f);
-		
+
 		scrollToBottom = false;
 		ImGui::End();
 	}
@@ -1664,12 +1668,12 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Text("3rd Party Libraries used:");
 		ImGui::Text("");
 		SDL_version compiled; SDL_version linked; SDL_VERSION(&compiled); SDL_GetVersion(&linked);
-		ImGui::Text("- SDL v%d.%d.%d",compiled.major, compiled.minor, compiled.patch);
+		ImGui::Text("- SDL v%d.%d.%d", compiled.major, compiled.minor, compiled.patch);
 		ImGui::Text("- Glew v7.0");
 		ImGui::Text("- ImGui v1.84.2");
 		ImGui::Text("- MathGeoLib v1.5");
 		ImGui::Text("- DevIL v1.8.0");
-		ImGui::Text("- OpenGL v%s",glGetString(GL_VERSION));
+		ImGui::Text("- OpenGL v%s", glGetString(GL_VERSION));
 		ImGui::Text("");
 		ImGui::Separator();
 		ImGui::Text("License:");
@@ -1711,8 +1715,8 @@ update_status ModuleEditor::Update(float dt)
 		{
 			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y, App->camera->editorCam);
 			App->camera->editorCam->size = { viewportSize.x, viewportSize.y };
-            App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
-            //App->camera->aspectRatio = viewportSize.x / viewportSize.y;
+			App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
+			//App->camera->aspectRatio = viewportSize.x / viewportSize.y;
 		}
 		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
 		ImGui::Image((ImTextureID)App->camera->editorCam->texture, { App->camera->editorCam->size.x, App->camera->editorCam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
@@ -1785,6 +1789,7 @@ update_status ModuleEditor::Update(float dt)
 			ComponentTransform* transComponent = objectSelected->getTransform();
 			float4x4 transformMatrix = transComponent->transMatrix; //AQUI ESTABAS USANDO transmat EN LUGAR DE TRANSMATRIX QUE ES LA QUE USAS PARA MOVER EL GAMEOBJECT
 			//transformMatrix.Transpose();
+			//float4x4& transformMatrix = transComponent->transmat;
 			float3 originalRotation = transComponent->rotationEuler;
 
 			//CUIDADO! LAS ROTACIONES SON EN LOCAL!! SI LA OPERACION ES ROTAR USA ImGuizmo::LOCAL
@@ -1913,20 +1918,21 @@ update_status ModuleEditor::Update(float dt)
 		}
 		for (int i = 0; i < dirList.size(); i++)
 		{
-			ImGui::ImageButton(folderIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1);
-			if (ImGui::Button(dirList[i].c_str()))
+			ImGui::PushID(dirList[i].c_str());
+			if (ImGui::ImageButton(folderIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1))
 			{
 				prevPath = currentPath;
 				std::string newDirectory = currentPath + dirList[i] + '/';
 				currentPath = newDirectory;
 				toDelete = currentPath;
 			}
+			ImGui::Text(dirList[i].c_str());
+			ImGui::PopID();
 			ImGui::NextColumn();
 		}
 		for (int i = 0; i < fileList.size(); i++)
 		{
-			ImGui::ImageButton(fileIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1);
-			if (ImGui::Button(fileList[i].c_str()))
+			if (ImGui::ImageButton(fileIcon, ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), -1))
 			{
 				toDelete = currentPath + fileList[i];
 			}
@@ -1937,6 +1943,8 @@ update_status ModuleEditor::Update(float dt)
 				ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemPath.c_str(), size + 1, ImGuiCond_Once);
 				ImGui::EndDragDropSource();
 			}
+			ImGui::Text(fileList[i].c_str());
+			
 			ImGui::NextColumn();
 		}
 		ImGui::Columns(1);
@@ -1992,7 +2000,7 @@ update_status ModuleEditor::Update(float dt)
 		{
 			for (int i = 0; i <= App->scene->gameObjects.size(); i++)
 			{
-				if (App->scene->gameObjects.size() > 0) 
+				if (App->scene->gameObjects.size() > 0)
 					App->scene->gameObjects.erase(App->scene->gameObjects.begin());
 			}
 			FileDialog fileDialog;
@@ -2034,13 +2042,13 @@ update_status ModuleEditor::Update(float dt)
 
 		if (App->gameMode == true)
 		{
-		ImGui::Text("Game Time: %.3f", App->gameTimeNum);
-		ImGui::SameLine();
-		    if (ImGui::ImageButton(stopIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
-			    App->stopGameTime = !App->stopGameTime;
-			    App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
-			    App->gameMode = false;
-		    }
+			ImGui::Text("Game Time: %.3f", App->gameTimeNum);
+			ImGui::SameLine();
+			if (ImGui::ImageButton(stopIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+				App->stopGameTime = !App->stopGameTime;
+				App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
+				App->gameMode = false;
+			}
 		}
 		ImGui::SameLine();
 		if (ImGui::ImageButton(playIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
@@ -2083,9 +2091,9 @@ update_status ModuleEditor::Update(float dt)
 
 	return UPDATE_CONTINUE;
 }
-update_status  ModuleEditor::PreUpdate(float dt) 
+update_status  ModuleEditor::PreUpdate(float dt)
 {
-	if (App->camera->GameCam != nullptr) 
+	if (App->camera->GameCam != nullptr)
 	{
 		App->camera->GameCam->pre();
 	}
@@ -2102,11 +2110,11 @@ update_status  ModuleEditor::PreUpdate(float dt)
 
 update_status ModuleEditor::PostUpdate(float dt)
 {
-	
+
 	if (App->camera->GameCam != nullptr) {
 		App->camera->GameCam->post();
 	}
-	
+
 	App->camera->editorCam->post();
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 

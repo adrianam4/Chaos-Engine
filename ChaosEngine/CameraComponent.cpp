@@ -3,6 +3,7 @@
 
 #include "Component.h"
 #include "CameraComponent.h"
+#include "mmgr.h"
 
 ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double fPlane, bool isGameObj)
 {
@@ -211,7 +212,8 @@ void ComponentCamera::Draw()
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
-void ComponentCamera::Move(float3 newPosition) {
+void ComponentCamera::Move(float3 newPosition) 
+{
 	position.x = newPosition.x;
 	position.y = newPosition.y;
 	position.z = newPosition.z;

@@ -2,6 +2,8 @@
 #include<stack>
 #include"Application.h"
 #include"TransformComponent.h"
+#include "mmgr.h"
+
 FBXimporter::FBXimporter() {}
 FBXimporter::~FBXimporter() {
 	for (int a = 0; a < bufferArray.size(); a++) {

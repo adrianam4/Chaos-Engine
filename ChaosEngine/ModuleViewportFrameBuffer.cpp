@@ -8,6 +8,7 @@
 #include "GL/glew.h"
 #include <gl/GL.h>
 #include"CameraComponent.h"
+#include "mmgr.h"
 ModuleViewportFrameBuffer::ModuleViewportFrameBuffer(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 

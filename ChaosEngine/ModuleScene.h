@@ -15,6 +15,7 @@ public:
 	update_status Update(float dt);
 	update_status PostUpdate(float dt);
 	bool CleanUp();
+	void ReleaseScene();
 	
 public:
 	GameObject* CreateGameObject(bool select, int number, const char* fmt, ...);

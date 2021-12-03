@@ -8,6 +8,7 @@
 #include "ResourceMaterial.h"
 
 #include "MathGeoLib/src/MathGeoLib.h"
+#include "mmgr.h"
 
 Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double hFov, double nPlane, double fPlane, bool isObj)
 {
@@ -29,7 +30,7 @@ GameObject::~GameObject()
 {
 	for (int a = 0; a < components.size(); a++) 
 	{
-		delete (*(components.begin() + a));
+		delete components[a];
 	}
 }
 

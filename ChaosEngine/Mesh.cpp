@@ -8,6 +8,8 @@
 #include "DevIL/include/ilu.h"
 #include "DevIL/include/ilut.h"
 
+#include "mmgr.h"
+
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Textures> textures, std::vector<float> texCoord)
 {
 	this->vertices = vertices;

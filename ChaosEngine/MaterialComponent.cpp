@@ -7,6 +7,7 @@
 #include "DevIL/include/ilut.h"
 
 #include "Parson/parson.h"
+#include "mmgr.h"
 
 
 ComponentMaterial::ComponentMaterial(ComponentType _type, const char* _path, bool _isDropped)

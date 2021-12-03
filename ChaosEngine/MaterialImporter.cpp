@@ -6,6 +6,7 @@
 #include "DevIL/include/ilut.h"
 
 #include <string>
+#include "mmgr.h"
 
 MaterialImporter::MaterialImporter()
 {

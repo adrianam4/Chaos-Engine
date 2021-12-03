@@ -7,6 +7,7 @@
 #include "imgui_impl_opengl3.h"
 
 #include "Parson/parson.h"
+#include "mmgr.h"
 ComponentTransform::ComponentTransform(const char* ID, float3 pos, float3 sca, float3 rot)
 {
 	UID = GenerateUID();
@@ -147,33 +148,80 @@ void ComponentTransform::OnEditor(int i)
 	
 	if (changed && (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)&& isCamera==-1)
 	{
-		App->editor->objectSelected->aabb.clear();
-		ComponentType type = getComponentType();
-		CreateAABB(type, App->editor->objectSelected, false);
-		changed = false;
+		GameObject* go = App->editor->objectSelected;
+		go->aabb.clear();
+		ComponentType type;
+
+		if (go->SearchComponent(go, ComponentType::CUBE) != -1)
+			type = ComponentType::CUBE;
+		else if (go->SearchComponent(go, ComponentType::CYLINDER) != -1)
+			type = ComponentType::CYLINDER;
+		else if (go->SearchComponent(go, ComponentType::MESH) != -1)
+			type = ComponentType::MESH;
+		else if (go->SearchComponent(go, ComponentType::PLANE) != -1)
+			type = ComponentType::PLANE;
+		else if (go->SearchComponent(go, ComponentType::PYRAMID) != -1)
+			type = ComponentType::PYRAMID;
+		else if (go->SearchComponent(go, ComponentType::SPHERE) != -1)
+			type = ComponentType::SPHERE;
+
+		if (go->SearchComponent(go, ComponentType::EMPTY) != -1 || go->SearchComponent(go, ComponentType::CAMERA) != -1)
+		{
+			CreateAABB(type, go, false);
+			changed = false;
+		}
+		
+		go = nullptr;
+		delete go;
 	}
 
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
+
+	static bool wasNull = true;
+	if (App->camera->GameCam != nullptr)
+		wasNull = false;
+
 	if (ImGui::DragFloat("Position X", &position.x))
 	{
-		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+		if (App->camera->GameCam == nullptr)
+			wasNull = true;
+
+		int camComponent = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+		if (camComponent != -1) {
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[camComponent];
 			App->camera->GameCam->Move(position);
+			if (wasNull)
+				App->camera->GameCam = nullptr;
 		}
 		changed = true;
 		Update();
 	}
 	if (ImGui::DragFloat("Position Y", &position.y))
 	{
-		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+		if (App->camera->GameCam == nullptr)
+			wasNull = true;
+
+		int camComponent = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+		if (camComponent != -1) {
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[camComponent];
 			App->camera->GameCam->Move(position);
+			if (wasNull)
+				App->camera->GameCam = nullptr;
 		}
 		changed = true;
 		Update();
 	}
 	if (ImGui::DragFloat("Position Z", &position.z))
 	{
-		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+		if (App->camera->GameCam == nullptr)
+			wasNull = true;
+
+		int camComponent = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+		if (camComponent != -1) {
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[camComponent];
 			App->camera->GameCam->Move(position);
+			if (wasNull)
+				App->camera->GameCam = nullptr;
 		}
 		changed = true;
 		Update();
@@ -206,24 +254,48 @@ void ComponentTransform::OnEditor(int i)
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Rotation");
 	if (ImGui::DragFloat("Rotation X", &rotationEuler.x))
 	{
-		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+		if (App->camera->GameCam == nullptr)
+			wasNull = true;
+
+		int camComponent = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+		if (camComponent != -1) 
+		{
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[camComponent];
 			App->camera->GameCam->Rotate(rotationEuler.x-lastRotation.x, "X");
+			if (wasNull)
+				App->camera->GameCam = nullptr;
 		}
 		changed = true;
 		Update();
 	}
 	if (ImGui::DragFloat("Rotation Y", &rotationEuler.y))
 	{
-		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+		if (App->camera->GameCam == nullptr)
+			wasNull = true;
+
+		int camComponent = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+		if (camComponent != -1)
+		{
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[camComponent];
 			App->camera->GameCam->Rotate(rotationEuler.y - lastRotation.y, "Y");
+			if (wasNull)
+				App->camera->GameCam = nullptr;
 		}
 		changed = true;
 		Update();
 	}
 	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z))
 	{
-		if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA) != -1) {
+		if (App->camera->GameCam == nullptr)
+			wasNull = true;
+
+		int camComponent = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+		if (camComponent != -1)
+		{
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[camComponent];
 			App->camera->GameCam->Rotate(rotationEuler.z - lastRotation.z, "Z");
+			if (wasNull)
+				App->camera->GameCam = nullptr;
 		}
 		changed = true;
 		Update();

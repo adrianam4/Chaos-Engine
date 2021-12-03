@@ -7,6 +7,7 @@
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
 #include "assimp/postProcess.h"
+#include "mmgr.h"
 
 ModuleScene::ModuleScene(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
@@ -51,6 +52,12 @@ bool ModuleScene::CleanUp()
 
 
 	return true;
+}
+
+void ModuleScene::ReleaseScene()
+{
+	gameObjects.clear();
+	App->resources->CleanUp();
 }
 
 GameObject* ModuleScene::CreateGameObject(bool select, int number, const char* fmt, ...)

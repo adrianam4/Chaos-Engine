@@ -20,6 +20,7 @@
 
 #pragma comment (lib, "glu32.lib")    /* link OpenGL Utility lib     */
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
+#include "mmgr.h"
 
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {}
@@ -366,8 +367,8 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 					GameObject* theObject;
 					for (int i = 0; i < App->scene->gameObjects.size(); i++)
 					{
-
-						for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++) {
+						for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++) 
+						{
 							stackNode.push(App->scene->gameObjects[i]->childrens[a]);
 						}
 						while (!stackNode.empty())
@@ -402,28 +403,35 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 				}
 				else {
 					App->viewportBuffer->Bind(editorCam);
-					if (App->scene->gameObjects[i]->SearchComponent(App->scene->gameObjects[i], ComponentType::CAMERA) == -1) {
+					if (App->scene->gameObjects[i]->SearchComponent(App->scene->gameObjects[i], ComponentType::CAMERA) == -1) 
+					{
 						int y = App->scene->gameObjects[i]->aabb.size();
-						math::AABB* e = App->scene->gameObjects[i]->aabb[y - 1];
 
-						if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) {
-							for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
-							{
-								if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
+						math::AABB* e = nullptr;
+						if (App->scene->gameObjects[i]->aabb.size() > 0)
+						{
+							math::AABB* e = App->scene->gameObjects[i]->aabb[y - 1];
+
+							if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) {
+								for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 								{
-									int auxId = App->scene->gameObjects[i]->id;
-									for (int k = 0; k < models.size(); k++)
+									if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
 									{
-										if (models[k].id == auxId)
+										int auxId = App->scene->gameObjects[i]->id;
+										for (int k = 0; k < models.size(); k++)
 										{
-											models[k].Draw(App->scene->gameObjects[i]->matrix);
+											if (models[k].id == auxId)
+											{
+												models[k].Draw(App->scene->gameObjects[i]->matrix);
+											}
 										}
 									}
 								}
 							}
-						}
-						else {
-							App->editor->AddLog("is outside\n");
+							else 
+							{
+								App->editor->AddLog("is outside\n");
+							}
 						}
 					}
 					App->editor->DrawPrimitives();

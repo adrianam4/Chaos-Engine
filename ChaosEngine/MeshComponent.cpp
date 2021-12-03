@@ -3,6 +3,7 @@
 #include "MeshComponent.h"
 
 #include "Parson/parson.h"
+#include "mmgr.h"
 
 ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 {
