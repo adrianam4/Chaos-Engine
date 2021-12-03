@@ -17,12 +17,9 @@
 #include "MaterialComponent.h"
 #include "Component.h"
 #include "FileDialog.h"
-<<<<<<< Updated upstream
 #include "mmgr.h"
 
-=======
 #include<stack>
->>>>>>> Stashed changes
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 
@@ -853,6 +850,11 @@ update_status ModuleEditor::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
 	{
 		guizmoType = ImGuizmo::OPERATION::SCALE;
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+	{
+		objectSelected = nullptr;
 	}
 
 	if (DockingRootItem("Viewport", ImGuiWindowFlags_MenuBar)) {

@@ -3,12 +3,9 @@
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h" 
 #include "CameraComponent.h"
-<<<<<<< Updated upstream
 #include "mmgr.h"
 
-=======
 #include<stack>
->>>>>>> Stashed changes
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	editorCam = new ComponentCamera(float3(0, 0, 5), 70, .01f, 100, false);
