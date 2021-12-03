@@ -232,6 +232,8 @@ update_status ModuleCamera3D::Update(float dt)
 				App->editor->AddLog("%s has been selected!\n", App->editor->objectSelected->name.c_str());
 				hitObjs.clear();
 			}
+			else
+				App->editor->objectSelected = nullptr;
 		}
 	}
 

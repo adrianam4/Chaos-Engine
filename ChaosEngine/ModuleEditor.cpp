@@ -347,6 +347,8 @@ void ModuleEditor::SaveScene(const char* fileToLoad)
 
 void ModuleEditor::LoadScene(const char* fileToLoad)
 {
+	App->scene->gameObjects.clear();
+
 	JSON_Value* root = json_parse_file(fileToLoad);
 	JSON_Array* gameObjectsInfo = json_object_dotget_array(json_value_get_object(root), "GameObjects");
 
@@ -1725,37 +1727,41 @@ update_status ModuleEditor::Update(float dt)
 
 				if (newResource == nullptr)
 				{
-					FileDialog fileDialog;
-					std::string fileToLoad = fileDialog.LoadScene("Chaos Scene (*.chaos)\0*.chaos\0");
-					LoadScene(fileToLoad.c_str());
+					LoadScene(path);
 				}
-				if (newResource->type == ResourceType::MESH)
+				else
 				{
-					static uint importedGobjs = 1;
-					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
-					importedGobjs++;
-					objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-					App->resources->LoadResource(importedFile);
-					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-					u32 tex = App->resources->ImportFile("Assets/Textures/Checker.png");
-					App->resources->LoadResource(tex);
-					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-					objectSelected->components.erase(objectSelected->components.begin() + 2);
-				}
-				else if (newResource->type == ResourceType::TEXTURE)
-				{
-					if (App->editor->objectSelected != nullptr)
+					if (newResource->type == ResourceType::MESH)
 					{
-						int oldMaterialId;
-						oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
-						if (oldMaterialId != -1)
-						{
-							objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
-						}
+						static uint importedGobjs = 1;
+						App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
+						importedGobjs++;
+						objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
 						App->resources->LoadResource(importedFile);
 						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+						objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+
+						u32 tex = App->resources->ImportFile("Assets/Textures/Checker.png");
+						if (tex != 0)
+							App->resources->LoadResource(tex);
+
+						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+						objectSelected->components.erase(objectSelected->components.begin() + 2);
+					}
+					else if (newResource->type == ResourceType::TEXTURE)
+					{
+						if (App->editor->objectSelected != nullptr)
+						{
+							int oldMaterialId;
+							oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
+							if (oldMaterialId != -1)
+							{
+								objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
+							}
+							App->resources->LoadResource(importedFile);
+							objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+						}
 					}
 				}
 			}
@@ -1777,20 +1783,19 @@ update_status ModuleEditor::Update(float dt)
 			float4x4 cameraView = myCamera->frustum.ViewMatrix();
 
 			ComponentTransform* transComponent = objectSelected->getTransform();
-			float4x4 transformMatrix = transComponent->transmat;
+			float4x4 &transformMatrix = transComponent->transmat;
 			float3 originalRotation = transComponent->rotationEuler;
 
-			ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.Transposed().ptr());
-			ImGuizmo::OPERATION::TRANSLATE, ImGuizmo::LOCAL, transformMatrix.ptr();
+			ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::WORLD, transformMatrix.Transposed().ptr());
 
 			if (ImGuizmo::IsUsing())
 			{
-				float3 position, rotation, scale;
+				static float3 position, rotation, scale;
 				position = transComponent->position;
 				rotation = transComponent->rotationEuler;
 				scale = transComponent->scale;
 
-				float3 deltaRotation = rotation - originalRotation;
+				static float3 deltaRotation = rotation - originalRotation;
 				transComponent->position = position;
 				transComponent->rotationEuler += deltaRotation;
 				transComponent->scale = scale;

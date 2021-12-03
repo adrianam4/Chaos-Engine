@@ -122,19 +122,6 @@ update_status ModuleInput::PreUpdate(float dt)
 					FBXimporter importer;
 					importer.SpecialreadFromFBX(fileDir);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 					/*static uint gObjs = 1;
 					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, gObjs, "Game Object"));
 					gObjs++;

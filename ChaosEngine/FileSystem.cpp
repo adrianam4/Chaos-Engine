@@ -26,7 +26,7 @@ FileSystem::FileSystem(Application* app, bool startEnabled) : Module(app, startE
 // Destructor
 FileSystem::~FileSystem()
 {
-	DeleteLibraryFiles();
+	//DeleteLibraryFiles();
 	RELEASE(AssimpIO);
 	PHYSFS_deinit();
 }

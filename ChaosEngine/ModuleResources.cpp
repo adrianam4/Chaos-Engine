@@ -29,20 +29,22 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 	ResourceType type = GetResourceType(newFileInAssets);
 	Resource* resource = CreateNewResource(newFileInAssets, type);
 	u32 ret = 0;
-	char* fileBuffer = nullptr;
-	unsigned int buffer = App->fileSystem->Load(newFileInAssets, &fileBuffer);
-	FBXimporter meshImporter;
-	MaterialImporter texImporter;
+	if (resource != nullptr)
+	{
+		char* fileBuffer = nullptr;
+		unsigned int buffer = App->fileSystem->Load(newFileInAssets, &fileBuffer);
+		FBXimporter meshImporter;
+		MaterialImporter texImporter;
 
-	if (type == ResourceType::MESH)
-		resource->aux = meshImporter.saveToOurFile(newFileInAssets, "Library/Models/");
-	else if (type == ResourceType::TEXTURE)
-		texImporter.ImportMaterial(newFileInAssets, false);
+		if (type == ResourceType::MESH)
+			resource->aux = meshImporter.saveToOurFile(newFileInAssets, "Library/Models/");
+		else if (type == ResourceType::TEXTURE)
+			texImporter.ImportMaterial(newFileInAssets, false);
 
-	SaveResource(resource, newFileInAssets);
-	ret = resource->GetUID();
-	RELEASE_ARRAY(fileBuffer);
-
+		SaveResource(resource, newFileInAssets);
+		ret = resource->GetUID();
+		RELEASE_ARRAY(fileBuffer);
+	}
 	return ret;
 }
 
@@ -242,12 +244,14 @@ ResourceType ModuleResources::GetResourceType(const char* assetsFile) // OK
 
 void ModuleResources::SaveResource(Resource* resource, std::string assetsFile) // OK
 {
-	resources[resource->GetUID()] = resource;
-	resource->assetsFile = assetsFile;
+	if (resource != nullptr)
+	{
+		resources[resource->GetUID()] = resource;
+		resource->assetsFile = assetsFile;
 
-	if (resource->GetType() == ResourceType::MESH)
-		resource->libraryFile = resource->aux[0][0]->libraryDir;
-	else
-		resource->libraryFile = GenerateLibraryFile(assetsFile.c_str());
-	
+		if (resource->GetType() == ResourceType::MESH)
+			resource->libraryFile = resource->aux[0][0]->libraryDir;
+		else
+			resource->libraryFile = GenerateLibraryFile(assetsFile.c_str());
+	}
 }
