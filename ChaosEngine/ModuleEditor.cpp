@@ -1853,21 +1853,14 @@ update_status ModuleEditor::Update(float dt)
 			bool mouseReleased = false;
 			if (ImGuizmo::IsUsing())
 			{
-
-				transComponent->transMatrix = transformMatrix; 
-
-				float3 pos, scale;
-
-				//transformMatrix.Transpose();
 				transComponent->transMatrix = transformMatrix;
-				//AQUI TENDRIAS QUE EXTRAER LA POSICION LA ROTACION Y LA ESCALA CON EL DECOMPOSE Y ACTUALIZAR EL COMPONENT TRANSFORM
-				//float3 pos, scale;
-				//Quat rot;
-				//transComponent->transMatrix.Transposed().Decompose(pos, rot, scale);
-				//transComponent->position = pos;
-				//transComponent->rotationEuler = transComponent->FromQuatToEuler(rot);
-				//transComponent->scale = scale;
-				//float3 rotEuler = transComponent->FromQuatToEuler(rot);
+				float3 pos, scale;
+				Quat rot;
+				transComponent->transMatrix.Transposed().Decompose(pos, rot, scale);
+				transComponent->position = pos;
+				transComponent->rotationEuler = transComponent->FromQuatToEuler(rot);
+				transComponent->scale = scale;
+				float3 rotEuler = transComponent->FromQuatToEuler(rot);
 			}
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 				transComponent->Update(true);

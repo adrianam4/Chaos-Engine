@@ -130,34 +130,39 @@ bool ModuleResources::LoadResource(u32 UID)
 		ResourceType type = resourceToLoad->GetType();
 		if (type == ResourceType::MESH)
 		{
-			FBXimporter importer;
-			std::vector<theBuffer*>* info;
-			std::vector<Mesh*> meshInfo;
-
-			std::string path = resourceToLoad->libraryFile;
-			unsigned start = path.find_last_of("/") + 1;
-			std::string pathUID = path.substr(start, 8);
-			std::string pathMesh = path.substr(start + 8, 1);
-			std::string pathNumMeshes = path.substr(start + 9, 1);
-
-			info = importer.loadFromOurFile("Library/Models/", pathUID.c_str(), pathMesh.c_str(), pathNumMeshes.c_str(), ".msh"); // TODO
-			for (int i = 0; i < info->size(); i++)
+			if (resourceToLoad->firstTime)
 			{
-				char* pointer = (*info)[i]->buffer;
-				meshInfo.push_back(importer.getNewMeshFBX(pointer));
-			}
-			for (int i = 0; i < meshInfo.size(); i++)
-			{
-				resourceToLoad->LoadToMemory(meshInfo[i]);	
+				FBXimporter importer;
+				static std::vector<theBuffer*>* info;
+				std::vector<Mesh*> meshInfo;
+				std::string path = resourceToLoad->libraryFile;
+				unsigned start = path.find_last_of("/") + 1;
+				std::string pathUID = path.substr(start, 8);
+				std::string pathMesh = path.substr(start + 8, 1);
+				std::string pathNumMeshes = path.substr(start + 9, 1);
+
+				info = importer.loadFromOurFile("Library/Models/", pathUID.c_str(), pathMesh.c_str(), pathNumMeshes.c_str(), ".msh"); // TODO
+				for (int i = 0; i < info->size(); i++)
+				{
+					char* pointer = (*info)[i]->buffer;
+					meshInfo.push_back(importer.getNewMeshFBX(pointer));
+				}
+				for (int i = 0; i < meshInfo.size(); i++)
+				{
+					resourceToLoad->LoadToMemory(meshInfo[i]);
+				}
+				resourceToLoad->firstTime = false;
 			}
 			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
 		}
 		else if (type == ResourceType::TEXTURE)
 		{
-			resourceToLoad->LoadToMemory();
+			if (resourceToLoad->firstTime)
+			{
+				resourceToLoad->LoadToMemory();
+			}
 			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
 		}
-
 		ret = true;
 	}
 

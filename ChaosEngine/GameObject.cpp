@@ -67,7 +67,7 @@ Component* GameObject::CreateComponentWithResource(Resource* resource)
 	ResourceType type = resource->GetType();
 
 	if (type == ResourceType::TEXTURE)
-		component = new ComponentMaterial(resource->GetLibraryFile(), (GLuint)resource->GetTextureId(), resource->GetWidth(), resource->GetHeight(), false);
+		component = new ComponentMaterial(resource->GetLibraryFile(), resource->GetTextureId(), resource->GetWidth(), resource->GetHeight(), false);
 	else if (type == ResourceType::MESH)
 		component = new ComponentMesh(resource->GetIndices(), resource->GetVertex(), resource->GetTextures(), resource->GetTexCoords(), resource->GetLibraryFile());
 	

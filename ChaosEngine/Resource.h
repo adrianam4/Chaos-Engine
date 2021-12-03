@@ -46,4 +46,5 @@ public:
 	ResourceType type = ResourceType::UNKNOWN;
 	uint referenceCount = 0;
 	std::vector<theBuffer*>* aux;
+	bool firstTime = true;
 };

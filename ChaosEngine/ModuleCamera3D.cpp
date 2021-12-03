@@ -181,7 +181,7 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 
 	//Test if a ray intersects with gameobjects
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN)
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 	{
 		float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
 		float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };

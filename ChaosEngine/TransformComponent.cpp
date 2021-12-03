@@ -124,19 +124,36 @@ void ComponentTransform::Update(bool releaseMouse)
 			ComponentType type;
 
 			if (go->SearchComponent(go, ComponentType::CUBE) != -1)
+			{
 				type = ComponentType::CUBE;
+				CreateAABB(type, go, false);
+			}
 			else if (go->SearchComponent(go, ComponentType::CYLINDER) != -1)
+			{
 				type = ComponentType::CYLINDER;
+				CreateAABB(type, go, false);
+			}
 			else if (go->SearchComponent(go, ComponentType::MESH) != -1)
+			{
 				type = ComponentType::MESH;
+				CreateAABB(type, go, false);
+			}
 			else if (go->SearchComponent(go, ComponentType::PLANE) != -1)
+			{
 				type = ComponentType::PLANE;
+				CreateAABB(type, go, false);
+			}
 			else if (go->SearchComponent(go, ComponentType::PYRAMID) != -1)
+			{
 				type = ComponentType::PYRAMID;
+				CreateAABB(type, go, false);
+			}
 			else if (go->SearchComponent(go, ComponentType::SPHERE) != -1)
+			{
 				type = ComponentType::SPHERE;
-
-			CreateAABB(type, go, false);
+				CreateAABB(type, go, false);
+			}
+			
 			go = nullptr;
 			delete go;
 		}
