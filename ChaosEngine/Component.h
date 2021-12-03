@@ -45,7 +45,7 @@ public:
 	float3 position;
 	float lastGeneralScale;
 
-	
+	virtual void CreateAABB(ComponentType type, GameObject* go, bool firstTime){}
 	float3 scale;
 	float3 rotationEuler;
 	float generalScale;

@@ -7,8 +7,12 @@
 #include "imgui_impl_opengl3.h"
 
 #include "Parson/parson.h"
+<<<<<<< Updated upstream
 #include "mmgr.h"
 ComponentTransform::ComponentTransform(const char* ID, float3 pos, float3 sca, float3 rot)
+=======
+ComponentTransform::ComponentTransform(GameObject* theObject, float3 pos, float3 sca, float3 rot)
+>>>>>>> Stashed changes
 {
 	UID = GenerateUID();
 	lastPosition = { 0,0,0 };
@@ -30,8 +34,8 @@ ComponentTransform::ComponentTransform(const char* ID, float3 pos, float3 sca, f
 
 	name = "Transform Component";
 
-	/*ComponentType t = getComponentType();
-	CreateAABB(t, App->scene->gameObjects[App->scene->gameObjects.size() - 1], true);*/
+	//ComponentType t = getComponentType();
+	//CreateAABB(ComponentType::MESH, theObject, true);
 }
 ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 {
