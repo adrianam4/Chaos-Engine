@@ -98,6 +98,7 @@ void ComponentTransform::Enable()
 
 void ComponentTransform::Update()
 {
+	
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	float4x4 aux;
@@ -105,7 +106,7 @@ void ComponentTransform::Update()
 	transmat = transMatrix;
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
-
+	
 	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
 	{
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
@@ -128,6 +129,7 @@ void ComponentTransform::Update()
 			}
 		}
 	}
+	
 }
 
 void ComponentTransform::Disable()

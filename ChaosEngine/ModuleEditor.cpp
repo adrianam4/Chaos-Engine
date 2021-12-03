@@ -1783,13 +1783,24 @@ update_status ModuleEditor::Update(float dt)
 			float4x4 cameraView = myCamera->frustum.ViewMatrix();
 
 			ComponentTransform* transComponent = objectSelected->getTransform();
-			float4x4 &transformMatrix = transComponent->transmat;
+			float4x4 transformMatrix = transComponent->transMatrix; //AQUI ESTABAS USANDO transmat EN LUGAR DE TRANSMATRIX QUE ES LA QUE USAS PARA MOVER EL GAMEOBJECT
+			//transformMatrix.Transpose();
 			float3 originalRotation = transComponent->rotationEuler;
 
-			ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::WORLD, transformMatrix.Transposed().ptr());
+			//CUIDADO! LAS ROTACIONES SON EN LOCAL!! SI LA OPERACION ES ROTAR USA ImGuizmo::LOCAL
+			ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::WORLD, transformMatrix.ptr());
 
 			if (ImGuizmo::IsUsing())
 			{
+				//transformMatrix.Transpose();
+				transComponent->transMatrix = transformMatrix; 
+				//AQUI TENDRIAS QUE EXTRAER LA POSICION LA ROTACION Y LA ESCALA CON EL DECOMPOSE Y ACTUALIZAR EL COMPONENT TRANSFORM
+				/*float3 pos, scale;
+				Quat rot;
+				transformMatrix.Decompose(pos, rot, scale);
+				transComponent->position = position;
+				transComponent->Update();
+				/*
 				static float3 position, rotation, scale;
 				position = transComponent->position;
 				rotation = transComponent->rotationEuler;
@@ -1799,6 +1810,7 @@ update_status ModuleEditor::Update(float dt)
 				transComponent->position = position;
 				transComponent->rotationEuler += deltaRotation;
 				transComponent->scale = scale;
+				*/
 			}
 		}
 

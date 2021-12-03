@@ -28,6 +28,7 @@ public:
 	virtual ~Component();
 	ComponentType type;
 	bool active;
+	//ESTO QUE HACE AQUI ?? 
 	bool drawNormals = false;
 	bool drawWireframe = false;
 	GameObject* owner;
@@ -44,6 +45,7 @@ public:
 	float3 position;
 	float lastGeneralScale;
 
+	
 	float3 scale;
 	float3 rotationEuler;
 	float generalScale;
@@ -53,6 +55,7 @@ public:
 	float horizontalFov;
 	float nearPlaneDistance;
 	float farPlaneDistance;
+	// ESTO DEBERIA ESTAR SOLO EN LOS COMPONENTES CONCRETOS
 	virtual void setOwner(){}
 	virtual void Enable() {}
 	virtual void Update() {}
