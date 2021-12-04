@@ -51,10 +51,12 @@ std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, cons
 	}
 	return &bufferArray;
 }
-void FBXimporter::SpecialsaveToOurFile(const char* originPath, const char* destinationPath) {
+void FBXimporter::SpecialsaveToOurFile(const char* originPath, const char* destinationPath, GameObject* object) 
+{
 	
+
 }
-void  FBXimporter::SpecialreadFromFBX(const char* originPath) {
+void  FBXimporter::SpecialreadFromFBX(const char* originPath, const char* destiantion) {
 	
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_SplitLargeMeshes | aiProcess_OptimizeMeshes);
@@ -65,12 +67,12 @@ void  FBXimporter::SpecialreadFromFBX(const char* originPath) {
 		return;
 	}
 
-
-	SpecialProcessNode(scene->mRootNode, scene);
-
+	GameObject* auxiliar=SpecialProcessNode(scene->mRootNode, scene);
+	
+	SpecialsaveToOurFile(originPath, destiantion, auxiliar);
 
 }
-void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene) 
+GameObject* FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 {
 	// process all the node's meshes
 	aiVector3D translation = { 0,0,0 };
@@ -165,7 +167,11 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 	//setTransform(aux);
 	App->scene->gameObjects.push_back(aux);
 	aux->isImported = true;
+
+
 	App->editor->AddLog("Processing Node\n");
+
+	return aux;
 }
 float3 FBXimporter::FromQuatToEuler(Quat quatAngles) {
 	float3 angles;

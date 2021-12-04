@@ -196,7 +196,19 @@ update_status ModuleCamera3D::Update(float dt)
 			editorCam->frustum.GetCornerPoints(&corners[0]);
 			myRay = editorCam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
 			App->editor->AddLog("-------------------------------------------------------\nRay Data:\n aX: %.1f aY: %.1f aZ: %.1f\n bX: %.1f bY: %.1f bZ: %.1f\n", myRay.a.x, myRay.a.y, myRay.a.z, myRay.b.x, myRay.b.y, myRay.b.z);
+			for (int i = 0; i < App->scene->gameObjects.size(); i++)
+			{
+				GameObject* go = App->scene->gameObjects[i];
+				for (int j = 0; j < go->boundingBoxes.size(); j++)
+				{
+					if (bool hit = myRay.Intersects(*go->aabb[j]))
+					{
+						hitObjs.push_back(go);
+						App->editor->AddLog("The ray has impacted with %s!\n", go->name.c_str());
+					}
+				}
 
+			}
 			std::stack<GameObject*>stackNode;
 			GameObject* theObject;
 			for (int i = 0; i < App->scene->gameObjects.size(); i++)
@@ -226,19 +238,7 @@ update_status ModuleCamera3D::Update(float dt)
 					}
 				}
 			}
-			for (int i = 0; i < App->scene->gameObjects.size(); i++)
-			{
-				GameObject* go = App->scene->gameObjects[i];
-				for (int j = 0; j < go->boundingBoxes.size(); j++)
-				{
-					if (bool hit = myRay.Intersects(*go->aabb[j]))
-					{
-						hitObjs.push_back(go);
-						App->editor->AddLog("The ray has impacted with %s!\n", go->name.c_str());
-					}
-				}
-
-			}
+			
 			if (hitObjs.size() > 0)
 			{
 				std::vector<float> distance;
