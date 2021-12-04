@@ -431,7 +431,7 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 			const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
 
 			u32 modelId = App->resources->RecoveryFile(modelPath);
-			App->resources->LoadResource(modelId);
+			App->resources->LoadResource(App->resources->Find(modelPath));
 			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
 		}
 		if (auxType == 3)
@@ -1859,8 +1859,7 @@ update_status ModuleEditor::Update(float dt)
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
 				const char* path = (const char*)payload->Data;
-				u32 importedFile = App->resources->ImportFile(path);
-				Resource* newResource = App->resources->GetResource(importedFile);
+				Resource* newResource = App->resources->GetResource(App->resources->Find(path));
 
 				if (newResource == nullptr)
 				{
@@ -1874,15 +1873,11 @@ update_status ModuleEditor::Update(float dt)
 						App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
 						importedGobjs++;
 						objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-						App->resources->LoadResource(importedFile);
+						App->resources->LoadResource(newResource->GetUID());
 						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 						objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-
-						u32 tex = App->resources->ImportFile("Assets/Textures/Checker.png");
-						if (tex != 0)
-							App->resources->LoadResource(tex);
-
+						App->resources->LoadResource(App->resources->Find("Assets/Textures/Checker.png"));
 						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 						objectSelected->components.erase(objectSelected->components.begin() + 2);
 					}
@@ -1896,7 +1891,7 @@ update_status ModuleEditor::Update(float dt)
 							{
 								objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
 							}
-							App->resources->LoadResource(importedFile);
+							App->resources->LoadResource(newResource->GetUID());
 							objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 						}
 					}

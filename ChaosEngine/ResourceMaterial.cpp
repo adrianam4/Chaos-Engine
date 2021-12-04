@@ -6,8 +6,6 @@ ResourceMatertial::ResourceMatertial(u32 _UID)
 {
 	type = ResourceType::TEXTURE;
 	UID = _UID;
-
-	
 }
 
 ResourceMatertial::~ResourceMatertial()

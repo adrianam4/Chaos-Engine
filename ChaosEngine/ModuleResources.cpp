@@ -136,10 +136,26 @@ bool ModuleResources::LoadResource(u32 UID)
 				static std::vector<theBuffer*>* info;
 				std::vector<Mesh*> meshInfo;
 				std::string path = resourceToLoad->libraryFile;
+				size_t size = path.length();
 				unsigned start = path.find_last_of("/") + 1;
-				std::string pathUID = path.substr(start, 8);
-				std::string pathMesh = path.substr(start + 8, 1);
-				std::string pathNumMeshes = path.substr(start + 9, 1);
+				std::string pathUID = path.substr(start, 8);;
+				std::string pathMesh;
+				std::string pathNumMeshes;
+				if (size == 29)
+				{
+					pathMesh = path.substr(start + 8, 1);
+					pathNumMeshes = path.substr(start + 9, 1);
+				}
+				else if (size == 30)
+				{
+					pathMesh = path.substr(start + 8, 1);
+					pathNumMeshes = path.substr(start + 9, 2);
+				}
+				else if (size == 30)
+				{
+					pathMesh = path.substr(start + 8, 2);
+					pathNumMeshes = path.substr(start + 10, 2);
+				}
 
 				info = importer.loadFromOurFile("Library/Models/", pathUID.c_str(), pathMesh.c_str(), pathNumMeshes.c_str(), ".msh"); // TODO
 				for (int i = 0; i < info->size(); i++)
