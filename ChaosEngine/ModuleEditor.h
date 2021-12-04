@@ -23,7 +23,7 @@ public:
 	void LoadScene(const char* fileToLoad);
 	void SaveScene(const char* fileToLoad);
 	void ComproveScreen();
-
+	int loadSpecialObject(int object, const char* direction);
 	//Docking Helper functions
 	bool DockingRootItem(char* id, ImGuiWindowFlags winFlags);
 	void BeginDock(char* dockSpaceId, ImGuiDockNodeFlags dockFlags, ImVec2 size = { .0f, .0f });

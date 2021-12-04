@@ -21,17 +21,19 @@ public:
 	float3 Rotation;
 	float3 scale;
 };
-
+class GameObject;
 class FBXimporter {
 public:
 	FBXimporter();
 	~FBXimporter();
 	std::vector<theBuffer*>* saveToOurFile(const char* originPath, const char* destinationPath);
-	void SpecialsaveToOurFile(const char* originPath, const char* destinationPath);
+	
 	bool saveMesh(const char* destinationPath, Mesh* object);
 	Mesh* readFile(const char* path);
 	Mesh* getNewMeshFBX(char* data);
 	void SpecialreadFromFBX(const char* originPath);
+	void SpecialreadFromFBX(const char* originPath, const char* destinationPath);
+	void SpecialsaveToOurFile(const char* originPath, const char* destinationPath, GameObject* object);
 	std::vector<theBuffer*>* loadFromOurFile(const char* originPath, const char* UID, const char* mesh, const char* Numbermesh, const char* extension);
 private:
 	float3 FromQuatToEuler(Quat quatAngles);

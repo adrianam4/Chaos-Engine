@@ -277,6 +277,141 @@ void ModuleEditor::LoadConfig()
 
 	AddLog("Loaded Config Data\n");
 }
+int ModuleEditor::loadSpecialObject(int object, const char* direction)
+{
+	JSON_Value* root = json_parse_file(direction);
+	JSON_Array* gameObjectsInfo = json_object_dotget_array(json_value_get_object(root), "GameObjects");
+
+	JSON_Value* auxValue = json_array_get_value(gameObjectsInfo, object);
+
+	std::stack<JSON_Value*>stackNode;
+	std::stack<GameObject*>parentstack;
+	JSON_Value* theObject = json_array_get_value(gameObjectsInfo, object);
+	int iteration = 0;
+	bool haveChild = true;
+	bool toAABB = false;
+	GameObject* theObjectParent = new GameObject();
+	int newNumber = 1;
+	//////////////////////////////////////////////////////
+	while (haveChild)
+	{
+		toAABB = false;
+		std::string number = std::to_string(iteration);
+		std::string root = "children";
+		std::string name = root + number;
+		std::string nextObjectName = json_object_get_string(json_value_get_object(theObject), name.c_str());
+		if (nextObjectName.c_str() != "")
+		{
+			for (int u = 0; u < json_array_get_count(gameObjectsInfo); u++)
+			{
+				JSON_Value* auxSecondValue = json_array_get_value(gameObjectsInfo, u);
+				std::string name = json_object_get_string(json_value_get_object(auxSecondValue), "Name");
+				if (nextObjectName.c_str() == name.c_str())
+				{
+					stackNode.push(auxSecondValue);
+					parentstack.push(theObjectParent);
+				}
+			}
+		}
+		else {
+			haveChild = false;
+			iteration = 0;
+		}
+	}
+	haveChild = true;
+	while (!stackNode.empty())
+	{
+		theObject = stackNode.top();
+		stackNode.pop();
+		haveChild = true;
+		newNumber++;
+		GameObject* aux = App->scene->CreateGameObject(false, 1, "sfe");
+
+		GameObject* parent = parentstack.top();
+		parentstack.pop();
+		parent->childrens.push_back(aux);
+		//////////////////////////////////////////////////////
+
+		while (haveChild)
+		{
+			std::string number = std::to_string(iteration);
+			std::string root = "children";
+			std::string name = root + number;
+			std::string nextObjectName = json_object_get_string(json_value_get_object(theObject), name.c_str());
+			if (nextObjectName.c_str() != "")
+			{
+				for (int u = 0; u < json_array_get_count(gameObjectsInfo); u++)
+				{
+					JSON_Value* auxSecondValue = json_array_get_value(gameObjectsInfo, u);
+					std::string name = json_object_get_string(json_value_get_object(auxSecondValue), "Name");
+					if (nextObjectName.c_str() == name.c_str())
+					{
+						stackNode.push(auxSecondValue);
+						parentstack.push(aux);
+					}
+				}
+			}
+			else {
+				haveChild = false;
+				iteration = 0;
+			}
+		}
+
+		//////////////////////////////////////////////////////
+		aux->name = json_object_get_string(json_value_get_object(theObject), "Name");
+		Component* e;
+		int auxType = json_object_dotget_number(json_value_get_object(theObject), "Components.Mesh.Type");
+		if (auxType == 2) {
+			const char* modelPath = json_object_dotget_string(json_value_get_object(theObject), "Components.Mesh.Path");
+			FBXimporter importer;
+
+			//e = new ComponentMesh(importer.readFile(modelPath));
+			aux->components.push_back(e);
+			e->owner = aux;
+			toAABB = true;
+		}
+		aux->isImported = true;
+
+		double position_x = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Position.x");
+		double position_y = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Position.y");
+		double position_z = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Position.z");
+		float3 position = float3(position_x, position_y, position_z);
+		//Scale
+		double scale_x = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Scale.x");
+		double scale_y = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Scale.y");
+		double scale_z = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Scale.z");
+		float3 scale = float3(scale_x, scale_y, scale_z);
+		//Rotation
+		double rotation_x = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Rotation.x");
+		double rotation_y = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Rotation.y");
+		double rotation_z = json_object_dotget_number(json_value_get_object(theObject), "Components.Transform.Rotation.z");
+		float3 rotation = float3(rotation_x, rotation_y, rotation_z);
+		e = new ComponentTransform(aux, float3(position_x, position_y, position_z), float3(scale_x, scale_y, scale_z), float3(rotation_x, rotation_y, rotation_z));
+		e->owner = aux;
+		aux->components.push_back(e);
+		e->setOwner();
+
+		if (toAABB) {
+			e->CreateAABB(ComponentType::MESH, aux, true);
+			toAABB = false;
+		}
+
+		/*while (!stackNode.empty())
+		{
+			theObject = stackNode.top();
+			stackNode.pop();
+
+			for (unsigned i = 0; i < theObject->childrens.size(); ++i)
+			{
+
+				stackNode.push(theObject->childrens[i]);
+			}
+		}*/
+	}
+	App->scene->gameObjects.push_back(theObjectParent);
+	theObjectParent->isImported = true;
+	return newNumber + object;
+}
 
 void ModuleEditor::SaveScene(const char* fileToLoad)
 {
@@ -397,114 +532,125 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 	JSON_Value* root = json_parse_file(fileToLoad);
 	JSON_Array* gameObjectsInfo = json_object_dotget_array(json_value_get_object(root), "GameObjects");
 
+
 	for (size_t i = 0; i < json_array_get_count(gameObjectsInfo); i++)
 	{
 		JSON_Value* auxValue = json_array_get_value(gameObjectsInfo, i);
 
-		u32 UID = json_object_get_number(json_value_get_object(auxValue), "UID");
-		const char* name = json_object_get_string(json_value_get_object(auxValue), "Name");
-
-		std::string futureNumber = std::string(name);
-		size_t start = futureNumber.find_last_of("_");
-		futureNumber = futureNumber.substr(start + 1, futureNumber.length() - start);
-		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, atoi(futureNumber.c_str()), name)); // Create GO with name
-		objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-		GameObject* lastGO = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-		lastGO->UID = UID; //UID
-
-		std::string isEmpty = std::string(name);
-		isEmpty = isEmpty.substr(0, 5);
-		if (isEmpty == "Empty")
+		std::string meshpath = json_object_get_string(json_value_get_object(auxValue), "children0");
+		if (meshpath.c_str() != "")
 		{
-			App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = lastId + 1;
-			lastId++;
+			i = loadSpecialObject(i, fileToLoad);
 		}
+		else {
+			//do normal
 
-		/*  MESH   */
-		int auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.Type");
-		u32 compUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.UID");
-		bool wire = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Wireframe");
-		bool act = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Active");
 
-		if (auxType == 2)
-		{
-			bool nor = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Normals");
-			const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
+			u32 UID = json_object_get_number(json_value_get_object(auxValue), "UID");
+			const char* name = json_object_get_string(json_value_get_object(auxValue), "Name");
 
-			u32 modelId = App->resources->RecoveryFile(modelPath);
-			App->resources->LoadResource(App->resources->Find(modelPath));
+			std::string futureNumber = std::string(name);
+			size_t start = futureNumber.find_last_of("_");
+			futureNumber = futureNumber.substr(start + 1, futureNumber.length() - start);
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, atoi(futureNumber.c_str()), name)); // Create GO with name
+			objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+			GameObject* lastGO = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+			lastGO->UID = UID; //UID
+
+			std::string isEmpty = std::string(name);
+			isEmpty = isEmpty.substr(0, 5);
+			if (isEmpty == "Empty")
+			{
+				App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = lastId + 1;
+				lastId++;
+			}
+
+			/*  MESH   */
+			int auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.Type");
+			u32 compUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Mesh.UID");
+			bool wire = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Wireframe");
+			bool act = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Active");
+
+			if (auxType == 2)
+			{
+				bool nor = json_object_dotget_boolean(json_value_get_object(auxValue), "Components.Mesh.Normals");
+				const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
+
+				u32 modelId = App->resources->RecoveryFile(modelPath);
+				App->resources->LoadResource(modelId);
+				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+			}
+			if (auxType == 3)
+			{
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CUBE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+			}
+			if (auxType == 6)
+			{
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CYLINDER, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+			}
+			if (auxType == 7)
+			{
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+			}
+			if (auxType == 4)
+			{
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PYRAMID, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+			}
+			if (auxType == 5)
+			{
+				lastGO->components.push_back(lastGO->CreateComponent(ComponentType::SPHERE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+			}
+
+			/*   CAMERAS   */
+			auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
+			if (auxType == 9)
+			{
+				u32 cameraUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.UID");
+				int Type = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
+				double horizontalFov = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FOV");
+				double nearPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.NearPlane");
+				double farPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FarPlane");
+				lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane, true));
+			}
+
+			/*   TRANSFORMATIONS   */
+			//Position
+			double position_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.x");
+			double position_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.y");
+			double position_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.z");
+			float3 position = float3(position_x, position_y, position_z);
+			//Scale
+			double scale_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.x");
+			double scale_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.y");
+			double scale_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.z");
+			float3 scale = float3(scale_x, scale_y, scale_z);
+			//Rotation
+			double rotation_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.x");
+			double rotation_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.y");
+			double rotation_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.z");
+			float3 rotation = float3(rotation_x, rotation_y, rotation_z);
+
+			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::TRANSFORM, &position, &scale, &rotation));
 			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-		}
-		if (auxType == 3)
-		{
-			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CUBE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-		}
-		if (auxType == 6)
-		{
-			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::CYLINDER, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-		}
-		if (auxType == 7)
-		{
-			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-		}
-		if (auxType == 4)
-		{
-			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::PYRAMID, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-		}
-		if (auxType == 5)
-		{
-			lastGO->components.push_back(lastGO->CreateComponent(ComponentType::SPHERE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-		}
 
-		/*   CAMERAS   */
-		auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
-		if (auxType == 9)
-		{
-			u32 cameraUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.UID");
-			int Type = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.Type");
-			double horizontalFov = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FOV");
-			double nearPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.NearPlane");
-			double farPlane = json_object_dotget_number(json_value_get_object(auxValue), "Components.Camera.FarPlane");
-			lastGO->components.push_back(lastGO->CreateComponent2(ComponentType::CAMERA, position, horizontalFov, nearPlane, farPlane, true));
-		}
+			/*   MATERIALS   */
+			auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Type");
+			if (auxType == 8)
+			{
+				u32 materialUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.UID");
+				const char* textPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Material.TexturePath");
+				double width = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Width");
+				double height = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Height");
 
-		/*   TRANSFORMATIONS   */
-		//Position
-		double position_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.x");
-		double position_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.y");
-		double position_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Position.z");
-		float3 position = float3(position_x, position_y, position_z);
-		//Scale
-		double scale_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.x");
-		double scale_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.y");
-		double scale_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Scale.z");
-		float3 scale = float3(scale_x, scale_y, scale_z);
-		//Rotation
-		double rotation_x = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.x");
-		double rotation_y = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.y");
-		double rotation_z = json_object_dotget_number(json_value_get_object(auxValue), "Components.Transform.Rotation.z");
-		float3 rotation = float3(rotation_x, rotation_y, rotation_z);
-
-		lastGO->components.push_back(lastGO->CreateComponent(ComponentType::TRANSFORM, &position, &scale, &rotation));
-		lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
-
-		/*   MATERIALS   */
-		auxType = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Type");
-		if (auxType == 8)
-		{
-			u32 materialUID = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.UID");
-			const char* textPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Material.TexturePath");
-			double width = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Width");
-			double height = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Height");
-
-			u32 materialId = App->resources->RecoveryFile(textPath);
-			App->resources->LoadResource(materialId);
-			lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+				u32 materialId = App->resources->RecoveryFile(textPath);
+				App->resources->LoadResource(materialId);
+				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
+			}
 		}
 	}
 	UpdateAll();

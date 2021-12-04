@@ -51,9 +51,7 @@ std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, cons
 	}
 	return &bufferArray;
 }
-void FBXimporter::SpecialsaveToOurFile(const char* originPath, const char* destinationPath) {
-	
-}
+
 void  FBXimporter::SpecialreadFromFBX(const char* originPath) {
 	
 	Assimp::Importer import;
@@ -70,7 +68,77 @@ void  FBXimporter::SpecialreadFromFBX(const char* originPath) {
 
 
 }
-void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene) 
+void FBXimporter::SpecialsaveToOurFile(const char* originPath, const char* destinationPath, GameObject* object)
+{
+	std::stack<GameObject*>stackNode;
+	GameObject* theObject;
+	for (int i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		for (int a = 0; a < App->scene->gameObjects[i]->childrens.size(); a++)
+		{
+			stackNode.push(App->scene->gameObjects[i]->childrens[a]);
+		}
+		while (!stackNode.empty())
+		{
+			theObject = stackNode.top();
+			stackNode.pop();
+			if (theObject->buffer.size > 0)
+			{
+				LCG uidGenerator;
+				std::string i;
+				int UID = 0;
+				for (int a = 0; a < 11; a++) {
+
+					i += std::to_string(uidGenerator.IntFast());
+					if (i.size() > 8) {
+						int v = i.size() - 8;
+						i = i.substr(0, 8);
+						break;
+					}
+					else if (i.size() == 8) {
+						break;
+					}
+				}
+				std::string sourcePath = destinationPath;
+				//name 
+				std::string finalPath = destinationPath + i + ".msh";
+				saveInFile(finalPath.c_str(), theObject->buffer.buffer, theObject->buffer.size);
+				for (int q = 0; q < theObject->components.size(); q++) {
+					if (theObject->SearchComponent(theObject, ComponentType::MESH) != -1) {
+						theObject->components[q]->modelPath = finalPath.c_str();
+						break;
+					}
+				}
+			}
+
+			for (unsigned i = 0; i < theObject->childrens.size(); ++i)
+			{
+				stackNode.push(theObject->childrens[i]);
+			}
+		}
+	}
+
+
+}
+void  FBXimporter::SpecialreadFromFBX(const char* originPath, const char* destinationPath) {
+
+	Assimp::Importer import;
+	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_SplitLargeMeshes | aiProcess_OptimizeMeshes);
+
+	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+	{
+		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+		return;
+	}
+
+	SpecialProcessNode(scene->mRootNode, scene);
+
+	SpecialsaveToOurFile(originPath, destinationPath, App->scene->gameObjects[App->scene->gameObjects.size()-1]);
+
+}
+
+
+void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 {
 	// process all the node's meshes
 	aiVector3D translation = { 0,0,0 };
@@ -166,6 +234,7 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 	App->scene->gameObjects.push_back(aux);
 	aux->isImported = true;
 	App->editor->AddLog("Processing Node\n");
+	
 }
 float3 FBXimporter::FromQuatToEuler(Quat quatAngles) {
 	float3 angles;
