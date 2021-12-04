@@ -31,7 +31,7 @@ public:
 	float3 corners[8];
 	//Frustum frustum;
 	ComponentCamera* GameCam = nullptr;
-	ComponentCamera *editorCam;
+	ComponentCamera *editorCam = nullptr;
 	float aspectRatio = 16/9;
 	float verticalFOV = 75.0f;
 	float nearPlaneDistance = 1.0f;
