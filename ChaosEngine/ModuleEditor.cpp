@@ -155,7 +155,6 @@ bool ModuleEditor::Start()
 	App->camera->camArray[lastComponent]->isTheMainCamera = true;
 	App->camera->GameCam = App->camera->camArray[lastComponent];
 
-
 	return ret;
 }
 
@@ -1936,7 +1935,6 @@ update_status ModuleEditor::Update(float dt)
 			else
 				transComponent->Update(false);
 		}
-
 		ImGui::End();
 	}
 
