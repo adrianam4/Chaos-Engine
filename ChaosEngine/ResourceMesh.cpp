@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "ResourceMesh.h"
+#include "Parson/parson.h"
 #include "mmgr.h"
 
 ResourceMesh::ResourceMesh(u32 _UID)
@@ -101,4 +102,30 @@ std::vector<Textures> ResourceMesh::GetTextures()
 std::vector<float> ResourceMesh::GetTexCoords()
 {
 	return texCoords;
+}
+
+void ResourceMesh::GenerateMeta()
+{
+	JSON_Value* user_data = json_value_init_object();
+
+	metaData.uid = UID;
+	json_object_set_number(json_object(user_data), "UID", metaData.uid);
+	metaData.modelPath = libraryFile;
+	json_object_set_string(json_object(user_data), "ModelPath", metaData.modelPath.c_str());
+	json_object_set_boolean(json_object(user_data), "JoinVertex", metaData.joinVertex);
+	json_object_set_boolean(json_object(user_data), "Triangulate", metaData.triangulate);
+	json_object_set_boolean(json_object(user_data), "GenerateNormals", metaData.generateNormals);
+	json_object_set_boolean(json_object(user_data), "GenerateSmoothNormals", metaData.generateSmoothNormals);
+	json_object_set_boolean(json_object(user_data), "RemoveMaterials", metaData.removeMaterials);
+	json_object_set_boolean(json_object(user_data), "InfacingNormals", metaData.infacingNormals);
+	json_object_set_boolean(json_object(user_data), "GenUvCoords", metaData.genUvCoords);
+	json_object_set_boolean(json_object(user_data), "TransUvCoords", metaData.transUvCoords);
+	json_object_set_boolean(json_object(user_data), "FindInstances", metaData.findInstances);
+	json_object_set_boolean(json_object(user_data), "OptimizeMesh", metaData.optimizeMesh);
+	json_object_set_boolean(json_object(user_data), "FlipUvs", metaData.flipUvs);
+
+	std::string savingPath = libraryFile + ".meta";
+	json_serialize_to_file_pretty(user_data, savingPath.c_str());
+
+	App->editor->AddLog("Generated Texture Meta Data\n");
 }

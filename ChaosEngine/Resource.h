@@ -29,6 +29,7 @@ public:
 	virtual bool LoadToMemory(Mesh* mesh) { return false; }
 	virtual bool LoadToMemory() { return false; }
 	virtual void UnloadFromMemory() {}
+	virtual void GenerateMeta() {}
 	//Models
 	virtual std::vector<Vertex> GetVertex() { return std::vector<Vertex>(); }
 	virtual std::vector<uint> GetIndices() { return std::vector<uint>(); }

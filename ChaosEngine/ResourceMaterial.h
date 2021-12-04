@@ -3,9 +3,20 @@
 #include "Globals.h"
 #include "MaterialComponent.h"
 
-class Meta
+struct TextureMeta
 {
-	u32 UID;
+	u32 uid = 0;
+	std::string texturePath = " ";
+
+	bool alienifying = false;
+	bool blurring = false;
+	bool contrast = false;
+	bool equalization = false;
+	bool gammaCorrection = false;
+	bool negativity = false;
+	bool noise = false;
+	bool pixelization = false;
+	bool sharpering = false;
 };
 
 class ResourceMatertial : public Resource
@@ -27,6 +38,7 @@ public:
 	inline uint GetHeight() override { return height; }
 	inline uint GetBytes() override { return bytes; }
 	inline GLuint GetTextureId() override { return textureId; }
+	void GenerateMeta() override;
 
 public:
 	uint width = 0;
@@ -34,4 +46,5 @@ public:
 	uint bytes = 0;
 	GLuint textureId = 0;
 	bool isLoaded = false;
+	TextureMeta metaData;
 };

@@ -44,6 +44,7 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 
 		SaveResource(resource, newFileInAssets);
 		ret = resource->GetUID();
+		resource->GenerateMeta();
 		RELEASE_ARRAY(fileBuffer);
 	}
 	return ret;

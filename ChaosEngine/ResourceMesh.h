@@ -3,6 +3,24 @@
 #include "Globals.h"
 #include "MeshComponent.h"
 
+struct MeshMeta
+{
+	u32 uid = 0;
+	std::string modelPath = " ";
+	std::vector<Mesh> meshes;
+	bool joinVertex = false;
+	bool triangulate = true;
+	bool generateNormals = false;
+	bool generateSmoothNormals = false;
+	bool removeMaterials = false;
+	bool infacingNormals = false;
+	bool genUvCoords = true;
+	bool transUvCoords = false;
+	bool findInstances = true;
+	bool optimizeMesh = true;
+	bool flipUvs = true;
+};
+
 class ResourceMesh : public Resource
 {
 public:
@@ -20,10 +38,12 @@ public:
 	std::vector<uint> GetIndices() override;
 	std::vector<Textures> GetTextures() override;
 	std::vector<float> GetTexCoords() override;
-private:
+	void GenerateMeta() override;
+public:
 	std::vector<uint> indices;
 	std::vector<Vertex> vertices;
 	std::vector<float> texCoords;
 	std::vector<Textures> textures;
+	MeshMeta metaData;
 	bool isLoaded = false;
 };
