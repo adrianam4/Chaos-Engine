@@ -108,41 +108,37 @@ bool ModuleEditor::Start()
 
 	guizmoType = ImGuizmo::OPERATION::TRANSLATE;
 
-	//Models
-	houseModelId = App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
-	carModelId = App->resources->ImportFile("Assets/Models/Car.fbx");
-	penguinModelId = App->resources->ImportFile("Assets/Models/Penguin.fbx");
-	App->resources->ImportFile("Assets/Models/BakerHouse.fbx");
-	houseModelId = App->resources->Find("Assets/Models/BakerHouse.fbx");
-	App->resources->ImportFile("Assets/Models/Car.fbx");
-	carModelId = App->resources->Find("Assets/Models/Car.fbx");
-	App->resources->ImportFile("Assets/Models/Penguin.fbx");
-	penguinModelId = App->resources->Find("Assets/Models/Penguin.fbx");
-	App->resources->ImportFile("Assets/Models/Street.FBX");
-	sceneId = App->resources->Find("Assets/Models/Street.FBX");
-	//Materials
-	houseMaterialId = App->resources->ImportFile("Assets/Textures/BakerHouse.png");
-	carMaterialId = App->resources->ImportFile("Assets/Textures/Car.png");
-	penguinMaterialId = App->resources->ImportFile("Assets/Textures/Penguin.png");
-	//Icons
-	folderId = App->resources->ImportFile("Assets/Textures/DirectoryIcon.png");
-	folderIcon = App->resources->LoadIcons(folderId);
-	playId = App->resources->ImportFile("Assets/Textures/Play.png");
-	playIcon = App->resources->LoadIcons(playId);
-	stopId = App->resources->ImportFile("Assets/Textures/Stop.png");
-	stopIcon = App->resources->LoadIcons(stopId);
-	pauseId = App->resources->ImportFile("Assets/Textures/Pause.png");
-	pauseIcon = App->resources->LoadIcons(pauseId);
-	advanceId = App->resources->ImportFile("Assets/Textures/Advance.png");
-	advanceIcon = App->resources->LoadIcons(advanceId);
-	speedUpId = App->resources->ImportFile("Assets/Textures/SpeedUp.png");
-	speedUpIcon = App->resources->LoadIcons(speedUpId);
-	speedDownId = App->resources->ImportFile("Assets/Textures/SpeedDown.png");
-	speedDownIcon = App->resources->LoadIcons(speedDownId);
-	backId = App->resources->ImportFile("Assets/Textures/Back.png");
-	backIcon = App->resources->LoadIcons(backId);
-	fileId = App->resources->ImportFile("Assets/Textures/FileIcon.png");
-	fileIcon = App->resources->LoadIcons(fileId);
+	std::string assetsPath = "Assets/";
+	std::string currentPath = assetsPath;
+	std::vector<std::string> dirs;
+	std::vector<std::string> dirs2;
+	std::vector<std::string> files;
+	App->fileSystem->DiscoverFiles(currentPath.c_str(), files, dirs);
+	for (int i = 0; i < dirs.size(); i++)
+	{
+		currentPath = assetsPath + dirs[i] + "/";
+		if (currentPath == "Assets/Textures/" || currentPath == "Assets/Models/")
+		{
+			std::string thisDir = currentPath;
+			App->fileSystem->DiscoverFiles(currentPath.c_str(), files, dirs2);
+			for (int j = 0; j < files.size(); j++)
+			{
+				std::string filePath = thisDir + files[j];
+				u32 auxID = App->resources->ImportFile(filePath.c_str());
+			}
+			files.clear();
+		}
+	}
+
+	advanceIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Advance.png"));
+	backIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Back.png"));
+	folderIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/DirectoryIcon.png"));
+	fileIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/FileIcon.png"));
+	pauseIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Pause.png"));
+	playIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Play.png"));
+	speedDownIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/SpeedDown.png"));
+	speedUpIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/SpeedUp.png"));
+	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
@@ -1163,11 +1159,11 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->resources->LoadResource(houseModelId);
+					App->resources->LoadResource(App->resources->Find("Assets/Models/BakerHouse.fbx"));
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-					App->resources->LoadResource(houseMaterialId);
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/BakerHouse.png"));
 					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("House Created\n");
@@ -1180,11 +1176,11 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->resources->LoadResource(penguinModelId);
+					App->resources->LoadResource(App->resources->Find("Assets/Models/Penguin.fbx"));
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-					App->resources->LoadResource(penguinMaterialId);
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/Penguin.png"));
 					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("Penguin Created\n");
@@ -1197,11 +1193,11 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->resources->LoadResource(carModelId);
+					App->resources->LoadResource(App->resources->Find("Assets/Models/Car.fbx"));
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-					App->resources->LoadResource(carMaterialId);
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/Car.png"));
 					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("Car Created\n");

@@ -3,6 +3,11 @@
 #include "Globals.h"
 #include "MaterialComponent.h"
 
+class Meta
+{
+	u32 UID;
+};
+
 class ResourceMatertial : public Resource
 {
 public:

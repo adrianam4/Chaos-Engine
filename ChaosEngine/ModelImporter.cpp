@@ -92,11 +92,11 @@ bool FBXImporter::saveInFile(const char* path, void* data, int size) {
 	PHYSFS_File* fileToWrite = PHYSFS_openWrite(path);
 	if (fileToWrite == nullptr)
 	{	
-		App->editor->AddLog("Error writing in %s -> %s", path, PHYSFS_getLastError());		
+		App->editor->AddLog("Error writing in %s -> %s\n", path, PHYSFS_getLastError());		
 		//PHYSFS_setWriteDir(".");	
 		return false;
 	}
-	App->editor->AddLog("Mesh saved in file %s",path);
+	App->editor->AddLog("Mesh saved in file %s\n",path);
 	PHYSFS_write(fileToWrite, data, size,1);
 	PHYSFS_close(fileToWrite);
 
@@ -106,7 +106,7 @@ bool FBXImporter::saveInFile(const char* path, void* data, int size) {
 int  FBXImporter::getFileSize(const char* path, PHYSFS_File* file) {
 	
 	if (file == nullptr) {
-		App->editor->AddLog("Error reading in %s -> %s", path, PHYSFS_getLastError());
+		App->editor->AddLog("Error reading in %s -> %s\n", path, PHYSFS_getLastError());
 		return -1;
 	}
 	return PHYSFS_fileLength(file);
@@ -115,12 +115,12 @@ Mesh* FBXImporter::readFile(const char* path) {
 	
 	PHYSFS_File* file = PHYSFS_openRead(path);
 	if (file == nullptr) {
-		App->editor->AddLog("Error openenig the file %s", path);
+		App->editor->AddLog("Error openenig the file %s\n", path);
 		return NULL;
 	}
 	int size = getFileSize(path, file);
 	if (size == -1) {
-		App->editor->AddLog("the file cannot be opened for reading");
+		App->editor->AddLog("the file cannot be opened for reading\n");
 		return NULL;
 	}
 	char* bufferData = new char[size];

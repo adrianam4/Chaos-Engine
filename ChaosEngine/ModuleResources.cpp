@@ -154,6 +154,7 @@ bool ModuleResources::LoadResource(u32 UID)
 				resourceToLoad->firstTime = false;
 			}
 			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
+			App->editor->AddLog("Reference counting for %s: %d\n", resourceToLoad->assetsFile.c_str(), resourceToLoad->referenceCount);
 		}
 		else if (type == ResourceType::TEXTURE)
 		{
@@ -162,6 +163,7 @@ bool ModuleResources::LoadResource(u32 UID)
 				resourceToLoad->LoadToMemory();
 			}
 			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
+			App->editor->AddLog("Reference counting for %s: %d\n", resourceToLoad->assetsFile.c_str(), resourceToLoad->referenceCount);
 		}
 		ret = true;
 	}
