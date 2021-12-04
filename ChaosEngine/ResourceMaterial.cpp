@@ -74,6 +74,7 @@ bool ResourceMatertial::LoadToMemory()
 
 void ResourceMatertial::UnloadFromMemory()
 {
+	glDeleteTextures(1, &textureId);
 	width = 0;
 	height = 0;
 	bytes = 0;

@@ -30,9 +30,8 @@ public:
 	std::string GenerateLibraryFile(const char* assetsFile);
 	ResourceType GetResourceType(const char* assetsFile);
 	void SaveResource(Resource* resource, std::string assetsFile);
-
-private:
 	std::map<u32, Resource*> resources;
+private:
 	std::vector<Resource*> deleted;
 	Component* componentToLoad;
 };
