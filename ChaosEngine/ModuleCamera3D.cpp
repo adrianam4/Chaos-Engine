@@ -61,25 +61,65 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += Vec3(editorCam->frustum.WorldRight().x, editorCam->frustum.WorldRight().y, editorCam->frustum.WorldRight().z) * speed * 2;
 
 	editorCam->frustum.SetPos(vec(editorCam->position.x += newPos.x, editorCam->position.y += newPos.y, editorCam->position.z += newPos.z));
+	editorCam->position += newPos;
 	editorCam->reference += newPos;
 
 	// Mouse motion ----------------
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT || (App->input->GetMouseButton(SDL_BUTTON_LEFT) && App->input->GetKey(SDL_SCANCODE_LALT)))
+	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		int dx = -App->input->GetMouseXMotion();
 		int dy = -App->input->GetMouseYMotion();
 
 		float sensitivity = 0.25f;
 
-		editorCam->RecalculateRotation((App->input->GetMouseXMotion()) * -1, (App->input->GetMouseYMotion()) * -1); //Recalculate rotation (???)
-
-		//position -= reference;
-		editorCam->frustum.SetPos(vec(editorCam->position.x -= editorCam->reference.x, editorCam->position.y -= editorCam->reference.y, editorCam->position.z -= editorCam->reference.z));
+		//PROBLEM!!!!!!!!!!
+		//editorCam->RecalculateRotation((App->input->GetMouseXMotion()) * -1, (App->input->GetMouseYMotion()) * -1); //Recalculate rotation (???)
+		//editorCam->frustum.SetPos(vec(editorCam->position.x -= editorCam->reference.x, editorCam->position.y -= editorCam->reference.y, editorCam->position.z -= editorCam->reference.z));
 
 		if (dx != 0)
 		{
 			float deltaX = (float)dx * sensitivity;
 
+			editorCam->x = rotate(editorCam->x, deltaX, Vec3(0.0f, 1.0f, 0.0f));
+			editorCam->y = rotate(editorCam->y, deltaX, Vec3(0.0f, 1.0f, 0.0f));
+			editorCam->z = rotate(editorCam->z, deltaX, Vec3(0.0f, 1.0f, 0.0f));
+		}
+
+		if (dy != 0)
+		{
+			float deltaY = (float)dy * sensitivity;
+
+			editorCam->y = rotate(editorCam->y, deltaY, editorCam->x);
+			editorCam->z = rotate(editorCam->z, deltaY, editorCam->x);
+
+			if (editorCam->y.y < 0.0f)
+			{
+				editorCam->z = Vec3(0.0f, editorCam->z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+				editorCam->y = cross(editorCam->z, editorCam->x);
+			}
+		}
+
+		//editorCam->position = editorCam->reference + editorCam->z * length(editorCam->position);
+		editorCam->frustum.SetPos(vec(editorCam->position.x, editorCam->position.y, editorCam->position.z));
+
+		//editorCam->position -= editorCam->reference;
+	}
+
+	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) && App->input->GetKey(SDL_SCANCODE_LALT))
+	{
+		int dx = -App->input->GetMouseXMotion();
+		int dy = -App->input->GetMouseYMotion();
+
+		float sensitivity = 0.25f;
+
+		//PROBLEM!!!!!!!!!!
+		editorCam->RecalculateRotation((App->input->GetMouseXMotion()) * -1, (App->input->GetMouseYMotion()) * -1); //Recalculate rotation (???)
+		editorCam->frustum.SetPos(vec(editorCam->position.x -= editorCam->reference.x, editorCam->position.y -= editorCam->reference.y, editorCam->position.z -= editorCam->reference.z));
+
+		if (dx != 0)
+		{
+			float deltaX = (float)dx * sensitivity;
+			
 			editorCam->x = rotate(editorCam->x, deltaX, Vec3(0.0f, 1.0f, 0.0f));
 			editorCam->y = rotate(editorCam->y, deltaX, Vec3(0.0f, 1.0f, 0.0f));
 			editorCam->z = rotate(editorCam->z, deltaX, Vec3(0.0f, 1.0f, 0.0f));

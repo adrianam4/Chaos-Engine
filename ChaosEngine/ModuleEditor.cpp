@@ -155,7 +155,6 @@ bool ModuleEditor::Start()
 	App->camera->camArray[lastComponent]->isTheMainCamera = true;
 	App->camera->GameCam = App->camera->camArray[lastComponent];
 
-
 	return ret;
 }
 
@@ -1745,6 +1744,69 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 
+
+	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT2 WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+
+	if (showScene2Window && App->camera->GameCam != nullptr)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Game Camera", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
+
+		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
+		if (viewportSize.x != App->camera->GameCam->size.x || viewportSize.y != App->camera->GameCam->size.y)
+		{
+			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y, App->camera->GameCam);
+			App->camera->GameCam->size = { viewportSize.x, viewportSize.y };
+			App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
+			//App->camera->aspectRatio = viewportSize.x / viewportSize.y;
+		}
+		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
+		ImGui::Image((ImTextureID)App->camera->GameCam->texture, { App->camera->GameCam->size.x, App->camera->GameCam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
+			{
+				const char* path = (const char*)payload->Data;
+				u32 importedFile = App->resources->ImportFile(path);
+				Resource* newResource = App->resources->GetResource(importedFile);
+
+				if (newResource->type == ResourceType::MESH)
+				{
+					static uint importedGobjs = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
+					importedGobjs++;
+					objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+					App->resources->LoadResource(importedFile);
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					u32 tex = App->resources->ImportFile("Assets/Textures/Checker.png");
+					App->resources->LoadResource(tex);
+					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					objectSelected->components.erase(objectSelected->components.begin() + 2);
+				}
+				else if (newResource->type == ResourceType::TEXTURE)
+				{
+					if (App->editor->objectSelected != nullptr)
+					{
+						int oldMaterialId;
+						oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
+						if (oldMaterialId != -1)
+						{
+							objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
+						}
+						App->resources->LoadResource(importedFile);
+						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+					}
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+		ImGui::End();
+	}
+
+
 	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 
 	if (showSceneWindow)
@@ -1868,67 +1930,6 @@ update_status ModuleEditor::Update(float dt)
 				transComponent->Update(false);
 		}
 		
-		ImGui::End();
-	}
-
-	//////////////////////////////////////////////////////////////////////////////////////////// VIEWPORT2 WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-
-	if (showScene2Window && App->camera->GameCam != nullptr)
-	{
-		ImGui::CloseCurrentPopup();
-		ImGui::Begin("Game Camera", &showScene2Window, ImGuiWindowFlags_NoScrollbar);
-
-		ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-		if (viewportSize.x != App->camera->GameCam->size.x || viewportSize.y != App->camera->GameCam->size.y)
-		{
-			App->viewportBuffer->Resize(viewportSize.x, viewportSize.y, App->camera->GameCam);
-			App->camera->GameCam->size = { viewportSize.x, viewportSize.y };
-			App->renderer3D->OnResize(viewportSize.x, viewportSize.y);
-			//App->camera->aspectRatio = viewportSize.x / viewportSize.y;
-		}
-		viewport = { ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(), ImGui::GetWindowHeight() };
-		ImGui::Image((ImTextureID)App->camera->GameCam->texture, { App->camera->GameCam->size.x, App->camera->GameCam->size.y }, ImVec2(0, 1), ImVec2(1, 0));
-
-		if (ImGui::BeginDragDropTarget())
-		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
-			{
-				const char* path = (const char*)payload->Data;
-				u32 importedFile = App->resources->ImportFile(path);
-				Resource* newResource = App->resources->GetResource(importedFile);
-
-				if (newResource->type == ResourceType::MESH)
-				{
-					static uint importedGobjs = 1;
-					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
-					importedGobjs++;
-					objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-					App->resources->LoadResource(importedFile);
-					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-					u32 tex = App->resources->ImportFile("Assets/Textures/Checker.png");
-					App->resources->LoadResource(tex);
-					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-					objectSelected->components.erase(objectSelected->components.begin() + 2);
-				}
-				else if (newResource->type == ResourceType::TEXTURE)
-				{
-					if (App->editor->objectSelected != nullptr)
-					{
-						int oldMaterialId;
-						oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
-						if (oldMaterialId != -1)
-						{
-							objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
-						}
-						App->resources->LoadResource(importedFile);
-						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-					}
-				}
-			}
-			ImGui::EndDragDropTarget();
-		}
 		ImGui::End();
 	}
 

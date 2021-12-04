@@ -79,8 +79,8 @@ void ComponentCamera::post() {
 }
 void ComponentCamera::Update()
 {
-	if (this != App->camera->editorCam) 
-	{
+	//if (this != App->camera->editorCam) 
+	//{
 		CalculatePoints();
 		RecalculateCamera();
 		math::vec positionAuxiliar = { position.x,position.y,position.z };
@@ -88,7 +88,7 @@ void ComponentCamera::Update()
 		float3 FRONT = { z.x,z.y,z.z };
 		frustum.SetFrame(positionAuxiliar, -FRONT, UP);
 		frustum.ComputeProjectionMatrix();
-	}
+	//}
 }
 
 void ComponentCamera::Disable()
