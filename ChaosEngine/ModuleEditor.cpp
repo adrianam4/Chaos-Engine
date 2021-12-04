@@ -1152,6 +1152,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool showOptions;
 	static bool showAssets;
 	static bool showTextureMenu;
+	static bool showMeshMenu;
 	static bool isActive;
 	static bool isActive2;
 	static bool isActive3;
@@ -1199,6 +1200,7 @@ update_status ModuleEditor::Update(float dt)
 		showTimeWindow = true;
 		showOptions = true;
 		showTextureMenu = false;
+		showMeshMenu = false;
 		isActive = true;
 		isActive2 = true;
 		isActive3 = true;
@@ -1574,6 +1576,103 @@ update_status ModuleEditor::Update(float dt)
 		}
 
 		ImGui::Image((void*)(intptr_t)droppedTexture, ImVec2(200, 200));
+
+		ImGui::End();
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////// MESH WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+
+	//Options
+	static bool joinVertex;
+	static bool triangulate;
+	static bool generateNormals;
+	static bool generateSmoothNormals;
+	static bool removeMaterials;
+	static bool infacingNormals;
+	static bool generateUvsCoords;
+	static bool transformUvsCoords;
+	static bool findInstances;
+	static bool optimixeMesh;
+	static bool flipUvs;
+
+	if (showMeshMenu)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Mesh Import Settings", &showMeshMenu, ImGuiWindowFlags_NoScrollbar);
+
+		if (ImGui::CollapsingHeader("Settings"))
+		{
+			static float padding = 1.0f;
+			static float thumbnailSize = 128.0f;
+			float cellSize = thumbnailSize + padding;
+			float panelWidth = ImGui::GetContentRegionAvail().x;
+			int columnCount = (int)(panelWidth / cellSize);
+			if (columnCount < 1)
+				columnCount = 1;
+
+			ImGui::Columns(columnCount, 0, false);
+
+			if (ImGui::Checkbox("Join Vertex", &alienfy))
+			{
+				alienfy = !alienfy;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Triangulate", &triangulate))
+			{
+				triangulate = !triangulate;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Generate Normals", &generateNormals))
+			{
+				generateNormals = !generateNormals;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Generate Smooth Normals", &generateSmoothNormals))
+			{
+				generateSmoothNormals = !generateSmoothNormals;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Remove Materials", &removeMaterials))
+			{
+				removeMaterials = removeMaterials;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Infacing Normals", &infacingNormals))
+			{
+				infacingNormals = !infacingNormals;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Generate UVs Coords", &generateUvsCoords))
+			{
+				generateUvsCoords = !generateUvsCoords;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Transform UVs Coords", &transformUvsCoords))
+			{
+				transformUvsCoords = !transformUvsCoords;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Find Instances", &findInstances))
+			{
+				findInstances = !findInstances;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Optimize Mesh", &optimixeMesh))
+			{
+				optimixeMesh = !optimixeMesh;
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Flip UVs", &flipUvs))
+			{
+				flipUvs = !flipUvs;
+			}
+			ImGui::NextColumn();
+		}
+
+		if (ImGui::Button("Import"))
+		{
+
+		}
 
 		ImGui::End();
 	}
@@ -2139,6 +2238,7 @@ update_status ModuleEditor::Update(float dt)
 				{
 					if (newResource->type == ResourceType::MESH)
 					{
+						showMeshMenu = true;
 						static uint importedGobjs = 1;
 						App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
 						importedGobjs++;
