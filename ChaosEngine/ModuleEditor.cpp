@@ -1151,6 +1151,7 @@ update_status ModuleEditor::Update(float dt)
 	static bool showTimeWindow;
 	static bool showOptions;
 	static bool showAssets;
+	static bool showTextureMenu;
 	static bool isActive;
 	static bool isActive2;
 	static bool isActive3;
@@ -1165,7 +1166,6 @@ update_status ModuleEditor::Update(float dt)
 		openConfigMenu = false;
 		openSceneMenu = false;
 		showConfigMenu = true;
-		showWarningMenu = false;
 		showHierarchy = true;
 		showInspector = true;
 		showConsoleMenu = true;
@@ -1198,6 +1198,7 @@ update_status ModuleEditor::Update(float dt)
 		showFileWindow = false;
 		showTimeWindow = true;
 		showOptions = true;
+		showTextureMenu = false;
 		isActive = true;
 		isActive2 = true;
 		isActive3 = true;
@@ -1249,9 +1250,6 @@ update_status ModuleEditor::Update(float dt)
 				if (ImGui::MenuItem("Load Scene"))
 				{
 					showWarningMenu = !showWarningMenu;
-					FileDialog fileDialog;
-					std::string fileToLoad = fileDialog.LoadScene("Chaos Scene (*.chaos)\0*.chaos\0");
-					LoadScene(fileToLoad.c_str());
 				}
 				ImGui::EndMenu();
 			}
@@ -1465,6 +1463,119 @@ update_status ModuleEditor::Update(float dt)
 			}
 			ImGui::EndMainMenuBar();
 		}
+	}
+
+	//////////////////////////////////////////////////////////////////////////////////////////// TEXTURE WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
+
+	///FILTERS
+	static bool mipMap;
+
+	static bool alienfy;
+	static bool contrast;
+	static bool negativity;
+	static bool sharpening;
+	static bool gaussianBlur;
+	static bool equalization;
+	static bool noise;
+	static bool averageBlur;
+	static bool gammaCorrection;
+	static bool pixelization;
+
+	if (showTextureMenu)
+	{
+		ImGui::CloseCurrentPopup();
+		ImGui::Begin("Texture Import Settings", &showTextureMenu, ImGuiWindowFlags_NoScrollbar);
+
+
+		if (ImGui::CollapsingHeader("Settings"))
+		{
+			if (ImGui::Checkbox("Mip-Map", &mipMap))
+			{
+
+			}
+		}
+
+		ImGui::Separator();
+		if (ImGui::CollapsingHeader("Filters"))
+		{
+			static float padding = 1.0f;
+			static float thumbnailSize = 128.0f;
+			float cellSize = thumbnailSize + padding;
+
+			float panelWidth = ImGui::GetContentRegionAvail().x;
+			int columnCount = (int)(panelWidth / cellSize);
+			if (columnCount < 1)
+				columnCount = 1;
+			ImGui::Columns(columnCount, 0, false);
+			if (ImGui::Checkbox("Alienfy", &alienfy))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Contrast", &contrast))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Negativity", &negativity))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Sharpening", &sharpening))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Gaussian Blur", &gaussianBlur))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Equalization", &equalization))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Noise", &noise))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Average Blur", &averageBlur))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Gamma Correction", &gammaCorrection))
+			{
+
+			}
+			ImGui::NextColumn();
+			if (ImGui::Checkbox("Pixelization", &pixelization))
+			{
+
+			}
+			ImGui::NextColumn();
+		}
+
+		ImGui::Separator();
+		if (ImGui::Button("Import"))
+		{
+
+		}
+		if (ImGui::Button("Restart"))
+		{
+
+		}
+		if (ImGui::Button("Set Default"))
+		{
+
+		}
+
+		ImGui::Image((void*)(intptr_t)droppedTexture, ImVec2(200, 200));
+
+		ImGui::End();
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////// HIERARCHY WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
@@ -2044,6 +2155,7 @@ update_status ModuleEditor::Update(float dt)
 					{
 						if (App->editor->objectSelected != nullptr)
 						{
+							showTextureMenu = true;
 							int oldMaterialId;
 							oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
 							if (oldMaterialId != -1)
@@ -2051,6 +2163,7 @@ update_status ModuleEditor::Update(float dt)
 								objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
 							}
 							App->resources->LoadResource(newResource->GetUID());
+							droppedTexture = (ImTextureID)newResource->GetTextureId();
 							objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 						}
 					}

@@ -110,6 +110,8 @@ public:
 	ImTextureID backIcon;
 	ImTextureID fileIcon;
 
+	ImTextureID droppedTexture;
+
 
 	std::string toDelete = "empty";
 };
