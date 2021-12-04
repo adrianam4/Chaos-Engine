@@ -30,6 +30,7 @@ public:
 	virtual bool LoadToMemory() { return false; }
 	virtual void UnloadFromMemory() {}
 	virtual void GenerateMeta() {}
+	virtual void LoadMeta() {}
 	//Models
 	virtual std::vector<Vertex> GetVertex() { return std::vector<Vertex>(); }
 	virtual std::vector<uint> GetIndices() { return std::vector<uint>(); }

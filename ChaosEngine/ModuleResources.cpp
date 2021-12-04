@@ -40,10 +40,14 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 		if (type == ResourceType::MESH)
 			resource->aux = meshImporter.saveToOurFile(newFileInAssets, "Library/Models/");
 		else if (type == ResourceType::TEXTURE)
-			texImporter.ImportMaterial(newFileInAssets, false);
+			texImporter.ImportMaterial(newFileInAssets, false, (ResourceMatertial*)resource);
 
 		SaveResource(resource, newFileInAssets);
 		ret = resource->GetUID();
+		if (resource->type == ResourceType::TEXTURE)
+		{
+			resource->LoadMeta();
+		}
 		resource->GenerateMeta();
 		RELEASE_ARRAY(fileBuffer);
 	}

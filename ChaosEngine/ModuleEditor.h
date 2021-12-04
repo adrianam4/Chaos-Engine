@@ -78,6 +78,8 @@ public:
 	bool start = true;
 	bool stop = false;
 	bool advance = false;
+	bool showSaveOnExitMenu;
+	bool showTextureMenu = false;
 
 	//Models
 	u32 houseModelId;
@@ -111,7 +113,7 @@ public:
 	ImTextureID fileIcon;
 
 	ImTextureID droppedTexture;
-
+	Resource* newResource = nullptr;
 
 	std::string toDelete = "empty";
 };

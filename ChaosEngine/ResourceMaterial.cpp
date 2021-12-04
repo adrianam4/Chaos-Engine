@@ -61,7 +61,7 @@ bool ResourceMatertial::LoadToMemory(int _width, int _height, GLuint _imageId)
 bool ResourceMatertial::LoadToMemory()
 {
 	MaterialImporter importer;
-	std::vector<int> data = importer.ImportMaterial(GetLibraryFile(), false);
+	std::vector<int> data = importer.ImportMaterial(GetLibraryFile(), false, this);
 	width = data[1];
 	height = data[2];
 	textureId = data[0];
@@ -103,4 +103,49 @@ void ResourceMatertial::GenerateMeta()
 	json_serialize_to_file_pretty(user_data, savingPath.c_str());
 
 	App->editor->AddLog("Generated Texture Meta Data\n");
+}
+
+void ResourceMatertial::GenerateMeta(bool alienifying, bool blurring, bool contrast, bool equalization, bool gammaCorrection, bool negativity, bool noise, bool pixelization, bool sharpering)
+{
+	JSON_Value* user_data = json_value_init_object();
+
+	metaData.uid = UID;
+	json_object_set_number(json_object(user_data), "UID", metaData.uid);
+	metaData.texturePath = libraryFile;
+	json_object_set_string(json_object(user_data), "TexturePath", metaData.texturePath.c_str());
+	json_object_set_boolean(json_object(user_data), "Alienifying", alienifying);
+	json_object_set_boolean(json_object(user_data), "Blurring", blurring);
+	json_object_set_boolean(json_object(user_data), "Contrast", contrast);
+	json_object_set_boolean(json_object(user_data), "Equalization", equalization);
+	json_object_set_boolean(json_object(user_data), "GammaCorrection", gammaCorrection);
+	json_object_set_boolean(json_object(user_data), "Negativity", negativity);
+	json_object_set_boolean(json_object(user_data), "Noise", noise);
+	json_object_set_boolean(json_object(user_data), "Pixelization", pixelization);
+	json_object_set_boolean(json_object(user_data), "Sharpering", sharpering);
+
+	std::string savingPath = libraryFile + ".meta";
+	json_serialize_to_file_pretty(user_data, savingPath.c_str());
+
+	App->editor->AddLog("Generated Texture Meta Data\n");
+}
+
+void ResourceMatertial::LoadMeta()
+{
+	std::string loadingPath = libraryFile + ".meta";
+	JSON_Value* userData = json_parse_file(loadingPath.c_str());
+
+	if (userData != nullptr)
+	{
+		metaData.uid = json_object_get_number(json_object(userData), "UID");
+		metaData.texturePath = json_object_get_string(json_object(userData), "TexturePath");
+		metaData.alienifying = json_object_get_boolean(json_object(userData), "Alienifying");
+		metaData.blurring = json_object_get_boolean(json_object(userData), "Blurring");
+		metaData.contrast = json_object_get_boolean(json_object(userData), "Contrast");
+		metaData.equalization = json_object_get_boolean(json_object(userData), "Equalization");
+		metaData.gammaCorrection = json_object_get_boolean(json_object(userData), "GammaCorrection");
+		metaData.negativity = json_object_get_boolean(json_object(userData), "Negativity");
+		metaData.noise = json_object_get_boolean(json_object(userData), "Noise");
+		metaData.pixelization = json_object_get_boolean(json_object(userData), "Pixelization");
+		metaData.sharpering = json_object_get_boolean(json_object(userData), "Sharpering");
+	}
 }

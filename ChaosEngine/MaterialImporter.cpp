@@ -1,5 +1,6 @@
 #include "Application.h" 
 #include "MaterialImporter.h"
+#include "ResourceMaterial.h"
 
 #include "DevIL/include/il.h"
 #include "DevIL/include/ilu.h"
@@ -45,7 +46,7 @@ void MaterialImporter::SaveMaterial(std::string sourcePath)
 	ddsPath = auxPath;
 }
 
-std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool isDropped)
+std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool isDropped, ResourceMatertial* resource)
 {
 	std::vector<int> toReturn;
 	ILboolean success;
@@ -60,6 +61,25 @@ std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool i
 	success = ilLoadImage(sourcePath.c_str());
 
 	SaveMaterial(sourcePath.c_str());
+
+	if (resource->metaData.alienifying)
+		iluAlienify();
+	if (resource->metaData.blurring)
+		iluBlurAvg(10);
+	if (resource->metaData.contrast)
+		iluContrast(1.6);
+	if (resource->metaData.equalization)
+		iluEqualize();
+	if (resource->metaData.gammaCorrection)
+		iluGammaCorrect(1);
+	if (resource->metaData.negativity)
+		iluNegative();
+	if (resource->metaData.noise)
+		iluNoisify(0.5);
+	if (resource->metaData.pixelization)
+		iluPixelize(10);
+	if (resource->metaData.sharpering)
+		iluSharpen(1.5,5);
 
 	w = ilGetInteger(IL_IMAGE_WIDTH);
 	h = ilGetInteger(IL_IMAGE_HEIGHT);
@@ -221,8 +241,8 @@ std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool i
 
 std::vector<int> MaterialImporter::LoadMaterial(std::string sourcePath, bool isDropped)
 {
-	ImportMaterial(sourcePath, isDropped);
-	std::vector<int> aux = ImportMaterial(ddsPath, isDropped);
+	ImportMaterial(sourcePath, isDropped, nullptr);
+	std::vector<int> aux = ImportMaterial(ddsPath, isDropped, nullptr);
 	return aux;
 }
 

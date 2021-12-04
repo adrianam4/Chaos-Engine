@@ -55,14 +55,14 @@ void ComponentMaterial::Update()
 	if (showCheckerTexture)
 	{
 		std::string checkersPath = "Library/Textures/Checker.dds";
-		std::vector<int> aux = importer.ImportMaterial(checkersPath, isDropped);
+		std::vector<int> aux = importer.ImportMaterial(checkersPath, isDropped, nullptr);
 		myImageId = aux[0];
 		width = aux[1];
 		height = aux[2];
 	}
 	else
 	{
-		std::vector<int> aux = importer.ImportMaterial(TexturePathConst, isDropped);
+		std::vector<int> aux = importer.ImportMaterial(TexturePathConst, isDropped, nullptr);
 		myImageId = aux[0];
 		width = aux[1];
 		height = aux[2];
@@ -80,7 +80,7 @@ void ComponentMaterial::OnEditor(int i)
 		Update();
 	}
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Path: "); ImGui::SameLine(); ImGui::Text(texturePath);
-	ImGui::Image((void*)(intptr_t)myImageId, ImVec2(width/2, height/2));
+	ImGui::Image((void*)(intptr_t)myImageId, ImVec2(200, 200));
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Width: "); ImGui::SameLine(); ImGui::Text("%d", width);
 	ImGui::TextColored(ImVec4(255, 255, 0, 255), "Height: "); ImGui::SameLine(); ImGui::Text("%d", height);
 }

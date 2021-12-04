@@ -39,6 +39,8 @@ public:
 	inline uint GetBytes() override { return bytes; }
 	inline GLuint GetTextureId() override { return textureId; }
 	void GenerateMeta() override;
+	void GenerateMeta(bool alienifying, bool blurring, bool contrast, bool equalization, bool gammaCorrection, bool negativity, bool noise, bool pixelization, bool sharpering);
+	void LoadMeta() override;
 
 public:
 	uint width = 0;

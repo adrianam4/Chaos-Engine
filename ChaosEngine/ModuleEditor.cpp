@@ -15,6 +15,7 @@
 #include "Parson/parson.h"
 #include "CameraComponent.h"
 #include "MaterialComponent.h"
+#include "ResourceMaterial.h"
 #include "Component.h"
 #include "FileDialog.h"
 #include "mmgr.h"
@@ -33,6 +34,7 @@ ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, st
 	objectSelected = nullptr;
 	consoleBuffer.clear();
 	showRay = true;
+	showSaveOnExitMenu = false;
 }
 
 ModuleEditor::~ModuleEditor()
@@ -49,7 +51,6 @@ bool ModuleEditor::Start()
 
 	grid = new Grid(0, 0, 0, 0);
 	grid->axis = true;
-
 	App->camera->Move(Vec3(1.0f, 1.0f, 0.0f));
 	App->camera->LookAt(Vec3(0, 0, 0));
 
@@ -1018,6 +1019,7 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 // Update: draw background
 update_status ModuleEditor::Update(float dt)
 {
+
 	if (App->camera->camArray.size() == 0) {
 		App->camera->GameCam = nullptr;
 	}
@@ -1209,6 +1211,8 @@ update_status ModuleEditor::Update(float dt)
 	}
 	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
+	if (App->input->GetKey(SDL_SCANCODE_V) == KEY_UP)
+		showSaveOnExitMenu = !showSaveOnExitMenu;
 	//////////////////////////////////////////////////////////////////////////////////////////// SHAPES BEGIN OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////
 	if (showOptionsMenu != ComponentType::NONE) {
 		DOptionsmenu(showOptionsMenu);
@@ -1488,6 +1492,7 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Texture Import Settings", &showTextureMenu, ImGuiWindowFlags_NoScrollbar);
 
+		ResourceMatertial* res = (ResourceMatertial*)newResource;
 
 		if (ImGui::CollapsingHeader("Settings"))
 		{
@@ -1511,52 +1516,72 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::Columns(columnCount, 0, false);
 			if (ImGui::Checkbox("Alienfy", &alienfy))
 			{
-
+				res->metaData.alienifying = alienfy;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Contrast", &contrast))
 			{
-
+				res->metaData.contrast = contrast;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Negativity", &negativity))
 			{
-
+				res->metaData.negativity = negativity;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Sharpening", &sharpening))
 			{
-
+				res->metaData.sharpering = sharpening;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Gaussian Blur", &gaussianBlur))
 			{
-
+				res->metaData.blurring = gaussianBlur; //TODO
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Equalization", &equalization))
 			{
-
+				res->metaData.equalization = equalization;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Noise", &noise))
 			{
-
+				res->metaData.noise = noise;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Average Blur", &averageBlur))
 			{
-
+				res->metaData.blurring = averageBlur;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Gamma Correction", &gammaCorrection))
 			{
-
+				res->metaData.gammaCorrection = gammaCorrection;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Pixelization", &pixelization))
 			{
-
+				res->metaData.pixelization = pixelization;
+				App->resources->LoadResource(newResource->GetUID());
+				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 		}
@@ -1564,15 +1589,33 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::Separator();
 		if (ImGui::Button("Import"))
 		{
-
-		}
-		if (ImGui::Button("Restart"))
-		{
-
+			int oldMaterialId;
+			oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
+			if (oldMaterialId != -1)
+			{
+				objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
+			}
+			ResourceMatertial* res = (ResourceMatertial*)newResource;
+			res->GenerateMeta(alienfy, averageBlur, contrast, equalization, gammaCorrection, negativity, noise, pixelization, sharpening);
+			App->resources->LoadResource(newResource->GetUID());
+			objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+			droppedTexture = (ImTextureID)newResource->GetTextureId();
+			showTextureMenu = false;
 		}
 		if (ImGui::Button("Set Default"))
 		{
-
+			res->metaData.alienifying = alienfy = false;
+			res->metaData.blurring = averageBlur = false;
+			res->metaData.contrast = contrast = false;
+			res->metaData.negativity = negativity = false;
+			res->metaData.sharpering = sharpening = false;
+			res->metaData.blurring = gaussianBlur = false;
+			res->metaData.equalization = equalization = false;
+			res->metaData.noise = noise = false;
+			res->metaData.gammaCorrection = gammaCorrection = false;
+			res->metaData.pixelization = pixelization = false;
+			App->resources->LoadResource(newResource->GetUID());
+			droppedTexture = (ImTextureID)newResource->GetTextureId();
 		}
 
 		ImGui::Image((void*)(intptr_t)droppedTexture, ImVec2(200, 200));
@@ -2228,7 +2271,7 @@ update_status ModuleEditor::Update(float dt)
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"))
 			{
 				const char* path = (const char*)payload->Data;
-				Resource* newResource = App->resources->GetResource(App->resources->Find(path));
+				newResource = App->resources->GetResource(App->resources->Find(path));
 
 				if (newResource == nullptr)
 				{
@@ -2239,6 +2282,7 @@ update_status ModuleEditor::Update(float dt)
 					if (newResource->type == ResourceType::MESH)
 					{
 						showMeshMenu = true;
+
 						static uint importedGobjs = 1;
 						App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
 						importedGobjs++;
@@ -2255,7 +2299,6 @@ update_status ModuleEditor::Update(float dt)
 					{
 						if (App->editor->objectSelected != nullptr)
 						{
-							showTextureMenu = true;
 							int oldMaterialId;
 							oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
 							if (oldMaterialId != -1)
@@ -2263,8 +2306,9 @@ update_status ModuleEditor::Update(float dt)
 								objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
 							}
 							App->resources->LoadResource(newResource->GetUID());
-							droppedTexture = (ImTextureID)newResource->GetTextureId();
 							objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+							droppedTexture = (ImTextureID)newResource->GetTextureId();
+							showTextureMenu = true;
 						}
 					}
 				}
@@ -2531,6 +2575,25 @@ update_status ModuleEditor::Update(float dt)
 			}
 			ImGui::SameLine();
 		}
+
+		ImGui::End();
+	}
+
+	if (showSaveOnExitMenu)
+	{
+		ImGui::Begin("Save Scene", &showTimeWindow, ImGuiWindowFlags_NoScrollbar);
+		ImGui::Text("Do you want to save the current scene?");
+		if (ImGui::Button("Yes, save the scene"))
+		{
+			FileDialog fileDialog;
+			std::string path = fileDialog.SaveScene("Chaos Scene (*.chaos)\0*.chaos\0");
+			App->editor->SaveScene(path.c_str());
+			return UPDATE_STOP;
+		}
+		else if (ImGui::Button("No, don't save the scene"))
+			return UPDATE_STOP;
+		if (ImGui::Button("Cancel"))
+			showSaveOnExitMenu = !showSaveOnExitMenu;
 
 		ImGui::End();
 	}

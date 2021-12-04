@@ -3,6 +3,8 @@
 #include"Globals.h"
 #include"physfs.h"
 
+class ResourceMatertial;
+
 class MaterialImporter 
 {
 public:
@@ -10,7 +12,7 @@ public:
 	~MaterialImporter();
 
 	void SaveMaterial(std::string sourcePath);
-	std::vector<int> ImportMaterial(std::string sourcePath, bool isDropped);
+	std::vector<int> ImportMaterial(std::string sourcePath, bool isDropped, ResourceMatertial* resource);
 	std::vector<int> LoadMaterial(std::string sourcePath, bool isDropped);
 	std::vector<int> GetMaterialData();
 	std::string ddsPath;
