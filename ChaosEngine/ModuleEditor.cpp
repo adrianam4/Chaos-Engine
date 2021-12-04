@@ -32,6 +32,7 @@ ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, st
 	lastId = -1;
 	objectSelected = nullptr;
 	consoleBuffer.clear();
+	showRay = true;
 }
 
 ModuleEditor::~ModuleEditor()
@@ -1143,6 +1144,18 @@ update_status ModuleEditor::Update(float dt)
 					else
 					{
 						App->editor->AddLog("AABB Disabled\n");
+					}
+				}
+				if (ImGui::MenuItem("Enable/Disable Raycast"))
+				{
+					showRay = !showRay;
+					if (showRay)
+					{
+						App->editor->AddLog("Raycast Enabled\n");
+					}
+					else
+					{
+						App->editor->AddLog("Raycast Disabled\n");
 					}
 				}
 				ImGui::EndMenu();

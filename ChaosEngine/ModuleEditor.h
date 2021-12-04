@@ -61,6 +61,7 @@ public:
 	ImGuiWindowFlags sceneWindow = 0;
 	ImVec2 lastViewportSize;
 	bool showAABB;
+	bool showRay;
 	bool scrollToBottom;
 	GameObject* objectSelected;
 	float4 viewport;

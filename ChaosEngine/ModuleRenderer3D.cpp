@@ -403,6 +403,9 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 						}
 					}
 				}
+				if (App->editor->showRay)
+					DrawRay();
+
 				App->editor->DrawPrimitives();
 				App->viewportBuffer->UnBind();
 
@@ -442,11 +445,7 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 				}
 				App->editor->DrawPrimitives();
 				App->viewportBuffer->UnBind();
-
-
-
 			}
-
 		}
 	}
 }
@@ -482,6 +481,18 @@ void ModuleRenderer3D::DrawCameras()
 		}
 		App->viewportBuffer->UnBind();
 	}
+}
+
+void ModuleRenderer3D::DrawRay()
+{
+	glBegin(GL_LINES);
+	glLineWidth(5);
+	glColor3f(1.f, 0.f, 0.f);
+	glVertex3f(App->camera->myRay.a.x, App->camera->myRay.a.y, App->camera->myRay.a.z);
+	glColor3f(0.f, 0.f, 0.f);
+	glVertex3f(App->camera->myRay.b.x, App->camera->myRay.b.y, App->camera->myRay.b.z);
+	glColor3f(1.f, 1.f, 1.f);
+	glEnd();
 }
 
 void ModuleRenderer3D::InitMesh(char* path, GameObject* lastObj)
