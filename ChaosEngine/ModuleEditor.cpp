@@ -154,6 +154,11 @@ bool ModuleEditor::Start()
 	App->camera->camArray[0]->isTheMainCamera = true;
 	App->camera->GameCam = App->camera->camArray[0];
 
+	isActive = true;
+	isActive2 = true;
+	isActive3 = true;
+	isActive4 = true;
+
 	return ret;
 }
 
@@ -897,32 +902,18 @@ void ModuleEditor::AddCylinder(float3 pos, float3 sca)
 
 void ModuleEditor::DOptionsmenu(ComponentType type)
 {
+	int lastComponent = 0;
 
 	switch (type)
 	{
 	case ComponentType::CUBE:
 
-		ImGui::CloseCurrentPopup();
-
-		ImGui::Begin("Options");
-		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X Position", &position.x);
-		ImGui::DragFloat("Y Position", &position.y);
-		ImGui::DragFloat("Z Position", &position.z);
-		ImGui::Text("Set Scale:");
-		ImGui::DragFloat("X Scale", &M.x);
-		ImGui::DragFloat("Y Scale", &M.y);
-		ImGui::DragFloat("Z Scale", &M.z);
-
-
-		if (ImGui::Button("Create Cube"))
-		{
 			if (cubes.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Cube "));
 			else
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cubes.size() + 1, "Cube "));
 
-			int lastComponent = App->scene->gameObjects.size() - 1;
+			lastComponent = App->scene->gameObjects.size() - 1;
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CUBE, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
@@ -931,32 +922,16 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 
 			showOptionsMenu = ComponentType::NONE;
 			App->editor->AddLog("Cube Created\n");
-		}
-		ImGui::End();
 		break;
 
 	case ComponentType::PYRAMID:
 
-		ImGui::Begin("Options");
-
-		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X Position", &position.x);
-		ImGui::DragFloat("Y Position", &position.y);
-		ImGui::DragFloat("Z Position", &position.z);
-
-		ImGui::Text("Set Scale:");
-		ImGui::DragFloat("X Scale", &M.x);
-		ImGui::DragFloat("Y Scale", &M.y);
-		ImGui::DragFloat("Z Scale", &M.z);
-
-		if (ImGui::Button("Create Pyramid"))
-		{
 			if (pyramids.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Pyramid "));
 			else
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, pyramids.size() + 1, "Pyramid "));
 
-			int lastComponent = App->scene->gameObjects.size() - 1;
+			lastComponent = App->scene->gameObjects.size() - 1;
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PYRAMID, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
@@ -965,30 +940,16 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 			showOptionsMenu = ComponentType::NONE;
 
 			App->editor->AddLog("Pyramid Created\n");
-		}
-		ImGui::End();
 		break;
+
 	case ComponentType::CYLINDER:
-		ImGui::Begin("Options");
 
-		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X Position", &position.x);
-		ImGui::DragFloat("Y Position", &position.y);
-		ImGui::DragFloat("Z Position", &position.z);
-
-		//ImGui::Text("Set Scale:");
-		//ImGui::DragFloat("X Scale", &M.x);
-		//ImGui::DragFloat("Y Scale", &M.y);
-		//ImGui::DragFloat("Z Scale", &M.z);
-
-		if (ImGui::Button("Create Cylindrer"))
-		{
 			if (cylinders.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Cylinder "));
 			else
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cylinders.size() + 1, "Cylinder "));
 
-			int lastComponent = App->scene->gameObjects.size() - 1;
+			lastComponent = App->scene->gameObjects.size() - 1;
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::CYLINDER, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
@@ -997,31 +958,16 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 			showOptionsMenu = ComponentType::NONE;
 
 			App->editor->AddLog("Cylinder Created\n");
-		}
-		ImGui::End();
 		break;
+
 	case ComponentType::SPHERE:
 
-		ImGui::Begin("Options");
-
-		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X Position", &position.x);
-		ImGui::DragFloat("Y Position", &position.y);
-		ImGui::DragFloat("Z Position", &position.z);
-
-		//ImGui::Text("Set Scale:");
-		//ImGui::DragFloat("X Scale", &M.x);
-		//ImGui::DragFloat("Y Scale", &M.y);
-		//ImGui::DragFloat("Z Scale", &M.z);
-
-		if (ImGui::Button("Create Sphere"))
-		{
 			if (spheres.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Sphere "));
 			else
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, spheres.size() + 1, "Sphere "));
 
-			int lastComponent = App->scene->gameObjects.size() - 1;
+			lastComponent = App->scene->gameObjects.size() - 1;
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::SPHERE, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
@@ -1030,32 +976,16 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 			showOptionsMenu = ComponentType::NONE;
 
 			App->editor->AddLog("Sphere Created\n");
-		}
-		ImGui::End();
 		break;
 
 	case ComponentType::PLANE:
 
-		ImGui::Begin("Options");
-
-		ImGui::Text("Set Position:");
-		ImGui::DragFloat("X Position", &position.x);
-		ImGui::DragFloat("Y Position", &position.y);
-		ImGui::DragFloat("Z Position", &position.z);
-
-		ImGui::Text("Set Scale:");
-		ImGui::DragFloat("X Scale", &M.x);
-		ImGui::DragFloat("Y Scale", &M.y);
-		ImGui::DragFloat("Z Scale", &M.z);
-
-		if (ImGui::Button("Create Plane"))
-		{
 			if (planes.size() == 0)
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Plane "));
 			else
 				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, planes.size() + 1, "Plane "));
 
-			int lastComponent = App->scene->gameObjects.size() - 1;
+			lastComponent = App->scene->gameObjects.size() - 1;
 			objectSelected = App->scene->gameObjects[lastComponent];
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::PLANE, &position, &M, &float3(0, 0, 0)));
 			App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &position, &M, &float3(0, 0, 0)));
@@ -1064,8 +994,6 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 			showOptionsMenu = ComponentType::NONE;
 
 			App->editor->AddLog("Plane Created\n");
-		}
-		ImGui::End();
 		break;
 	default:
 		break;
@@ -1155,42 +1083,6 @@ update_status ModuleEditor::Update(float dt)
 
 					break;
 				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
-				{
-					App->editor->AddLog("Cube Deleted\n");
-				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::CUBE)
-				{
-					App->editor->AddLog("Camera Deleted\n");
-				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::PYRAMID)
-				{
-					App->editor->AddLog("Pyramid Deleted\n");
-				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::CYLINDER)
-				{
-					App->editor->AddLog("Cylinder Deleted\n");
-				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::SPHERE)
-				{
-					App->editor->AddLog("Sphere Deleted\n");
-				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::PLANE)
-				{
-					App->editor->AddLog("Plane Deleted\n");
-				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::MESH)
-				{
-					App->editor->AddLog("Mesh Deleted\n");
-				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::EMPTY)
-				{
-					App->editor->AddLog("Empty Object Deleted\n");
-				}
-				if (App->editor->objectSelected->components[i]->type == ComponentType::CAMERA)
-				{
-					App->editor->AddLog("Camera Deleted\n");
-				}
 			}
 		}
 	}
@@ -1214,17 +1106,12 @@ update_status ModuleEditor::Update(float dt)
 	static bool showAssets;
 	static bool showTextureMenu;
 	static bool showMeshMenu;
-	static bool isActive;
-	static bool isActive2;
-	static bool isActive3;
-	static bool isActive4;
 
 	// Our state
 	if (App->gameMode == false) {
-		showDemoWindow = false;
+
 		showAnotherWindow = false;
 		showCloseWindow = true;
-		showAboutWindow = false;
 		openConfigMenu = false;
 		openSceneMenu = false;
 		showConfigMenu = true;
@@ -1236,10 +1123,6 @@ update_status ModuleEditor::Update(float dt)
 		showFileWindow = false;
 		showTimeWindow = true;
 		showOptions = true;
-		isActive = true;
-		isActive2 = true;
-		isActive3 = true;
-		isActive4 = true;
 		showAssets = true;
 	}
 
@@ -1322,27 +1205,6 @@ update_status ModuleEditor::Update(float dt)
 
 			if (ImGui::BeginMenu("View", &openConfigMenu))
 			{
-				if (ImGui::MenuItem("Configuration"))
-				{
-					showConfigMenu = !showConfigMenu;
-				}
-				if (ImGui::MenuItem("Hierarchy"))
-				{
-					showHierarchy = !showHierarchy;
-				}
-				if (ImGui::MenuItem("Inspector"))
-				{
-					showInspector = !showInspector;
-				}
-				if (ImGui::MenuItem("Console"))
-				{
-					showConsoleMenu = !showConsoleMenu;
-				}
-				if (ImGui::MenuItem("Time"))
-				{
-					showTimeWindow = !showTimeWindow;
-				}
-				ImGui::Separator();
 				if (ImGui::MenuItem("Enable/Disable AABB"))
 				{
 					showAABB = !showAABB;

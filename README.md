@@ -24,7 +24,15 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - Configuration Menu with many options such as a Frame Limiter, Window Size Configuration, Input and Hardware Info, etc.
 - View and manage your objects in an Hierarchy
 - A Console that shows your actions on the Engine
-- 
+- Import your FBX, Textures and Scenes (Resource Manager)
+- Select Objects by Clicking on them (Mouse Clicking)
+- Game Mode (Time Management)
+- Create Game Cameras and move them
+- Loading Optimization (Frustrum Culling)
+- Live Object Transform (Guizmos)
+- Load and Save your own Scenes (.chaos Format)
+- New Texture Filters
+- Own File Format (Textures and Models)
 
 
 ## Controls:
@@ -40,30 +48,25 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - LEFT MOUSE BUTTON + LEFT ALT: Orbit Camera
 - LEFT SHIFT: Duplicates Camera Movement
 - P + Select Object: Makes the First Selected Object Children of the Second One
+- P: Object Selected = NULL
 - SUPR: Deletes Selected Game Object
 - F1: Enable/Disable Deph Test
 - F2: Enable/Disable Cull Face
 - F3: Enable/Disable Lightning
 - F4: Enable/Disable Color Material
 - F5: Enable/Disable Textures
-- F10: Save Config
-- F11: Load Config
 - BUTTON (1): Translation Guizmo
 - BUTTON (2): Rotation Guizmo
 - BUTTON (3): Scale Guizmo
 
 
-## Additional Functionality
-
-- You can view the Bounding Boxes (AABB) of each Object
-- You can set the Scale and Position before creating Objects
-
-
 ## Additional Comments
 
 - You need to keep pressing the P key to assign one Children to the Father
-- If you don't see a window you can make it visible with the top menu selecting View
-- Our two extra FBX can be loaded with the Create Menu
+- Mouse Picking can fail because of the AABBs (Change positions when the object rotates/scales) (We don't have Space Partitioning)
+- If you import an external texture you need to go to the Material Component (Inspector Window) and activate/deactivate the checker texture
+- While the camera orbits there is a visual problem (It doesn't affect the engine)
+- External FBX cannot be deleted on the Hierarchy Window
 
 
 ## Important Note

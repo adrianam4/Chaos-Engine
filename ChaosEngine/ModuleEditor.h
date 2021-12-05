@@ -73,6 +73,11 @@ public:
 	std::vector<MyPlane*> planes;
 	GameObject* objectToChildren;
 
+	bool isActive;
+	bool isActive2;
+	bool isActive3;
+	bool isActive4;
+
 	int lastId;
 	bool isSelected;
 	bool start = true;

@@ -299,8 +299,6 @@ update_status ModuleCamera3D::Update(float dt)
 				App->editor->objectSelected = hitObjs[nearObj];
 				hitObjs.clear();
 			}
-			else
-				App->editor->objectSelected = nullptr;
 		}
 	}
 

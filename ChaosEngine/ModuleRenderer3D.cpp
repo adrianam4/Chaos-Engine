@@ -32,14 +32,14 @@ ModuleRenderer3D::~ModuleRenderer3D()
 // Called before render is available
 bool ModuleRenderer3D::Init()
 {
-	App->editor->AddLog("Creating 3D Renderer context\n");
+	//App->editor->AddLog("Creating 3D Renderer context\n");
 	bool ret = true;
 	//Create context
 	context = SDL_GL_CreateContext(App->window->window);
 
 	if(context == NULL)
 	{
-		App->editor->AddLog("OpenGL context could not be created! SDL_Error: %s\n");
+		//App->editor->AddLog("OpenGL context could not be created! SDL_Error: %s\n");
 		ret = false;
 	}
 	
@@ -48,19 +48,19 @@ bool ModuleRenderer3D::Init()
 	{
 		GLenum err = glewInit();
 		// … check for errors
-		App->editor->AddLog("Using Glew %s\n", glewGetString(GLEW_VERSION));
-		// Should be 2.0
-		App->editor->AddLog("Vendor: %s\n", glGetString(GL_VENDOR));
-		App->editor->AddLog("Renderer: %s\n", glGetString(GL_RENDERER));
-		App->editor->AddLog("OpenGL version supported %s\n", glGetString(GL_VERSION));
-		App->editor->AddLog("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		//App->editor->AddLog("Using Glew %s\n", glewGetString(GLEW_VERSION));
+		//// Should be 2.0
+		//App->editor->AddLog("Vendor: %s\n", glGetString(GL_VENDOR));
+		//App->editor->AddLog("Renderer: %s\n", glGetString(GL_RENDERER));
+		//App->editor->AddLog("OpenGL version supported %s\n", glGetString(GL_VERSION));
+		//App->editor->AddLog("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		if (GLEW_OK != err)
 		{
 			/* Problem: glewInit failed, something is seriously wrong. */
-			App->editor->AddLog("Error: %s\n", glewGetErrorString(err));
+			//App->editor->AddLog("Error: %s\n", glewGetErrorString(err));
 		}
-		App->editor->AddLog("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
+		//App->editor->AddLog("Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
 
 		ilInit();
 		iluInit();
@@ -69,7 +69,7 @@ bool ModuleRenderer3D::Init()
 		//Use Vsync
 		if (VSYNC && SDL_GL_SetSwapInterval(1) < 0)
 		{
-			App->editor->AddLog("Warning: Unable to set VSync! SDL Error: %s\n");
+			//App->editor->AddLog("Warning: Unable to set VSync! SDL Error: %s\n");
 		}
 
 		// Setup Dear ImGui context
@@ -95,7 +95,7 @@ bool ModuleRenderer3D::Init()
 		GLenum error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
+			//App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -107,7 +107,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
+			//App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 		
@@ -130,7 +130,7 @@ bool ModuleRenderer3D::Init()
 		error = glGetError();
 		if(error != GL_NO_ERROR)
 		{
-			App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
+			//App->editor->AddLog("Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 		
