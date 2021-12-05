@@ -152,6 +152,8 @@ bool ModuleEditor::Start()
 	App->camera->camArray[lastComponent]->isTheMainCamera = true;
 	App->camera->GameCam = App->camera->camArray[lastComponent];
 
+	//LoadScene("Assets/Scenes/Street.chaos");
+
 	return ret;
 }
 

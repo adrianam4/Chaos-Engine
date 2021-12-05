@@ -157,6 +157,11 @@ void ComponentTransform::Update(bool releaseMouse)
 			go = nullptr;
 			delete go;
 		}
+		else
+		{
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[isCamera];
+			App->camera->GameCam->Move(position);
+		}
 	}
 
 	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
