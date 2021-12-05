@@ -17,11 +17,26 @@ MaterialImporter::~MaterialImporter()
 {
 }
 
-void MaterialImporter::SaveMaterial(std::string sourcePath)
+void MaterialImporter::SaveMaterial(std::string sourcePath, std::string compression)
 {
 	ILuint size;
 	ILubyte* data;
-	ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+
+	ILint compressionMethod = IL_DXT5;
+	if (compression == "IL_DXT_NO_COMP")
+		compressionMethod = IL_DXT_NO_COMP;
+	if (compression == "IL_DXT1")
+		compressionMethod = IL_DXT1;
+	if (compression == "IL_DXT2")
+		compressionMethod = IL_DXT2;
+	if (compression == "IL_DXT3")
+		compressionMethod = IL_DXT3;
+	if (compression == "IL_DXT4")
+		compressionMethod = IL_DXT4;
+	if (compression == "IL_DXT5")
+		compressionMethod = IL_DXT5;
+
+	ilSetInteger(IL_DXTC_FORMAT, compressionMethod);
 	size = ilSaveL(IL_DDS, nullptr, 0);
 
 	std::string auxPath = std::string(sourcePath);
@@ -60,26 +75,30 @@ std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool i
 
 	success = ilLoadImage(sourcePath.c_str());
 
-	SaveMaterial(sourcePath.c_str());
+	SaveMaterial(sourcePath.c_str(), resource->metaData.compression);
 
+	if (resource->metaData.mipMap)
+		iluBuildMipmaps();
 	if (resource->metaData.alienifying)
 		iluAlienify();
-	if (resource->metaData.blurring)
-		iluBlurAvg(10);
+	if (resource->metaData.avgBlurring)
+		iluBlurAvg(resource->metaData.amountAvBlur);
+	if (resource->metaData.gausianBlurring)
+		iluBlurGaussian(resource->metaData.amountGausianBlur);
 	if (resource->metaData.contrast)
-		iluContrast(1.6);
+		iluContrast(resource->metaData.amountContrast);
 	if (resource->metaData.equalization)
 		iluEqualize();
 	if (resource->metaData.gammaCorrection)
-		iluGammaCorrect(1);
+		iluGammaCorrect(resource->metaData.amountGammaCorrection);
 	if (resource->metaData.negativity)
 		iluNegative();
 	if (resource->metaData.noise)
-		iluNoisify(0.5);
+		iluNoisify(resource->metaData.amountNoise);
 	if (resource->metaData.pixelization)
-		iluPixelize(10);
+		iluPixelize(resource->metaData.amountPixelation);
 	if (resource->metaData.sharpering)
-		iluSharpen(1.5,5);
+		iluSharpen(resource->metaData.sharpenFactor, resource->metaData.sharpenIters);
 
 	w = ilGetInteger(IL_IMAGE_WIDTH);
 	h = ilGetInteger(IL_IMAGE_HEIGHT);

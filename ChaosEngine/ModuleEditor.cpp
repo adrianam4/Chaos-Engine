@@ -1486,19 +1486,74 @@ update_status ModuleEditor::Update(float dt)
 	static bool averageBlur;
 	static bool gammaCorrection;
 	static bool pixelization;
+	static float contrastAmount;
+	static float sharpenFactor;
+	static float sharpenIters;
+	static float avBlurAmount;
+	static float gaussianBlurAmount;
+	static float gammaCorrectionAmount;
+	static float noiseAmount;
+	static float pixelationAmount;
+	static std::string compression;
+	static bool selected[6];
 
 	if (showTextureMenu)
 	{
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Texture Import Settings", &showTextureMenu, ImGuiWindowFlags_NoScrollbar);
+		
+		const char* items[]{ "IL_DXT_NO_COMP","IL_DXT1" ,"IL_DXT2" ,"IL_DXT3" ,"IL_DXT4" ,"IL_DXT5" };
 
 		ResourceMatertial* res = (ResourceMatertial*)newResource;
+
+		static std::string previewValue = " ";
+		// Select Compression Type
+		if (ImGui::BeginCombo("Compression",previewValue.c_str()))
+		{
+			previewValue = " ";
+			for (int i = 0; i < IM_ARRAYSIZE(items); i++)
+			{
+				if (ImGui::Selectable(items[i],&selected[i]))
+				{
+					compression = items[i];
+					previewValue = compression;
+				}
+			}
+			ImGui::EndCombo();
+		}
+
+		if (!res->metaData.isLoaded)
+		{
+			mipMap = res->metaData.mipMap;
+			alienfy = res->metaData.alienifying;
+			averageBlur = res->metaData.avgBlurring;
+			contrast = res->metaData.contrast;
+			negativity = res->metaData.negativity;
+			sharpening = res->metaData.sharpering;
+			gaussianBlur = res->metaData.gausianBlurring; 
+			equalization = res->metaData.equalization;
+		    noise = res->metaData.noise;
+			gammaCorrection = res->metaData.gammaCorrection;
+			pixelization = res->metaData.pixelization;
+
+			avBlurAmount = res->metaData.amountAvBlur;
+			contrastAmount = res->metaData.amountContrast;
+			pixelationAmount = res->metaData.amountGammaCorrection;
+			gaussianBlurAmount = res->metaData.amountGausianBlur;
+			noiseAmount = res->metaData.amountNoise;
+			pixelationAmount = res->metaData.amountPixelation;
+			sharpenIters = res->metaData.sharpenIters;
+			sharpenFactor = res->metaData.sharpenFactor;
+			compression = res->metaData.compression;
+
+			res->metaData.isLoaded = true;
+		}
 
 		if (ImGui::CollapsingHeader("Settings"))
 		{
 			if (ImGui::Checkbox("Mip-Map", &mipMap))
 			{
-
+				res->metaData.mipMap = mipMap;
 			}
 		}
 
@@ -1517,77 +1572,97 @@ update_status ModuleEditor::Update(float dt)
 			if (ImGui::Checkbox("Alienfy", &alienfy))
 			{
 				res->metaData.alienifying = alienfy;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Contrast", &contrast))
 			{
 				res->metaData.contrast = contrast;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
+			}
+			ImGui::NextColumn();
+			if (ImGui::DragFloat("Amount of Contrast:", &contrastAmount, 0.1f, -2, 2));
+			{
+				res->metaData.amountContrast = contrastAmount;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Negativity", &negativity))
 			{
 				res->metaData.negativity = negativity;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Sharpening", &sharpening))
 			{
 				res->metaData.sharpering = sharpening;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
+			}
+			ImGui::NextColumn();
+			if (ImGui::DragFloat("Sharpering Factor:", &sharpenFactor, 0.1f, 0, 2.5));
+			{
+				res->metaData.sharpenFactor = sharpenFactor;
+			}
+			ImGui::NextColumn();
+			if (ImGui::DragFloat("Sharpering Iterations:", &sharpenIters, 0.1f, 0, 5));
+			{
+				res->metaData.sharpenIters = sharpenIters;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Gaussian Blur", &gaussianBlur))
 			{
-				res->metaData.blurring = gaussianBlur; //TODO
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
+				res->metaData.gausianBlurring = gaussianBlur;
+			}
+			ImGui::NextColumn();
+			if (ImGui::DragFloat("Amount of Gaussian Blur:", &gaussianBlurAmount, 0.1f, 1, 10));
+			{
+				res->metaData.amountGausianBlur = gaussianBlurAmount;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Equalization", &equalization))
 			{
 				res->metaData.equalization = equalization;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Noise", &noise))
 			{
 				res->metaData.noise = noise;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
+			}
+			ImGui::NextColumn();
+			if (ImGui::DragFloat("Amount of Noise:", &noiseAmount, 0.1f, 0, 1));
+			{
+				res->metaData.amountNoise = noiseAmount;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Average Blur", &averageBlur))
 			{
-				res->metaData.blurring = averageBlur;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
+				res->metaData.avgBlurring = averageBlur;
+			}
+			ImGui::NextColumn();
+			if (ImGui::DragFloat("Amount of Average Blur:", &avBlurAmount, 0.1f, 1, 10));
+			{
+				res->metaData.amountAvBlur = avBlurAmount;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Gamma Correction", &gammaCorrection))
 			{
 				res->metaData.gammaCorrection = gammaCorrection;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
+			}
+			ImGui::NextColumn();
+			if (ImGui::DragFloat("Amount of Gamma Correction:", &gammaCorrectionAmount, 0.1f, 0, 2));
+			{
+				res->metaData.amountGammaCorrection = gammaCorrectionAmount;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Pixelization", &pixelization))
 			{
 				res->metaData.pixelization = pixelization;
-				App->resources->LoadResource(newResource->GetUID());
-				droppedTexture = (ImTextureID)newResource->GetTextureId();
+			}
+			ImGui::NextColumn();
+			if (ImGui::DragFloat("Amount of Pixelization:", &pixelationAmount, 0.1f, 1, 10));
+			{
+				res->metaData.amountPixelation = pixelationAmount;
 			}
 			ImGui::NextColumn();
 		}
 
 		ImGui::Separator();
-		if (ImGui::Button("Import"))
+		if (ImGui::Button("Apply and Import"))
 		{
 			int oldMaterialId;
 			oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
@@ -1596,7 +1671,7 @@ update_status ModuleEditor::Update(float dt)
 				objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
 			}
 			ResourceMatertial* res = (ResourceMatertial*)newResource;
-			res->GenerateMeta(alienfy, averageBlur, contrast, equalization, gammaCorrection, negativity, noise, pixelization, sharpening);
+			res->GenerateMeta(mipMap,alienfy, averageBlur, gaussianBlur, contrast, equalization, gammaCorrection, negativity, noise, pixelization, sharpening, contrastAmount, sharpenFactor, sharpenIters, avBlurAmount, gaussianBlurAmount, gammaCorrectionAmount, noiseAmount, pixelationAmount,compression);
 			App->resources->LoadResource(newResource->GetUID());
 			objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 			droppedTexture = (ImTextureID)newResource->GetTextureId();
@@ -1604,16 +1679,28 @@ update_status ModuleEditor::Update(float dt)
 		}
 		if (ImGui::Button("Set Default"))
 		{
+			res->metaData.mipMap = mipMap = false;
 			res->metaData.alienifying = alienfy = false;
-			res->metaData.blurring = averageBlur = false;
+			res->metaData.avgBlurring = averageBlur = false;
 			res->metaData.contrast = contrast = false;
 			res->metaData.negativity = negativity = false;
 			res->metaData.sharpering = sharpening = false;
-			res->metaData.blurring = gaussianBlur = false;
+			res->metaData.gausianBlurring = gaussianBlur = false;
 			res->metaData.equalization = equalization = false;
 			res->metaData.noise = noise = false;
 			res->metaData.gammaCorrection = gammaCorrection = false;
 			res->metaData.pixelization = pixelization = false;
+
+			res->metaData.amountAvBlur = avBlurAmount = 10;
+			res->metaData.amountContrast = contrastAmount = 1.6;
+			res->metaData.amountGammaCorrection = pixelationAmount = 10;
+			res->metaData.amountGausianBlur = gaussianBlurAmount = 10;
+			res->metaData.amountNoise = noiseAmount = 0.5;
+			res->metaData.amountPixelation = pixelationAmount = 10;
+			res->metaData.sharpenIters = sharpenIters = 5;
+			res->metaData.sharpenFactor = sharpenFactor = 1.5;
+			res->metaData.compression = compression = "IL_DXT5";
+
 			App->resources->LoadResource(newResource->GetUID());
 			droppedTexture = (ImTextureID)newResource->GetTextureId();
 		}
