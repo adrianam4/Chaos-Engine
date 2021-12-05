@@ -1434,23 +1434,6 @@ update_status ModuleEditor::Update(float dt)
 
 					App->editor->AddLog("Penguin Created\n");
 				}
-				if (ImGui::MenuItem("Create Car"))
-				{
-					static int cars = 1;
-					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, cars, "Car "));
-					cars++;
-					int lastComponent = App->scene->gameObjects.size() - 1;
-					objectSelected = App->scene->gameObjects[lastComponent];
-
-					App->resources->LoadResource(App->resources->Find("Assets/Models/Car.fbx"), App->scene->gameObjects[lastComponent]);
-					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-					objectSelected->components[1]->owner = objectSelected;
-					App->resources->LoadResource(App->resources->Find("Assets/Textures/Car.png"), App->scene->gameObjects[lastComponent]);
-					objectSelected->components[2]->owner = objectSelected;
-
-					App->editor->AddLog("Car Created\n");
-				}
 				if (ImGui::MenuItem("Create Cube"))
 				{
 					showOptionsMenu = ComponentType::CUBE;

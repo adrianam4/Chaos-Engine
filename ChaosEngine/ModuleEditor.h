@@ -81,27 +81,6 @@ public:
 	bool showSaveOnExitMenu;
 	bool showTextureMenu = false;
 
-	//Models
-	u32 houseModelId;
-	u32 penguinModelId;
-	u32 carModelId;
-	u32 sceneId;
-	//Materials
-	u32 houseMaterialId;
-	u32 penguinMaterialId;
-	u32 carMaterialId;
-	u32 sceneMaterialId;
-	//Icons
-	u32 folderId;
-	u32 playId;
-	u32 stopId;
-	u32 pauseId;
-	u32 advanceId;
-	u32 speedUpId;
-	u32 speedDownId;
-	u32 backId;
-	u32 fileId;
-
 	ImTextureID folderIcon;
 	ImTextureID playIcon;
 	ImTextureID stopIcon;
