@@ -3,7 +3,6 @@
 #include "MeshComponent.h"
 
 #include "Parson/parson.h"
-#include "mmgr.h"
 
 ComponentMesh::ComponentMesh(Mesh* mesh) 
 {

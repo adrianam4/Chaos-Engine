@@ -1,7 +1,6 @@
 #include "Application.h"
 #include "ResourceMesh.h"
 #include "Parson/parson.h"
-#include "mmgr.h"
 
 ResourceMesh::ResourceMesh(u32 _UID)
 {

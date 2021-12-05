@@ -2,7 +2,6 @@
 #include "ModuleResources.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
-#include "mmgr.h"
 
 ModuleResources::ModuleResources(Application* app, bool startEnabled) : Module(app, startEnabled)
 {

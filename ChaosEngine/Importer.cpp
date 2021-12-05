@@ -4,7 +4,6 @@
 #include "Resource.h"
 #include "ResourceMesh.h"
 #include"TransformComponent.h"
-#include "mmgr.h"
 
 FBXimporter::FBXimporter() {}
 FBXimporter::~FBXimporter() {

@@ -19,9 +19,9 @@
 #include "ResourceMesh.h"
 #include "Component.h"
 #include "FileDialog.h"
-#include "mmgr.h"
 #include"MeshComponent.h"
 #include<stack>
+
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
 
@@ -1100,7 +1100,6 @@ update_status ModuleEditor::Update(float dt)
 	static bool showConsoleMenu;
 	static bool showSceneWindow;
 	static bool showScene2Window;
-	static bool showFileWindow;
 	static bool showTimeWindow;
 	static bool showOptions;
 	static bool showAssets;
@@ -1120,7 +1119,6 @@ update_status ModuleEditor::Update(float dt)
 		showConsoleMenu = true;
 		showSceneWindow = true;
 		showScene2Window = true;
-		showFileWindow = false;
 		showTimeWindow = true;
 		showOptions = true;
 		showAssets = true;
@@ -1140,7 +1138,6 @@ update_status ModuleEditor::Update(float dt)
 		showConsoleMenu = false;
 		showSceneWindow = false;
 		showScene2Window = true;
-		showFileWindow = false;
 		showTimeWindow = true;
 		showOptions = true;
 		showTextureMenu = false;
@@ -1167,10 +1164,6 @@ update_status ModuleEditor::Update(float dt)
 		{
 			if (ImGui::BeginMenu("File", &openConfigMenu))
 			{
-				if (ImGui::MenuItem("Quit"))
-				{
-					return UPDATE_STOP;
-				}
 				if (ImGui::MenuItem("Save Config"))
 				{
 					SaveConfig();
@@ -1179,10 +1172,6 @@ update_status ModuleEditor::Update(float dt)
 				{
 					LoadConfig();
 					ComproveScreen();
-				}
-				if (ImGui::MenuItem("Load File"))
-				{
-					showFileWindow = !showFileWindow;
 				}
 				ImGui::EndMenu();
 			}
@@ -2540,20 +2529,6 @@ update_status ModuleEditor::Update(float dt)
 
 	if (showDemoWindow)
 		ImGui::ShowDemoWindow(&showDemoWindow);
-
-	//////////////////////////////////////////////////////////////////////////////////////////// FILE WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
-
-	if (showFileWindow)
-	{
-		ImGui::CloseCurrentPopup();
-		ImGui::Begin("Load File", &showFileWindow);
-
-		ImGui::Text("Select the file you want to load:");
-
-		SDL_GetBasePath();
-
-		ImGui::End();
-	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////// TIME WINDOW ////////////////////////////////////////////////////////////////////////////////////////////
 

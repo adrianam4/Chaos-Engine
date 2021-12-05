@@ -1,6 +1,5 @@
 #include "Application.h"
 #include "Resource.h"
-#include "mmgr.h"
 
 Resource::Resource()
 {

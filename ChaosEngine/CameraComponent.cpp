@@ -3,7 +3,6 @@
 
 #include "Component.h"
 #include "CameraComponent.h"
-#include "mmgr.h"
 
 ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double fPlane, bool isGameObj)
 {

@@ -122,9 +122,6 @@
     <ClCompile Include="FileDialog.cpp">
       <Filter>Engine\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="mmgr.cpp">
-      <Filter>External</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -255,12 +252,6 @@
     </ClInclude>
     <ClInclude Include="FileDialog.h">
       <Filter>Engine\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="mmgr.h">
-      <Filter>External</Filter>
-    </ClInclude>
-    <ClInclude Include="nommgr.h">
-      <Filter>External</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

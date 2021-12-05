@@ -102,7 +102,6 @@
     <ClInclude Include="ImGui\imstb_truetype.h" />
     <ClInclude Include="Importer.h" />
     <ClInclude Include="MaterialImporter.h" />
-    <ClInclude Include="mmgr.h" />
     <ClInclude Include="ModelImporter.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MaterialComponent.h" />
@@ -119,7 +118,6 @@
     <ClInclude Include="ModuleScene.h" />
     <ClInclude Include="ModuleViewportFrameBuffer.h" />
     <ClInclude Include="ModuleWindow.h" />
-    <ClInclude Include="nommgr.h" />
     <ClInclude Include="Parson\parson.h" />
     <ClInclude Include="Primitives.h" />
     <ClInclude Include="Resource.h" />
@@ -146,7 +144,6 @@
     <ClCompile Include="ImGui\imgui_widgets.cpp" />
     <ClCompile Include="Importer.cpp" />
     <ClCompile Include="MaterialImporter.cpp" />
-    <ClCompile Include="mmgr.cpp" />
     <ClCompile Include="ModelImporter.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="log.cpp" />

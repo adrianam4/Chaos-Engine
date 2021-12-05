@@ -7,7 +7,6 @@
 #include "imgui_impl_opengl3.h"
 
 #include "Parson/parson.h"
-#include "mmgr.h"
 
 ComponentTransform::ComponentTransform(GameObject* theObject, float3 pos, float3 sca, float3 rot)
 {

@@ -6,7 +6,6 @@
 #include <assimp/types.h>
 
 #pragma comment( lib, "PhysFS/libx86/physfs.lib" )
-#include "mmgr.h"
 
 using namespace std;
 

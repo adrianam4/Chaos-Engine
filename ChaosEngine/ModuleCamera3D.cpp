@@ -3,7 +3,6 @@
 #include "ModuleCamera3D.h"
 #include "ModuleScene.h" 
 #include "CameraComponent.h"
-#include "mmgr.h"
 
 #include<stack>
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
