@@ -24,6 +24,7 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - Configuration Menu with many options such as a Frame Limiter, Window Size Configuration, Input and Hardware Info, etc.
 - View and manage your objects in an Hierarchy
 - A Console that shows your actions on the Engine
+- 
 
 
 ## Controls:
@@ -35,7 +36,8 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - F: Focus the Camera Around the Selected Object
 - MOUSE WHEEL: Zoom In / Zoom Out
 - RIGHT MOUSE BUTTON: Camera Orientation
-- LEFT MOUSE BUTTON + LEFT ALT: Orbit Camera Around the Selected Object
+- LEFT MOUSE BUTTON: Select Object
+- LEFT MOUSE BUTTON + LEFT ALT: Orbit Camera
 - LEFT SHIFT: Duplicates Camera Movement
 - P + Select Object: Makes the First Selected Object Children of the Second One
 - SUPR: Deletes Selected Game Object
@@ -46,6 +48,9 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - F5: Enable/Disable Textures
 - F10: Save Config
 - F11: Load Config
+- BUTTON (1): Translation Guizmo
+- BUTTON (2): Rotation Guizmo
+- BUTTON (3): Scale Guizmo
 
 
 ## Additional Functionality
@@ -59,4 +64,8 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - You need to keep pressing the P key to assign one Children to the Father
 - If you don't see a window you can make it visible with the top menu selecting View
 - Our two extra FBX can be loaded with the Create Menu
-- We used the ModuleFrameBuffer.ccp and ModuleFrameBuffer.h from the Engine3D in order to make the Window Docking/Viewport!!!!!
+
+
+## Important Note
+
+- We used the ModuleFrameBuffer.ccp and ModuleFrameBuffer.h from the provided engine (https://github.com/solidajenjo/Engine3D) in order to make the Window Docking/Viewport!!!!!

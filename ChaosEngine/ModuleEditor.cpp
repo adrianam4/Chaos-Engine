@@ -141,7 +141,7 @@ bool ModuleEditor::Start()
 	speedUpIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/SpeedUp.png"));
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
-	//LoadScene("Assets/Scenes/Street.chaos");
+	LoadScene("Assets/Scenes/Street.chaos");
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
