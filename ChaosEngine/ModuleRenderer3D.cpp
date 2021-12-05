@@ -496,7 +496,10 @@ void ModuleRenderer3D::DrawRay()
 	glColor3f(1.f, 1.f, 1.f);
 	glEnd();
 }
-
+void ModuleRenderer3D::InitMesh(Mesh* mesh)
+{
+	models.push_back(Model(mesh));
+}
 void ModuleRenderer3D::InitMesh(char* path, GameObject* lastObj)
 {
 	models.push_back(Model(path,lastObj));

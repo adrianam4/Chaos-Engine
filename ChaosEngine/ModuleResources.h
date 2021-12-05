@@ -16,7 +16,8 @@ public:
 	u32 Find(const char* fileInAssets);
 	u32 ImportFile(const char* newFileInAssets);
 	u32 GenerateUID();
-
+	bool LoadtextureResource(u32 UID, GameObject* theObject);
+	
 	Resource* RequestResource(u32 UID);
 	void ReleaseResource(u32 UID);
 	void SaveUID();

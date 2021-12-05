@@ -59,7 +59,29 @@ u32 ModuleResources::GenerateUID() // OK
 	LCG uidGenerator;
 	return uidGenerator.IntFast();
 }
+bool ModuleResources::LoadtextureResource(u32 UID, GameObject* theObject)
+{
+	bool ret = false;
+	Resource* resourceToLoad = nullptr;
+	resourceToLoad = GetResource(UID);
+	if (resourceToLoad != nullptr)
+	{
+		GameObject* gObj = theObject;
+		ResourceType type = resourceToLoad->GetType();
+		if (type == ResourceType::TEXTURE)
+		{
+			if (resourceToLoad->firstTime)
+			{
+				resourceToLoad->LoadToMemory();
+			}
+			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
+			App->editor->AddLog("Reference counting for %s: %d\n", resourceToLoad->assetsFile.c_str(), resourceToLoad->referenceCount);
+		}
+		ret = true;
+	}
 
+	return ret;
+}
 Resource* ModuleResources::RequestResource(u32 UID)
 {
 	Resource* resource = nullptr;
@@ -131,7 +153,7 @@ bool ModuleResources::LoadResource(u32 UID)
 	resourceToLoad = GetResource(UID);
 	if (resourceToLoad != nullptr)
 	{
-		GameObject* gObj = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+		GameObject* gObj = App->editor->objectSelected;
 		ResourceType type = resourceToLoad->GetType();
 		if (type == ResourceType::MESH)
 		{

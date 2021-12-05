@@ -19,7 +19,7 @@
 #include "Component.h"
 #include "FileDialog.h"
 #include "mmgr.h"
-
+#include"MeshComponent.h"
 #include<stack>
 #define GL_GPU_MEM_INFO_TOTAL_AVAILABLE_MEM_NVX 0x9048
 #define GL_GPU_MEM_INFO_CURRENT_AVAILABLE_MEM_NVX 0x9049
@@ -278,6 +278,8 @@ void ModuleEditor::LoadConfig()
 }
 int ModuleEditor::loadSpecialObject(int object, const char* direction)
 {
+
+	int toReturn = 1;
 	JSON_Value* root = json_parse_file(direction);
 	JSON_Array* gameObjectsInfo = json_object_dotget_array(json_value_get_object(root), "GameObjects");
 
@@ -287,28 +289,85 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 	std::stack<GameObject*>parentstack;
 	JSON_Value* theObject = json_array_get_value(gameObjectsInfo, object);
 	int iteration = 0;
+
 	bool haveChild = true;
 	bool toAABB = false;
 	GameObject* theObjectParent = new GameObject();
-	int newNumber = 1;
+	int newNumber = 0;
 	//////////////////////////////////////////////////////
-	while (haveChild)
+
+
+	toAABB = false;
+	std::string number = std::to_string(iteration);
+	std::string roott = "children";
+	std::string name = roott + number;
+	std::string nextObjectName = json_object_get_string(json_value_get_object(theObject), name.c_str());
+
+	int numberOfChild = 1;
+	numberOfChild = json_object_dotget_number(json_value_get_object(theObject), "Number");
+	int numTotal = json_array_get_count(gameObjectsInfo);
+	if (numberOfChild > 0)
 	{
-		toAABB = false;
-		std::string number = std::to_string(iteration);
-		std::string root = "children";
-		std::string name = root + number;
-		std::string nextObjectName = json_object_get_string(json_value_get_object(theObject), name.c_str());
-		if (nextObjectName.c_str() != "")
-		{
-			for (int u = 0; u < json_array_get_count(gameObjectsInfo); u++)
+
+		for (int y = 0; y < numberOfChild; y++) {
+			std::string number = std::to_string(y);
+			std::string root = "children";
+			std::string name = root + number;
+			std::string nextObjectName = json_object_get_string(json_value_get_object(theObject), name.c_str());
+
+			for (int u = 0; u < numTotal; u++)
 			{
 				JSON_Value* auxSecondValue = json_array_get_value(gameObjectsInfo, u);
 				std::string name = json_object_get_string(json_value_get_object(auxSecondValue), "Name");
-				if (nextObjectName.c_str() == name.c_str())
+				if (nextObjectName == name)
 				{
+					toReturn += 2;
 					stackNode.push(auxSecondValue);
 					parentstack.push(theObjectParent);
+					break;
+				}
+			}
+		}
+	}
+
+
+	haveChild = true;
+	while (!stackNode.empty())
+	{
+
+		haveChild = true;
+
+		GameObject* aux = App->scene->CreateGameObject(false, 1, "sfe");
+
+		GameObject* parent = parentstack.top();
+		parentstack.pop();
+		parent->childrens.push_back(aux);
+		//////////////////////////////////////////////////////
+		theObject = stackNode.top();
+		stackNode.pop();
+
+		int numberOfChild = 0;
+		numberOfChild = json_object_dotget_number(json_value_get_object(theObject), "Number");
+		if (numberOfChild > 0)
+		{
+			for (int y = 0; y < numberOfChild; y++) {
+
+				std::string number = std::to_string(y);
+				std::string root = "children";
+				std::string name = root + number;
+				std::string nextObjectName = json_object_get_string(json_value_get_object(theObject), name.c_str());
+
+				for (int u = 0; u < numTotal; u++)
+				{
+					JSON_Value* auxSecondValue = json_array_get_value(gameObjectsInfo, u);
+					std::string name = json_object_get_string(json_value_get_object(auxSecondValue), "Name");
+					if (nextObjectName == name)
+					{
+						toReturn += 2;
+						stackNode.push(auxSecondValue);
+						parentstack.push(aux);
+						break;
+					}
 				}
 			}
 		}
@@ -316,55 +375,26 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 			haveChild = false;
 			iteration = 0;
 		}
-	}
-	haveChild = true;
-	while (!stackNode.empty())
-	{
-		theObject = stackNode.top();
-		stackNode.pop();
-		haveChild = true;
-		newNumber++;
-		GameObject* aux = App->scene->CreateGameObject(false, 1, "sfe");
 
-		GameObject* parent = parentstack.top();
-		parentstack.pop();
-		parent->childrens.push_back(aux);
-		//////////////////////////////////////////////////////
 
-		while (haveChild)
-		{
-			std::string number = std::to_string(iteration);
-			std::string root = "children";
-			std::string name = root + number;
-			std::string nextObjectName = json_object_get_string(json_value_get_object(theObject), name.c_str());
-			if (nextObjectName.c_str() != "")
-			{
-				for (int u = 0; u < json_array_get_count(gameObjectsInfo); u++)
-				{
-					JSON_Value* auxSecondValue = json_array_get_value(gameObjectsInfo, u);
-					std::string name = json_object_get_string(json_value_get_object(auxSecondValue), "Name");
-					if (nextObjectName.c_str() == name.c_str())
-					{
-						stackNode.push(auxSecondValue);
-						parentstack.push(aux);
-					}
-				}
-			}
-			else {
-				haveChild = false;
-				iteration = 0;
-			}
-		}
+
+
 
 		//////////////////////////////////////////////////////
 		aux->name = json_object_get_string(json_value_get_object(theObject), "Name");
+		int auxType;
+
+
+
 		Component* e;
-		int auxType = json_object_dotget_number(json_value_get_object(theObject), "Components.Mesh.Type");
+		auxType = json_object_dotget_number(json_value_get_object(theObject), "Components.Mesh.Type");
 		if (auxType == 2) {
 			const char* modelPath = json_object_dotget_string(json_value_get_object(theObject), "Components.Mesh.Path");
 			FBXimporter importer;
-
-			//e = new ComponentMesh(importer.readFile(modelPath));
+			Mesh* i = importer.readFile(modelPath);
+			e = new ComponentMesh(i);
+			e->name = "mesh Component";
+			e->type = ComponentType::MESH;
 			aux->components.push_back(e);
 			e->owner = aux;
 			toAABB = true;
@@ -387,6 +417,7 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 		float3 rotation = float3(rotation_x, rotation_y, rotation_z);
 		e = new ComponentTransform(aux, float3(position_x, position_y, position_z), float3(scale_x, scale_y, scale_z), float3(rotation_x, rotation_y, rotation_z));
 		e->owner = aux;
+		e->type = ComponentType::TRANSFORM;
 		aux->components.push_back(e);
 		e->setOwner();
 
@@ -395,6 +426,18 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 			toAABB = false;
 		}
 
+		auxType = json_object_dotget_number(json_value_get_object(theObject), "Components.Material.Type");
+		if (auxType == 8)
+		{
+			u32 materialUID = json_object_dotget_number(json_value_get_object(theObject), "Components.Material.UID");
+			const char* textPath = json_object_dotget_string(json_value_get_object(theObject), "Components.Material.TexturePath");
+			double width = json_object_dotget_number(json_value_get_object(theObject), "Components.Material.Width");
+			double height = json_object_dotget_number(json_value_get_object(theObject), "Components.Material.Height");
+
+			u32 materialId = App->resources->RecoveryFile(textPath);
+			App->resources->LoadtextureResource(materialId, aux);
+			aux->components[aux->components.size() - 1]->owner = aux;
+		}
 		/*while (!stackNode.empty())
 		{
 			theObject = stackNode.top();
@@ -409,7 +452,7 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 	}
 	App->scene->gameObjects.push_back(theObjectParent);
 	theObjectParent->isImported = true;
-	return newNumber + object;
+	return toReturn;
 }
 
 void ModuleEditor::SaveScene(const char* fileToLoad)
@@ -442,7 +485,13 @@ void ModuleEditor::SaveScene(const char* fileToLoad)
 			JSON_Object* gameObjObject = json_value_get_object(gameObjectValue);
 			json_object_set_number(gameObjObject, "UID", go->UID);
 			json_object_set_string(gameObjObject, "Name", go->name.c_str());
-
+			if (go->childrens.size() > 0) {
+				json_object_set_string(gameObjObject, "HaveChildren", "YES");
+				json_object_dotset_number(gameObjObject, "Number", go->childrens.size());
+			}
+			else {
+				json_object_set_string(gameObjObject, "HaveChildren", "NO");
+			}
 			for (int p = 0; p < go->childrens.size(); p++) {
 				std::string name = "children";
 
@@ -530,29 +579,33 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 
 	JSON_Value* root = json_parse_file(fileToLoad);
 	JSON_Array* gameObjectsInfo = json_object_dotget_array(json_value_get_object(root), "GameObjects");
+	int numOfIterations = json_array_get_count(gameObjectsInfo);
 
-
-	for (size_t i = 0; i < json_array_get_count(gameObjectsInfo); i++)
+	for (size_t i = 0; i < numOfIterations; i++)
 	{
 		JSON_Value* auxValue = json_array_get_value(gameObjectsInfo, i);
+		std::string meshpath = "NOT RESULT";
+		meshpath = json_object_get_string(json_value_get_object(auxValue), "HaveChildren");
 
-		std::string meshpath = json_object_get_string(json_value_get_object(auxValue), "children0");
-		if (meshpath.c_str() != "")
+		if (meshpath == "YES")
 		{
-			i = loadSpecialObject(i, fileToLoad);
+
+			int iter = loadSpecialObject(i, fileToLoad);
+			i = iter + i;
 		}
 		else {
 			//do normal
+			const char* name = json_object_get_string(json_value_get_object(auxValue), "Name");
 
 
 			u32 UID = json_object_get_number(json_value_get_object(auxValue), "UID");
-			const char* name = json_object_get_string(json_value_get_object(auxValue), "Name");
+
 
 			std::string futureNumber = std::string(name);
 			size_t start = futureNumber.find_last_of("_");
 			futureNumber = futureNumber.substr(start + 1, futureNumber.length() - start);
 			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, atoi(futureNumber.c_str()), name)); // Create GO with name
-			objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+			//objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
 			GameObject* lastGO = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
 			lastGO->UID = UID; //UID
 
@@ -653,6 +706,7 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 		}
 	}
 	UpdateAll();
+	//load = true;
 	AddLog("Loaded Scene Data\n");
 }
 

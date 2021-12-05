@@ -130,7 +130,7 @@ update_status ModuleInput::PreUpdate(float dt)
 					gObjs++;
 					GameObject* gObj = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
 					App->editor->objectSelected = gObj;
-					
+
 					model = App->resources->ImportFile((const char*)fileDir);
 					App->resources->LoadResource(model);
 					gObj->components[0]->owner = gObj;
@@ -150,10 +150,11 @@ update_status ModuleInput::PreUpdate(float dt)
 					{
 						int oldMaterialId;
 						oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
-						if (oldMaterialId != -1) 
+						if (oldMaterialId != -1)
 						{
 							App->editor->objectSelected->components.erase(App->editor->objectSelected->components.begin() + oldMaterialId);
 						}
+
 						u32 textId = App->resources->ImportFile(fileDir);
 						App->resources->LoadResource(textId);
 						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;

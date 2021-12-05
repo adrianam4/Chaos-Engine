@@ -19,6 +19,7 @@ public:
 	bool CleanUp();
 	void InitModel(std::vector<theBuffer*>* theArray);
 	void InitModel(theBuffer* theArray);
+	void InitMesh(Mesh* mesh);
 	void InitModel(std::vector<uint> indices, std::vector<Vertex> vertices, std::vector<Textures> textures, std::vector<float> texCoords);
 	void InitModelPath(char *path);
 	void OnResize(int width, int height);
