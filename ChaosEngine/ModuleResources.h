@@ -23,7 +23,7 @@ public:
 	void SaveUID();
 	void LoadUID();
 	Resource* CreateNewResource(const char* assetsFile, ResourceType type);
-	bool LoadResource(u32 UID);
+	bool LoadResource(u32 UID, GameObject* go);
 	u32 RecoveryFile(const char* file);
 	ImTextureID LoadIcons(u32 UID);
 	Resource* GetResource(u32 UID);

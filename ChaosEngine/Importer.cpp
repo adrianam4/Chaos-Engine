@@ -1,6 +1,8 @@
 #include"Importer.h"
 #include<stack>
 #include"Application.h"
+#include "Resource.h"
+#include "ResourceMesh.h"
 #include"TransformComponent.h"
 #include "mmgr.h"
 
@@ -15,9 +17,10 @@ FBXimporter::~FBXimporter() {
 theBuffer* SpecialsaveToOurFile(const char* originPath, const char* destinationPath) {
 	return nullptr;
 }
-std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, const char* destinationPath) {
+std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, const char* destinationPath, Resource* resource) 
+{
 	//////////////////////////////////////////// read the fbx file and save de data in buffers ////////////////////////////////////////////
-	readFromFBX(originPath);
+	readFromFBX(originPath,resource);
 
 
 	//////////////////////////////////////////// write the buffers data in our custom file format ////////////////////////////////////////////	
@@ -52,10 +55,37 @@ std::vector<theBuffer*>* FBXimporter::saveToOurFile(const char* originPath, cons
 	return &bufferArray;
 }
 
-void  FBXimporter::SpecialreadFromFBX(const char* originPath) {
+void  FBXimporter::SpecialreadFromFBX(const char* originPath, Resource* resource) {
 	
+	//unsigned int flags = 0;
+	//ResourceMesh* res = (ResourceMesh*)resource;
+
+	//if (res->metaData.joinVertex)
+	//	flags |= aiProcess_JoinIdenticalVertices;
+	//if (res->metaData.triangulate)
+	//	flags |= aiProcess_Triangulate;
+	//if (res->metaData.generateNormals)
+	//	flags |= aiProcess_GenNormals;
+	//if (res->metaData.generateSmoothNormals)
+	//	flags |= aiProcess_GenSmoothNormals;
+	//if (res->metaData.removeMaterials)
+	//	flags |= aiProcess_RemoveRedundantMaterials;
+	//if (res->metaData.infacingNormals)
+	//	flags |= aiProcess_FixInfacingNormals;
+	//if (res->metaData.genUvCoords)
+	//	flags |= aiProcess_GenUVCoords;
+	//if (res->metaData.transUvCoords)
+	//	flags |= aiProcess_TransformUVCoords;
+	//if (res->metaData.findInstances)
+	//	flags |= aiProcess_FindInstances;
+	//if (res->metaData.optimizeMesh)
+	//	flags |= aiProcess_OptimizeMeshes;
+	//if (res->metaData.flipUvs)
+	//	flags |= aiProcess_FlipUVs;
+
+	// aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_OptimizeMeshes
 	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_SplitLargeMeshes | aiProcess_OptimizeMeshes);
+	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_OptimizeMeshes);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -120,10 +150,36 @@ void FBXimporter::SpecialsaveToOurFile(const char* originPath, const char* desti
 
 
 }
-void  FBXimporter::SpecialreadFromFBX(const char* originPath, const char* destinationPath) {
+void  FBXimporter::SpecialreadFromFBX(const char* originPath, const char* destinationPath, Resource* resource) 
+{
+	//unsigned int flags = 0;
+	//ResourceMesh* res = (ResourceMesh*)resource;
+
+	//if (res->metaData.joinVertex)
+	//	flags |= aiProcess_JoinIdenticalVertices;
+	//if (res->metaData.triangulate)
+	//	flags |= aiProcess_Triangulate;
+	//if (res->metaData.generateNormals)
+	//	flags |= aiProcess_GenNormals;
+	//if (res->metaData.generateSmoothNormals)
+	//	flags |= aiProcess_GenSmoothNormals;
+	//if (res->metaData.removeMaterials)
+	//	flags |= aiProcess_RemoveRedundantMaterials;
+	//if (res->metaData.infacingNormals)
+	//	flags |= aiProcess_FixInfacingNormals;
+	//if (res->metaData.genUvCoords)
+	//	flags |= aiProcess_GenUVCoords;
+	//if (res->metaData.transUvCoords)
+	//	flags |= aiProcess_TransformUVCoords;
+	//if (res->metaData.findInstances)
+	//	flags |= aiProcess_FindInstances;
+	//if (res->metaData.optimizeMesh)
+	//	flags |= aiProcess_OptimizeMeshes;
+	//if (res->metaData.flipUvs)
+	//	flags |= aiProcess_FlipUVs;
 
 	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_SplitLargeMeshes | aiProcess_OptimizeMeshes);
+	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_OptimizeMeshes);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -247,9 +303,37 @@ float3 FBXimporter::FromQuatToEuler(Quat quatAngles) {
 
 	return angles;
 }
-void  FBXimporter::readFromFBX(const char* originPath) {
+void  FBXimporter::readFromFBX(const char* originPath, Resource* resource) 
+{
 	Assimp::Importer import;
-	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_SplitLargeMeshes | aiProcess_OptimizeMeshes);
+
+	unsigned int flags = 0;
+	ResourceMesh* res = (ResourceMesh*)resource;
+
+	if (res->metaData.joinVertex)
+		flags |= aiProcess_JoinIdenticalVertices;
+	if (res->metaData.triangulate)
+		flags |= aiProcess_Triangulate;
+	if (res->metaData.generateNormals)
+		flags |= aiProcess_GenNormals;
+	if (res->metaData.generateSmoothNormals)
+		flags |= aiProcess_GenSmoothNormals;
+	if (res->metaData.removeMaterials)
+		flags |= aiProcess_RemoveRedundantMaterials;
+	if (res->metaData.infacingNormals)
+		flags |= aiProcess_FixInfacingNormals;
+	if (res->metaData.genUvCoords)
+		flags |= aiProcess_GenUVCoords;
+	if (res->metaData.transUvCoords)
+		flags |= aiProcess_TransformUVCoords;
+	if (res->metaData.findInstances)
+		flags |= aiProcess_FindInstances;
+	if (res->metaData.optimizeMesh)
+		flags |= aiProcess_OptimizeMeshes;
+	if (res->metaData.flipUvs)
+		flags |= aiProcess_FlipUVs;
+
+	const aiScene* scene = import.ReadFile(originPath, flags);
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
@@ -257,10 +341,7 @@ void  FBXimporter::readFromFBX(const char* originPath) {
 		return;
 	}
 
-	
 	ProcessNode(scene->mRootNode, scene);
-
-	
 }
 std::vector<theBuffer*>* FBXimporter::loadFromOurFile(const char* originPath, const char* UID, const char* mesh, const char* Numbermesh, const char* extension)
 {

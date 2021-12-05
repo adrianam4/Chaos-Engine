@@ -38,16 +38,13 @@ u32 ModuleResources::ImportFile(const char* newFileInAssets) // OK
 		MaterialImporter texImporter;
 
 		if (type == ResourceType::MESH)
-			resource->aux = meshImporter.saveToOurFile(newFileInAssets, "Library/Models/");
+			resource->aux = meshImporter.saveToOurFile(newFileInAssets, "Library/Models/", resource);
 		else if (type == ResourceType::TEXTURE)
 			texImporter.ImportMaterial(newFileInAssets, false, (ResourceMatertial*)resource);
 
 		SaveResource(resource, newFileInAssets);
 		ret = resource->GetUID();
-		if (resource->type == ResourceType::TEXTURE)
-		{
-			resource->LoadMeta();
-		}
+		resource->LoadMeta();
 		resource->GenerateMeta();
 		RELEASE_ARRAY(fileBuffer);
 	}
@@ -146,14 +143,14 @@ Resource* ModuleResources::CreateNewResource(const char* assetsFile, ResourceTyp
 	return ret;
 }
 
-bool ModuleResources::LoadResource(u32 UID)
+bool ModuleResources::LoadResource(u32 UID, GameObject* go)
 {
 	bool ret = false;
 	Resource* resourceToLoad = nullptr;
 	resourceToLoad = GetResource(UID);
 	if (resourceToLoad != nullptr)
 	{
-		GameObject* gObj = App->editor->objectSelected;
+		GameObject* gObj = go;
 		ResourceType type = resourceToLoad->GetType();
 		if (type == ResourceType::MESH)
 		{
@@ -194,7 +191,7 @@ bool ModuleResources::LoadResource(u32 UID)
 				{
 					resourceToLoad->LoadToMemory(meshInfo[i]);
 				}
-				resourceToLoad->firstTime = false;
+				//resourceToLoad->firstTime = false;
 			}
 			gObj->components.push_back(gObj->CreateComponentWithResource(resourceToLoad));
 			App->editor->AddLog("Reference counting for %s: %d\n", resourceToLoad->assetsFile.c_str(), resourceToLoad->referenceCount);

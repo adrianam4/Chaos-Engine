@@ -16,6 +16,7 @@
 #include "CameraComponent.h"
 #include "MaterialComponent.h"
 #include "ResourceMaterial.h"
+#include "ResourceMesh.h"
 #include "Component.h"
 #include "FileDialog.h"
 #include "mmgr.h"
@@ -593,13 +594,11 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 			int iter = loadSpecialObject(i, fileToLoad);
 			i = iter + i;
 		}
-		else {
+		else 
+		{
 			//do normal
 			const char* name = json_object_get_string(json_value_get_object(auxValue), "Name");
-
-
 			u32 UID = json_object_get_number(json_value_get_object(auxValue), "UID");
-
 
 			std::string futureNumber = std::string(name);
 			size_t start = futureNumber.find_last_of("_");
@@ -629,7 +628,7 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 				const char* modelPath = json_object_dotget_string(json_value_get_object(auxValue), "Components.Mesh.Path");
 
 				u32 modelId = App->resources->RecoveryFile(modelPath);
-				App->resources->LoadResource(modelId);
+				App->resources->LoadResource(modelId, lastGO);
 				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
 			}
 			if (auxType == 3)
@@ -700,7 +699,7 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 				double height = json_object_dotget_number(json_value_get_object(auxValue), "Components.Material.Height");
 
 				u32 materialId = App->resources->RecoveryFile(textPath);
-				App->resources->LoadResource(materialId);
+				App->resources->LoadResource(materialId, lastGO);
 				lastGO->components[lastGO->components.size() - 1]->owner = lastGO;
 			}
 		}
@@ -1401,11 +1400,11 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->resources->LoadResource(App->resources->Find("Assets/Models/BakerHouse.fbx"));
+					App->resources->LoadResource(App->resources->Find("Assets/Models/BakerHouse.fbx"),App->scene->gameObjects[lastComponent]);
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-					App->resources->LoadResource(App->resources->Find("Assets/Textures/BakerHouse.png"));
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/BakerHouse.png"), App->scene->gameObjects[lastComponent]);
 					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("House Created\n");
@@ -1418,11 +1417,11 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->resources->LoadResource(App->resources->Find("Assets/Models/Penguin.fbx"));
+					App->resources->LoadResource(App->resources->Find("Assets/Models/Penguin.fbx"), App->scene->gameObjects[lastComponent]);
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-					App->resources->LoadResource(App->resources->Find("Assets/Textures/Penguin.png"));
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/Penguin.png"), App->scene->gameObjects[lastComponent]);
 					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("Penguin Created\n");
@@ -1435,11 +1434,11 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					App->resources->LoadResource(App->resources->Find("Assets/Models/Car.fbx"));
+					App->resources->LoadResource(App->resources->Find("Assets/Models/Car.fbx"), App->scene->gameObjects[lastComponent]);
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-					App->resources->LoadResource(App->resources->Find("Assets/Textures/Car.png"));
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/Car.png"), App->scene->gameObjects[lastComponent]);
 					objectSelected->components[2]->owner = objectSelected;
 
 					App->editor->AddLog("Car Created\n");
@@ -1732,7 +1731,7 @@ update_status ModuleEditor::Update(float dt)
 			}
 			ResourceMatertial* res = (ResourceMatertial*)newResource;
 			res->GenerateMeta(mipMap,alienfy, averageBlur, gaussianBlur, contrast, equalization, gammaCorrection, negativity, noise, pixelization, sharpening, contrastAmount, sharpenFactor, sharpenIters, avBlurAmount, gaussianBlurAmount, gammaCorrectionAmount, noiseAmount, pixelationAmount,compression);
-			App->resources->LoadResource(newResource->GetUID());
+			App->resources->LoadResource(newResource->GetUID(), objectSelected);
 			objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 			droppedTexture = (ImTextureID)newResource->GetTextureId();
 			showTextureMenu = false;
@@ -1761,7 +1760,7 @@ update_status ModuleEditor::Update(float dt)
 			res->metaData.sharpenFactor = sharpenFactor = 1.5;
 			res->metaData.compression = compression = "IL_DXT5";
 
-			App->resources->LoadResource(newResource->GetUID());
+			App->resources->LoadResource(newResource->GetUID(),objectSelected);
 			droppedTexture = (ImTextureID)newResource->GetTextureId();
 		}
 
@@ -1782,11 +1781,12 @@ update_status ModuleEditor::Update(float dt)
 	static bool generateUvsCoords;
 	static bool transformUvsCoords;
 	static bool findInstances;
-	static bool optimixeMesh;
+	static bool optimizeMesh;
 	static bool flipUvs;
 
 	if (showMeshMenu)
 	{
+		ResourceMesh* res = (ResourceMesh*)newResource;
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("Mesh Import Settings", &showMeshMenu, ImGuiWindowFlags_NoScrollbar);
 
@@ -1800,68 +1800,112 @@ update_status ModuleEditor::Update(float dt)
 			if (columnCount < 1)
 				columnCount = 1;
 
+			if (!res->metaData.isLoaded)
+			{
+				joinVertex = res->metaData.joinVertex;
+				triangulate = res->metaData.triangulate;
+				generateNormals = res->metaData.generateNormals;
+				generateSmoothNormals = res->metaData.generateSmoothNormals;
+				removeMaterials = res->metaData.removeMaterials;
+				infacingNormals = res->metaData.infacingNormals;
+				generateUvsCoords = res->metaData.genUvCoords;
+				transformUvsCoords = res->metaData.transUvCoords;
+				findInstances = res->metaData.findInstances;
+				optimizeMesh = res->metaData.optimizeMesh;
+				flipUvs = res->metaData.flipUvs;
+
+				res->metaData.isLoaded = true;
+			}
+
 			ImGui::Columns(columnCount, 0, false);
 
-			if (ImGui::Checkbox("Join Vertex", &alienfy))
+			if (ImGui::Checkbox("Join Vertex", &joinVertex))
 			{
-				alienfy = !alienfy;
+				res->metaData.joinVertex = joinVertex;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Triangulate", &triangulate))
 			{
-				triangulate = !triangulate;
+				res->metaData.triangulate = triangulate;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Generate Normals", &generateNormals))
 			{
-				generateNormals = !generateNormals;
+				res->metaData.generateNormals = generateNormals;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Generate Smooth Normals", &generateSmoothNormals))
 			{
-				generateSmoothNormals = !generateSmoothNormals;
+				res->metaData.generateSmoothNormals = generateSmoothNormals;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Remove Materials", &removeMaterials))
 			{
-				removeMaterials = removeMaterials;
+				res->metaData.removeMaterials = removeMaterials;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Infacing Normals", &infacingNormals))
 			{
-				infacingNormals = !infacingNormals;
+				res->metaData.infacingNormals = infacingNormals;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Generate UVs Coords", &generateUvsCoords))
 			{
-				generateUvsCoords = !generateUvsCoords;
+				res->metaData.genUvCoords = generateUvsCoords;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Transform UVs Coords", &transformUvsCoords))
 			{
-				transformUvsCoords = !transformUvsCoords;
+				res->metaData.transUvCoords = transformUvsCoords;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Find Instances", &findInstances))
 			{
-				findInstances = !findInstances;
+				res->metaData.findInstances = findInstances;
 			}
 			ImGui::NextColumn();
-			if (ImGui::Checkbox("Optimize Mesh", &optimixeMesh))
+			if (ImGui::Checkbox("Optimize Mesh", &optimizeMesh))
 			{
-				optimixeMesh = !optimixeMesh;
+				res->metaData.optimizeMesh = optimizeMesh;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Flip UVs", &flipUvs))
 			{
-				flipUvs = !flipUvs;
+				res->metaData.flipUvs = flipUvs;
 			}
 			ImGui::NextColumn();
 		}
 
 		if (ImGui::Button("Import"))
 		{
+			showMeshMenu = !showMeshMenu;
 
+			ResourceMesh* res = (ResourceMesh*)newResource;
+			res->GenerateMeta(joinVertex,triangulate,generateNormals,generateSmoothNormals,removeMaterials,infacingNormals,generateUvsCoords,transformUvsCoords,findInstances,optimizeMesh,flipUvs);
+			static uint importedGobjs = 1;
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
+			importedGobjs++;
+			u32 newResID = App->resources->ImportFile(newResource->GetAssetFile());
+			objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+			App->resources->LoadResource(newResID, App->scene->gameObjects[App->scene->gameObjects.size() - 1]);
+			objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+		}
+
+		if (ImGui::Button("Set Default"))
+		{
+			res->metaData.joinVertex = joinVertex = false;
+			res->metaData.triangulate = triangulate = true;
+			res->metaData.generateNormals = generateNormals = false;
+			res->metaData.generateSmoothNormals = generateSmoothNormals = false;
+			res->metaData.removeMaterials = removeMaterials = false;
+			res->metaData.infacingNormals = infacingNormals = false;
+			res->metaData.genUvCoords = generateUvsCoords = true;
+			res->metaData.transUvCoords = transformUvsCoords = false;
+			res->metaData.findInstances = findInstances = true;
+			res->metaData.optimizeMesh = optimizeMesh = true;
+			res->metaData.flipUvs = flipUvs = true;
 		}
 
 		ImGui::End();
@@ -2366,12 +2410,12 @@ update_status ModuleEditor::Update(float dt)
 					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
 					importedGobjs++;
 					objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-					App->resources->LoadResource(importedFile);
+					App->resources->LoadResource(importedFile,objectSelected);
 					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 					u32 tex = App->resources->ImportFile("Assets/Textures/Checker.png");
-					App->resources->LoadResource(tex);
+					App->resources->LoadResource(tex,objectSelected);
 					objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 					objectSelected->components.erase(objectSelected->components.begin() + 2);
 				}
@@ -2385,7 +2429,7 @@ update_status ModuleEditor::Update(float dt)
 						{
 							objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
 						}
-						App->resources->LoadResource(importedFile);
+						App->resources->LoadResource(importedFile,objectSelected);
 						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 					}
 				}
@@ -2429,18 +2473,6 @@ update_status ModuleEditor::Update(float dt)
 					if (newResource->type == ResourceType::MESH)
 					{
 						showMeshMenu = true;
-
-						static uint importedGobjs = 1;
-						App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, importedGobjs, "Game Object"));
-						importedGobjs++;
-						objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-						App->resources->LoadResource(newResource->GetUID());
-						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-						objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-						App->resources->LoadResource(App->resources->Find("Assets/Textures/Checker.png"));
-						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-						objectSelected->components.erase(objectSelected->components.begin() + 2);
 					}
 					else if (newResource->type == ResourceType::TEXTURE)
 					{
@@ -2452,7 +2484,7 @@ update_status ModuleEditor::Update(float dt)
 							{
 								objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
 							}
-							App->resources->LoadResource(newResource->GetUID());
+							App->resources->LoadResource(newResource->GetUID(),objectSelected);
 							objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
 							droppedTexture = (ImTextureID)newResource->GetTextureId();
 							showTextureMenu = true;

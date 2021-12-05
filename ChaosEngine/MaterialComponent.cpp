@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "MaterialComponent.h"
+#include "ResourceMaterial.h"
 
 #include "GL/glew.h"
 #include "DevIL/include/il.h"

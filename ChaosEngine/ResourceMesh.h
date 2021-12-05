@@ -7,18 +7,19 @@ struct MeshMeta
 {
 	u32 uid = 0;
 	std::string modelPath = " ";
-	std::vector<Mesh> meshes;
 	bool joinVertex = false;
 	bool triangulate = true;
-	bool generateNormals = false;
+	bool generateNormals = true;
 	bool generateSmoothNormals = false;
 	bool removeMaterials = false;
 	bool infacingNormals = false;
 	bool genUvCoords = true;
 	bool transUvCoords = false;
-	bool findInstances = true;
+	bool findInstances = false;
 	bool optimizeMesh = true;
 	bool flipUvs = true;
+
+	bool isLoaded = false;
 };
 
 class ResourceMesh : public Resource
@@ -39,6 +40,8 @@ public:
 	std::vector<Textures> GetTextures() override;
 	std::vector<float> GetTexCoords() override;
 	void GenerateMeta() override;
+	void GenerateMeta(bool joinVertex, bool triangulate, bool generateNormals, bool generateSmoothNormals, bool removeMaterials, bool infacingNormals, bool genUvCoords, bool transUvCoords, bool findInstances, bool optimizeMesh, bool flipUvs);
+	void LoadMeta() override;
 public:
 	std::vector<uint> indices;
 	std::vector<Vertex> vertices;

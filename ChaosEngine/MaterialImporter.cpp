@@ -75,30 +75,34 @@ std::vector<int> MaterialImporter::ImportMaterial(std::string sourcePath, bool i
 
 	success = ilLoadImage(sourcePath.c_str());
 
-	SaveMaterial(sourcePath.c_str(), resource->metaData.compression);
+	if (resource != nullptr)
+	{
+		SaveMaterial(sourcePath.c_str(), resource->metaData.compression);
 
-	if (resource->metaData.mipMap)
-		iluBuildMipmaps();
-	if (resource->metaData.alienifying)
-		iluAlienify();
-	if (resource->metaData.avgBlurring)
-		iluBlurAvg(resource->metaData.amountAvBlur);
-	if (resource->metaData.gausianBlurring)
-		iluBlurGaussian(resource->metaData.amountGausianBlur);
-	if (resource->metaData.contrast)
-		iluContrast(resource->metaData.amountContrast);
-	if (resource->metaData.equalization)
-		iluEqualize();
-	if (resource->metaData.gammaCorrection)
-		iluGammaCorrect(resource->metaData.amountGammaCorrection);
-	if (resource->metaData.negativity)
-		iluNegative();
-	if (resource->metaData.noise)
-		iluNoisify(resource->metaData.amountNoise);
-	if (resource->metaData.pixelization)
-		iluPixelize(resource->metaData.amountPixelation);
-	if (resource->metaData.sharpering)
-		iluSharpen(resource->metaData.sharpenFactor, resource->metaData.sharpenIters);
+		if (resource->metaData.mipMap)
+			iluBuildMipmaps();
+		if (resource->metaData.alienifying)
+			iluAlienify();
+		if (resource->metaData.avgBlurring)
+			iluBlurAvg(resource->metaData.amountAvBlur);
+		if (resource->metaData.gausianBlurring)
+			iluBlurGaussian(resource->metaData.amountGausianBlur);
+		if (resource->metaData.contrast)
+			iluContrast(resource->metaData.amountContrast);
+		if (resource->metaData.equalization)
+			iluEqualize();
+		if (resource->metaData.gammaCorrection)
+			iluGammaCorrect(resource->metaData.amountGammaCorrection);
+		if (resource->metaData.negativity)
+			iluNegative();
+		if (resource->metaData.noise)
+			iluNoisify(resource->metaData.amountNoise);
+		if (resource->metaData.pixelization)
+			iluPixelize(resource->metaData.amountPixelation);
+		if (resource->metaData.sharpering)
+			iluSharpen(resource->metaData.sharpenFactor, resource->metaData.sharpenIters);
+	}
+	else SaveMaterial(sourcePath.c_str(), "IL_DXT5");
 
 	w = ilGetInteger(IL_IMAGE_WIDTH);
 	h = ilGetInteger(IL_IMAGE_HEIGHT);

@@ -57,7 +57,7 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 	name = "Transform Component";
 
 	ComponentType t = getComponentType();
-	CreateAABB(t, App->editor->objectSelected, true);
+	CreateAABB(t, App->scene->gameObjects[App->scene->gameObjects.size() - 1], true);
 }
 
 ComponentType ComponentTransform::getComponentType() 

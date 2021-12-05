@@ -27,31 +27,31 @@ ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 		break;
 	case ComponentType::CUBE:
 		App->editor->AddCube(*pos,*measures);
-		App->editor->cubes[App->editor->cubes.size() - 1]->id = App->editor->lastId + 1;
+		App->editor->cubes[App->editor->cubes.size() - 1]->id = App->scene->lastId;
 		App->editor->lastId++;
 		break;
 	case ComponentType::PYRAMID:
 		App->editor->AddPyramid(*pos, *measures);
-		App->editor->pyramids[App->editor->pyramids.size() - 1]->id = App->editor->lastId + 1;
+		App->editor->pyramids[App->editor->pyramids.size() - 1]->id = App->scene->lastId;
 		App->editor->lastId++;
 		break;
 	case ComponentType::SPHERE:
 		App->editor->AddSphere(*pos, *measures);
-		App->editor->spheres[App->editor->spheres.size() - 1]->id = App->editor->lastId + 1;
+		App->editor->spheres[App->editor->spheres.size() - 1]->id = App->scene->lastId;
 		App->editor->lastId++;
 		break;
 	case ComponentType::PLANE:
 		App->editor->AddPlane(*pos, *measures);
-		App->editor->planes[App->editor->planes.size() - 1]->id = App->editor->lastId + 1;
+		App->editor->planes[App->editor->planes.size() - 1]->id = App->scene->lastId;
 		App->editor->lastId++;
 		break;
 	case ComponentType::CYLINDER:
 		App->editor->AddCylinder(*pos, *measures);
-		App->editor->cylinders[App->editor->cylinders.size() - 1]->id = App->editor->lastId + 1;
+		App->editor->cylinders[App->editor->cylinders.size() - 1]->id = App->scene->lastId;
 		App->editor->lastId++;
 		break;
 	case ComponentType::EMPTY:
-		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = App->editor->lastId + 1;
+		App->scene->gameObjects[App->scene->gameObjects.size() - 1]->id = App->scene->lastId;
 		App->editor->lastId++;
 		name = "Empty Component";
 		break;

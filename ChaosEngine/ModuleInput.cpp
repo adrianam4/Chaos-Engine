@@ -122,7 +122,7 @@ update_status ModuleInput::PreUpdate(float dt)
 				{
 
 					FBXimporter importer;
-					importer.SpecialreadFromFBX(fileDir, "Library/Models/");
+					importer.SpecialreadFromFBX(fileDir, "Library/Models/", nullptr);
 					//importer.SpecialreadFromFBX(fileDir);
 
 					/*static uint gObjs = 1;
@@ -156,7 +156,7 @@ update_status ModuleInput::PreUpdate(float dt)
 						}
 
 						u32 textId = App->resources->ImportFile(fileDir);
-						App->resources->LoadResource(textId);
+						App->resources->LoadResource(textId,App->editor->objectSelected);
 						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
 						SDL_free(&fileDir);
 					}

@@ -7,6 +7,8 @@
 #include "Component.h"
 #include "MaterialImporter.h"
 
+class ResourceMatertial;
+
 class ComponentMaterial : public Component
 {
 public:
@@ -30,4 +32,5 @@ private:
 	char* oldTextPath;
 	bool isDropped;
 	std::string TexturePathConst;
+	ResourceMatertial* lastResource;
 };
