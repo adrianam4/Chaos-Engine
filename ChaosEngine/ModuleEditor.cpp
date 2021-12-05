@@ -339,7 +339,7 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 		haveChild = true;
 
 		GameObject* aux = App->scene->CreateGameObject(false, 1, "sfe");
-
+		App->editor->objectSelected = aux;
 		GameObject* parent = parentstack.top();
 		parentstack.pop();
 		parent->childrens.push_back(aux);
@@ -604,8 +604,9 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 			size_t start = futureNumber.find_last_of("_");
 			futureNumber = futureNumber.substr(start + 1, futureNumber.length() - start);
 			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, atoi(futureNumber.c_str()), name)); // Create GO with name
+			objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
 			//objectSelected = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
-			GameObject* lastGO = App->scene->gameObjects[App->scene->gameObjects.size() - 1];
+			GameObject* lastGO = objectSelected;
 			lastGO->UID = UID; //UID
 
 			std::string isEmpty = std::string(name);
