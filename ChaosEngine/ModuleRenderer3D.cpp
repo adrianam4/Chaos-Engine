@@ -421,7 +421,8 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 					{
 						math::AABB* e = App->scene->gameObjects[i]->aabb[y - 1];
 
-						if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) {
+						if (editorCam->frustum.Contains(*e) || editorCam->frustum.Intersects(*e)) 
+						{
 							for (int j = 0; j < App->scene->gameObjects[i]->components.size(); j++)
 							{
 								if (App->scene->gameObjects[i]->components[j]->type == ComponentType::MESH && App->scene->gameObjects[i]->components[j]->active)
@@ -438,10 +439,6 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 									}
 								}
 							}
-						}
-						else
-						{
-							App->editor->AddLog("is outside\n");
 						}
 					}
 				}

@@ -141,6 +141,8 @@ bool ModuleEditor::Start()
 	speedUpIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/SpeedUp.png"));
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
+	//LoadScene("Assets/Scenes/Street.chaos");
+
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
 	App->editor->objectSelected = App->scene->gameObjects[lastComponent];
@@ -149,10 +151,8 @@ bool ModuleEditor::Start()
 	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 	objectSelected = App->scene->gameObjects[lastComponent];
-	App->camera->camArray[lastComponent]->isTheMainCamera = true;
-	App->camera->GameCam = App->camera->camArray[lastComponent];
-
-	//LoadScene("Assets/Scenes/Street.chaos");
+	App->camera->camArray[0]->isTheMainCamera = true;
+	App->camera->GameCam = App->camera->camArray[0];
 
 	return ret;
 }
@@ -396,6 +396,7 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 			FBXimporter importer;
 			Mesh* i = importer.readFile(modelPath);
 			e = new ComponentMesh(i);
+			e->modelPath = modelPath;
 			e->name = "mesh Component";
 			e->type = ComponentType::MESH;
 			aux->components.push_back(e);
@@ -594,7 +595,7 @@ void ModuleEditor::LoadScene(const char* fileToLoad)
 		{
 
 			int iter = loadSpecialObject(i, fileToLoad);
-			i = iter + i;
+			i = iter + i - 1;
 		}
 		else 
 		{
@@ -1108,7 +1109,7 @@ update_status ModuleEditor::Update(float dt)
 
 	if (objectSelected != nullptr && App->input->GetKey(SDL_SCANCODE_DELETE) == KEY_DOWN)
 	{
-		if (App->scene->gameObjects.size() >= 1 && showOptionsMenu == ComponentType::CAMERA)
+		if (objectSelected->name == "Game Camera _1" || objectSelected->name == "Game Camera _1_1")
 		{
 			App->editor->AddLog("You can't delete the Game Camera\n");
 		}
@@ -1185,6 +1186,10 @@ update_status ModuleEditor::Update(float dt)
 				if (App->editor->objectSelected->components[i]->type == ComponentType::EMPTY)
 				{
 					App->editor->AddLog("Empty Object Deleted\n");
+				}
+				if (App->editor->objectSelected->components[i]->type == ComponentType::CAMERA)
+				{
+					App->editor->AddLog("Camera Deleted\n");
 				}
 			}
 		}
@@ -2335,7 +2340,7 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("About", &showAboutWindow);
 
-		ImGui::Text("Chaos Engine v0.1");
+		ImGui::Text("Chaos Engine v0.8");
 		ImGui::Separator();
 		ImGui::Text("A trully amazing 3D Game Engine.");
 		ImGui::Text("Created by David Lira, Adrian Aroca and Unai Diaz for the Game Engines subject.");
