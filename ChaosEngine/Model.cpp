@@ -5,6 +5,10 @@ Model::Model()
 {
 }
 
+Model::Model(Mesh* mesh)
+{
+	meshes.push_back(*mesh);
+}
 Model::Model(char* path, GameObject* lastObj)
 {
 	LoadModel(path, lastObj);

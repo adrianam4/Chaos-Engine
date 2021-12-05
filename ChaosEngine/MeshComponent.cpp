@@ -5,6 +5,13 @@
 #include "Parson/parson.h"
 #include "mmgr.h"
 
+ComponentMesh::ComponentMesh(Mesh* mesh) 
+{
+
+	App->renderer3D->InitMesh(mesh);
+	App->renderer3D->models[App->renderer3D->models.size() - 1].id = App->scene->lastId;
+	App->editor->lastId++;
+}
 ComponentMesh::ComponentMesh(ComponentType mType, float3* pos, float3* measures)
 {
 	type = mType;

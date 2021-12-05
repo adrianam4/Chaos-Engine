@@ -20,6 +20,7 @@ public:
 	Model(theBuffer* theArray);
 	Model(std::vector<uint> indices, std::vector<Vertex> vertices, std::vector<Textures> textures, std::vector<float> texCoords);
 	Model(char* path, GameObject* objSelected);
+	Model(Mesh* mesh);
 	void Draw(float* matrix);
 	Mesh createMesh(char* buffer);
 	Mesh createSpecialMesh(char* buffer);

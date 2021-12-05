@@ -19,6 +19,7 @@ enum class MeshType
 class ComponentMesh : public Component
 {
 public:
+	ComponentMesh(Mesh* mesh);
 	ComponentMesh(std::vector<theBuffer*>* theArray , const char* mName);
 	ComponentMesh(theBuffer* theArray);
 	ComponentMesh(ComponentType mType, float3* pos=nullptr, float3* measures = nullptr);
