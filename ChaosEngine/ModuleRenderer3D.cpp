@@ -120,6 +120,8 @@ bool ModuleRenderer3D::Init()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
 		glEnable(GL_TEXTURE_2D);
+		glEnable(GL_STENCIL_TEST);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 		
 		//Initialize clear color
 		glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -285,7 +287,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixf(App->camera->editorCam->frustumMatrix.Transposed().ptr());
 			App->editor->grid->DrawGrid();
-			
+
 			DrawMeshes(App->camera->editorCam);
 
 			App->viewportBuffer->UnBind();

@@ -75,7 +75,6 @@ bool Application::Init()
 // ---------------------------------------------
 void Application::PrepareUpdate()
 {
-
 	dt = (float)msTimer.Read() / 1000.0f;
 	msTimer.Start();
 
@@ -91,14 +90,20 @@ void Application::PrepareUpdate()
 	}
 
 	if (stopGameTime)
+	{
 		gameTime.Stop();
+	}
 
 	if (pauseGameTime)
 	{
 		if (gameTime.IsPaused())
+		{
 			gameTime.Play();
+		}
 		else
+		{
 			gameTime.Pause();
+		}
 	}
 
 	if (advanceGameTime) 
@@ -130,8 +135,11 @@ void Application::PrepareUpdate()
 		gameTimeNum = timestep / 2.0f;
 	}
 
-	if(gameTime.IsActive() && gameTime.IsPaused()) 
+	if (gameTime.IsActive() && gameTime.IsPaused())
+	{
 		gameTimeNum = 0.0f;
+	}
+
 	if (advance && gameTime.IsPaused())
 	{
 		gameTimeNum = timestep;

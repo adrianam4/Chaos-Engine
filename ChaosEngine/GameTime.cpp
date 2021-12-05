@@ -1,38 +1,13 @@
 #include "GameTime.h"
-#include "mmgr.h"
 
-void GameTime::Start()
+bool GameTime::IsActive() const
 {
-	isActive = true;
-	isPaused = false;
-	startedAt = SDL_GetTicks();
-	pausedAt = 0.0f;
+	return isActive;
 }
 
-void GameTime::Stop()
+bool GameTime::IsPaused() const
 {
-	isActive = false;
-	isPaused = true;
-	startedAt = 0.0f;
-	pausedAt = 0.0f;
-}
-
-void GameTime::Play()
-{
-	if(isPaused)
-		return;
-
-	isPaused = false;
-	startedAt = (SDL_GetTicks() + startedAt) - pausedAt;
-}
-
-void GameTime::Pause()
-{
-	if (isPaused)
-		return;
-
-	isPaused = true;
-	pausedAt = SDL_GetTicks();
+	return isPaused;
 }
 
 int GameTime::Read() const
@@ -55,4 +30,37 @@ float GameTime::ReadSec() const
 		return (float)((SDL_GetTicks() - startedAt) / 1000.0f);
 	else
 		return (float)((pausedAt - startedAt) / 1000.0f);
+}
+
+void GameTime::Start()
+{
+	startedAt = SDL_GetTicks();
+	pausedAt = 0.0f;
+	isActive = true;
+	isPaused = false;
+}
+
+void GameTime::Stop()
+{
+	startedAt = 0.0f;
+	pausedAt = 0.0f;
+	isActive = false;
+	isPaused = true;
+}
+
+void GameTime::Play()
+{
+	isPaused = false;
+	startedAt = (SDL_GetTicks() + startedAt) - pausedAt;
+}
+
+void GameTime::Pause()
+{
+	if (isPaused)
+	{
+		return;
+	}
+
+	isPaused = true;
+	pausedAt = SDL_GetTicks();
 }

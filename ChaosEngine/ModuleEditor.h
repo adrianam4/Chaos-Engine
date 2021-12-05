@@ -60,8 +60,8 @@ public:
 	ImGuiTextBuffer consoleBuffer;
 	ImGuiWindowFlags sceneWindow = 0;
 	ImVec2 lastViewportSize;
-	bool showAABB;
-	bool showRay;
+	bool showAABB = false;
+	bool showRay = false;
 	bool scrollToBottom;
 	GameObject* objectSelected;
 	float4 viewport;

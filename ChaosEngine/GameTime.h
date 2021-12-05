@@ -14,17 +14,17 @@ private:
 
 public:
 
-	GameTime() { Start(); }
+	GameTime() 
+	{ 
+		Start(); 
+	}
+	int Read() const;
+	float ReadSec() const;
+	bool IsActive() const;
+	bool IsPaused() const;
 
 	void Start();
 	void Stop();
-
 	void Play();
 	void Pause();
-
-	int Read() const;
-	float ReadSec() const;
-
-	bool IsActive() const { return isActive; }
-	bool IsPaused() const { return isPaused; }
 };

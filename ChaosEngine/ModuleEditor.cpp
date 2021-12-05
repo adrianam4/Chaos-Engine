@@ -33,7 +33,6 @@ ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, st
 	lastId = -1;
 	objectSelected = nullptr;
 	consoleBuffer.clear();
-	showRay = true;
 	showSaveOnExitMenu = false;
 }
 
@@ -106,7 +105,6 @@ bool ModuleEditor::Start()
 	style->Colors[ImGuiCol_WindowBg] = ImColor(20, 20, 20, 255);
 
 	style->Colors[ImGuiCol_DockingPreview] = ImColor(150, 150, 150, 255);
-
 
 	guizmoType = ImGuizmo::OPERATION::TRANSLATE;
 
@@ -1579,11 +1577,6 @@ update_status ModuleEditor::Update(float dt)
 				res->metaData.contrast = contrast;
 			}
 			ImGui::NextColumn();
-			if (ImGui::DragFloat("Amount of Contrast:", &contrastAmount, 0.1f, -2, 2));
-			{
-				res->metaData.amountContrast = contrastAmount;
-			}
-			ImGui::NextColumn();
 			if (ImGui::Checkbox("Negativity", &negativity))
 			{
 				res->metaData.negativity = negativity;
@@ -1594,24 +1587,9 @@ update_status ModuleEditor::Update(float dt)
 				res->metaData.sharpering = sharpening;
 			}
 			ImGui::NextColumn();
-			if (ImGui::DragFloat("Sharpering Factor:", &sharpenFactor, 0.1f, 0, 2.5));
-			{
-				res->metaData.sharpenFactor = sharpenFactor;
-			}
-			ImGui::NextColumn();
-			if (ImGui::DragFloat("Sharpering Iterations:", &sharpenIters, 0.1f, 0, 5));
-			{
-				res->metaData.sharpenIters = sharpenIters;
-			}
-			ImGui::NextColumn();
 			if (ImGui::Checkbox("Gaussian Blur", &gaussianBlur))
 			{
 				res->metaData.gausianBlurring = gaussianBlur;
-			}
-			ImGui::NextColumn();
-			if (ImGui::DragFloat("Amount of Gaussian Blur:", &gaussianBlurAmount, 0.1f, 1, 10));
-			{
-				res->metaData.amountGausianBlur = gaussianBlurAmount;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Equalization", &equalization))
@@ -1624,19 +1602,9 @@ update_status ModuleEditor::Update(float dt)
 				res->metaData.noise = noise;
 			}
 			ImGui::NextColumn();
-			if (ImGui::DragFloat("Amount of Noise:", &noiseAmount, 0.1f, 0, 1));
-			{
-				res->metaData.amountNoise = noiseAmount;
-			}
-			ImGui::NextColumn();
 			if (ImGui::Checkbox("Average Blur", &averageBlur))
 			{
 				res->metaData.avgBlurring = averageBlur;
-			}
-			ImGui::NextColumn();
-			if (ImGui::DragFloat("Amount of Average Blur:", &avBlurAmount, 0.1f, 1, 10));
-			{
-				res->metaData.amountAvBlur = avBlurAmount;
 			}
 			ImGui::NextColumn();
 			if (ImGui::Checkbox("Gamma Correction", &gammaCorrection))
@@ -1644,19 +1612,57 @@ update_status ModuleEditor::Update(float dt)
 				res->metaData.gammaCorrection = gammaCorrection;
 			}
 			ImGui::NextColumn();
-			if (ImGui::DragFloat("Amount of Gamma Correction:", &gammaCorrectionAmount, 0.1f, 0, 2));
-			{
-				res->metaData.amountGammaCorrection = gammaCorrectionAmount;
-			}
-			ImGui::NextColumn();
 			if (ImGui::Checkbox("Pixelization", &pixelization))
 			{
 				res->metaData.pixelization = pixelization;
 			}
 			ImGui::NextColumn();
-			if (ImGui::DragFloat("Amount of Pixelization:", &pixelationAmount, 0.1f, 1, 10));
+			ImGui::Text("Amount of Pixelization:");
+			if (ImGui::DragFloat("", &pixelationAmount, 0.1f, 1, 10));
 			{
 				res->metaData.amountPixelation = pixelationAmount;
+			}
+			ImGui::NextColumn();
+			ImGui::Text("Amount of Contrast:");
+			if (ImGui::DragFloat(" ", &contrastAmount, 0.1f, -2, 2));
+			{
+				res->metaData.amountContrast = contrastAmount;
+			}
+			ImGui::NextColumn();
+			ImGui::Text("Sharpering Factor:");
+			if (ImGui::DragFloat("  ", &sharpenFactor, 0.1f, 0, 2.5));
+			{
+				res->metaData.sharpenFactor = sharpenFactor;
+			}
+			ImGui::NextColumn();
+			ImGui::Text("Sharpering Iterations:");
+			if (ImGui::DragFloat("   ", &sharpenIters, 0.1f, 0, 5));
+			{
+				res->metaData.sharpenIters = sharpenIters;
+			}
+			ImGui::NextColumn();
+			ImGui::Text("Amount of Gaussian Blur:");
+			if (ImGui::DragFloat("    ", &gaussianBlurAmount, 0.1f, 1, 10));
+			{
+				res->metaData.amountGausianBlur = gaussianBlurAmount;
+			}
+			ImGui::NextColumn();
+			ImGui::Text("Amount of Noise:");
+			if (ImGui::DragFloat("     ", &noiseAmount, 0.1f, 0, 1));
+			{
+				res->metaData.amountNoise = noiseAmount;
+			}
+			ImGui::NextColumn();
+			ImGui::Text("Amount of Average Blur:");
+			if (ImGui::DragFloat("       ", &avBlurAmount, 0.1f, 1, 10));
+			{
+				res->metaData.amountAvBlur = avBlurAmount;
+			}
+			ImGui::NextColumn();
+			ImGui::Text("Amount of Gamma Correction:");
+			if (ImGui::DragFloat("        ", & gammaCorrectionAmount, 0.1f, 0, 2));
+			{
+				res->metaData.amountGammaCorrection = gammaCorrectionAmount;
 			}
 			ImGui::NextColumn();
 		}
