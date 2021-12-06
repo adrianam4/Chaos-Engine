@@ -86,7 +86,7 @@ void ResourceMatertial::GenerateMeta()
 
 	metaData.uid = UID;
 	json_object_set_number(json_object(user_data), "UID", metaData.uid);
-	metaData.texturePath = libraryFile;
+	metaData.texturePath = assetsFile;
 	json_object_set_string(json_object(user_data), "TexturePath", metaData.texturePath.c_str());
 	json_object_set_boolean(json_object(user_data), "MipMap", metaData.mipMap);
 	json_object_set_boolean(json_object(user_data), "Alienifying", metaData.alienifying);
@@ -109,7 +109,7 @@ void ResourceMatertial::GenerateMeta()
 	json_object_set_number(json_object(user_data), "sharpenIters", metaData.sharpenIters);
 	json_object_set_string(json_object(user_data), "Compression", metaData.compression.c_str());
 
-	std::string savingPath = libraryFile + ".meta";
+	std::string savingPath = assetsFile + ".meta";
 	json_serialize_to_file_pretty(user_data, savingPath.c_str());
 
 	App->editor->AddLog("Generated Texture Meta Data\n");
@@ -121,7 +121,7 @@ void ResourceMatertial::GenerateMeta(bool mipMap, bool alienifying, bool avgBlur
 
 	metaData.uid = UID;
 	json_object_set_number(json_object(user_data), "UID", metaData.uid);
-	metaData.texturePath = libraryFile;
+	metaData.texturePath = assetsFile;
 	json_object_set_string(json_object(user_data), "TexturePath", metaData.texturePath.c_str());
 	json_object_set_boolean(json_object(user_data), "MipMap", mipMap);
 	json_object_set_boolean(json_object(user_data), "Alienifying", alienifying);
@@ -144,7 +144,7 @@ void ResourceMatertial::GenerateMeta(bool mipMap, bool alienifying, bool avgBlur
 	json_object_set_number(json_object(user_data), "sharpenIters", sharpenIters);
 	json_object_set_string(json_object(user_data), "Compression", compression.c_str());
 
-	std::string savingPath = libraryFile + ".meta";
+	std::string savingPath = assetsFile + ".meta";
 	json_serialize_to_file_pretty(user_data, savingPath.c_str());
 
 	App->editor->AddLog("Generated Texture Meta Data\n");
@@ -152,7 +152,7 @@ void ResourceMatertial::GenerateMeta(bool mipMap, bool alienifying, bool avgBlur
 
 void ResourceMatertial::LoadMeta()
 {
-	std::string loadingPath = libraryFile + ".meta";
+	std::string loadingPath = assetsFile + ".meta";
 	JSON_Value* userData = json_parse_file(loadingPath.c_str());
 
 	if (userData != nullptr)

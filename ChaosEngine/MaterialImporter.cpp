@@ -270,7 +270,6 @@ std::vector<int> MaterialImporter::LoadMaterial(std::string sourcePath, bool isD
 
 std::vector<int> MaterialImporter::GetMaterialData()
 {
-	
 	return std::vector<int>();
 }
 

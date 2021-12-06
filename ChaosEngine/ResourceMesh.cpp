@@ -109,7 +109,7 @@ void ResourceMesh::GenerateMeta()
 
 	metaData.uid = UID;
 	json_object_set_number(json_object(user_data), "UID", metaData.uid);
-	metaData.modelPath = libraryFile;
+	metaData.modelPath = assetsFile;
 	json_object_set_string(json_object(user_data), "ModelPath", metaData.modelPath.c_str());
 	json_object_set_boolean(json_object(user_data), "JoinVertex", metaData.joinVertex);
 	json_object_set_boolean(json_object(user_data), "Triangulate", metaData.triangulate);
@@ -123,7 +123,7 @@ void ResourceMesh::GenerateMeta()
 	json_object_set_boolean(json_object(user_data), "OptimizeMesh", metaData.optimizeMesh);
 	json_object_set_boolean(json_object(user_data), "FlipUvs", metaData.flipUvs);
 
-	std::string savingPath = libraryFile + ".meta";
+	std::string savingPath = assetsFile + ".meta";
 	json_serialize_to_file_pretty(user_data, savingPath.c_str());
 
 	App->editor->AddLog("Generated Mesh Meta Data\n");
@@ -135,7 +135,7 @@ void ResourceMesh::GenerateMeta(bool joinVertex, bool triangulate, bool generate
 
 	metaData.uid = UID;
 	json_object_set_number(json_object(user_data), "UID", metaData.uid);
-	metaData.modelPath = libraryFile;
+	metaData.modelPath = assetsFile;
 	json_object_set_string(json_object(user_data), "ModelPath", metaData.modelPath.c_str());
 	json_object_set_boolean(json_object(user_data), "JoinVertex", joinVertex);
 	json_object_set_boolean(json_object(user_data), "Triangulate", triangulate);
@@ -149,7 +149,7 @@ void ResourceMesh::GenerateMeta(bool joinVertex, bool triangulate, bool generate
 	json_object_set_boolean(json_object(user_data), "OptimizeMesh", optimizeMesh);
 	json_object_set_boolean(json_object(user_data), "FlipUvs", flipUvs);
 
-	std::string savingPath = libraryFile + ".meta";
+	std::string savingPath = assetsFile + ".meta";
 	json_serialize_to_file_pretty(user_data, savingPath.c_str());
 
 	App->editor->AddLog("Generated Mesh Meta Data\n");
@@ -157,13 +157,13 @@ void ResourceMesh::GenerateMeta(bool joinVertex, bool triangulate, bool generate
 
 void ResourceMesh::LoadMeta()
 {
-	std::string loadingPath = libraryFile + ".meta";
+	std::string loadingPath = assetsFile + ".meta";
 	JSON_Value* userData = json_parse_file(loadingPath.c_str());
 
 	if (userData != nullptr)
 	{
 		metaData.uid = json_object_get_number(json_object(userData), "UID");
-		metaData.modelPath = json_object_get_string(json_object(userData), "TexturePath");
+		metaData.modelPath = json_object_get_string(json_object(userData), "ModelPath");
 		metaData.joinVertex = json_object_get_boolean(json_object(userData), "MipMap");
 		metaData.triangulate = json_object_get_boolean(json_object(userData), "Alienifying");
 		metaData.generateNormals = json_object_get_boolean(json_object(userData), "AverageBlurring");

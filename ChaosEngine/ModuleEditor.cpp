@@ -125,7 +125,12 @@ bool ModuleEditor::Start()
 			for (int j = 0; j < files.size(); j++)
 			{
 				std::string filePath = thisDir + files[j];
-				u32 auxID = App->resources->ImportFile(filePath.c_str());
+				unsigned lastPoint = filePath.find_last_of(".");
+				std::string isMeta = filePath.substr(lastPoint, filePath.length() - lastPoint);
+				if (isMeta != ".meta")
+				{
+					u32 auxID = App->resources->ImportFile(filePath.c_str());
+				}
 			}
 			files.clear();
 		}
@@ -141,7 +146,8 @@ bool ModuleEditor::Start()
 	speedUpIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/SpeedUp.png"));
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
-	LoadScene("Assets/Scenes/Street.chaos");
+	FBXimporter importer;
+	importer.SpecialreadFromFBX("Assets/Models/Street.FBX", "Library/Models/", nullptr);
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
@@ -243,7 +249,7 @@ void ModuleEditor::SaveConfig()
 	json_object_set_boolean(json_object(user_data), "Dekstop", dekstop);
 	json_object_set_boolean(json_object(user_data), "AABB", showAABB);
 
-	json_serialize_to_file_pretty(user_data, "Settings/ConfigFile.json");
+	json_serialize_to_file_pretty(user_data, "ConfigFile.json");
 
 	AddLog("Saved Config Data\n");
 }
@@ -252,7 +258,7 @@ void ModuleEditor::LoadConfig()
 {
 	if (App->gameMode == false)
 	{
-		JSON_Value* userData = json_parse_file("Settings/ConfigFile.json");
+		JSON_Value* userData = json_parse_file("ConfigFile.json");
 
 		maxFPS = json_object_get_number(json_object(userData), "MaxFPS");
 		App->maxMs = json_object_get_number(json_object(userData), "MaxMs");
@@ -268,7 +274,7 @@ void ModuleEditor::LoadConfig()
 
 	if (App->gameMode == true)
 	{
-		JSON_Value* userData = json_parse_file("Settings/GameMode.json");
+		JSON_Value* userData = json_parse_file("GameMode.json");
 
 		maxFPS = json_object_get_number(json_object(userData), "MaxFPS");
 		App->maxMs = json_object_get_number(json_object(userData), "MaxMs");
@@ -1150,8 +1156,6 @@ update_status ModuleEditor::Update(float dt)
 	}
 	ImVec4 clearColor = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
 
-	if (App->input->GetKey(SDL_SCANCODE_V) == KEY_UP)
-		showSaveOnExitMenu = !showSaveOnExitMenu;
 	//////////////////////////////////////////////////////////////////////////////////////////// SHAPES BEGIN OPTIONS ////////////////////////////////////////////////////////////////////////////////////////////
 	if (showOptionsMenu != ComponentType::NONE) {
 		DOptionsmenu(showOptionsMenu);
@@ -2308,7 +2312,10 @@ update_status ModuleEditor::Update(float dt)
 
 				if (newResource == nullptr)
 				{
-					LoadScene(path);
+					std::string isScene = std::string(path);
+					unsigned lastPoint = isScene.find_last_of(".");
+					isScene = isScene.substr(lastPoint, isScene.length() - lastPoint);
+					if (isScene == ".chaos") LoadScene(path);
 				}
 				else
 				{
