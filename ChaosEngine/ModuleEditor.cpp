@@ -147,7 +147,7 @@ bool ModuleEditor::Start()
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
 	FBXimporter importer;
-	importer.SpecialreadFromFBX("Assets/Models/Street.FBX", "Library/Models/", nullptr);
+	importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;

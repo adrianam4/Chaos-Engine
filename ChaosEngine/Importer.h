@@ -42,7 +42,7 @@ private:
 	theBuffer* procesOneOfOurFile(char* data,int size);
 	theBuffer* ProcessMesh(aiMesh* mesh, const aiScene* scene, int numOf);
 	void ProcessNode(aiNode* node, const aiScene* scene);
-	void SpecialProcessNode(aiNode* node, const aiScene* scene);
+	void SpecialProcessNode(const char* originPath, aiNode* node, const aiScene* scene);
 	void readFromFBX(const char* originPath, Resource* resource);
 	
 	bool saveInFile(const char* path, void* data, int size);

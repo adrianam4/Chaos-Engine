@@ -93,8 +93,7 @@ void  FBXimporter::SpecialreadFromFBX(const char* originPath, Resource* resource
 	}
 
 
-	SpecialProcessNode(scene->mRootNode, scene);
-
+	SpecialProcessNode(originPath, scene->mRootNode, scene);
 
 }
 void FBXimporter::SpecialsaveToOurFile(const char* originPath, const char* destinationPath, GameObject* object)
@@ -151,32 +150,6 @@ void FBXimporter::SpecialsaveToOurFile(const char* originPath, const char* desti
 }
 void  FBXimporter::SpecialreadFromFBX(const char* originPath, const char* destinationPath, Resource* resource) 
 {
-	//unsigned int flags = 0;
-	//ResourceMesh* res = (ResourceMesh*)resource;
-
-	//if (res->metaData.joinVertex)
-	//	flags |= aiProcess_JoinIdenticalVertices;
-	//if (res->metaData.triangulate)
-	//	flags |= aiProcess_Triangulate;
-	//if (res->metaData.generateNormals)
-	//	flags |= aiProcess_GenNormals;
-	//if (res->metaData.generateSmoothNormals)
-	//	flags |= aiProcess_GenSmoothNormals;
-	//if (res->metaData.removeMaterials)
-	//	flags |= aiProcess_RemoveRedundantMaterials;
-	//if (res->metaData.infacingNormals)
-	//	flags |= aiProcess_FixInfacingNormals;
-	//if (res->metaData.genUvCoords)
-	//	flags |= aiProcess_GenUVCoords;
-	//if (res->metaData.transUvCoords)
-	//	flags |= aiProcess_TransformUVCoords;
-	//if (res->metaData.findInstances)
-	//	flags |= aiProcess_FindInstances;
-	//if (res->metaData.optimizeMesh)
-	//	flags |= aiProcess_OptimizeMeshes;
-	//if (res->metaData.flipUvs)
-	//	flags |= aiProcess_FlipUVs;
-
 	Assimp::Importer import;
 	const aiScene* scene = import.ReadFile(originPath, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_OptimizeMeshes);
 
@@ -186,21 +159,21 @@ void  FBXimporter::SpecialreadFromFBX(const char* originPath, const char* destin
 		return;
 	}
 
-	SpecialProcessNode(scene->mRootNode, scene);
+	SpecialProcessNode(originPath,scene->mRootNode, scene);
 
 	SpecialsaveToOurFile(originPath, destinationPath, App->scene->gameObjects[App->scene->gameObjects.size()-1]);
 
 }
 
 
-void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
+void FBXimporter::SpecialProcessNode(const char* originPath, aiNode* node, const aiScene* scene)
 {
 	// process all the node's meshes
 	aiVector3D translation = { 0,0,0 };
 	aiVector3D scale = { 1,1,1 };
 	aiQuaternion rotation = { 1,0,0,0 };
 
-	bool toAABB=false;
+	bool toAABB = false;
 
 	aiVector3D Auxtranslation = { 0,0,0 };
 	aiVector3D Auxscale = { 1,1,1 };
@@ -208,10 +181,9 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 	std::stack<aiNode*> stackNode;
 	std::stack<GameObject*> stackParent;
 	GameObject* aux = new GameObject();
-	for (int a = 0; a < node->mNumChildren; a++) {
+	for (int a = 0; a < node->mNumChildren; a++) 
+	{
 		stackNode.push(node->mChildren[a]);
-
-
 		stackParent.push(aux);
 	}
 	while (!stackNode.empty())
@@ -219,7 +191,6 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 		aiNode* Thenode = stackNode.top();
 		stackNode.pop();
 		GameObject* aux = App->scene->CreateGameObject(false, 1, "sfe");
-
 		GameObject* parent = stackParent.top();
 		stackParent.pop();
 		parent->childrens.push_back(aux);
@@ -229,17 +200,8 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 			stackParent.push(aux);
 		}
 
-
-
-
 		unsigned nMeshes = Thenode->mNumMeshes;
-
-
-
-
 		Thenode->mTransformation.Decompose(scale, rotation, translation);
-
-
 
 		aux->buffer.position.x = translation.x;
 		aux->buffer.position.y = translation.y;
@@ -250,10 +212,8 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 
 		Component* e;
 		
-
-		
-
-		for (int q = 0; q < nMeshes; q++) {
+		for (int q = 0; q < nMeshes; q++) 
+		{
 			aiMesh* mesh = scene->mMeshes[Thenode->mMeshes[q]];
 			theBuffer* temporal = ProcessMesh(mesh, scene, Thenode->mNumMeshes);
 
@@ -262,9 +222,70 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 			aux->components.push_back(e);
 			e->owner = aux;
 			toAABB = true;
-			/*e=aux->CreateComponent(ComponentType::MATERIAL, aux->name.c_str(), true);
 
-			e->owner = aux;*/
+			if (originPath == "Assets/Models/Street.fbx")
+			{
+				if (aux->name == "City_building_041" || aux->name == "City_building_001")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/Building_V02_C.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "City_building_024" || aux->name == "City_building_008")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/building_025_c.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "City_building_007" || aux->name == "City_building_011" || aux->name == "City_building_023")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/building_016_c.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "City_building_035" || aux->name == "City_building_028" || aux->name == "City_building_030" || aux->name == "City_building_039" || aux->name == "City_building_031" || aux->name == "City_building_040")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/Building_V01_C.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "City_building_022" || aux->name == "City_building_037" || aux->name == "City_building_038" || aux->name == "City_building_026" || aux->name == "City_building_034")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/building05-_c.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "City_building_017" || aux->name == "City_building_016" || aux->name == "City_building_010")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/building-01_c.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "City_building_033" || aux->name == "City_building_013" || aux->name == "City_building_036")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/building-06_-c.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "City_building_014" || aux->name == "City_building_032" || aux->name == "City_building_004")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/building03_c.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "Line002")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/Building_V01_C.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+				else if (aux->name == "Plane001")
+				{
+					App->editor->objectSelected = aux;
+					App->resources->LoadResource(App->resources->Find("Assets/Textures/textGreen.png"), App->editor->objectSelected);
+					App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+				}
+			}
 
 			aux->buffer.buffer = temporal->buffer;
 			aux->buffer.size = temporal->size;
@@ -277,7 +298,8 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 		aux->components.push_back(e);
 		e->setOwner();
 		Thenode->mTransformation.Decompose(scale, rotation, translation);
-		if (toAABB) {
+		if (toAABB) 
+		{
 			e->CreateAABB(ComponentType::MESH, aux,true);
 			toAABB = false;
 		}
@@ -291,7 +313,9 @@ void FBXimporter::SpecialProcessNode(aiNode* node, const aiScene* scene)
 	App->editor->AddLog("Processing Node\n");
 	
 }
-float3 FBXimporter::FromQuatToEuler(Quat quatAngles) {
+
+float3 FBXimporter::FromQuatToEuler(Quat quatAngles) 
+{
 	float3 angles;
 
 	angles = quatAngles.ToEulerXYZ();
@@ -302,6 +326,7 @@ float3 FBXimporter::FromQuatToEuler(Quat quatAngles) {
 
 	return angles;
 }
+
 void  FBXimporter::readFromFBX(const char* originPath, Resource* resource) 
 {
 	Assimp::Importer import;

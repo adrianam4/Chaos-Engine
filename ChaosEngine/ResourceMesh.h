@@ -7,6 +7,7 @@ struct MeshMeta
 {
 	u32 uid = 0;
 	std::string modelPath = " ";
+	std::vector<std::string> meshesPaths;
 	bool joinVertex = false;
 	bool triangulate = true;
 	bool generateNormals = true;
