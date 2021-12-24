@@ -122,6 +122,24 @@
     <ClCompile Include="FileDialog.cpp">
       <Filter>Engine\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="UIControl.h">
+      <Filter>Engine\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonComponent.cpp">
+      <Filter>Engine\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="SliderComponent.cpp">
+      <Filter>Engine\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckBoxComponent.cpp">
+      <Filter>Engine\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="InputBoxComponent.cpp">
+      <Filter>Engine\UserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleUI.cpp">
+      <Filter>Engine\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -253,6 +271,21 @@
     <ClInclude Include="FileDialog.h">
       <Filter>Engine\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="CheckBoxComponent.h">
+      <Filter>Engine\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderComponent.h">
+      <Filter>Engine\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="InputBoxComponent.h">
+      <Filter>Engine\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonComponent.h">
+      <Filter>Engine\UserInterface</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleUI.h">
+      <Filter>Engine\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Engine">
@@ -275,6 +308,9 @@
     </Filter>
     <Filter Include="Engine\Resources">
       <UniqueIdentifier>{493b5924-9e6b-48cc-b5e5-eb6d3475265b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\UserInterface">
+      <UniqueIdentifier>{d770091a-988a-4721-9fd6-17fdb38d4f09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

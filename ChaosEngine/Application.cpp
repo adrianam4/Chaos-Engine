@@ -5,6 +5,7 @@ Application::Application()
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	scene = new ModuleScene(this);
+	userInterface = new ModuleUI(this);
 	renderer3D = new ModuleRenderer3D(this);
 	camera = new ModuleCamera3D(this);
 	editor = new ModuleEditor(this);
@@ -21,6 +22,7 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(scene);
+	AddModule(userInterface);
 	AddModule(editor);
 	AddModule(resources);
 	AddModule(viewportBuffer);

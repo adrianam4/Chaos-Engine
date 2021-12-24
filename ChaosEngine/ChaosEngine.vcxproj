@@ -116,6 +116,7 @@
     <ClInclude Include="ModuleInput.h" />
     <ClInclude Include="ModuleResources.h" />
     <ClInclude Include="ModuleScene.h" />
+    <ClInclude Include="ModuleUI.h" />
     <ClInclude Include="ModuleViewportFrameBuffer.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="Parson\parson.h" />
@@ -125,6 +126,10 @@
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="ButtonComponent.h" />
+    <ClInclude Include="CheckBoxComponent.h" />
+    <ClInclude Include="InputBoxComponent.h" />
+    <ClInclude Include="SliderComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
@@ -159,6 +164,7 @@
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleResources.cpp" />
     <ClCompile Include="ModuleScene.cpp" />
+    <ClCompile Include="ModuleUI.cpp" />
     <ClCompile Include="ModuleViewportFrameBuffer.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
     <ClCompile Include="Parson\parson.c" />
@@ -168,6 +174,11 @@
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="ButtonComponent.cpp" />
+    <ClCompile Include="CheckBoxComponent.cpp" />
+    <ClCompile Include="UIControl.h" />
+    <ClCompile Include="InputBoxComponent.cpp" />
+    <ClCompile Include="SliderComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
