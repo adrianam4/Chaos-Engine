@@ -137,6 +137,9 @@
     <ClCompile Include="TransformComponent.cpp">
       <Filter>Engine\GameObjects\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Transform2DComponent.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -281,6 +284,9 @@
       <Filter>Engine\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="TransformComponent.h">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform2DComponent.h">
       <Filter>Engine\GameObjects\Components</Filter>
     </ClInclude>
   </ItemGroup>

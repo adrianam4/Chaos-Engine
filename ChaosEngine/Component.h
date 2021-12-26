@@ -9,6 +9,7 @@ class GameObject;
 
 enum class ComponentType
 {
+	TRANSFORM2D,
 	TRANSFORM = 1,
 	MESH,
 	CUBE,

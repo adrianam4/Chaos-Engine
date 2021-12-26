@@ -125,6 +125,7 @@
     <ClInclude Include="ResourceMaterial.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="Transform2DComponent.h" />
     <ClInclude Include="TransformComponent.h" />
     <ClInclude Include="ButtonComponent.h" />
     <ClInclude Include="CheckBoxComponent.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="ResourceMaterial.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Transform2DComponent.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="ButtonComponent.cpp" />
     <ClCompile Include="CheckBoxComponent.cpp" />

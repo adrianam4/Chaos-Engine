@@ -11,7 +11,7 @@
 #include "InputBoxComponent.h"
 #include "Resource.h"
 #include "ResourceMaterial.h"
-
+#include"Transform2DComponent.h"
 #include "MathGeoLib/src/MathGeoLib.h"
 
 Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double hFov, double nPlane, double fPlane, bool isObj)
@@ -117,6 +117,10 @@ Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* m
 
 	switch (type)
 	{
+	case ComponentType::TRANSFORM2D:
+
+		component = new ComponentTransform2D(float2(position.x,position.y), float2(scale.x, scale.y), float2(rotation.x, rotation.y));
+		break;
 	case ComponentType::TRANSFORM:
 		
 		component = new ComponentTransform(position, scale, rotation);
