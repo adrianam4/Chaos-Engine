@@ -1,10 +1,13 @@
 #pragma once
 
-#include "UIControl.h"
+#include "SDL.h"
+#include "Component.h"
 
-#include <string>
+class SDL_Rect;
+class SDL_Color;
+class SDL_Texture;
 
-class InputBoxComponent : public UIControl
+class InputBoxComponent : public Component
 {
 public:
 
@@ -12,9 +15,14 @@ public:
 	virtual ~InputBoxComponent();
 
 	bool Update(float dt);
-	bool Draw();
+	void Draw();
 
 public:
-
+	SDL_Color color;
+	SDL_Texture* texture;
+	SDL_Rect section;
+	State state;
+	SDL_Rect bounds;
+	std::string text;
 	bool drawRect;
 };

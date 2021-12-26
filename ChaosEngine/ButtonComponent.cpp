@@ -1,19 +1,20 @@
-#include "ButtonComponent.h"
 #include "Application.h"
+#include "SDL.h"
+#include "ButtonComponent.h"
 
-ButtonComponent::ButtonComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton) : UIControl(UIControlType::BUTTON, id)
+ButtonComponent::ButtonComponent(int id, SDL_Rect bounds, std::string text, SDL_Texture* textureButton)
 {
-
+	name = "Button Component";
 	this->bounds = bounds;
 	this->text = text;
-	buttonsColliders = false;
-	textureButtons = textureButton;
-	pendingToDelete = false;
+	texture = textureButton;
+	state = State::NORMAL;
 }
 
 ButtonComponent::~ButtonComponent()
 {
-
+	text.clear();
+	delete texture;
 }
 
 bool ButtonComponent::Update(float dt)
@@ -30,7 +31,7 @@ bool ButtonComponent::Update(float dt)
 		}
 	}
 
-	if (state != UIControlState::DISABLED)
+	if (state != State::DISABLED)
 	{
 		int mouseX = App->input->GetMouseX();
 		int mouseY = App->input->GetMouseY();
@@ -39,15 +40,15 @@ bool ButtonComponent::Update(float dt)
 		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
 			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
 		{
-			if (state != UIControlState::FOCUSED && state != UIControlState::PRESSED)
+			if (state != State::FOCUSED && state != State::PRESSED)
 			{
 				/*app->audio->PlayFx(focusedFX);*/
 			}
-			state = UIControlState::FOCUSED;
+			state = State::FOCUSED;
 
 			if (App->input->GetKey(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			{
-				state = UIControlState::PRESSED;
+				state = State::PRESSED;
 			}
 
 			// If mouse button pressed -> Generate event!
@@ -57,17 +58,17 @@ bool ButtonComponent::Update(float dt)
 				NotifyObserver();*/
 			}
 		}
-		else state = UIControlState::NORMAL;
+		else state = State::NORMAL;
 	}
 
 	return false;
 }
 
-bool ButtonComponent::Draw()
+void ButtonComponent::Draw()
 {
 	switch (state)
 	{
-	case UIControlState::DISABLED:
+	case State::DISABLED:
 		/*App->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect);
 		if (buttonsColliders == true)
 		{
@@ -75,7 +76,7 @@ bool ButtonComponent::Draw()
 		}*/
 		break;
 
-	case UIControlState::NORMAL:
+	case State::NORMAL:
 		/*App->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect2);
 		if (buttonsColliders == true)
 		{
@@ -83,7 +84,7 @@ bool ButtonComponent::Draw()
 		}*/
 		break;
 
-	case UIControlState::FOCUSED:
+	case State::FOCUSED:
 		/*App->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect3);
 		if (buttonsColliders == true)
 		{
@@ -91,7 +92,7 @@ bool ButtonComponent::Draw()
 		}*/
 		break;
 
-	case UIControlState::PRESSED:
+	case State::PRESSED:
 		/*App->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect4);
 		if (buttonsColliders == true)
 		{
@@ -99,13 +100,11 @@ bool ButtonComponent::Draw()
 		}*/
 		break;
 
-	case UIControlState::SELECTED:
+	case State::SELECTED:
 		/*App->render->DrawRectangle(bounds, 0, 255, 0, 255);*/
 		break;
 
 	default:
 		break;
 	}
-
-	return false;
 }

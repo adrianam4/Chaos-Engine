@@ -147,7 +147,7 @@ bool ModuleEditor::Start()
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
 	FBXimporter importer;
-	importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
+	//importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
@@ -1332,6 +1332,71 @@ update_status ModuleEditor::Update(float dt)
 					M.x = 1;
 					M.y = 1;
 					M.z = 1;
+				}
+				ImGui::Separator();
+				if (ImGui::MenuItem("Create Button"))
+				{
+					static int buttons = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, buttons, "Button "));
+					buttons++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+
+					// TIENE QUE SER 2D!!!
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON));
+					objectSelected->components[1]->owner = objectSelected;
+
+					App->editor->AddLog("Button Created\n");
+				}
+				if (ImGui::MenuItem("Create Check Box"))
+				{
+					static int checkboxes = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, checkboxes, "Check Box "));
+					checkboxes++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+
+					// TIENE QUE SER 2D!!!
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX));
+					objectSelected->components[1]->owner = objectSelected;
+
+					App->editor->AddLog("Check Box Created\n");
+				}
+				if (ImGui::MenuItem("Create Slider"))
+				{
+					static int sliders = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, sliders, "Slider "));
+					sliders++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+
+					// TIENE QUE SER 2D!!!
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER));
+					objectSelected->components[1]->owner = objectSelected;
+
+					App->editor->AddLog("Slider Created\n");
+				}
+				if (ImGui::MenuItem("Create Input Box"))
+				{
+					static int inputboxes = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, inputboxes, "Input Box "));
+					inputboxes++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+
+					// TIENE QUE SER 2D!!!
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX));
+					objectSelected->components[1]->owner = objectSelected;
+
+					App->editor->AddLog("Input Box Created\n");
 				}
 				ImGui::EndMenu();
 			}

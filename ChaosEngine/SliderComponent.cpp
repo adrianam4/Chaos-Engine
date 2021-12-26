@@ -1,20 +1,24 @@
-#include "SliderComponent.h"
 #include "Application.h"
+#include "SDL.h"
+#include "SliderComponent.h"
 
-SliderComponent::SliderComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton, SDL_Texture* textureSlider) : UIControl(UIControlType::SLIDER, id)
+SliderComponent::SliderComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton, SDL_Texture* textureSlider)
 {
+	name = "Slider Component";
 	this->bounds = bounds;
 	this->text = text;
 	minValue = 0;
 	maxValue = 100;
-	textureButtons = textureButton;
-	textureSliders = textureSlider;
+	//textureButtons = textureButton;
+	texture = textureSlider;
 	drawRect = false;
-	pendingToDelete = false;
+	state = State::NORMAL;
 }
 
 SliderComponent::~SliderComponent()
 {
+	text.clear();
+	delete texture;
 }
 
 bool SliderComponent::Update(float dt)
@@ -31,7 +35,7 @@ bool SliderComponent::Update(float dt)
 		}
 	}
 
-	if (state != UIControlState::DISABLED)
+	if (state != State::DISABLED)
 	{
 		int mouseX = App->input->GetMouseX();
 		int mouseY = App->input->GetMouseY();
@@ -40,10 +44,10 @@ bool SliderComponent::Update(float dt)
 		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
 			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
 		{
-			state = UIControlState::FOCUSED;
+			state = State::FOCUSED;
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			{
-				state = UIControlState::PRESSED;
+				state = State::PRESSED;
 				value = ((maxValue - minValue) * (mouseX - (float)(bounds.x + slider.w / 2))) / (float)(bounds.w - slider.w) + minValue;
 
 				//NotifyObserver();
@@ -58,7 +62,7 @@ bool SliderComponent::Update(float dt)
 				}
 			}
 		}
-		else state = UIControlState::NORMAL;
+		else state = State::NORMAL;
 
 		if (value > maxValue)
 		{
@@ -73,46 +77,36 @@ bool SliderComponent::Update(float dt)
 	return false;
 }
 
-bool SliderComponent::Draw()
+void SliderComponent::Draw()
 {
 	SDL_Rect rect = { 3486,3838,359,57 };
 	SDL_Rect rect2 = { 3450,3955, 3.41 * value,46 };
 	SDL_Rect rect3;
 
-	if (id == 1)
-	{
-		rect3 = { 1074,921, 91,96 };
-	}
-
-	if (id == 2)
-	{
-		rect3 = { 1074,1029, 91,96 };
-	}
-
 	switch (state)
 	{
-	case UIControlState::DISABLED:
+	case State::DISABLED:
 		/*app->render->DrawTexture(textureSliders, bounds.x, bounds.y, &rect);
 		app->render->DrawTexture(textureSliders, bounds.x + 8, bounds.y + 6, &rect2);
 		app->render->DrawTexture(textureButtons, bounds.x - 95, bounds.y, &rect3);
 		if (drawRect == true) app->render->DrawRectangle(bounds, 0, 255, 0, 255);
 		*/
 		break;
-	case UIControlState::NORMAL:
+	case State::NORMAL:
 		/*app->render->DrawTexture(textureSliders, bounds.x, bounds.y, &rect);
 		app->render->DrawTexture(textureSliders, bounds.x + 8, bounds.y + 6, &rect2);
 		app->render->DrawTexture(textureButtons, bounds.x - 95, bounds.y, &rect3);
 		if (drawRect == true) app->render->DrawRectangle(bounds, 0, 255, 0, 255);
 		*/
 		break;
-	case UIControlState::FOCUSED:
+	case State::FOCUSED:
 		/*app->render->DrawTexture(textureSliders, bounds.x, bounds.y, &rect);
 		app->render->DrawTexture(textureSliders, bounds.x + 8, bounds.y + 6, &rect2);
 		app->render->DrawTexture(textureButtons, bounds.x - 95, bounds.y, &rect3);
 		if (drawRect == true) app->render->DrawRectangle(bounds, 255, 255, 0, 255);
 		*/
 		break;
-	case UIControlState::PRESSED:
+	case State::PRESSED:
 		/*app->render->DrawTexture(textureSliders, bounds.x, bounds.y, &rect);
 		app->render->DrawTexture(textureSliders, bounds.x + 8, bounds.y + 6, &rect2);
 		app->render->DrawTexture(textureButtons, bounds.x - 95, bounds.y, &rect3);
@@ -122,6 +116,4 @@ bool SliderComponent::Draw()
 	default:
 		break;
 	}
-
-	return false;
 }

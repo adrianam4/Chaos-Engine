@@ -1,17 +1,21 @@
-#include "CheckboxComponent.h"
 #include "Application.h"
+#include "SDL.h"
+#include "CheckboxComponent.h"
 
-CheckboxComponent::CheckboxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton) : UIControl(UIControlType::CHECKBOX, id)
+CheckboxComponent::CheckboxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton)
 {
+	name = "CheckBox Component";
 	this->bounds = bounds;
 	this->text = text;
-	textureButtons = textureButton;
+	texture = textureButton;
 	drawRectangle = false;
-	pendingToDelete = false;
+	state = State::NORMAL;
 }
 
 CheckboxComponent::~CheckboxComponent()
 {
+	text.clear();
+	delete texture;
 }
 
 bool CheckboxComponent::Update(float dt)
@@ -27,7 +31,7 @@ bool CheckboxComponent::Update(float dt)
 			drawRectangle = false;
 		}
 	}
-	if (state != UIControlState::DISABLED)
+	if (state != State::DISABLED)
 	{
 		int mouseX = App->input->GetMouseX();
 		int mouseY = App->input->GetMouseY();
@@ -40,11 +44,11 @@ bool CheckboxComponent::Update(float dt)
 			{
 				App->audio->PlayFx(focusedFX);
 			}*/
-			state = UIControlState::FOCUSED;
+			state = State::FOCUSED;
 
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			{
-				state = UIControlState::PRESSED;
+				state = State::PRESSED;
 			}
 
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
@@ -53,7 +57,7 @@ bool CheckboxComponent::Update(float dt)
 				//NotifyObserver();
 			}
 		}
-		else state = UIControlState::NORMAL;
+		else state = State::NORMAL;
 	}
 
 
@@ -61,7 +65,7 @@ bool CheckboxComponent::Update(float dt)
 	return false;
 }
 
-bool CheckboxComponent::Draw()
+void CheckboxComponent::Draw()
 {
 	/*SDL_Rect rect;
 	if (id == 8)
@@ -91,28 +95,28 @@ bool CheckboxComponent::Draw()
 	// Draw the right button depending on state
 	switch (state)
 	{
-	case UIControlState::DISABLED:
+	case State::DISABLED:
 	{
 		/*if (checked) 	app->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect8);
 		else 	app->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect4);
 		app->render->DrawTexture(textureButtons, bounds.x + 95, bounds.y + 15, &rect9);
 		if (drawRectangle == true) app->render->DrawRectangle(bounds, 0, 255, 0, 255);*/
 	} break;
-	case UIControlState::NORMAL:
+	case State::NORMAL:
 	{
 		/*if (checked) 	app->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect5);
 		else 	app->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect);
 		app->render->DrawTexture(textureButtons, bounds.x + 95, bounds.y + 15, &rect9);
 		if (drawRectangle == true) app->render->DrawRectangle(bounds, 0, 255, 0, 255);*/
 	} break;
-	case UIControlState::FOCUSED:
+	case State::FOCUSED:
 	{
 		/*if (checked) 	app->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect6);
 		else 	app->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect2);
 		app->render->DrawTexture(textureButtons, bounds.x + 95, bounds.y + 15, &rect9);
 		if (drawRectangle == true) app->render->DrawRectangle(bounds, 255, 255, 0, 255);*/
 	} break;
-	case UIControlState::PRESSED:
+	case State::PRESSED:
 	{
 		/*if (checked) 	app->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect7);
 		else 	app->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect3);
@@ -122,6 +126,4 @@ bool CheckboxComponent::Draw()
 	default:
 		break;
 	}
-
-	return false;
 }

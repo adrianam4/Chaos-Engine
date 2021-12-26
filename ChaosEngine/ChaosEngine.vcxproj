@@ -176,7 +176,6 @@
     <ClCompile Include="TransformComponent.cpp" />
     <ClCompile Include="ButtonComponent.cpp" />
     <ClCompile Include="CheckBoxComponent.cpp" />
-    <ClCompile Include="UIControl.h" />
     <ClCompile Include="InputBoxComponent.cpp" />
     <ClCompile Include="SliderComponent.cpp" />
   </ItemGroup>

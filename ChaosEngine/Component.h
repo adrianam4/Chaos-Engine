@@ -18,8 +18,21 @@ enum class ComponentType
 	PLANE,
 	MATERIAL,
 	CAMERA,
+	UI_BUTTON,
+	UI_CHECKBOX,
+	UI_SLIDER,
+	UI_INPUTBOX,
 	NONE,
 	EMPTY,
+};
+
+enum class State
+{
+	DISABLED,
+	NORMAL,
+	FOCUSED,
+	PRESSED,
+	SELECTED
 };
 
 class Component

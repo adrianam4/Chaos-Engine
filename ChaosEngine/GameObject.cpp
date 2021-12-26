@@ -1,9 +1,14 @@
 #include "Application.h"
+#include "SDL.h"
 #include "GameObject.h"
 #include "MeshComponent.h"
 #include "TransformComponent.h"
 #include "MaterialComponent.h"
 #include "CameraComponent.h"
+#include "ButtonComponent.h"
+#include "CheckBoxComponent.h"
+#include "SliderComponent.h"
+#include "InputBoxComponent.h"
 #include "Resource.h"
 #include "ResourceMaterial.h"
 
@@ -22,6 +27,30 @@ Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double h
 		break;
 	}
 
+	return component;
+}
+
+Component* GameObject::CreateUIComponent(ComponentType type)
+{
+	Component* component = nullptr;
+
+	switch (type)
+	{
+	case ComponentType::UI_BUTTON:
+		component = new ButtonComponent(1, SDL_Rect({0, 0, 100, 100}), "a", nullptr);
+		break;
+	case ComponentType::UI_CHECKBOX:
+		component = new CheckboxComponent(2, SDL_Rect({ 0, 0, 100, 100 }), "b", nullptr);
+		break;
+	case ComponentType::UI_SLIDER:
+		component = new SliderComponent(3, SDL_Rect({ 0, 0, 100, 100 }), "c", nullptr, nullptr);
+		break;
+	case ComponentType::UI_INPUTBOX:
+		component = new InputBoxComponent(4, SDL_Rect({ 0, 0, 100, 100 }), "d", nullptr);
+		break;
+	default:
+		break;
+	}
 	return component;
 }
 

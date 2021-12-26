@@ -47,26 +47,11 @@
     <ClCompile Include="Application.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
-      <Filter>Engine\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Engine\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="MaterialComponent.cpp">
-      <Filter>Engine\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshComponent.cpp">
-      <Filter>Engine\GameObjects</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformComponent.cpp">
       <Filter>Engine\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Engine\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraComponent.cpp">
-      <Filter>Engine\GameObjects</Filter>
     </ClCompile>
     <ClCompile Include="FileSystem.cpp">
       <Filter>Engine\Tools</Filter>
@@ -122,23 +107,35 @@
     <ClCompile Include="FileDialog.cpp">
       <Filter>Engine\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="UIControl.h">
-      <Filter>Engine\UserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="ButtonComponent.cpp">
-      <Filter>Engine\UserInterface</Filter>
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="SliderComponent.cpp">
-      <Filter>Engine\UserInterface</Filter>
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="CheckBoxComponent.cpp">
-      <Filter>Engine\UserInterface</Filter>
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="InputBoxComponent.cpp">
-      <Filter>Engine\UserInterface</Filter>
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClCompile>
     <ClCompile Include="ModuleUI.cpp">
       <Filter>Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialComponent.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Engine\GameObjects\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -184,19 +181,7 @@
     <ClInclude Include="Application.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Engine\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Engine\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="MaterialComponent.h">
-      <Filter>Engine\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshComponent.h">
-      <Filter>Engine\GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformComponent.h">
       <Filter>Engine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
@@ -207,9 +192,6 @@
     </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Engine\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraComponent.h">
-      <Filter>Engine\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="FileSystem.h">
       <Filter>Engine\Tools</Filter>
@@ -272,19 +254,34 @@
       <Filter>Engine\Tools</Filter>
     </ClInclude>
     <ClInclude Include="CheckBoxComponent.h">
-      <Filter>Engine\UserInterface</Filter>
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="SliderComponent.h">
-      <Filter>Engine\UserInterface</Filter>
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="InputBoxComponent.h">
-      <Filter>Engine\UserInterface</Filter>
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="ButtonComponent.h">
-      <Filter>Engine\UserInterface</Filter>
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClInclude>
     <ClInclude Include="ModuleUI.h">
       <Filter>Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialComponent.h">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Engine\GameObjects\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -309,7 +306,10 @@
     <Filter Include="Engine\Resources">
       <UniqueIdentifier>{493b5924-9e6b-48cc-b5e5-eb6d3475265b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\UserInterface">
+    <Filter Include="Engine\GameObjects\Components">
+      <UniqueIdentifier>{4ffae068-c81c-459d-9bb2-685fc3083186}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\GameObjects\Components\UserInterface">
       <UniqueIdentifier>{d770091a-988a-4721-9fd6-17fdb38d4f09}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

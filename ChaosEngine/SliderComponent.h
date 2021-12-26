@@ -1,8 +1,12 @@
 #pragma once
 
-#include "UIControl.h"
+#include "Component.h"
 
-class SliderComponent : public UIControl
+class SDL_Rect;
+class SDL_Color;
+class SDL_Texture;
+
+class SliderComponent : public Component
 {
 public:
 
@@ -10,14 +14,19 @@ public:
 	virtual ~SliderComponent();
 
 	bool Update(float dt);
-	bool Draw();
+	void Draw();
 
 	int value;
 	int minValue;
 	int maxValue;
 
 private:
-
+	SDL_Color color;
+	SDL_Texture* texture;
+	SDL_Rect section;
+	State state;
+	SDL_Rect bounds;
+	std::string text;
 	SDL_Rect slider;
 	bool drawRect;
 };
