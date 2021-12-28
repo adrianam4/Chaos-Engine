@@ -13,12 +13,13 @@ public:
 	SliderComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton, SDL_Texture* textureSlider);
 	virtual ~SliderComponent();
 
-	bool Update(float dt);
-	void Draw();
+	void Update() override;
+	void Draw() override;
+	void OnEditor(int i) override;
 
-	int value;
-	int minValue;
-	int maxValue;
+	float value;
+	float minValue;
+	float maxValue;
 
 private:
 	SDL_Color color;

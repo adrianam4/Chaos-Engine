@@ -14,8 +14,9 @@ public:
 	InputBoxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton);
 	virtual ~InputBoxComponent();
 
-	bool Update(float dt);
-	void Draw();
+	void Update() override;
+	void Draw() override;
+	void OnEditor(int i) override;
 
 public:
 	SDL_Color color;
