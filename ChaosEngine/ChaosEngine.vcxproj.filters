@@ -140,6 +140,9 @@
     <ClCompile Include="Transform2DComponent.cpp">
       <Filter>Engine\GameObjects\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Engine\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -288,6 +291,9 @@
     </ClInclude>
     <ClInclude Include="Transform2DComponent.h">
       <Filter>Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Engine\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
