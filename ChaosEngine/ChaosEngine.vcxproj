@@ -91,6 +91,7 @@
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
+    <ClInclude Include="ImageComponent.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\ImGuizmo.h" />
@@ -141,6 +142,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="glmath.cpp" />
+    <ClCompile Include="ImageComponent.cpp" />
     <ClCompile Include="ImGui\imgui.cpp" />
     <ClCompile Include="ImGui\ImGuizmo.cpp" />
     <ClCompile Include="ImGui\imgui_demo.cpp" />

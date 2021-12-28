@@ -6,6 +6,7 @@
 #include "MaterialComponent.h"
 #include "CameraComponent.h"
 #include "ButtonComponent.h"
+#include "ImageComponent.h"
 #include "CheckBoxComponent.h"
 #include "SliderComponent.h"
 #include "InputBoxComponent.h"
@@ -37,16 +38,19 @@ Component* GameObject::CreateUIComponent(ComponentType type)
 	switch (type)
 	{
 	case ComponentType::UI_BUTTON:
-		component = new ButtonComponent(1, SDL_Rect({0, 0, 100, 100}), "a", nullptr);
+		component = new ButtonComponent(1, SDL_Rect({0, 0, 100, 100}), "Button", nullptr);
+		break;
+	case ComponentType::UI_IMAGE:
+		component = new ImageComponent(2, SDL_Rect({ 0, 0, 100, 100 }), "Image", nullptr);
 		break;
 	case ComponentType::UI_CHECKBOX:
-		component = new CheckboxComponent(2, SDL_Rect({ 0, 0, 100, 100 }), "b", nullptr);
+		component = new CheckboxComponent(3, SDL_Rect({ 0, 0, 100, 100 }), "CheckBox", nullptr);
 		break;
 	case ComponentType::UI_SLIDER:
-		component = new SliderComponent(3, SDL_Rect({ 0, 0, 100, 100 }), "c", nullptr, nullptr);
+		component = new SliderComponent(4, SDL_Rect({ 0, 0, 100, 100 }), "Slider", nullptr, nullptr);
 		break;
 	case ComponentType::UI_INPUTBOX:
-		component = new InputBoxComponent(4, SDL_Rect({ 0, 0, 100, 100 }), "d", nullptr);
+		component = new InputBoxComponent(5, SDL_Rect({ 0, 0, 100, 100 }), "InputBox", nullptr);
 		break;
 	default:
 		break;
