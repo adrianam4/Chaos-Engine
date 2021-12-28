@@ -140,8 +140,12 @@
     <ClCompile Include="Transform2DComponent.cpp">
       <Filter>Engine\GameObjects\Components</Filter>
     </ClCompile>
+
     <ClCompile Include="Fonts.cpp">
       <Filter>Engine\Tools</Filter>
+
+    <ClCompile Include="ImageComponent.cpp">
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,8 +296,12 @@
     <ClInclude Include="Transform2DComponent.h">
       <Filter>Engine\GameObjects\Components</Filter>
     </ClInclude>
+
     <ClInclude Include="Fonts.h">
       <Filter>Engine\Tools</Filter>
+
+    <ClInclude Include="ImageComponent.h">
+      <Filter>Engine\GameObjects\Components\UserInterface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

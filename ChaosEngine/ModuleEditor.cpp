@@ -1342,13 +1342,27 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					// TIENE QUE SER 2D!!!
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON));
 					objectSelected->components[1]->owner = objectSelected;
 
 					App->editor->AddLog("Button Created\n");
+				}
+				if (ImGui::MenuItem("Create Image"))
+				{
+					static int images = 1;
+					App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
+					images++;
+					int lastComponent = App->scene->gameObjects.size() - 1;
+					objectSelected = App->scene->gameObjects[lastComponent];
+
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components[0]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE));
+					objectSelected->components[1]->owner = objectSelected;
+
+					App->editor->AddLog("Image Created\n");
 				}
 				if (ImGui::MenuItem("Create Check Box"))
 				{
@@ -1358,7 +1372,6 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					// TIENE QUE SER 2D!!!
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX));
@@ -1374,7 +1387,6 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					// TIENE QUE SER 2D!!!
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER));
@@ -1390,7 +1402,6 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					// TIENE QUE SER 2D!!!
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX));

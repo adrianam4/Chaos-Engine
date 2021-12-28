@@ -20,6 +20,7 @@ enum class ComponentType
 	MATERIAL,
 	CAMERA,
 	UI_BUTTON,
+	UI_IMAGE,
 	UI_CHECKBOX,
 	UI_SLIDER,
 	UI_INPUTBOX,
