@@ -13,7 +13,7 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include "ImGuizmo.h"
-
+#include"Fonts.h"
 #include "DevIL/include/il.h"
 #include "DevIL/include/ilu.h"
 #include "DevIL/include/ilut.h"
@@ -269,6 +269,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::PostUpdate(float dt)
 {
+	
 	for (int a = 0; a < 2; a++) {
 
 		if (a == 0) 
@@ -288,8 +289,18 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			App->editor->grid->DrawGrid();
 
 			DrawMeshes(App->camera->editorCam);
+			//
+	
+			/*glColor3ub(0xff, 0, 0);
+			
+			glRotatef(0, 0, 0, 0);
+			glScalef(1, 1, 1);
+			glTranslatef(0, 0, 0);
 
+			freetype::print(App->editor->our_font, 0, 0, "Aaaaaaaaaaa", 50);*/
 			App->viewportBuffer->UnBind();
+			
+			
 			glPopMatrix();
 		}
 		else if (App->camera->GameCam != nullptr) 
@@ -311,6 +322,23 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			glPopMatrix();
 		}
 	}
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+	glColor3ub(0xff, 0, 0);
+
+	glPushMatrix();
+	glLoadIdentity();
+	glRotatef(0, 0, 0, 1);
+	glScalef(1, 1, 1);
+	glTranslatef(-180, 0, 0);
+	freetype::print(App->editor->our_font, 50, 50, "Active FreeType Text - %7.2f");
+	glPopMatrix();
+	
+
+
+
 
 	//DrawCameras();
 	ImGui::Render();
