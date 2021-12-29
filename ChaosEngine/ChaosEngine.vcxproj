@@ -77,7 +77,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalLibraryDirectories>$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;$(ProjectDir)PhysFS\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib;$(ProjectDir)DevIL\lib;$(ProjectDir)imgui;$(ProjectDir)SDL\libx86;$(ProjectDir)freetype\lib;$(ProjectDir)freetype\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;$(ProjectDir)PhysFS\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib;$(ProjectDir)DevIL\lib;$(ProjectDir)imgui;$(ProjectDir)SDL\libx86;$(ProjectDir)freetype\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32s.lib;assimp-vc142-mt.lib;physfs.lib;MathGeoLib.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
