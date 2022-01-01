@@ -1,107 +1,342 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="Application.cpp" />
-    <ClCompile Include="CameraComponent.cpp" />
-    <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="FileDialog.cpp" />
-    <ClCompile Include="Fonts.cpp" />
-    <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="GameTime.cpp" />
-    <ClCompile Include="glmath.cpp" />
-    <ClCompile Include="ImageComponent.cpp" />
-    <ClCompile Include="ImGui\imgui.cpp" />
-    <ClCompile Include="ImGui\ImGuizmo.cpp" />
-    <ClCompile Include="ImGui\imgui_demo.cpp" />
-    <ClCompile Include="ImGui\imgui_draw.cpp" />
-    <ClCompile Include="ImGui\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="ImGui\imgui_impl_sdl.cpp" />
-    <ClCompile Include="ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="Importer.cpp" />
-    <ClCompile Include="MaterialImporter.cpp" />
-    <ClCompile Include="ModelImporter.cpp" />
-    <ClCompile Include="Light.cpp" />
-    <ClCompile Include="log.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MaterialComponent.cpp" />
-    <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshComponent.cpp" />
-    <ClCompile Include="Model.cpp" />
-    <ClCompile Include="ModuleCamera3D.cpp" />
-    <ClCompile Include="ModuleEditor.cpp" />
-    <ClCompile Include="FileSystem.cpp" />
-    <ClCompile Include="ModuleInput.cpp" />
-    <ClCompile Include="ModuleRenderer3D.cpp" />
-    <ClCompile Include="ModuleResources.cpp" />
-    <ClCompile Include="ModuleScene.cpp" />
-    <ClCompile Include="ModuleUI.cpp" />
-    <ClCompile Include="ModuleViewportFrameBuffer.cpp" />
-    <ClCompile Include="ModuleWindow.cpp" />
-    <ClCompile Include="Parson\parson.c" />
-    <ClCompile Include="Primitives.cpp" />
-    <ClCompile Include="Resource.cpp" />
-    <ClCompile Include="ResourceMaterial.cpp" />
-    <ClCompile Include="ResourceMesh.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Transform2DComponent.cpp" />
-    <ClCompile Include="TransformComponent.cpp" />
-    <ClCompile Include="ButtonComponent.cpp" />
-    <ClCompile Include="CheckBoxComponent.cpp" />
-    <ClCompile Include="InputBoxComponent.cpp" />
-    <ClCompile Include="SliderComponent.cpp" />
+    <ClCompile Include="FileSystem.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleCamera3D.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleEditor.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleInput.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleRenderer3D.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleResources.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleScene.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleUI.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleViewportFrameBuffer.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleWindow.cpp">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Application.cpp">
+      <Filter>Chaos_Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="FileDialog.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Fonts.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="GameTime.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="glmath.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="log.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Importer.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialImporter.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Chaos_Engine\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckBoxComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform2DComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="SliderComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="InputBoxComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui.cpp">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_demo.cpp">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_draw.cpp">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_opengl3.cpp">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_impl_sdl.cpp">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\imgui_widgets.cpp">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ImGui\ImGuizmo.cpp">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>Chaos_Engine\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelImporter.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Primitives.cpp">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="Parson\parson.c">
+      <Filter>Chaos_Engine\External\Parson</Filter>
+    </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Chaos_Engine\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMaterial.cpp">
+      <Filter>Chaos_Engine\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceMesh.cpp">
+      <Filter>Chaos_Engine\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h" />
-    <ClInclude Include="CameraComponent.h" />
-    <ClInclude Include="Color.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="FileDialog.h" />
-    <ClInclude Include="Fonts.h" />
-    <ClInclude Include="GameObject.h" />
-    <ClInclude Include="GameTime.h" />
-    <ClInclude Include="glmath.h" />
-    <ClInclude Include="Globals.h" />
-    <ClInclude Include="ImageComponent.h" />
-    <ClInclude Include="ImGui\imconfig.h" />
-    <ClInclude Include="ImGui\imgui.h" />
-    <ClInclude Include="ImGui\ImGuizmo.h" />
-    <ClInclude Include="ImGui\imgui_impl_opengl3.h" />
-    <ClInclude Include="ImGui\imgui_impl_sdl.h" />
-    <ClInclude Include="ImGui\imgui_internal.h" />
-    <ClInclude Include="ImGui\imstb_rectpack.h" />
-    <ClInclude Include="ImGui\imstb_textedit.h" />
-    <ClInclude Include="ImGui\imstb_truetype.h" />
-    <ClInclude Include="Importer.h" />
-    <ClInclude Include="MaterialImporter.h" />
-    <ClInclude Include="ModelImporter.h" />
-    <ClInclude Include="Light.h" />
-    <ClInclude Include="MaterialComponent.h" />
-    <ClInclude Include="Mesh.h" />
-    <ClInclude Include="MeshComponent.h" />
-    <ClInclude Include="Model.h" />
-    <ClInclude Include="ModuleCamera3D.h" />
-    <ClInclude Include="ModuleEditor.h" />
-    <ClInclude Include="FileSystem.h" />
-    <ClInclude Include="ModuleRenderer3D.h" />
-    <ClInclude Include="Module.h" />
-    <ClInclude Include="ModuleInput.h" />
-    <ClInclude Include="ModuleResources.h" />
-    <ClInclude Include="ModuleScene.h" />
-    <ClInclude Include="ModuleUI.h" />
-    <ClInclude Include="ModuleViewportFrameBuffer.h" />
-    <ClInclude Include="ModuleWindow.h" />
-    <ClInclude Include="Parson\parson.h" />
-    <ClInclude Include="Primitives.h" />
-    <ClInclude Include="Resource.h" />
-    <ClInclude Include="ResourceMaterial.h" />
-    <ClInclude Include="ResourceMesh.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="Transform2DComponent.h" />
-    <ClInclude Include="TransformComponent.h" />
-    <ClInclude Include="ButtonComponent.h" />
-    <ClInclude Include="CheckBoxComponent.h" />
-    <ClInclude Include="InputBoxComponent.h" />
-    <ClInclude Include="SliderComponent.h" />
+    <ClInclude Include="FileSystem.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Module.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCamera3D.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleEditor.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleInput.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleRenderer3D.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleResources.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleScene.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleUI.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleViewportFrameBuffer.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleWindow.h">
+      <Filter>Chaos_Engine\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>Chaos_Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="FileDialog.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Fonts.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="GameTime.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="glmath.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialImporter.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Chaos_Engine\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckBoxComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform2DComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputBoxComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_opengl3.h">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_impl_sdl.h">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui_internal.h">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\ImGuizmo.h">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imgui.h">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imconfig.h">
+      <Filter>Chaos_Engine\External\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_rectpack.h">
+      <Filter>Chaos_Engine\External\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_textedit.h">
+      <Filter>Chaos_Engine\External\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGui\imstb_truetype.h">
+      <Filter>Chaos_Engine\External\TrueType</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Chaos_Engine\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelImporter.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Primitives.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="Parson\parson.h">
+      <Filter>Chaos_Engine\External\Parson</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Chaos_Engine\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMaterial.h">
+      <Filter>Chaos_Engine\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceMesh.h">
+      <Filter>Chaos_Engine\Resources</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Chaos_Engine">
+      <UniqueIdentifier>{01126620-ad8d-4c64-9de7-fcf969474da9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\Modules">
+      <UniqueIdentifier>{6b7927d5-eccf-4b7a-aead-e6350da2f0a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\Core">
+      <UniqueIdentifier>{fa969da7-e8b4-43c9-8d5e-6e0139143658}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\Tools">
+      <UniqueIdentifier>{5c4e1245-7f66-45d2-86d3-9e5ad252e009}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\GameObjects">
+      <UniqueIdentifier>{fcf90584-0bba-4c18-b660-b45213fbcf92}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\GameObjects\Components">
+      <UniqueIdentifier>{fbcb09cb-8481-422d-982b-17944f0f097e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\External">
+      <UniqueIdentifier>{0ecb8238-b3b4-477e-8b27-039e092b1ffd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\External\ImGui">
+      <UniqueIdentifier>{a45c9fb0-cf11-480c-90ec-dc390bbee080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\External\TrueType">
+      <UniqueIdentifier>{c9a7fb49-4643-4fd0-95ac-b2d1ae4f7a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\External\Parson">
+      <UniqueIdentifier>{b0741ff2-6dc2-4964-a1ac-9935451d7da6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\Resources">
+      <UniqueIdentifier>{ea01f113-c802-40ac-bcf3-3ec16fb74b62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
