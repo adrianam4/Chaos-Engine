@@ -123,7 +123,7 @@ Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* m
 	{
 	case ComponentType::TRANSFORM2D:
 
-		component = new ComponentTransform2D(float2(position.x,position.y), float2(scale.x, scale.y), float2(rotation.x, rotation.y));
+		component = new ComponentTransform2D(position, scale, rotation);
 		break;
 	case ComponentType::TRANSFORM:
 		
@@ -173,6 +173,18 @@ ComponentTransform* GameObject::getTransform()
 
 	}
 
+}
+
+ComponentTransform2D* GameObject::getTransform2D()
+{
+	for (int i = 0; i < components.size(); i++)
+	{
+		if (components[i]->type == ComponentType::TRANSFORM2D)
+		{
+			return (ComponentTransform2D*)components[i];
+		}
+
+	}
 }
 int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
 {

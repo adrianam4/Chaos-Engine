@@ -8,6 +8,7 @@
 #include"Primitives.h"
 #include"Importer.h"
 #include"TransformComponent.h"
+#include "Transform2DComponent.h"
 #include "Resource.h"
 class theBuffer;
 class GameObject
@@ -45,6 +46,7 @@ public:
 	std::vector<OBB*>obb;
 	bool isChild = false;
 	ComponentTransform* getTransform();
+	ComponentTransform2D* getTransform2D();
 	float3 trans;
 	float3 sca;
 	Quat rot;

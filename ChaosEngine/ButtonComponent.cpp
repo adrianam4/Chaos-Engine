@@ -49,6 +49,7 @@ void ButtonComponent::Update()
 			if (App->input->GetKey(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			{
 				state = State::PRESSED;
+				OnClick();
 			}
 
 			// If mouse button pressed -> Generate event!
@@ -109,6 +110,8 @@ void ButtonComponent::Draw()
 
 void ButtonComponent::OnEditor(int i)
 {
+	Update();
+
 	// General variables
 	static float multiplier = 1;
 	static float fadeDuration = 0.1f;
@@ -160,4 +163,9 @@ void ButtonComponent::OnEditor(int i)
 	
 	ImGui::SliderFloat("Color Multiplier", &multiplier, 1, 5);
 	ImGui::InputFloat("Fade Duration", &fadeDuration);
+}
+
+void ButtonComponent::OnClick()
+{
+	SDL_Quit();
 }

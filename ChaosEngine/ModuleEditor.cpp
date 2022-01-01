@@ -14,6 +14,7 @@
 #include "imgui_internal.h"
 #include "Parson/parson.h"
 #include "CameraComponent.h"
+#include "Transform2DComponent.h"
 #include "MaterialComponent.h"
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
@@ -1344,11 +1345,10 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1.5f, 1, 0.5f), &float3(90, 0, 0)));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1.5f, 1, 0.5f), &float3(90, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON));
 					objectSelected->components[1]->owner = objectSelected;
-
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
 
@@ -2439,44 +2439,82 @@ update_status ModuleEditor::Update(float dt)
 			float4x4 cameraProjection = myCamera->frustum.ProjectionMatrix();
 			float4x4 cameraView = myCamera->frustum.ViewMatrix();
 
-			ComponentTransform* transComponent = objectSelected->getTransform();
-			float4x4 transformMatrix = transComponent->transMatrix; //AQUI ESTABAS USANDO transmat EN LUGAR DE TRANSMATRIX QUE ES LA QUE USAS PARA MOVER EL GAMEOBJECT
-			//transformMatrix.Transpose();
-			//float4x4& transformMatrix = transComponent->transmat;
-			float3 originalRotation = transComponent->rotationEuler;
-
-			//CUIDADO! LAS ROTACIONES SON EN LOCAL!! SI LA OPERACION ES ROTAR USA ImGuizmo::LOCAL
-			switch (guizmoType)
+			if (objectSelected->SearchComponent(objectSelected,ComponentType::TRANSFORM) != -1)
 			{
-			case ImGuizmo::OPERATION::TRANSLATE:
-				ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::WORLD, transformMatrix.ptr());
-				break;
-			case ImGuizmo::OPERATION::ROTATE:
-				ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
-				break;
-			case ImGuizmo::OPERATION::SCALE:
-				ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
-				break;
-			default:
-				break;
-			}
+				ComponentTransform* transComponent = objectSelected->getTransform();
+				float4x4 transformMatrix = transComponent->transMatrix;
+				float3 originalRotation = transComponent->rotationEuler;
 
-			bool mouseReleased = false;
-			if (ImGuizmo::IsUsing())
-			{
-				transComponent->transMatrix = transformMatrix;
-				float3 pos, scale;
-				Quat rot;
-				transComponent->transMatrix.Transposed().Decompose(pos, rot, scale);
-				transComponent->position = pos;
-				transComponent->rotationEuler = transComponent->FromQuatToEuler(rot);
-				transComponent->scale = scale;
-				float3 rotEuler = transComponent->FromQuatToEuler(rot);
+				switch (guizmoType)
+				{
+				case ImGuizmo::OPERATION::TRANSLATE:
+					ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::WORLD, transformMatrix.ptr());
+					break;
+				case ImGuizmo::OPERATION::ROTATE:
+					ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
+					break;
+				case ImGuizmo::OPERATION::SCALE:
+					ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
+					break;
+				default:
+					break;
+				}
+
+				bool mouseReleased = false;
+				if (ImGuizmo::IsUsing())
+				{
+					transComponent->transMatrix = transformMatrix;
+					float3 pos, scale;
+					Quat rot;
+					transComponent->transMatrix.Transposed().Decompose(pos, rot, scale);
+					transComponent->position = pos;
+					transComponent->rotationEuler = transComponent->FromQuatToEuler(rot);
+					transComponent->scale = scale;
+					float3 rotEuler = transComponent->FromQuatToEuler(rot);
+				}
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+					transComponent->Update(true);
+				else
+					transComponent->Update(false);
 			}
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-				transComponent->Update(true);
 			else
-				transComponent->Update(false);
+			{
+				ComponentTransform2D* transComponent2D = objectSelected->getTransform2D();
+				float4x4 transformMatrix = transComponent2D->transMatrix;
+				float3 originalRotation = transComponent2D->rotationEuler;
+
+				switch (guizmoType)
+				{
+				case ImGuizmo::OPERATION::TRANSLATE:
+					ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::WORLD, transformMatrix.ptr());
+					break;
+				case ImGuizmo::OPERATION::ROTATE:
+					ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
+					break;
+				case ImGuizmo::OPERATION::SCALE:
+					ImGuizmo::Manipulate(cameraView.Transposed().ptr(), cameraProjection.Transposed().ptr(), (ImGuizmo::OPERATION)guizmoType, ImGuizmo::LOCAL, transformMatrix.ptr());
+					break;
+				default:
+					break;
+				}
+
+				bool mouseReleased = false;
+				if (ImGuizmo::IsUsing())
+				{
+					transComponent2D->transMatrix = transformMatrix;
+					float3 pos, scale;
+					Quat rot;
+					transComponent2D->transMatrix.Transposed().Decompose(pos, rot, scale);
+					transComponent2D->position = pos;
+					transComponent2D->rotationEuler = transComponent2D->FromQuatToEuler(rot);
+					transComponent2D->scale = scale;
+					float3 rotEuler = transComponent2D->FromQuatToEuler(rot);
+				}
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+					transComponent2D->Update(true);
+				else
+					transComponent2D->Update(false);
+			}
 		}
 		ImGui::End();
 	}

@@ -76,6 +76,7 @@ public:
 	virtual void Update() {}
 	virtual void Disable() {}
 	virtual void Draw() {}
+	virtual void OnClick() {}
 	virtual void Save(const char* texturePath) {}
 	virtual void Load(const char* texturePath) {}
 	virtual void OnEditor(int i) {}

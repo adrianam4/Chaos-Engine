@@ -15,8 +15,8 @@ class Component;
 class ComponentTransform2D : public Component
 {
 public:
-	ComponentTransform2D(GameObject* theObject, float2 pos, float2 sca, float2 rot);
-	ComponentTransform2D(float2 pos, float2 sca, float2 rot);
+	ComponentTransform2D(GameObject* theObject, float3 pos, float3 sca, float3 rot);
+	ComponentTransform2D(float3 pos, float3 sca, float3 rot);
 	~ComponentTransform2D();
 	ComponentType getComponentType();
 	void Enable() override;
@@ -25,19 +25,21 @@ public:
 	void OnEditor(int i) override;
 	void Load(const char* path) override;
 	void Save(const char* path) override;
-	Quat FromEulerToQuat(float2 eulerAngles);
-	float2 FromQuatToEuler(Quat quatAngles);
+	Quat FromEulerToQuat(float3 eulerAngles);
+	float3 FromQuatToEuler(Quat quatAngles);
 	/*std::vector<float3> vertices_aux;*/
 	float4x4 transMatrix;
 	void setOwner();
 	//void CreateAABB(ComponentType type, GameObject* go, bool firstTime)override;
 
+	float buttonWidth;
+	float buttonHeight;
 
-	float2 lastRotation;
-	float2 lastPosition;
-	float2 lastScale;
-	float2 position;
+	float3 lastRotation;
+	float3 lastPosition;
+	float3 lastScale;
+	float3 position;
 
-	float2 scale;
-	float2 rotationEuler;
+	float3 scale;
+	float3 rotationEuler;
 };

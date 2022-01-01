@@ -8,52 +8,57 @@
 
 #include "Parson/parson.h"
 
-ComponentTransform2D::ComponentTransform2D(GameObject* theObject, float2 pos, float2 sca, float2 rot)
+ComponentTransform2D::ComponentTransform2D(GameObject* theObject, float3 pos, float3 sca, float3 rot)
 {
 	UID = GenerateUID();
-	lastPosition = { 0,0};
-	lastRotation = { 0,0};
-	type = ComponentType::TRANSFORM;
+	lastPosition = { 0,0,0 };
+	lastRotation = { 0,0,0 };
+	type = ComponentType::TRANSFORM2D;
 
 	position = pos;
 	scale = sca;
 	rotationEuler = rot;
 	generalScale = 1.0f;
 
+	buttonWidth = scale.x * 10;
+	buttonHeight = scale.z * 10;
+
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	float4x4 aux;
-	transMatrix = aux.FromTRS(float3(position.x,position.y,0), rotationQuat, float3(scale.x, scale.y, 0));
+	transMatrix = aux.FromTRS(position, rotationQuat, scale);
 	transmat = transMatrix;
 	transMatrix = transMatrix.Transposed();
 
+	name = "Transform2D Component";
 
-	name = "Transform Component";
-
-	//ComponentType t = getComponentType();
-	//CreateAABB(ComponentType::MESH, theObject, true);
+	ComponentType t = getComponentType();
+	CreateAABB(ComponentType::MESH, theObject, true);
 }
-ComponentTransform2D::ComponentTransform2D(float2 pos, float2 sca, float2 rot)
+ComponentTransform2D::ComponentTransform2D(float3 pos, float3 sca, float3 rot)
 {
 	UID = GenerateUID();
-	lastPosition = { 0,0 };
-	lastRotation = { 0,0};
-	type = ComponentType::TRANSFORM;
+	lastPosition = { 0,0,0 };
+	lastRotation = { 0,0,0 };
+	type = ComponentType::TRANSFORM2D;
 
 	position = pos;
 	scale = sca;
 	rotationEuler = rot;
 	generalScale = 1.0f;
 
+	buttonWidth = scale.x * 10;
+	buttonHeight = scale.z * 10;
+
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	float4x4 aux;
-	transMatrix = aux.FromTRS(float3(position.x, position.y, 0), rotationQuat, float3(scale.x, scale.y, 0));
+	transMatrix = aux.FromTRS(position, rotationQuat, scale);
 	transmat = transMatrix;
 	transMatrix = transMatrix.Transposed();
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->matrix = transMatrix.ptr();
 
-	name = "Transform Component";
+	name = "Transform2D Component";
 
 	ComponentType t = getComponentType();
 	CreateAABB(t, App->scene->gameObjects[App->scene->gameObjects.size() - 1], true);
@@ -95,7 +100,7 @@ void ComponentTransform2D::Update(bool releaseMouse)
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	float4x4 aux;
-	transMatrix = aux.FromTRS(float3(position.x, position.y, 0), rotationQuat, float3(scale.x, scale.y, 0));
+	transMatrix = aux.FromTRS(float3(position.x, position.y, position.z), rotationQuat, float3(scale.x, scale.y, scale.z));
 	transmat = transMatrix;
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
@@ -157,15 +162,33 @@ void ComponentTransform2D::Disable()
 
 void ComponentTransform2D::OnEditor(int i)
 {
-	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
+	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Size");
+	if (ImGui::DragFloat("Width", &buttonWidth, 0.5f))
+	{
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		scale.x = buttonWidth / 10;
+		scale.z = buttonHeight / 10;
+		Update(release);
+	}
+	if (ImGui::DragFloat("Height", &buttonHeight, 0.5f))
+	{
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		scale.x = buttonWidth / 10;
+		scale.z = buttonHeight / 10;
+		Update(release);
+	}
 
+	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Position");
 	static bool wasNull = true;
 	if (App->camera->GameCam != nullptr)
 		wasNull = false;
 
 	if (ImGui::DragFloat("Position X", &position.x, 0.5f))
 	{
-		
 		bool release = false;
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
@@ -173,7 +196,13 @@ void ComponentTransform2D::OnEditor(int i)
 	}
 	if (ImGui::DragFloat("Position Y", &position.y, 0.5f))
 	{
-		
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
+	}
+	if (ImGui::DragFloat("Position Z", &position.z, 0.5f))
+	{
 		bool release = false;
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
@@ -197,6 +226,8 @@ void ComponentTransform2D::OnEditor(int i)
 		bool release = false;
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
+		buttonWidth = scale.x * 10;
+		buttonHeight = scale.z * 10;
 		Update(release);
 	}
 	if (ImGui::DragFloat("Scale Y", &scale.y, 0.1f, 0.0f, 1000.0f))
@@ -204,6 +235,15 @@ void ComponentTransform2D::OnEditor(int i)
 		bool release = false;
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
+		Update(release);
+	}
+	if (ImGui::DragFloat("Scale Z", &scale.z, 0.1f, 0.0f, 1000.0f))
+	{
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		buttonWidth = scale.x * 10;
+		buttonHeight = scale.z * 10;
 		Update(release);
 	}
 	
@@ -244,6 +284,24 @@ void ComponentTransform2D::OnEditor(int i)
 			release = true;
 		Update(release);
 	}
+	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z, 0.5f))
+	{
+		if (App->camera->GameCam == nullptr)
+			wasNull = true;
+
+		int camComponent = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
+		if (camComponent != -1)
+		{
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[camComponent];
+			App->camera->GameCam->Rotate(rotationEuler.z - lastRotation.z, "Z");
+			if (wasNull)
+				App->camera->GameCam = nullptr;
+		}
+		bool release = false;
+		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			release = true;
+		Update(release);
+	}
 }
 
 void ComponentTransform2D::Load(const char* path)
@@ -254,12 +312,15 @@ void ComponentTransform2D::Load(const char* path)
 	UID = json_object_get_number(json_object(userData), "UID");
 	position.x = json_object_get_number(json_object(userData), "Position X");
 	position.y = json_object_get_number(json_object(userData), "Position Y");
+	position.z = json_object_get_number(json_object(userData), "Position Z");
 	
 	scale.x = json_object_get_number(json_object(userData), "Scale X");
 	scale.y = json_object_get_number(json_object(userData), "Scale Y");
+	scale.z = json_object_get_number(json_object(userData), "Scale Z");
 	
 	rotationEuler.x = json_object_get_number(json_object(userData), "Rotation X");
 	rotationEuler.y = json_object_get_number(json_object(userData), "Rotation Y");
+	rotationEuler.z = json_object_get_number(json_object(userData), "Rotation Z");
 
 	App->editor->AddLog("Loaded Transform 2D Component Data\n");
 
@@ -274,31 +335,35 @@ void ComponentTransform2D::Save(const char* path)
 	json_object_set_number(json_object(user_data), "UID", UID);
 	json_object_set_number(json_object(user_data), "Position X", position.x);
 	json_object_set_number(json_object(user_data), "Position Y", position.y);
+	json_object_set_number(json_object(user_data), "Position Z", position.z);
 	json_object_set_number(json_object(user_data), "Scale X", scale.x);
 	json_object_set_number(json_object(user_data), "Scale Y", scale.y);
+	json_object_set_number(json_object(user_data), "Scale Z", scale.z);
 	json_object_set_number(json_object(user_data), "Rotation X", rotationEuler.x);
 	json_object_set_number(json_object(user_data), "Rotation Y", rotationEuler.y);
+	json_object_set_number(json_object(user_data), "Rotation Z", rotationEuler.z);
 	
 
 	json_serialize_to_file_pretty(user_data, path);
 
 	App->editor->AddLog("Saved Transform 2D Component Data\n");
 }
-void ComponentTransform2D::setOwner() {
+void ComponentTransform2D::setOwner() 
+{
 	owner->matrix = transMatrix.ptr();
 }
-Quat ComponentTransform2D::FromEulerToQuat(float2 eulerAngles)
+Quat ComponentTransform2D::FromEulerToQuat(float3 eulerAngles)
 {
 	eulerAngles.x = math::DegToRad(eulerAngles.x);
 	eulerAngles.y = math::DegToRad(eulerAngles.y);
-	
+	eulerAngles.z = math::DegToRad(eulerAngles.z);
 
-	Quat q = q.FromEulerXYZ(eulerAngles.x, eulerAngles.y, 0);
+	Quat q = q.FromEulerXYZ(eulerAngles.x, eulerAngles.y, eulerAngles.z);
 
 	return q;
 }
 
-float2 ComponentTransform2D::FromQuatToEuler(Quat quatAngles)
+float3 ComponentTransform2D::FromQuatToEuler(Quat quatAngles)
 {
 	float3 angles;
 
@@ -307,7 +372,7 @@ float2 ComponentTransform2D::FromQuatToEuler(Quat quatAngles)
 	angles.x = math::RadToDeg(angles.x);
 	angles.y = math::RadToDeg(angles.y);
 	angles.z = math::RadToDeg(angles.z);
-	float2 toReturn(angles.x,angles.y);
+	float3 toReturn(angles.x,angles.y,angles.z);
 
 	return toReturn;
 }

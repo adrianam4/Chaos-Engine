@@ -16,6 +16,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void OnEditor(int i) override;
+	void OnClick() override;
 
 private:
 	SDL_Color color;
