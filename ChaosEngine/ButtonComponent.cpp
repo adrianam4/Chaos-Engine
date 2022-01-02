@@ -5,16 +5,26 @@
 ButtonComponent::ButtonComponent(int id, SDL_Rect bounds, std::string text, SDL_Texture* textureButton)
 {
 	name = "Button Component";
-	this->bounds = bounds;
+	type = ComponentType::UI_BUTTON;
+
+	this->bounds = &bounds;
 	this->text = text;
-	texture = textureButton;
+
+	disabledTexture = textureButton;
+	normalTexture = textureButton;
+	focusedTexture = textureButton;
+	pressedTexture = textureButton;
+
 	state = State::NORMAL;
 }
 
 ButtonComponent::~ButtonComponent()
 {
 	text.clear();
-	delete texture;
+	delete normalTexture;
+	delete disabledTexture;
+	delete focusedTexture;
+	delete pressedTexture;
 }
 
 void ButtonComponent::Update()
@@ -37,8 +47,8 @@ void ButtonComponent::Update()
 		int mouseY = App->input->GetMouseY();
 
 		// Check collision between mouse and button bounds
-		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
-			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
+		if ((mouseX > bounds->x) && (mouseX < (bounds->x + bounds->w)) &&
+			(mouseY > bounds->y) && (mouseY < (bounds->y + bounds->h)))
 		{
 			if (state != State::FOCUSED && state != State::PRESSED)
 			{
@@ -68,41 +78,15 @@ void ButtonComponent::Draw()
 	switch (state)
 	{
 	case State::DISABLED:
-		/*App->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect);
-		if (buttonsColliders == true)
-		{
-			app->render->DrawRectangle(bounds, 0, 255, 0, 255);
-		}*/
 		break;
-
 	case State::NORMAL:
-		/*App->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect2);
-		if (buttonsColliders == true)
-		{
-			app->render->DrawRectangle(bounds, 0, 255, 0, 255);
-		}*/
 		break;
-
 	case State::FOCUSED:
-		/*App->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect3);
-		if (buttonsColliders == true)
-		{
-			app->render->DrawRectangle(bounds, 255, 255, 0, 255);
-		}*/
 		break;
-
 	case State::PRESSED:
-		/*App->render->DrawTexture(textureButtons, bounds.x, bounds.y, &rect4);
-		if (buttonsColliders == true)
-		{
-			app->render->DrawRectangle(bounds, 0, 255, 255, 255);
-		}*/
 		break;
-
 	case State::SELECTED:
-		/*App->render->DrawRectangle(bounds, 0, 255, 0, 255);*/
 		break;
-
 	default:
 		break;
 	}
@@ -115,11 +99,7 @@ void ButtonComponent::OnEditor(int i)
 	// General variables
 	static float multiplier = 1;
 	static float fadeDuration = 0.1f;
-	// Colors
-	static float normalColor[3] = {255,255,255};
-	static float pressedColor[3] = {255,255,255};
-	static float selectedColor[3] = {255,255,255};
-	static float disabledColor[3] = { 255,255,255 };
+
 	// Manage if colors are being edited or not
 	static bool normalEditable = false;
 	static bool pressedEditable = false;
@@ -129,36 +109,36 @@ void ButtonComponent::OnEditor(int i)
 	ImGui::Checkbox("Interactable", &active);
 
 	ImGui::Text("Normal Color"); ImGui::SameLine(); 
-	if (ImGui::ColorButton("Normal Color", ImVec4(normalColor[0], normalColor[1], normalColor[2], 255)))
+	if (ImGui::ColorButton("Normal Color", ImVec4(normalColor.r, normalColor.g, normalColor.b, normalColor.a)))
 		normalEditable = !normalEditable;
 
 	ImGui::Text("Pressed Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Pressed Color", ImVec4(pressedColor[0], pressedColor[1], pressedColor[2], 255)))
+	if (ImGui::ColorButton("Pressed Color", ImVec4(pressedColor.r, pressedColor.g, pressedColor.b, pressedColor.a)))
 		pressedEditable = !pressedEditable;
 
 	ImGui::Text("Selected Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Selected Color", ImVec4(selectedColor[0], selectedColor[1], selectedColor[2], 255)))
+	if (ImGui::ColorButton("Selected Color", ImVec4(focusedColor.r, focusedColor.g, focusedColor.b, focusedColor.a)))
 		selectedEditable = !selectedEditable;
 
 	ImGui::Text("Disabled Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Disabled Color", ImVec4(disabledColor[0], disabledColor[1], disabledColor[2], 255)))
+	if (ImGui::ColorButton("Disabled Color", ImVec4(disabledColor.r, disabledColor.g, disabledColor.b, disabledColor.a)))
 		disabledEditable = !disabledEditable;
 
 	if (normalEditable)
 	{
-		ImGui::ColorPicker3("Normal Color", normalColor);
+		ImGui::ColorPicker3("Normal Color", &normalColor);
 	}
 	if (pressedEditable)
 	{
-		ImGui::ColorPicker3("Pressed Color", pressedColor);
+		ImGui::ColorPicker3("Pressed Color", &pressedColor);
 	}
 	if (selectedEditable)
 	{
-		ImGui::ColorPicker3("Selected Color", selectedColor);
+		ImGui::ColorPicker3("Selected Color", &focusedColor);
 	}
 	if (disabledEditable)
 	{
-		ImGui::ColorPicker3("Disabled Color", disabledColor);
+		ImGui::ColorPicker3("Disabled Color", &disabledColor);
 	}
 	
 	ImGui::SliderFloat("Color Multiplier", &multiplier, 1, 5);

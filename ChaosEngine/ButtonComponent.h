@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Component.h"
+#include "Color.h"
 
 class SDL_Rect;
-class SDL_Color;
 class SDL_Texture;
 
 class ButtonComponent : public Component
@@ -18,12 +18,20 @@ public:
 	void OnEditor(int i) override;
 	void OnClick() override;
 
-private:
-	SDL_Color color;
-	SDL_Texture* texture;
-	SDL_Rect section;
+public:
+	Color disabledColor = White;
+	Color pressedColor = White;
+	Color focusedColor = White;
+	Color normalColor = White;
+
+	SDL_Texture* disabledTexture = nullptr;
+	SDL_Texture* pressedTexture = nullptr;
+	SDL_Texture* focusedTexture = nullptr;
+	SDL_Texture* normalTexture = nullptr;
+
+	SDL_Rect* section = nullptr;
 	State state;
-	SDL_Rect bounds;
+	SDL_Rect* bounds = nullptr;
 	std::string text;
 	bool buttonsColliders;
 };

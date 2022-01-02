@@ -19,6 +19,7 @@
 #include "ResourceMaterial.h"
 #include "ResourceMesh.h"
 #include "Component.h"
+#include "ButtonComponent.h"
 #include "FileDialog.h"
 #include"MeshComponent.h"
 #include<stack>
@@ -779,7 +780,6 @@ void ModuleEditor::AddPlane(float3 pos, float3 sca)
 }
 void ModuleEditor::DrawPrimitives()
 {
-
 	std::stack<GameObject*>stackNode;
 	GameObject* theObject;
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
@@ -877,7 +877,31 @@ void ModuleEditor::DrawPrimitives()
 				{
 					if (planes[k]->id == auxId)
 					{
+						ButtonComponent* currentButton = nullptr;
+						currentButton = App->scene->gameObjects[i]->GetButtonComponent(App->scene->gameObjects[i]);
+						if (currentButton != nullptr)
+						{
+							State s = currentButton->state;
+							switch (s)
+							{
+							case State::DISABLED:
+								glColor4f(currentButton->disabledColor.r, currentButton->disabledColor.g, currentButton->disabledColor.b, currentButton->disabledColor.a);
+								break;
+							case State::NORMAL:
+								glColor4f(currentButton->normalColor.r, currentButton->normalColor.g, currentButton->normalColor.b, currentButton->normalColor.a);
+								break;
+							case State::FOCUSED:
+								glColor4f(currentButton->focusedColor.r, currentButton->focusedColor.g, currentButton->focusedColor.b, currentButton->focusedColor.a);
+								break;
+							case State::PRESSED:
+								glColor4f(currentButton->pressedColor.r, currentButton->pressedColor.g, currentButton->pressedColor.b, currentButton->pressedColor.a);
+								break;
+							default:
+								break;
+							}
+						}
 						planes[k]->DrawPlane();
+						glColor3f(255, 255, 255);
 					}
 				}
 			}

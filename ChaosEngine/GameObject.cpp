@@ -186,6 +186,17 @@ ComponentTransform2D* GameObject::getTransform2D()
 
 	}
 }
+
+ButtonComponent* GameObject::GetButtonComponent(GameObject* go)
+{
+	int comp = go->SearchComponent(go, ComponentType::UI_BUTTON);
+
+	if (comp != -1)
+		return (ButtonComponent*)go->components[comp];
+	else
+		return nullptr;
+}
+
 int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
 {
 	for (int i = 0; i < gameObject->components.size(); i++)

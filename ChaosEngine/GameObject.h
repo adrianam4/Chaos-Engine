@@ -9,6 +9,7 @@
 #include"Importer.h"
 #include"TransformComponent.h"
 #include "Transform2DComponent.h"
+#include "ButtonComponent.h"
 #include "Resource.h"
 class theBuffer;
 class GameObject
@@ -47,6 +48,7 @@ public:
 	bool isChild = false;
 	ComponentTransform* getTransform();
 	ComponentTransform2D* getTransform2D();
+	ButtonComponent* GetButtonComponent(GameObject* go);
 	float3 trans;
 	float3 sca;
 	Quat rot;
