@@ -881,6 +881,8 @@ void ModuleEditor::DrawPrimitives()
 						currentButton = App->scene->gameObjects[i]->GetButtonComponent(App->scene->gameObjects[i]);
 						if (currentButton != nullptr)
 						{
+							glAlphaFunc(GL_GREATER, 0.5);
+							glEnable(GL_ALPHA_TEST);
 							State s = currentButton->state;
 							switch (s)
 							{
@@ -901,6 +903,7 @@ void ModuleEditor::DrawPrimitives()
 							}
 						}
 						planes[k]->DrawPlane();
+						glDisable(GL_ALPHA_TEST);
 						glColor3f(255, 255, 255);
 					}
 				}
@@ -1375,6 +1378,8 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
+					objectSelected->components[3]->owner = objectSelected;
 
 					App->editor->AddLog("Button Created\n");
 				}
@@ -2380,8 +2385,16 @@ update_status ModuleEditor::Update(float dt)
 						{
 							objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
 						}
-						App->resources->LoadResource(importedFile,objectSelected);
-						objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+						if (objectSelected->SearchComponent(objectSelected,ComponentType::MESH) != -1)
+						{
+							App->resources->LoadResource(importedFile, objectSelected);
+							objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+						}
+						else
+						{
+							App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, path, true);
+							App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+						}
 					}
 				}
 			}
@@ -2438,10 +2451,18 @@ update_status ModuleEditor::Update(float dt)
 							{
 								objectSelected->components.erase(objectSelected->components.begin() + oldMaterialId);
 							}
-							App->resources->LoadResource(newResource->GetUID(),objectSelected);
-							objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
-							droppedTexture = (ImTextureID)newResource->GetTextureId();
-							showTextureMenu = true;
+							if (objectSelected->SearchComponent(objectSelected, ComponentType::MESH) != -1)
+							{
+								App->resources->LoadResource(newResource->GetUID(), objectSelected);
+								objectSelected->components[objectSelected->components.size() - 1]->owner = objectSelected;
+								droppedTexture = (ImTextureID)newResource->GetTextureId();
+								showTextureMenu = true;
+							}
+							else
+							{
+								App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, path, true);
+								App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+							}
 						}
 					}
 				}

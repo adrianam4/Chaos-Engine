@@ -154,9 +154,17 @@ update_status ModuleInput::PreUpdate(float dt)
 							App->editor->objectSelected->components.erase(App->editor->objectSelected->components.begin() + oldMaterialId);
 						}
 
-						u32 textId = App->resources->ImportFile(fileDir);
-						App->resources->LoadResource(textId,App->editor->objectSelected);
-						App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+						if (App->editor->objectSelected->SearchComponent(App->editor->objectSelected,ComponentType::MESH) != -1)
+						{
+							u32 textId = App->resources->ImportFile(fileDir);
+							App->resources->LoadResource(textId, App->editor->objectSelected);
+							App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+						}
+						else
+						{
+							App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, fileDir, true);
+							App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+						}
 						SDL_free(&fileDir);
 					}
 				}

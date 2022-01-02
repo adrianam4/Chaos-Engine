@@ -323,7 +323,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		}
 	}
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 
 	glColor3ub(0xff, 0, 0);
@@ -334,7 +334,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 	glScalef(1, 1, 1);
 	glTranslatef(-180, 0, 0);
 	freetype::print(App->editor->our_font, 50, 50, "Active FreeType Text - %7.2f");
-	glPopMatrix();
+	glPopMatrix();*/
 	
 
 
