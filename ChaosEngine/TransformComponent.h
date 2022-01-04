@@ -30,5 +30,4 @@ public:
 	float4x4 transMatrix;
 	void setOwner();
 	void CreateAABB(ComponentType type, GameObject* go, bool firstTime)override;
-	
 };

@@ -13,6 +13,7 @@ ComponentTransform::ComponentTransform(GameObject* theObject, float3 pos, float3
 	UID = GenerateUID();
 	lastPosition = { 0,0,0 };
 	lastRotation = { 0,0,0 };
+	lastScale = { 1,1,1 };
 	type = ComponentType::TRANSFORM;
 
 	position = pos;
@@ -38,6 +39,7 @@ ComponentTransform::ComponentTransform(float3 pos, float3 sca, float3 rot)
 	UID = GenerateUID();
 	lastPosition = { 0,0,0 };
 	lastRotation = {0,0,0};
+	lastScale = { 1,1,1 };
 	type = ComponentType::TRANSFORM;
 
 	position = pos;
@@ -106,13 +108,15 @@ void ComponentTransform::Update(bool releaseMouse)
 	transmat = transMatrix;
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
+
+	/*lastScale = scale;
+	lastPosition = position;
+	lastRotation = rotationEuler;
+	lastGeneralScale = generalScale;*/
 	
 	if (releaseMouse)
 	{
-		lastScale = scale;
-		lastPosition = position;
-		lastRotation = rotationEuler;
-		lastGeneralScale = generalScale;
+		
 
 		UINT isCamera = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
 
@@ -161,18 +165,15 @@ void ComponentTransform::Update(bool releaseMouse)
 			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[isCamera];
 			App->camera->GameCam->Move(position);
 		}
-	}
+		
 
-	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
-	{
-		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
+		
 	}
 
 	float4x4 aux1;
-	
 	for (int a = 0; a < App->editor->objectSelected->childrens.size(); a++) {
 		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {
-			if (App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM)
+			if ((App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM) || (App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM2D))
 			{
 				App->editor->objectSelected->childrens[a]->components[b]->scale += (scale - lastScale);
 				App->editor->objectSelected->childrens[a]->components[b]->position += (position - lastPosition);
@@ -182,9 +183,22 @@ void ComponentTransform::Update(bool releaseMouse)
 				App->editor->objectSelected->childrens[a]->components[b]->transmat = aux1.FromTRS(App->editor->objectSelected->childrens[a]->components[b]->position, App->editor->objectSelected->childrens[a]->components[b]->rotationQuat, App->editor->objectSelected->childrens[a]->components[b]->scale);
 				App->editor->objectSelected->childrens[a]->components[b]->transmat = App->editor->objectSelected->childrens[a]->components[b]->transmat.Transposed();
 				App->editor->objectSelected->childrens[a]->matrix = App->editor->objectSelected->childrens[a]->components[b]->transmat.ptr();
+
+				lastScale = scale;
+				lastPosition = position;
+				lastRotation = rotationEuler;
+				lastGeneralScale = generalScale;
 			}
 		}
 	}
+	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
+	{
+		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
+	}
+
+	
+	
+	
 }
 
 void ComponentTransform::Disable()
@@ -199,6 +213,11 @@ void ComponentTransform::OnEditor(int i)
 	if (App->camera->GameCam != nullptr)
 		wasNull = false;
 
+	lastScale = scale;
+	lastPosition = position;
+	lastRotation = rotationEuler;
+	lastGeneralScale = generalScale;
+
 	if (ImGui::DragFloat("Position X", &position.x, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)
@@ -212,6 +231,8 @@ void ComponentTransform::OnEditor(int i)
 				App->camera->GameCam = nullptr;
 		}
 		bool release = false;
+		
+
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
@@ -229,6 +250,7 @@ void ComponentTransform::OnEditor(int i)
 				App->camera->GameCam = nullptr;
 		}
 		bool release = false;
+		
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
@@ -246,6 +268,7 @@ void ComponentTransform::OnEditor(int i)
 				App->camera->GameCam = nullptr;
 		}
 		bool release = false;
+		
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
@@ -265,6 +288,7 @@ void ComponentTransform::OnEditor(int i)
 	if (ImGui::DragFloat("Scale X", &scale.x, 0.1f, 0.0f, 1000.0f))
 	{
 		bool release = false;
+		
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
@@ -272,6 +296,7 @@ void ComponentTransform::OnEditor(int i)
 	if (ImGui::DragFloat("Scale Y", &scale.y, 0.1f, 0.0f, 1000.0f))
 	{
 		bool release = false;
+		
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
@@ -279,6 +304,7 @@ void ComponentTransform::OnEditor(int i)
 	if (ImGui::DragFloat("Scale Z", &scale.z, 0.1f, 0.0f, 1000.0f))
 	{
 		bool release = false;
+		
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
@@ -298,6 +324,7 @@ void ComponentTransform::OnEditor(int i)
 				App->camera->GameCam = nullptr;
 		}
 		bool release = false;
+		
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
@@ -316,6 +343,7 @@ void ComponentTransform::OnEditor(int i)
 				App->camera->GameCam = nullptr;
 		}
 		bool release = false;
+		
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
@@ -334,6 +362,7 @@ void ComponentTransform::OnEditor(int i)
 				App->camera->GameCam = nullptr;
 		}
 		bool release = false;
+		
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);

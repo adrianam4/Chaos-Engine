@@ -35,10 +35,10 @@ public:
 	float buttonWidth;
 	float buttonHeight;
 
-	float3 lastRotation;
+	/*float3 lastRotation;
 	float3 lastPosition;
 	float3 lastScale;
-	float3 position;
+	float3 position;*/
 
 	float3 scale;
 	float3 rotationEuler;
