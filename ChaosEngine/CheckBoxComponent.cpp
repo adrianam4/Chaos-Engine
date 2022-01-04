@@ -5,6 +5,7 @@
 CheckboxComponent::CheckboxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton)
 {
 	name = "CheckBox Component";
+	type = ComponentType::UI_CHECKBOX;
 	this->bounds = bounds;
 	this->text = text;
 	texture = textureButton;

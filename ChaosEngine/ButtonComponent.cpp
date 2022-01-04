@@ -29,18 +29,6 @@ ButtonComponent::~ButtonComponent()
 
 void ButtonComponent::Update()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
-	{
-		if (buttonsColliders == false)
-		{
-			buttonsColliders = true;
-		}
-		else
-		{
-			buttonsColliders = false;
-		}
-	}
-
 	if (state != State::DISABLED)
 	{
 		int mouseX = App->input->GetMouseX();
@@ -75,27 +63,43 @@ void ButtonComponent::Update()
 
 void ButtonComponent::Draw()
 {
+	MyPlane* planeToDraw = nullptr;
+	int auxId = owner->id;
+
+	for (int i = 0; i < App->editor->planes.size(); i++)
+		if (App->editor->planes[i]->id == auxId) planeToDraw = App->editor->planes[i];
+	
+	glAlphaFunc(GL_GREATER, 0.5);
+	glEnable(GL_ALPHA_TEST);
+
 	switch (state)
 	{
 	case State::DISABLED:
+		glColor4f(disabledColor.r, disabledColor.g, disabledColor.b, disabledColor.a);
 		break;
 	case State::NORMAL:
+		glColor4f(normalColor.r, normalColor.g, normalColor.b, normalColor.a);
 		break;
 	case State::FOCUSED:
+		glColor4f(focusedColor.r, focusedColor.g, focusedColor.b, focusedColor.a);
 		break;
 	case State::PRESSED:
+		glColor4f(pressedColor.r, pressedColor.g, pressedColor.b, pressedColor.a);
 		break;
 	case State::SELECTED:
 		break;
 	default:
 		break;
 	}
+
+	planeToDraw->DrawPlane();
+	
+	glDisable(GL_ALPHA_TEST);
+	glColor3f(255, 255, 255);
 }
 
 void ButtonComponent::OnEditor(int i)
 {
-	Update();
-
 	// General variables
 	static float multiplier = 1;
 	static float fadeDuration = 0.1f;
@@ -147,5 +151,12 @@ void ButtonComponent::OnEditor(int i)
 
 void ButtonComponent::OnClick()
 {
-	SDL_Quit();
+	if (text == "Start")
+	{
+		SDL_Quit();
+	}
+	else
+	{
+		normalColor = Red;
+	}
 }

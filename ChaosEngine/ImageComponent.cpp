@@ -5,6 +5,7 @@
 ImageComponent::ImageComponent(int id, SDL_Rect bounds, std::string text, SDL_Texture* textureButton)
 {
 	name = "Image Component";
+	type = ComponentType::UI_IMAGE;
 	this->bounds = bounds;
 	this->text = text;
 	texture = textureButton;

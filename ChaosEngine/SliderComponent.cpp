@@ -5,6 +5,7 @@
 SliderComponent::SliderComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton, SDL_Texture* textureSlider)
 {
 	name = "Slider Component";
+	type = ComponentType::UI_SLIDER;
 	this->bounds = bounds;
 	this->text = text;
 	value = 0;

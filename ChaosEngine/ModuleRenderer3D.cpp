@@ -182,86 +182,81 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 		lights[i].Render();
 
 	static bool depth;
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-	{
-		depth = !depth;
-		if (depth)
-		{
-			glDisable(GL_DEPTH_TEST);
-			App->editor->AddLog("GL_DEPTH_TEST disabled \n");
-		}
-		else
-		{
-			glEnable(GL_DEPTH_TEST);
-			App->editor->AddLog("GL_DEPTH_TEST enabled \n");
-		}
-	}
-
-	static bool cull;
-	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
-	{
-		cull = !cull;
-		if (cull)
-		{
-			glDisable(GL_CULL_FACE);
-			App->editor->AddLog("GL_CULL_FACE disabled \n");
-		}
-		else
-		{
-			glEnable(GL_CULL_FACE);
-			App->editor->AddLog("GL_CULL_FACE enabled \n");
-		}
-	}
-
+	static bool cull = true;
 	static bool lighting;
-	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
-	{
-		lighting = !lighting;
-		if (lighting)
-		{
-			glDisable(GL_LIGHTING);
-			App->editor->AddLog("GL_LIGHTING disabled \n");
-		}
-		else
-		{
-			glEnable(GL_LIGHTING);
-			App->editor->AddLog("GL_LIGHTING enabled \n");
-		}
-
-	}
-
 	static bool colorMaterial;
-	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
-	{
-		colorMaterial = !colorMaterial;
-		if (colorMaterial)
-		{
-			glDisable(GL_COLOR_MATERIAL);
-			App->editor->AddLog("GL_COLOR_MATERIAL disabled \n");
-		}
-		else
-		{
-			glEnable(GL_COLOR_MATERIAL);
-			App->editor->AddLog("GL_COLOR_MATERIAL enabled \n");
-		}
-	}
-
 	static bool texture;
-	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		depth = !depth;
+
+	if (depth)
 	{
-		texture = !texture;
-		if (texture)
-		{
-			glDisable(GL_TEXTURE_2D);
-			App->editor->AddLog("GL_TEXTURE_2D disabled \n");
-		}
-		else
-		{
-			glEnable(GL_TEXTURE_2D);
-			App->editor->AddLog("GL_TEXTURE_2D enabled \n");
-		}
+		glDisable(GL_DEPTH_TEST);
+		App->editor->AddLog("GL_DEPTH_TEST disabled \n");
+	}
+	else
+	{
+		glEnable(GL_DEPTH_TEST);
+		App->editor->AddLog("GL_DEPTH_TEST enabled \n");
+	}
+	
+	if (App->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+		cull = !cull;
+
+	if (cull)
+	{
+		glDisable(GL_CULL_FACE);
+		App->editor->AddLog("GL_CULL_FACE disabled \n");
+	}
+	else
+	{
+		glEnable(GL_CULL_FACE);
+		App->editor->AddLog("GL_CULL_FACE enabled \n");
 	}
 
+	
+	if (App->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN)
+		lighting = !lighting;
+
+	if (lighting)
+	{
+		glDisable(GL_LIGHTING);
+		App->editor->AddLog("GL_LIGHTING disabled \n");
+	}
+	else
+	{
+		glEnable(GL_LIGHTING);
+		App->editor->AddLog("GL_LIGHTING enabled \n");
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F4) == KEY_DOWN)
+		colorMaterial = !colorMaterial;
+
+	if (colorMaterial)
+	{
+		glDisable(GL_COLOR_MATERIAL);
+		App->editor->AddLog("GL_COLOR_MATERIAL disabled \n");
+	}
+	else
+	{
+		glEnable(GL_COLOR_MATERIAL);
+		App->editor->AddLog("GL_COLOR_MATERIAL enabled \n");
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
+		texture = !texture;
+
+	if (texture)
+	{
+		glDisable(GL_TEXTURE_2D);
+		App->editor->AddLog("GL_TEXTURE_2D disabled \n");
+	}
+	else
+	{
+		glEnable(GL_TEXTURE_2D);
+		App->editor->AddLog("GL_TEXTURE_2D enabled \n");
+	}
 
 	return UPDATE_CONTINUE;
 }

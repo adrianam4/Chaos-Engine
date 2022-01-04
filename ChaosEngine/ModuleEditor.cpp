@@ -879,36 +879,35 @@ void ModuleEditor::DrawPrimitives()
 					{
 						ButtonComponent* currentButton = nullptr;
 						currentButton = App->scene->gameObjects[i]->GetButtonComponent(App->scene->gameObjects[i]);
-						if (currentButton != nullptr)
+						if (currentButton == nullptr)
 						{
-							glAlphaFunc(GL_GREATER, 0.5);
-							glEnable(GL_ALPHA_TEST);
-							State s = currentButton->state;
-							switch (s)
-							{
-							case State::DISABLED:
-								glColor4f(currentButton->disabledColor.r, currentButton->disabledColor.g, currentButton->disabledColor.b, currentButton->disabledColor.a);
-								break;
-							case State::NORMAL:
-								glColor4f(currentButton->normalColor.r, currentButton->normalColor.g, currentButton->normalColor.b, currentButton->normalColor.a);
-								break;
-							case State::FOCUSED:
-								glColor4f(currentButton->focusedColor.r, currentButton->focusedColor.g, currentButton->focusedColor.b, currentButton->focusedColor.a);
-								break;
-							case State::PRESSED:
-								glColor4f(currentButton->pressedColor.r, currentButton->pressedColor.g, currentButton->pressedColor.b, currentButton->pressedColor.a);
-								break;
-							default:
-								break;
-							}
+							planes[k]->DrawPlane();
 						}
-						planes[k]->DrawPlane();
-						glDisable(GL_ALPHA_TEST);
-						glColor3f(255, 255, 255);
 					}
 				}
 			}
+			// Draw All UI Components
+			for (int i = 0; i < App->scene->gameObjects.size(); i++)
+			{
+				GameObject* go = App->scene->gameObjects[i];
 
+				int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
+				int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
+				int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
+				int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
+				int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
+
+				if (button != -1)
+					go->components[button]->Draw();
+				if (checkbox != -1)
+					go->components[checkbox]->Draw();
+				if (image != -1)
+					go->components[image]->Draw();
+				if (inputbox != -1)
+					go->components[inputbox]->Draw();
+				if (slider != -1)
+					go->components[slider]->Draw();
+			}
 		}
 	}
 }
@@ -1372,13 +1371,13 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1.5f, 1, 0.5f), &float3(90, 0, 0)));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1.5f, 1, 0.5f), &float3(-90, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON, "Startaaaa"));
 					objectSelected->components[1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/ButtonStart.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
 
 					App->editor->AddLog("Button Created\n");
@@ -1393,7 +1392,7 @@ update_status ModuleEditor::Update(float dt)
 
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Empty"));
 					objectSelected->components[1]->owner = objectSelected;
 
 					App->editor->AddLog("Image Created\n");
@@ -1408,7 +1407,7 @@ update_status ModuleEditor::Update(float dt)
 
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Empty"));
 					objectSelected->components[1]->owner = objectSelected;
 
 					App->editor->AddLog("Check Box Created\n");
@@ -1423,7 +1422,7 @@ update_status ModuleEditor::Update(float dt)
 
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Empty"));
 					objectSelected->components[1]->owner = objectSelected;
 
 					App->editor->AddLog("Slider Created\n");
@@ -1438,7 +1437,7 @@ update_status ModuleEditor::Update(float dt)
 
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX, "Empty"));
 					objectSelected->components[1]->owner = objectSelected;
 
 					App->editor->AddLog("Input Box Created\n");

@@ -5,6 +5,7 @@
 InputBoxComponent::InputBoxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton)
 {
 	name = "InputBox Component";
+	type = ComponentType::UI_INPUTBOX;
 	this->bounds = bounds;
 	this->text = text;
 	drawRect = false;

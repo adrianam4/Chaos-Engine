@@ -31,26 +31,26 @@ Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double h
 	return component;
 }
 
-Component* GameObject::CreateUIComponent(ComponentType type)
+Component* GameObject::CreateUIComponent(ComponentType type, std::string text)
 {
 	Component* component = nullptr;
 
 	switch (type)
 	{
 	case ComponentType::UI_BUTTON:
-		component = new ButtonComponent(1, SDL_Rect({0, 0, 100, 100}), "Button", nullptr);
+		component = new ButtonComponent(1, SDL_Rect({0, 0, 100, 100}), text, nullptr);
 		break;
 	case ComponentType::UI_IMAGE:
-		component = new ImageComponent(2, SDL_Rect({ 0, 0, 100, 100 }), "Image", nullptr);
+		component = new ImageComponent(2, SDL_Rect({ 0, 0, 100, 100 }), text, nullptr);
 		break;
 	case ComponentType::UI_CHECKBOX:
-		component = new CheckboxComponent(3, SDL_Rect({ 0, 0, 100, 100 }), "CheckBox", nullptr);
+		component = new CheckboxComponent(3, SDL_Rect({ 0, 0, 100, 100 }), "a", nullptr);
 		break;
 	case ComponentType::UI_SLIDER:
-		component = new SliderComponent(4, SDL_Rect({ 0, 0, 100, 100 }), "Slider", nullptr, nullptr);
+		component = new SliderComponent(4, SDL_Rect({ 0, 0, 100, 100 }), "b", nullptr, nullptr);
 		break;
 	case ComponentType::UI_INPUTBOX:
-		component = new InputBoxComponent(5, SDL_Rect({ 0, 0, 100, 100 }), "InputBox", nullptr);
+		component = new InputBoxComponent(5, SDL_Rect({ 0, 0, 100, 100 }), "c", nullptr);
 		break;
 	default:
 		break;

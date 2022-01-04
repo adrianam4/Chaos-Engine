@@ -20,9 +20,9 @@ public:
 
 public:
 	Color disabledColor = White;
-	Color pressedColor = White;
-	Color focusedColor = White;
-	Color normalColor = White;
+	Color pressedColor = Red;
+	Color focusedColor = Blue;
+	Color normalColor = Green;
 
 	SDL_Texture* disabledTexture = nullptr;
 	SDL_Texture* pressedTexture = nullptr;
@@ -33,5 +33,4 @@ public:
 	State state;
 	SDL_Rect* bounds = nullptr;
 	std::string text;
-	bool buttonsColliders;
 };
