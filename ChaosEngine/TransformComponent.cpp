@@ -116,8 +116,6 @@ void ComponentTransform::Update(bool releaseMouse)
 	
 	if (releaseMouse)
 	{
-		
-
 		UINT isCamera = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
 
 		if (isCamera == -1)
@@ -165,9 +163,6 @@ void ComponentTransform::Update(bool releaseMouse)
 			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[isCamera];
 			App->camera->GameCam->Move(position);
 		}
-		
-
-		
 	}
 
 	float4x4 aux1;
@@ -191,14 +186,11 @@ void ComponentTransform::Update(bool releaseMouse)
 			}
 		}
 	}
+
 	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
 	{
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
 	}
-
-	
-	
-	
 }
 
 void ComponentTransform::Disable()

@@ -99,35 +99,30 @@ void ComponentTransform2D::Update(bool releaseMouse)
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
 	float4x4 aux;
-	transMatrix = aux.FromTRS(float3(position.x, position.y, position.z), rotationQuat, float3(scale.x, scale.y, scale.z));
+	transMatrix = aux.FromTRS(position, rotationQuat, scale);
 	transmat = transMatrix;
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
 
 	if (releaseMouse)
 	{
-		lastScale = scale;
-		lastPosition = position;
-		lastRotation = rotationEuler;
-		lastGeneralScale = generalScale;
+		UINT isCamera = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
 
-		
-
-		
-			/*GameObject* go = App->editor->objectSelected;
+		if (isCamera == -1)
+		{
+			GameObject* go = App->editor->objectSelected;
 			go->aabb.clear();
 
-			ComponentType type = ComponentType::MESH;
-			if (go->SearchComponent(go, ComponentType::"boton 2D") != -1)
-			{
-				type = ComponentType::CUBE;
-				CreateAABB(type, go, false);
-			}
+			CreateAABB(ComponentType::PLANE, go, false);
 			
-
 			go = nullptr;
-			delete go;*/
-		
+			delete go;
+		}
+		else
+		{
+			App->camera->GameCam = (ComponentCamera*)App->editor->objectSelected->components[isCamera];
+			App->camera->GameCam->Move(position);
+		}
 		
 	}
 
@@ -136,7 +131,7 @@ void ComponentTransform2D::Update(bool releaseMouse)
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
 	}
 
-	float4x4 aux1;
+	//float4x4 aux1;
 
 	/*for (int a = 0; a < App->editor->objectSelected->childrens.size(); a++) {
 		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {
@@ -161,6 +156,11 @@ void ComponentTransform2D::Disable()
 
 void ComponentTransform2D::OnEditor(int i)
 {
+	lastScale = scale;
+	lastPosition = position;
+	lastRotation = rotationEuler;
+	lastGeneralScale = generalScale;
+
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Size");
 	if (ImGui::DragFloat("Width", &buttonWidth, 0.5f, 0, 10000))
 	{

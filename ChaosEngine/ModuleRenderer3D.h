@@ -26,7 +26,7 @@ public:
 	void InitMesh(char* path, GameObject* selectedObj);
 	void DrawMeshes(ComponentCamera*editorCam);
 	void DrawCameras();
-	void DrawRay();
+	void DrawRay(LineSegment& myRay);
 public:
 
 	Light lights[MAX_LIGHTS];

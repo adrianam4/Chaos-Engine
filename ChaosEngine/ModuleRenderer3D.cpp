@@ -428,7 +428,7 @@ void ModuleRenderer3D::DrawMeshes(ComponentCamera* editorCam)
 					}
 				}
 				if (App->editor->showRay)
-					DrawRay();
+					DrawRay(App->userInterface->myRay);
 
 				App->editor->DrawPrimitives();
 				App->viewportBuffer->UnBind();
@@ -504,14 +504,14 @@ void ModuleRenderer3D::DrawCameras()
 	}
 }
 
-void ModuleRenderer3D::DrawRay()
+void ModuleRenderer3D::DrawRay(LineSegment& myRay)
 {
 	glBegin(GL_LINES);
 	glLineWidth(5);
 	glColor3f(1.f, 0.f, 0.f);
-	glVertex3f(App->camera->myRay.a.x, App->camera->myRay.a.y, App->camera->myRay.a.z);
+	glVertex3f(myRay.a.x, myRay.a.y, myRay.a.z);
 	glColor3f(0.f, 0.f, 0.f);
-	glVertex3f(App->camera->myRay.b.x, App->camera->myRay.b.y, App->camera->myRay.b.z);
+	glVertex3f(myRay.b.x, myRay.b.y, myRay.b.z);
 	glColor3f(1.f, 1.f, 1.f);
 	glEnd();
 }

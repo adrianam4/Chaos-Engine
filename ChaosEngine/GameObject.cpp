@@ -123,7 +123,7 @@ Component* GameObject::CreateComponent(ComponentType type,float3* pos, float3* m
 	{
 	case ComponentType::TRANSFORM2D:
 
-		component = new ComponentTransform2D(position, math::float3(1,1,1), math::float3(-90, 0, 0));
+		component = new ComponentTransform2D(position, scale, rotation);
 		break;
 	case ComponentType::TRANSFORM:
 		

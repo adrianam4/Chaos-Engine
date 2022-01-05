@@ -49,7 +49,6 @@ update_status ModuleUI::PreUpdate(float dt)
 					}
 				}
 			}
-
 		}
 
 		if (hitObjs.size() > 0)
@@ -85,8 +84,8 @@ update_status ModuleUI::PreUpdate(float dt)
 update_status ModuleUI::Update(float dt)
 {
 	// Update All UI Components
-	if (App->gameMode)
-	{
+	/*if (App->gameMode)
+	{*/
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
 			GameObject* go = App->scene->gameObjects[i];
@@ -108,7 +107,7 @@ update_status ModuleUI::Update(float dt)
 			if (slider != -1)
 				go->components[slider]->Update();
 		}
-	}
+	//}
 	
 	return UPDATE_CONTINUE;
 }
