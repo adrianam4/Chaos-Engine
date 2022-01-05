@@ -40,6 +40,6 @@ public:
 	float3 lastScale;
 	float3 position;*/
 
-	float3 scale;
+	//float3 scale;
 	float3 rotationEuler;
 };

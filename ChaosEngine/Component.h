@@ -74,6 +74,7 @@ public:
 	virtual void setOwner(){}
 	virtual void Enable() {}
 	virtual void Update() {}
+	virtual void Update(bool releaseMouse){}
 	virtual void Disable() {}
 	virtual void Draw() {}
 	virtual void OnClick() {}
