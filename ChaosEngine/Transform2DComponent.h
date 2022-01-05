@@ -27,10 +27,10 @@ public:
 	void Save(const char* path) override;
 	Quat FromEulerToQuat(float3 eulerAngles);
 	float3 FromQuatToEuler(Quat quatAngles);
-	/*std::vector<float3> vertices_aux;*/
+	std::vector<float3> vertices_aux;
 	float4x4 transMatrix;
 	void setOwner();
-	//void CreateAABB(ComponentType type, GameObject* go, bool firstTime)override;
+	void CreateAABB(ComponentType type, GameObject* go, bool firstTime)override;
 
 	float buttonWidth;
 	float buttonHeight;

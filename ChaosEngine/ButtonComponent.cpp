@@ -29,32 +29,34 @@ ButtonComponent::~ButtonComponent()
 
 void ButtonComponent::Update()
 {
+	if (!active)
+		state = State::DISABLED;
+	else
+		state = State::NORMAL;
+
 	if (state != State::DISABLED)
 	{
 		int mouseX = App->input->GetMouseX();
 		int mouseY = App->input->GetMouseY();
 
 		// Check collision between mouse and button bounds
-		if ((mouseX > bounds->x) && (mouseX < (bounds->x + bounds->w)) &&
-			(mouseY > bounds->y) && (mouseY < (bounds->y + bounds->h)))
+		if ((mouseX > bounds->x) && (mouseX < (bounds->x + bounds->w)) && (mouseY > bounds->y) && (mouseY < (bounds->y + bounds->h)))
 		{
-			if (state != State::FOCUSED && state != State::PRESSED)
-			{
-				/*app->audio->PlayFx(focusedFX);*/
-			}
 			state = State::FOCUSED;
+			//if (state != State::FOCUSED && state != State::PRESSED)
+			//{
+			//	/*app->audio->PlayFx(focusedFX);*/
+			//}
 
-			if (App->input->GetKey(SDL_BUTTON_LEFT) == KEY_REPEAT)
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			{
 				state = State::PRESSED;
-				OnClick();
 			}
 
 			// If mouse button pressed -> Generate event!
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			{
-				/*App->audio->PlayFx(clickedFX);
-				NotifyObserver();*/
+				OnClick();
 			}
 		}
 		else state = State::NORMAL;
