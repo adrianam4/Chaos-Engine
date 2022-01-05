@@ -220,7 +220,7 @@ update_status ModuleCamera3D::Update(float dt)
 	}
 
 	//Test if a ray intersects with gameobjects
-	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	if (!App->gameMode && App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 	{
 		float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
 		float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };
@@ -283,6 +283,10 @@ update_status ModuleCamera3D::Update(float dt)
 				for (int i = 0; i < hitObjs.size(); ++i)
 				{
 					int myComp = hitObjs[i]->SearchComponent(hitObjs[i], ComponentType::TRANSFORM);
+					if (myComp == -1)
+					{
+						myComp = hitObjs[i]->SearchComponent(hitObjs[i], ComponentType::TRANSFORM2D);
+					}
 					float3 distnceVec = hitObjs[i]->components[myComp]->position - editorCam->frustum.pos;
 					float finalDistance = math::Sqrt((distnceVec.x * distnceVec.x) + (distnceVec.y * distnceVec.y) + (distnceVec.z * distnceVec.z));
 					distance.push_back(finalDistance);

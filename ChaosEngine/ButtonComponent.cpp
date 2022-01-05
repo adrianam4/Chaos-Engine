@@ -36,17 +36,14 @@ void ButtonComponent::Update()
 
 	if (state != State::DISABLED)
 	{
-		int mouseX = App->input->GetMouseX();
-		int mouseY = App->input->GetMouseY();
-
-		// Check collision between mouse and button bounds
-		if ((mouseX > bounds->x) && (mouseX < (bounds->x + bounds->w)) && (mouseY > bounds->y) && (mouseY < (bounds->y + bounds->h)))
+		if (App->userInterface->focusedGameObject == owner)
 		{
 			state = State::FOCUSED;
-			//if (state != State::FOCUSED && state != State::PRESSED)
-			//{
-			//	/*app->audio->PlayFx(focusedFX);*/
-			//}
+
+			if (state != State::FOCUSED && state != State::PRESSED)
+			{
+				/*app->audio->PlayFx(focusedFX);*/
+			}
 
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			{
@@ -153,12 +150,5 @@ void ButtonComponent::OnEditor(int i)
 
 void ButtonComponent::OnClick()
 {
-	if (text == "Start")
-	{
-		SDL_Quit();
-	}
-	else
-	{
-		normalColor = Red;
-	}
+	
 }
