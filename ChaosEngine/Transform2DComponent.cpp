@@ -438,6 +438,8 @@ void ComponentTransform2D::CreateAABB(ComponentType type, GameObject* go, bool f
 
 	std::vector<float4> aabbVertexAux;
 	std::vector<float3> aabbVertex;
+	float3 MAX;
+	float3 MIN;
 	switch (type)
 	{
 	case ComponentType::MESH:
@@ -587,6 +589,7 @@ void ComponentTransform2D::CreateAABB(ComponentType type, GameObject* go, bool f
 		go->obb.push_back(aux1);
 		if (firstTime)
 		{
+			
 			auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
 			go->boundingBoxes.push_back(auxiliarCube);
 		}
@@ -607,16 +610,24 @@ void ComponentTransform2D::CreateAABB(ComponentType type, GameObject* go, bool f
 			float3 vertex(aabbVertexAux[i].x, aabbVertexAux[i].y, aabbVertexAux[i].z);
 			aabbVertex.push_back(vertex);
 		}
+		
 		aux->Enclose((float3*)aabbVertex.data(), (size_t)aabbVertex.size());
+		MAX = aux->maxPoint;
+		MIN = aux->minPoint;
 		(*aux1) = (*aux);
 		aux1->Transform(transMatrix);
 		aux->SetNegativeInfinity();
 		aux->Enclose(*aux1);
+		
 		go->aabb.push_back(aux);
 		go->obb.push_back(aux1);
+
+		aux->maxPoint= MAX;
+		aux->minPoint= MIN;
 		if (firstTime)
 		{
-			auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, aux->maxPoint, aux->minPoint);
+			auxiliarCube = new BoundingBoxes({ 0,0,0 }, scale, MAX, MIN);
+			
 			go->boundingBoxes.push_back(auxiliarCube);
 		}
 		break;

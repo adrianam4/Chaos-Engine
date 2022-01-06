@@ -1375,7 +1375,7 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON, "Startaaaa"));
 					objectSelected->components[1]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1.5f, 1, 0.5f), &float3(-90, 0, 0)));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1,1), &float3(0, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/ButtonStart.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
