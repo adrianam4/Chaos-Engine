@@ -1424,11 +1424,14 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Empty"));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Empty"));
+					objectSelected->components[2]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/bar.dds", true));
+					objectSelected->components[3]->owner = objectSelected;
 					App->editor->AddLog("Slider Created\n");
 				}
 				if (ImGui::MenuItem("Create Input Box"))

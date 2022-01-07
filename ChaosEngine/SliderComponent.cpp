@@ -12,6 +12,9 @@ SliderComponent::SliderComponent(int id, const char* text)
 	maxValue = 100;
 	drawRect = false;
 	state = State::NORMAL;
+	barProgres = 0.0f;
+	completed = false;
+	thePlane = App->editor->planes[App->editor->planes.size() - 1];
 }
 
 SliderComponent::~SliderComponent()
@@ -21,55 +24,31 @@ SliderComponent::~SliderComponent()
 
 void SliderComponent::Update()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
-	{
-		if (drawRect == false)
+	barProgres += 0.001;
+	if (!completed) {
+
+
+		if (barProgres < 0.5f)
 		{
-			drawRect = true;
+			thePlane->texCoords[4] = (0.5 - barProgres);
+			thePlane->texCoords[6] = (0.5 - barProgres);
 		}
-		else
-		{
-			drawRect = false;
+		else if (barProgres >= 1) {
+			completed = true;
 		}
-	}
+		else if (barProgres >= 0.5f) {
 
-	if (state != State::DISABLED)
-	{
-		int mouseX = App->input->GetMouseX();
-		int mouseY = App->input->GetMouseY();
-
-		// Check collision between mouse and button bounds
-		if (App->userInterface->focusedGameObject == owner)
-		{
-			state = State::FOCUSED;
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
-			{
-				state = State::PRESSED;
-				//value = ((maxValue - minValue) * (mouseX - (float)(bounds.x + slider.w / 2))) / (float)(bounds.w - slider.w) + minValue;
-
-				//NotifyObserver();
-
-				if (slider.w > 0)
-				{
-					slider.x = mouseX - slider.w / 2;
-				}
-				else if (slider.w == 0)
-				{
-					//slider.w = sliderValue;
-				}
-			}
+			float aux = barProgres - 0.5;
+			thePlane->texCoords[0] = (1 - aux);
+			thePlane->texCoords[2] = (1 - aux);
 		}
-		else state = State::NORMAL;
+		glDeleteBuffers(thePlane->texCoords.size() * sizeof(GLfloat), &thePlane->TBO);
 
-		if (value > maxValue)
-		{
-			value = maxValue;
-		}
+		glGenBuffers(1, &thePlane->TBO);
+		glBindBuffer(GL_ARRAY_BUFFER, thePlane->TBO);
+		glBufferData(GL_ARRAY_BUFFER, thePlane->texCoords.size() * sizeof(GLfloat), thePlane->texCoords.data(), GL_STATIC_DRAW);
 
-		else if (value < minValue)
-		{
-			value = minValue;
-		}
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }
 
