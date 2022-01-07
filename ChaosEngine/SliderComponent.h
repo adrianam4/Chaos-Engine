@@ -20,7 +20,9 @@ public:
 	float value;
 	float minValue;
 	float maxValue;
-
+	MyPlane* thePlane;
+	bool completed;
+	float barProgres;
 private:
 	SDL_Color color;
 	State state;
