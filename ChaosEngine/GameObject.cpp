@@ -197,6 +197,26 @@ ButtonComponent* GameObject::GetButtonComponent(GameObject* go)
 		return nullptr;
 }
 
+ImageComponent* GameObject::GetImageComponent(GameObject* go)
+{
+	int comp = go->SearchComponent(go, ComponentType::UI_IMAGE);
+
+	if (comp != -1)
+		return (ImageComponent*)go->components[comp];
+	else
+		return nullptr;
+}
+
+CheckboxComponent* GameObject::GetCheckboxComponent(GameObject* go)
+{
+	int comp = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
+
+	if (comp != -1)
+		return (CheckboxComponent*)go->components[comp];
+	else
+		return nullptr;
+}
+
 int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
 {
 	for (int i = 0; i < gameObject->components.size(); i++)

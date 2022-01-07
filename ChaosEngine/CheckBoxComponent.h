@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Component.h"
-
-class SDL_Rect;
-class SDL_Color;
-class SDL_Texture;
+#include "Color.h"
 
 class CheckboxComponent : public Component
 {
@@ -16,11 +13,15 @@ public:
 	void Update() override;
 	void Draw() override;
 	void OnEditor(int i) override;
+	void OnClick() override;
 
 public:
-	SDL_Color color;
+	Color disabledColor = White;
+	Color pressedColor = Red;
+	Color focusedColor = Blue;
+	Color normalColor = Green;
+
 	State state;
 	std::string text;
-	bool drawRectangle;
 	bool checked;
 };

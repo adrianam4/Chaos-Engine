@@ -20,6 +20,8 @@
 #include "ResourceMesh.h"
 #include "Component.h"
 #include "ButtonComponent.h"
+#include "ImageComponent.h"
+#include "CheckBoxComponent.h"
 #include "FileDialog.h"
 #include"MeshComponent.h"
 #include<stack>
@@ -878,8 +880,13 @@ void ModuleEditor::DrawPrimitives()
 					if (planes[k]->id == auxId)
 					{
 						ButtonComponent* currentButton = nullptr;
+						ImageComponent* currentImage = nullptr;
+						CheckboxComponent* currentCheckbox = nullptr;
 						currentButton = App->scene->gameObjects[i]->GetButtonComponent(App->scene->gameObjects[i]);
-						if (currentButton == nullptr)
+						currentImage = App->scene->gameObjects[i]->GetImageComponent(App->scene->gameObjects[i]);
+						currentCheckbox = App->scene->gameObjects[i]->GetCheckboxComponent(App->scene->gameObjects[i]);
+
+						if (currentButton == nullptr && currentImage == nullptr && currentCheckbox == nullptr)
 						{
 							planes[k]->DrawPlane();
 						}
@@ -1377,7 +1384,7 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1,1), &float3(-90, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/ButtonStart.dds", true));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
 
 					App->editor->AddLog("Button Created\n");
@@ -1396,7 +1403,7 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(-90, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Crosshair2.dds", true));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Crosshair.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
 
 					App->editor->AddLog("Image Created\n");
@@ -1409,10 +1416,14 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Empty"));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Checkbox"));
 					objectSelected->components[1]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(-90, 0, 0)));
+					objectSelected->components[2]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxFalse.dds", true));
+					objectSelected->components[3]->owner = objectSelected;
 
 					App->editor->AddLog("Check Box Created\n");
 				}

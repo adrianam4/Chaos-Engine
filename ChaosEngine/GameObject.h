@@ -10,8 +10,12 @@
 #include"TransformComponent.h"
 #include "Transform2DComponent.h"
 #include "ButtonComponent.h"
+#include "ImageComponent.h"
+#include "CheckBoxComponent.h"
 #include "Resource.h"
+
 class theBuffer;
+
 class GameObject
 {
 public:
@@ -49,6 +53,8 @@ public:
 	ComponentTransform* getTransform();
 	ComponentTransform2D* getTransform2D();
 	ButtonComponent* GetButtonComponent(GameObject* go);
+	ImageComponent* GetImageComponent(GameObject* go);
+	CheckboxComponent* GetCheckboxComponent(GameObject* go);
 	float3 trans;
 	float3 sca;
 	Quat rot;
