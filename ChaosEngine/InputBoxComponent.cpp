@@ -2,11 +2,10 @@
 #include "SDL.h"
 #include "Application.h"
 
-InputBoxComponent::InputBoxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton)
+InputBoxComponent::InputBoxComponent(int id, const char* text)
 {
 	name = "InputBox Component";
 	type = ComponentType::UI_INPUTBOX;
-	this->bounds = bounds;
 	this->text = text;
 	drawRect = false;
 	state = State::NORMAL;
@@ -15,7 +14,6 @@ InputBoxComponent::InputBoxComponent(int id, SDL_Rect bounds, const char* text, 
 InputBoxComponent::~InputBoxComponent()
 {
 	text.clear();
-	delete texture;
 }
 
 void InputBoxComponent::Update()
@@ -38,8 +36,7 @@ void InputBoxComponent::Update()
 		int mouseY = App->input->GetMouseY();
 
 		// Check collision between mouse and button bounds
-		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
-			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
+		if (App->userInterface->focusedGameObject == owner)
 		{
 			state = State::FOCUSED;
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)

@@ -2,17 +2,14 @@
 #include "SDL.h"
 #include "SliderComponent.h"
 
-SliderComponent::SliderComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton, SDL_Texture* textureSlider)
+SliderComponent::SliderComponent(int id, const char* text)
 {
 	name = "Slider Component";
 	type = ComponentType::UI_SLIDER;
-	this->bounds = bounds;
 	this->text = text;
 	value = 0;
 	minValue = 0;
 	maxValue = 100;
-	//textureButtons = textureButton;
-	texture = textureSlider;
 	drawRect = false;
 	state = State::NORMAL;
 }
@@ -20,7 +17,6 @@ SliderComponent::SliderComponent(int id, SDL_Rect bounds, const char* text, SDL_
 SliderComponent::~SliderComponent()
 {
 	text.clear();
-	delete texture;
 }
 
 void SliderComponent::Update()
@@ -43,14 +39,13 @@ void SliderComponent::Update()
 		int mouseY = App->input->GetMouseY();
 
 		// Check collision between mouse and button bounds
-		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
-			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
+		if (App->userInterface->focusedGameObject == owner)
 		{
 			state = State::FOCUSED;
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			{
 				state = State::PRESSED;
-				value = ((maxValue - minValue) * (mouseX - (float)(bounds.x + slider.w / 2))) / (float)(bounds.w - slider.w) + minValue;
+				//value = ((maxValue - minValue) * (mouseX - (float)(bounds.x + slider.w / 2))) / (float)(bounds.w - slider.w) + minValue;
 
 				//NotifyObserver();
 

@@ -2,13 +2,11 @@
 #include "SDL.h"
 #include "CheckboxComponent.h"
 
-CheckboxComponent::CheckboxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton)
+CheckboxComponent::CheckboxComponent(int id, const char* text)
 {
 	name = "CheckBox Component";
 	type = ComponentType::UI_CHECKBOX;
-	this->bounds = bounds;
 	this->text = text;
-	texture = textureButton;
 	drawRectangle = false;
 	state = State::NORMAL;
 }
@@ -16,7 +14,6 @@ CheckboxComponent::CheckboxComponent(int id, SDL_Rect bounds, const char* text, 
 CheckboxComponent::~CheckboxComponent()
 {
 	text.clear();
-	delete texture;
 }
 
 void CheckboxComponent::Update()
@@ -38,8 +35,7 @@ void CheckboxComponent::Update()
 		int mouseY = App->input->GetMouseY();
 
 		// Check collision between mouse and button bounds
-		if ((mouseX > bounds.x) && (mouseX < (bounds.x + bounds.w)) &&
-			(mouseY > bounds.y) && (mouseY < (bounds.y + bounds.h)))
+		if (App->userInterface->focusedGameObject == owner)
 		{
 			/*if (state != UIControlState::FOCUSED && state != UIControlState::PRESSED)
 			{

@@ -2,29 +2,17 @@
 #include "SDL.h"
 #include "ButtonComponent.h"
 
-ButtonComponent::ButtonComponent(int id, SDL_Rect bounds, std::string text, SDL_Texture* textureButton)
+ButtonComponent::ButtonComponent(int id, std::string text)
 {
 	name = "Button Component";
 	type = ComponentType::UI_BUTTON;
-
-	this->bounds = &bounds;
 	this->text = text;
-
-	disabledTexture = textureButton;
-	normalTexture = textureButton;
-	focusedTexture = textureButton;
-	pressedTexture = textureButton;
-
 	state = State::NORMAL;
 }
 
 ButtonComponent::~ButtonComponent()
 {
 	text.clear();
-	delete normalTexture;
-	delete disabledTexture;
-	delete focusedTexture;
-	delete pressedTexture;
 }
 
 void ButtonComponent::Update()

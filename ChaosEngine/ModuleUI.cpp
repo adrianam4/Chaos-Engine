@@ -32,8 +32,8 @@ update_status ModuleUI::PreUpdate(float dt)
 		float normalized_x = Lerp(-1, 1, fMousePos.x / viewport.z);
 		float normalized_y = Lerp(1, -1, fMousePos.y / viewport.w);
 
-		App->camera->editorCam->frustum.GetCornerPoints(&corners[0]);
-		myRay = App->camera->editorCam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
+		App->camera->GameCam->frustum.GetCornerPoints(&corners[0]);
+		myRay = App->camera->GameCam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
 
 		for (int i = 0; i < App->scene->gameObjects.size(); i++)
 		{
@@ -59,7 +59,7 @@ update_status ModuleUI::PreUpdate(float dt)
 			for (int i = 0; i < hitObjs.size(); ++i)
 			{
 				int myComp = hitObjs[i]->SearchComponent(hitObjs[i], ComponentType::TRANSFORM2D);
-				float3 distnceVec = hitObjs[i]->components[myComp]->position - App->camera->editorCam->frustum.pos;
+				float3 distnceVec = hitObjs[i]->components[myComp]->position - App->camera->GameCam->frustum.pos;
 				float finalDistance = math::Sqrt((distnceVec.x * distnceVec.x) + (distnceVec.y * distnceVec.y) + (distnceVec.z * distnceVec.z));
 				distance.push_back(finalDistance);
 			}

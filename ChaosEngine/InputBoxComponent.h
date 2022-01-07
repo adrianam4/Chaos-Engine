@@ -11,7 +11,7 @@ class InputBoxComponent : public Component
 {
 public:
 
-	InputBoxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton);
+	InputBoxComponent(int id, const char* text);
 	virtual ~InputBoxComponent();
 
 	void Update() override;
@@ -20,10 +20,7 @@ public:
 
 public:
 	SDL_Color color;
-	SDL_Texture* texture;
-	SDL_Rect section;
 	State state;
-	SDL_Rect bounds;
 	std::string text;
 	bool drawRect;
 };

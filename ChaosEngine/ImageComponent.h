@@ -1,16 +1,13 @@
 #pragma once
 
 #include "Component.h"
-
-class SDL_Rect;
-class SDL_Color;
-class SDL_Texture;
+#include "Color.h"
 
 class ImageComponent : public Component
 {
 public:
 
-	ImageComponent(int id, SDL_Rect bounds, std::string text, SDL_Texture* textureButton);
+	ImageComponent(int id, std::string text);
 	~ImageComponent();
 
 	void Update() override;
@@ -18,11 +15,7 @@ public:
 	void OnEditor(int i) override;
 
 private:
-	SDL_Color color;
-	SDL_Texture* texture;
-	SDL_Rect section;
+	Color color;
 	State state;
-	SDL_Rect bounds;
 	std::string text;
-	bool buttonsColliders;
 };

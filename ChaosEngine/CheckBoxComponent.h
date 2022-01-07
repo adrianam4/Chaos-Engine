@@ -10,7 +10,7 @@ class CheckboxComponent : public Component
 {
 public:
 
-	CheckboxComponent(int id, SDL_Rect bounds, const char* text, SDL_Texture* textureButton);
+	CheckboxComponent(int id, const char* text);
 	virtual ~CheckboxComponent();
 
 	void Update() override;
@@ -19,10 +19,7 @@ public:
 
 public:
 	SDL_Color color;
-	SDL_Texture* texture;
-	SDL_Rect section;
 	State state;
-	SDL_Rect bounds;
 	std::string text;
 	bool drawRectangle;
 	bool checked;

@@ -10,7 +10,7 @@ class ButtonComponent : public Component
 {
 public:
 
-	ButtonComponent(int id, SDL_Rect bounds, std::string text, SDL_Texture* textureButton);
+	ButtonComponent(int id, std::string text);
 	~ButtonComponent();
 
 	void Update() override;
@@ -24,13 +24,6 @@ public:
 	Color focusedColor = Blue;
 	Color normalColor = Green;
 
-	SDL_Texture* disabledTexture = nullptr;
-	SDL_Texture* pressedTexture = nullptr;
-	SDL_Texture* focusedTexture = nullptr;
-	SDL_Texture* normalTexture = nullptr;
-
-	SDL_Rect* section = nullptr;
 	State state;
-	SDL_Rect* bounds = nullptr;
 	std::string text;
 };
