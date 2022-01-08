@@ -3,7 +3,6 @@
 #include "Globals.h"
 #include "Primitives.h"
 #include "GameObject.h"
-#include"Fonts.h"
 #include "imgui.h"
 
 class ModuleEditor : public Module
@@ -56,7 +55,7 @@ private:
 	void childrenManage(int i);
 
 public:
-	freetype::font_data our_font;
+	
 	Grid* grid;
 	ImGuiTextBuffer consoleBuffer;
 	ImGuiWindowFlags sceneWindow = 0;

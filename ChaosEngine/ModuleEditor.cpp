@@ -170,7 +170,7 @@ bool ModuleEditor::Start()
 	isActive4 = true;
 	
 
-	our_font.init("Assets/Fonts/OpenSans-Regular.ttf", 16);
+	//our_font.init("Assets/Fonts/OpenSans-Regular.ttf", 16);
 	return ret;
 }
 

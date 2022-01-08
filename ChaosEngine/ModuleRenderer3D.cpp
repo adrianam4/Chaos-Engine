@@ -153,7 +153,28 @@ bool ModuleRenderer3D::Init()
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	Shader* sha=new Shader("text.vs", "text.fs");
+	shader= sha;
+	float4 projection = { 0.0f, static_cast<float>(App->window->width), 0.0f, static_cast<float>(App->window->height) };
+	shader->use();
+	
+	glUniformMatrix4fv(glGetUniformLocation(shader->ID, "projection"), 1, GL_FALSE, projection.ptr());
+	
+	FT_Library ft;
 
+	if (FT_Init_FreeType(&ft))
+	{
+		 std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+		 return -1;
+	}
+
+	std::string font_name="Assets/Fonts/OpenSans-Bold.ttf";
+
+	FT_Face face;
+	if (FT_New_Face(ft, font_name.c_str(), 0, &face)) {
+		        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+		        return -1;
+	}
 	return ret;
 }
 
@@ -275,7 +296,16 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			
+			//glLoadIdentity();
+
+			/*glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);*/
+
+			RenderText((*shader), "This is sample text", 50.0f, 50.0f, 3.0f, float3(1, 0.8f, 0.2f));
+
+			/*glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
+			glOrtho(0.0f, App->window->width, App->window->height, 0.0f, 0.0f, 1.0f);*/
 
 			glMatrixMode(GL_PROJECTION);
 			glLoadMatrixf(App->camera->editorCam->frustum.ProjectionMatrix().Transposed().ptr());
@@ -284,15 +314,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			App->editor->grid->DrawGrid();
 
 			DrawMeshes(App->camera->editorCam);
-			//
-	
-			/*glColor3ub(0xff, 0, 0);
 			
-			glRotatef(0, 0, 0, 0);
-			glScalef(1, 1, 1);
-			glTranslatef(0, 0, 0);
-
-			freetype::print(App->editor->our_font, 0, 0, "Aaaaaaaaaaa", 50);*/
 			App->viewportBuffer->UnBind();
 			
 			
@@ -318,24 +340,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		}
 	}
 
-	/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-
-	glColor3ub(0xff, 0, 0);
-
-	glPushMatrix();
-	glLoadIdentity();
-	glRotatef(0, 0, 0, 1);
-	glScalef(1, 1, 1);
-	glTranslatef(-180, 0, 0);
-	freetype::print(App->editor->our_font, 50, 50, "Active FreeType Text - %7.2f");
-	glPopMatrix();*/
 	
-
-
-
-
-	//DrawCameras();
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(App->window->window);

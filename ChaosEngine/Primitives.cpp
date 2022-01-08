@@ -22,6 +22,7 @@ int Primitives::TransformMatrix()
 {
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
+		
 		if (App->scene->gameObjects[i]->id == id)
 		{
 			if (App->scene->gameObjects[i]->matrix != nullptr) 

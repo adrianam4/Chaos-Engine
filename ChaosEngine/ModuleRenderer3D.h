@@ -2,7 +2,7 @@
 #include "Module.h"
 #include "glmath.h"
 #include "Light.h"
-
+#include"Shader.h"
 #define MAX_LIGHTS 8
 class ComponentCamera;
 class Model;
@@ -28,7 +28,7 @@ public:
 	void DrawCameras();
 	void DrawRay(LineSegment& myRay);
 public:
-
+	Shader* shader;
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 normalMatrix;
