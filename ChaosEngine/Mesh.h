@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MathGeoLib/src/MathGeoLib.h"
+#include "MathGeoLib.h"
 
 struct Vertex
 {

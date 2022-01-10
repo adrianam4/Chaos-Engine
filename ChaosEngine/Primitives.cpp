@@ -4,7 +4,7 @@
 #include "Primitives.h"
 
 #include "glmath.h"
-#include "MathGeoLib/src/MathGeoLib.h"
+#include "MathGeoLib.h"
 
 // ------------------------------------------------------------
 Primitives::Primitives() : transform(IdentityMatrix), color(White), wire(false), axis(false), type(PrimitivesTypes::PRIMITIVE_MYPOINT)

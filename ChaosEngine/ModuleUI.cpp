@@ -301,19 +301,6 @@ update_status ModuleUI::Update(float dt)
 	// Update All UI Components
 	/*if (App->gameMode)
 	{*/
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glDisable(GL_DEPTH_TEST);
-
-	glPushMatrix();
-
-	App->viewportBuffer->Bind(App->camera->editorCam);
-	RenderText("HOLA", 0, 0, 1.f, float3(1.f, 0.f, 0.f));
-
-	glEnable(GL_DEPTH_TEST);
-	glPopMatrix();
-	App->viewportBuffer->UnBind();
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
 		GameObject* go = App->scene->gameObjects[i];
@@ -342,6 +329,19 @@ update_status ModuleUI::Update(float dt)
 
 update_status ModuleUI::PostUpdate(float dt)
 {
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+
+	glPushMatrix();
+
+	App->viewportBuffer->Bind(App->camera->editorCam);
+	RenderText("Aroca", 0, 0, 1.f, float3(1.f, 0.f, 0.f));
+
+	glEnable(GL_DEPTH_TEST);
+	glPopMatrix();
+	App->viewportBuffer->UnBind();
+
 	return UPDATE_CONTINUE;
 }
 

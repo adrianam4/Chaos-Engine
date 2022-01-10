@@ -3,7 +3,7 @@
 #include "Module.h"
 #include "glmath.h"
 #include <vector>
-#include "MathGeoLib/src/MathGeoLib.h"
+#include "MathGeoLib.h"
 
 class GameObject;
 

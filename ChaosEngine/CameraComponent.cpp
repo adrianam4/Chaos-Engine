@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "Globals.h"
+#include <vector>
 
 #include "Component.h"
 #include "CameraComponent.h"
@@ -10,13 +11,15 @@ ComponentCamera::ComponentCamera(float3 pos, double hFov, double nPlane, double 
 	UID = GenerateUID();
 	name = "Camera Component";
 
-	frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
-	frustum.SetViewPlaneDistances(nPlane, fPlane);
+	frustum.type = PerspectiveFrustum;
+	frustum.nearPlaneDistance = nPlane;
+	frustum.farPlaneDistance = fPlane;
+	frustum.pos = pos;
 	float hFovR = DegToRad(hFov);
 	float vFovR = 2 * Atan((Tan(hFovR / 2)) * ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH));
-	frustum.SetPerspective(hFovR, vFovR);
-	frustum.SetFrame(pos, float3(0, 0, -1), float3(0, 1, 0));
-	frustum.ComputeProjectionMatrix();
+	frustum.horizontalFov = hFovR;
+	frustum.verticalFov = vFovR;
+
 	reference = Vec3(0.0f, 0.0f, 0.0f);
 	horizontalFov = hFov;
 	nearPlaneDistance = nPlane;
@@ -82,11 +85,10 @@ void ComponentCamera::Update()
 	//{
 		CalculatePoints();
 		RecalculateCamera();
-		math::vec positionAuxiliar = { position.x,position.y,position.z };
-		float3 UP = { y.x,y.y,y.z };
-		float3 FRONT = { z.x,z.y,z.z };
-		frustum.SetFrame(positionAuxiliar, -FRONT, UP);
-		frustum.ComputeProjectionMatrix();
+		frustum.pos = { position.x,position.y,position.z };
+		frustum.up = { y.x,y.y,y.z };
+		frustum.front = { z.x,z.y,z.z };
+		frustum.ProjectionMatrix();
 	//}
 }
 
@@ -159,10 +161,12 @@ void ComponentCamera::OnEditor(int i)
 }
 void ComponentCamera::changeViewMatrix() {
 	//viewMatrix=perspective(horizontalFov, (float)SCREEN_WIDTH / (float)SCREEN_HEIGHT, nearPlaneDistance, farPlaneDistance);
-	frustum.SetViewPlaneDistances(nearPlaneDistance, farPlaneDistance);
+	frustum.nearPlaneDistance = nearPlaneDistance;
+	frustum.farPlaneDistance = farPlaneDistance;
 	float hFovR = DegToRad(horizontalFov);
 	float vFovR = 2 * Atan((Tan(hFovR / 2)) * size.y / size.x);
-	frustum.SetPerspective(hFovR, vFovR);
+	frustum.horizontalFov = hFovR;
+	frustum.verticalFov = vFovR;
 	
 }
 mat4x4 ComponentCamera::getViewmatrix() {
@@ -240,7 +244,7 @@ void ComponentCamera::RecalculateCamera()
 		{
 			if (App->editor->objectSelected->components[i]->type == ComponentType::TRANSFORM)
 			{
-				frustum.SetPos(App->editor->objectSelected->components[i]->position);
+				frustum.pos = App->editor->objectSelected->components[i]->position;
 				break;
 			}
 		}
@@ -250,7 +254,7 @@ void ComponentCamera::RecalculateCamera()
 
 void ComponentCamera::CalculatePoints()
 {
-	vec cornerPoints[8];
+	float3 cornerPoints[8];
 	frustum.GetCornerPoints(cornerPoints);
 
 	vertices.clear();

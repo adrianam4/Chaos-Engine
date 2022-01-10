@@ -59,7 +59,7 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= Vec3(editorCam->frustum.WorldRight().x, editorCam->frustum.WorldRight().y, editorCam->frustum.WorldRight().z) * speed * 2;
 	if (App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += Vec3(editorCam->frustum.WorldRight().x, editorCam->frustum.WorldRight().y, editorCam->frustum.WorldRight().z) * speed * 2;
 
-	editorCam->frustum.SetPos(vec(editorCam->position.x += newPos.x, editorCam->position.y += newPos.y, editorCam->position.z += newPos.z));
+	editorCam->frustum.pos = float3(editorCam->position.x += newPos.x, editorCam->position.y += newPos.y, editorCam->position.z += newPos.z);
 	editorCam->position += newPos;
 	editorCam->reference += newPos;
 
@@ -99,7 +99,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		//editorCam->position = editorCam->reference + editorCam->z * length(editorCam->position);
-		editorCam->frustum.SetPos(vec(editorCam->position.x, editorCam->position.y, editorCam->position.z));
+		editorCam->frustum.pos = float3(editorCam->position.x, editorCam->position.y, editorCam->position.z);
 
 		//editorCam->position -= editorCam->reference;
 	}
@@ -113,7 +113,7 @@ update_status ModuleCamera3D::Update(float dt)
 
 		//PROBLEM!!!!!!!!!!
 		editorCam->RecalculateRotation((App->input->GetMouseXMotion()) * -1, (App->input->GetMouseYMotion()) * -1); //Recalculate rotation (???)
-		editorCam->frustum.SetPos(vec(editorCam->position.x -= editorCam->reference.x, editorCam->position.y -= editorCam->reference.y, editorCam->position.z -= editorCam->reference.z));
+		editorCam->frustum.pos = float3(editorCam->position.x -= editorCam->reference.x, editorCam->position.y -= editorCam->reference.y, editorCam->position.z -= editorCam->reference.z);
 
 		if (dx != 0)
 		{
@@ -139,7 +139,7 @@ update_status ModuleCamera3D::Update(float dt)
 		}
 
 		editorCam->position = editorCam->reference + editorCam->z * length(editorCam->position);
-		editorCam->frustum.SetPos(vec(editorCam->position.x, editorCam->position.y, editorCam->position.z));
+		editorCam->frustum.pos = float3(editorCam->position.x, editorCam->position.y, editorCam->position.z);
 	}
 
 	if (App->input->GetKey(SDL_SCANCODE_F))
@@ -203,7 +203,7 @@ update_status ModuleCamera3D::Update(float dt)
 				editorCam->position.z = (objectPoition.z + distance);
 				editorCam->position.x = (objectPoition.x + distance);
 				LookAt({ (((Max.x - Min.x) / 2) + objectPoition.x),(objectPoition.y + ((objectScale.y * (Max.y - Min.y)) / 2)),(((Max.z - Min.z) / 2) + objectPoition.z) });
-				editorCam->frustum.SetPos(vec(editorCam->position.x, editorCam->position.y, editorCam->position.z));
+				editorCam->frustum.pos = float3(editorCam->position.x, editorCam->position.y, editorCam->position.z);
 			}
 		}
 	}

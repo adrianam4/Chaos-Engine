@@ -3,7 +3,7 @@
 #include "ModuleRenderer3D.h"
 #include"CameraComponent.h"
 #include "GL/glew.h"
-#include "MathGeoLib/src/MathGeoLib.h"
+#include "MathGeoLib.h"
 #include "SDL\include\SDL_opengl.h"
 #include <gl/GL.h>
 #include <gl/GLU.h>
@@ -282,20 +282,18 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-// PostUpdate present buffer to screen
-update_status ModuleRenderer3D::PostUpdate(float dt)
+update_status ModuleRenderer3D::Update(float dt)
 {
-	
 	for (int a = 0; a < 2; a++) {
 
-		if (a == 0) 
+		if (a == 0)
 		{
 			glPushMatrix();
-			
+
 			App->viewportBuffer->Bind(App->camera->editorCam);
 
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			
+			//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 			//glLoadIdentity();
 
 			/*glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -314,13 +312,13 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			App->editor->grid->DrawGrid();
 
 			DrawMeshes(App->camera->editorCam);
-			
+
 			App->viewportBuffer->UnBind();
-			
-			
+
+
 			glPopMatrix();
 		}
-		else if (App->camera->GameCam != nullptr) 
+		else if (App->camera->GameCam != nullptr)
 		{
 			glPushMatrix();
 			App->viewportBuffer->Bind(App->camera->GameCam);
@@ -331,8 +329,8 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			glLoadMatrixf(App->camera->GameCam->frustum.ProjectionMatrix().Transposed().ptr());
 			glMatrixMode(GL_MODELVIEW);
 			glLoadMatrixf(App->camera->GameCam->frustumMatrix.Transposed().ptr());
-			
-			
+
+
 			DrawMeshes(App->camera->GameCam);
 
 			App->viewportBuffer->UnBind();
@@ -340,7 +338,12 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 		}
 	}
 
-	
+	return UPDATE_CONTINUE;
+}
+
+// PostUpdate present buffer to screen
+update_status ModuleRenderer3D::PostUpdate(float dt)
+{
 	ImGui::Render();
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	SDL_GL_SwapWindow(App->window->window);

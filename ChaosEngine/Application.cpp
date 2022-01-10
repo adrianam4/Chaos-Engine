@@ -22,15 +22,14 @@ Application::Application()
 	AddModule(camera);
 	AddModule(input);
 	AddModule(scene);
-	AddModule(userInterface);
 	AddModule(editor);
 	AddModule(resources);
 	AddModule(viewportBuffer);
 	AddModule(fileSystem);
 
 	// Renderer last!
+	AddModule(userInterface);
 	AddModule(renderer3D);
-	
 }
 
 Application::~Application()

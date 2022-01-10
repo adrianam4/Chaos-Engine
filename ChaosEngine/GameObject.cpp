@@ -13,7 +13,7 @@
 #include "Resource.h"
 #include "ResourceMaterial.h"
 #include"Transform2DComponent.h"
-#include "MathGeoLib/src/MathGeoLib.h"
+#include "MathGeoLib.h"
 
 Component* GameObject::CreateComponent2(ComponentType type, float3 pos, double hFov, double nPlane, double fPlane, bool isObj)
 {

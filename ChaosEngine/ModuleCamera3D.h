@@ -2,8 +2,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
-
-#include "MathGeoLib/src/MathGeoLib.h"
+#include "MathGeoLib.h"
 
 class ComponentCamera;
 
