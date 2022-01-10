@@ -10,6 +10,7 @@ InputBoxComponent::InputBoxComponent(int id, char* text)
 	text = "Ejemplo";
 	drawRect = false;
 	state = State::NORMAL;
+	aux.setText("Default", 0, 0, 0.5, { 255,255,255 });
 }
 
 InputBoxComponent::~InputBoxComponent()
@@ -84,8 +85,11 @@ void InputBoxComponent::OnEditor(int i)
 		normalEditable = !normalEditable;
 
 	ImGui::Text("Text Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Text Color", ImVec4(textColor.r, textColor.g, textColor.b, textColor.a)))
+	if (ImGui::ColorButton("Text Color", ImVec4(textColor.r, textColor.g, textColor.b, textColor.a))) {
+		
 		textColorEditable = !textColorEditable;
+	}
+	aux.setOnlyColor({ textColor.r, textColor.g, textColor.b });
 
 	if (normalEditable)
 	{
@@ -98,4 +102,5 @@ void InputBoxComponent::OnEditor(int i)
 
 	ImGui::InputText("Text", text, IM_ARRAYSIZE(text));
 	ImGui::DragFloat("Font Size", &fontScale,0.1,0,10);
+	aux.setOnlyText(text);
 }

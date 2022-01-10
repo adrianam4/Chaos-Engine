@@ -187,12 +187,12 @@ void ModuleUI::RenderText(std::string text, float x, float y, float scale, float
 	// activate corresponding render state	
 	shader->Use();
 	Frustum frustum;
-	frustum.pos = App->camera->editorCam->frustum.pos;
-	frustum.front = App->camera->editorCam->frustum.front; //COGED EL FRONT DE LA CAMARA DE JUEGO
-	frustum.up = App->camera->editorCam->frustum.up; //COGED EL UP DE LA CAMARA DE JUEGO
+	frustum.pos = App->camera->GameCam->frustum.pos;
+	frustum.front = App->camera->GameCam->frustum.front; //COGED EL FRONT DE LA CAMARA DE JUEGO
+	frustum.up = App->camera->GameCam->frustum.up; //COGED EL UP DE LA CAMARA DE JUEGO
 	frustum.type = OrthographicFrustum;
-	frustum.orthographicHeight = 500;//PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
-	frustum.orthographicWidth = 500;//PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
+	frustum.orthographicHeight = App->camera->GameCam->size.y;//PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
+	frustum.orthographicWidth = App->camera->GameCam->size.x;//PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
 	frustum.nearPlaneDistance = 0.1;
 	frustum.farPlaneDistance = 1000000.f;
 
@@ -322,8 +322,17 @@ update_status ModuleUI::Update(float dt)
 			go->components[checkbox]->Update();
 		if (image != -1)
 			go->components[image]->Update();
-		if (inputbox != -1)
+		if (inputbox != -1) 
+		{
 			go->components[inputbox]->Update();
+			InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
+			textExample = auxiliar->text;
+			color.x = auxiliar->textColor.r;
+			color.y = auxiliar->textColor.g;
+			color.z = auxiliar->textColor.b;
+
+		}
+			
 		if (slider != -1)
 			go->components[slider]->Update();
 	}
@@ -340,8 +349,35 @@ update_status ModuleUI::PostUpdate(float dt)
 
 	glPushMatrix();
 
-	App->viewportBuffer->Bind(App->camera->editorCam);
-	RenderText(textExample, 0, 0, scale, color);
+	App->viewportBuffer->Bind(App->camera->GameCam);
+
+	for (int i = 0; i < App->scene->gameObjects.size(); i++)
+	{
+		GameObject* go = App->scene->gameObjects[i];
+
+		int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
+		int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
+		int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
+		int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
+		int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
+
+		if (button != -1)
+			go->components[button]->Update();
+		if (checkbox != -1)
+			go->components[checkbox]->Update();
+		if (image != -1)
+			go->components[image]->Update();
+		if (inputbox != -1)
+		{
+
+			InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
+			
+			RenderText(auxiliar->aux.textt, auxiliar->aux.X, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
+		}
+
+		if (slider != -1)
+			go->components[slider]->Update();
+	}
 
 	glEnable(GL_DEPTH_TEST);
 	glPopMatrix();
