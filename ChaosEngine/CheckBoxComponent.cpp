@@ -31,7 +31,7 @@ void CheckboxComponent::Update()
 
 			if (state != State::FOCUSED && state != State::PRESSED)
 			{
-				
+				/*app->audio->PlayFx(focusedFX);*/
 			}
 
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
@@ -46,6 +46,13 @@ void CheckboxComponent::Update()
 			}
 		}
 		else state = State::NORMAL;
+
+		if (App->userInterface->UIGameObjectSelected == owner)
+		{
+			state = State::SELECTED;
+			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+				OnClick();
+		}
 	}
 }
 
@@ -75,6 +82,7 @@ void CheckboxComponent::Draw()
 		glColor4f(pressedColor.r, pressedColor.g, pressedColor.b, pressedColor.a);
 		break;
 	case State::SELECTED:
+		glColor4f(selectedColor.r, selectedColor.g, selectedColor.b, selectedColor.a);
 		break;
 	default:
 		break;
@@ -95,8 +103,9 @@ void CheckboxComponent::OnEditor(int i)
 	// Manage if colors are being edited or not
 	static bool normalEditable = false;
 	static bool pressedEditable = false;
-	static bool selectedEditable = false;
+	static bool focusedEditable = false;
 	static bool disabledEditable = false;
+	static bool selectedEditable = false;
 
 	ImGui::Checkbox("Interactable", &active);
 
@@ -108,13 +117,17 @@ void CheckboxComponent::OnEditor(int i)
 	if (ImGui::ColorButton("Pressed Color", ImVec4(pressedColor.r, pressedColor.g, pressedColor.b, pressedColor.a)))
 		pressedEditable = !pressedEditable;
 
-	ImGui::Text("Selected Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Selected Color", ImVec4(focusedColor.r, focusedColor.g, focusedColor.b, focusedColor.a)))
-		selectedEditable = !selectedEditable;
+	ImGui::Text("Focused Color"); ImGui::SameLine();
+	if (ImGui::ColorButton("Focused Color", ImVec4(focusedColor.r, focusedColor.g, focusedColor.b, focusedColor.a)))
+		focusedEditable = !focusedEditable;
 
 	ImGui::Text("Disabled Color"); ImGui::SameLine();
 	if (ImGui::ColorButton("Disabled Color", ImVec4(disabledColor.r, disabledColor.g, disabledColor.b, disabledColor.a)))
 		disabledEditable = !disabledEditable;
+
+	ImGui::Text("Selected Color"); ImGui::SameLine();
+	if (ImGui::ColorButton("Selected Color", ImVec4(selectedColor.r, selectedColor.g, selectedColor.b, selectedColor.a)))
+		selectedEditable = !selectedEditable;
 
 	if (normalEditable)
 	{
@@ -124,13 +137,17 @@ void CheckboxComponent::OnEditor(int i)
 	{
 		ImGui::ColorPicker3("Pressed Color", &pressedColor);
 	}
-	if (selectedEditable)
+	if (focusedEditable)
 	{
-		ImGui::ColorPicker3("Selected Color", &focusedColor);
+		ImGui::ColorPicker3("Focused Color", &focusedColor);
 	}
 	if (disabledEditable)
 	{
 		ImGui::ColorPicker3("Disabled Color", &disabledColor);
+	}
+	if (selectedEditable)
+	{
+		ImGui::ColorPicker3("Selected Color", &selectedColor);
 	}
 
 	ImGui::SliderFloat("Color Multiplier", &multiplier, 1, 5);

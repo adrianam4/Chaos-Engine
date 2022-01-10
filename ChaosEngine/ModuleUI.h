@@ -61,4 +61,7 @@ public:
     std::string textExample = "Default";
     float3 color = { 255,255,255 };
     float scale = 1;
+    std::vector<GameObject*> UIGameObjects;
+    GameObject* UIGameObjectSelected;
+    uint nextUIGameObject = 1;
 };

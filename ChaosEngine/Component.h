@@ -43,6 +43,7 @@ public:
 	virtual ~Component();
 	ComponentType type;
 	bool active;
+	State state;
 	//ESTO QUE HACE AQUI ?? 
 	bool drawNormals = false;
 	bool drawWireframe = false;

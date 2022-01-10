@@ -1393,6 +1393,8 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
 
+					App->userInterface->UIGameObjects.push_back(objectSelected);
+
 					App->editor->AddLog("Button Created\n");
 				}
 				if (ImGui::MenuItem("Create Image"))
@@ -1411,6 +1413,8 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[2]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Crosshair.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
+
+					//App->userInterface->UIGameObjects.push_back(objectSelected);
 
 					App->editor->AddLog("Image Created\n");
 				}
@@ -1431,6 +1435,8 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxFalse.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
 
+					App->userInterface->UIGameObjects.push_back(objectSelected);
+
 					App->editor->AddLog("Check Box Created\n");
 				}
 				if (ImGui::MenuItem("Create Slider"))
@@ -1449,6 +1455,9 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[2]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/bar.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
+
+					App->userInterface->UIGameObjects.push_back(objectSelected);
+
 					App->editor->AddLog("Slider Created\n");
 				}
 				if (ImGui::MenuItem("Create Input Box"))
@@ -1467,6 +1476,8 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[2]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
+
+					App->userInterface->UIGameObjects.push_back(objectSelected);
 
 					App->editor->AddLog("Input Box Created\n");
 				}

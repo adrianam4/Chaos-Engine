@@ -24,6 +24,43 @@ SliderComponent::~SliderComponent()
 
 void SliderComponent::Update()
 {
+	if (!active)
+		state = State::DISABLED;
+	else
+		state = State::NORMAL;
+
+	if (state != State::DISABLED)
+	{
+		if (App->userInterface->focusedGameObject == owner)
+		{
+			state = State::FOCUSED;
+
+			if (state != State::FOCUSED && state != State::PRESSED)
+			{
+				/*app->audio->PlayFx(focusedFX);*/
+			}
+
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+			{
+				state = State::PRESSED;
+			}
+
+			// If mouse button pressed -> Generate event!
+			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+			{
+				OnClick();
+			}
+		}
+		else state = State::NORMAL;
+
+		if (App->userInterface->UIGameObjectSelected == owner)
+		{
+			state = State::SELECTED;
+			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+				OnClick();
+		}
+	}
+
 	barProgres += 0.001;
 	if (!completed) {
 
@@ -54,98 +91,94 @@ void SliderComponent::Update()
 
 void SliderComponent::Draw()
 {
-	SDL_Rect rect = { 3486,3838,359,57 };
-	SDL_Rect rect2 = { 3450,3955, 3.41 * value,46 };
-	SDL_Rect rect3;
+	MyPlane* planeToDraw = nullptr;
+	int auxId = owner->id;
+
+	for (int i = 0; i < App->editor->planes.size(); i++)
+		if (App->editor->planes[i]->id == auxId) planeToDraw = App->editor->planes[i];
+
+	glAlphaFunc(GL_GREATER, 0.5);
+	glEnable(GL_ALPHA_TEST);
 
 	switch (state)
 	{
 	case State::DISABLED:
-		/*app->render->DrawTexture(textureSliders, bounds.x, bounds.y, &rect);
-		app->render->DrawTexture(textureSliders, bounds.x + 8, bounds.y + 6, &rect2);
-		app->render->DrawTexture(textureButtons, bounds.x - 95, bounds.y, &rect3);
-		if (drawRect == true) app->render->DrawRectangle(bounds, 0, 255, 0, 255);
-		*/
+		glColor4f(disabledColor.r, disabledColor.g, disabledColor.b, disabledColor.a);
 		break;
 	case State::NORMAL:
-		/*app->render->DrawTexture(textureSliders, bounds.x, bounds.y, &rect);
-		app->render->DrawTexture(textureSliders, bounds.x + 8, bounds.y + 6, &rect2);
-		app->render->DrawTexture(textureButtons, bounds.x - 95, bounds.y, &rect3);
-		if (drawRect == true) app->render->DrawRectangle(bounds, 0, 255, 0, 255);
-		*/
+		glColor4f(normalColor.r, normalColor.g, normalColor.b, normalColor.a);
 		break;
 	case State::FOCUSED:
-		/*app->render->DrawTexture(textureSliders, bounds.x, bounds.y, &rect);
-		app->render->DrawTexture(textureSliders, bounds.x + 8, bounds.y + 6, &rect2);
-		app->render->DrawTexture(textureButtons, bounds.x - 95, bounds.y, &rect3);
-		if (drawRect == true) app->render->DrawRectangle(bounds, 255, 255, 0, 255);
-		*/
+		glColor4f(focusedColor.r, focusedColor.g, focusedColor.b, focusedColor.a);
 		break;
 	case State::PRESSED:
-		/*app->render->DrawTexture(textureSliders, bounds.x, bounds.y, &rect);
-		app->render->DrawTexture(textureSliders, bounds.x + 8, bounds.y + 6, &rect2);
-		app->render->DrawTexture(textureButtons, bounds.x - 95, bounds.y, &rect3);
-		if (drawRect == true) app->render->DrawRectangle(bounds, 255, 0, 0, 255);
-		*/
+		glColor4f(pressedColor.r, pressedColor.g, pressedColor.b, pressedColor.a);
+		break;
+	case State::SELECTED:
+		glColor4f(selectedColor.r, selectedColor.g, selectedColor.b, selectedColor.a);
 		break;
 	default:
 		break;
 	}
+
+	planeToDraw->DrawPlane();
+
+	glDisable(GL_ALPHA_TEST);
+	glColor3f(255, 255, 255);
 }
 
 void SliderComponent::OnEditor(int i)
 {
-	// General variables
-	static float multiplier = 1;
-	static float fadeDuration = 0.1f;
 	// Colors
-	static float normalColor[3] = { 255,255,255 };
-	static float pressedColor[3] = { 255,255,255 };
-	static float selectedColor[3] = { 255,255,255 };
-	static float disabledColor[3] = { 255,255,255 };
-	// Manage if colors are being edited or not
 	static bool normalEditable = false;
 	static bool pressedEditable = false;
-	static bool selectedEditable = false;
+	static bool focusedEditable = false;
 	static bool disabledEditable = false;
+	static bool selectedEditable = false;
 
 	ImGui::Checkbox("Interactable", &active);
 
 	ImGui::Text("Normal Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Normal Color", ImVec4(normalColor[0], normalColor[1], normalColor[2], 255)))
+	if (ImGui::ColorButton("Normal Color", ImVec4(normalColor.r, normalColor.g, normalColor.b, normalColor.a)))
 		normalEditable = !normalEditable;
 
 	ImGui::Text("Pressed Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Pressed Color", ImVec4(pressedColor[0], pressedColor[1], pressedColor[2], 255)))
+	if (ImGui::ColorButton("Pressed Color", ImVec4(pressedColor.r, pressedColor.g, pressedColor.b, pressedColor.a)))
 		pressedEditable = !pressedEditable;
 
-	ImGui::Text("Selected Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Selected Color", ImVec4(selectedColor[0], selectedColor[1], selectedColor[2], 255)))
-		selectedEditable = !selectedEditable;
+	ImGui::Text("Focused Color"); ImGui::SameLine();
+	if (ImGui::ColorButton("Focused Color", ImVec4(focusedColor.r, focusedColor.g, focusedColor.b, focusedColor.a)))
+		focusedEditable = !focusedEditable;
 
 	ImGui::Text("Disabled Color"); ImGui::SameLine();
-	if (ImGui::ColorButton("Disabled Color", ImVec4(disabledColor[0], disabledColor[1], disabledColor[2], 255)))
+	if (ImGui::ColorButton("Disabled Color", ImVec4(disabledColor.r, disabledColor.g, disabledColor.b, disabledColor.a)))
 		disabledEditable = !disabledEditable;
+
+	ImGui::Text("Selected Color"); ImGui::SameLine();
+	if (ImGui::ColorButton("Selected Color", ImVec4(selectedColor.r, selectedColor.g, selectedColor.b, selectedColor.a)))
+		selectedEditable = !selectedEditable;
 
 	if (normalEditable)
 	{
-		ImGui::ColorPicker3("Normal Color", normalColor);
+		ImGui::ColorPicker3("Normal Color", &normalColor);
 	}
 	if (pressedEditable)
 	{
-		ImGui::ColorPicker3("Pressed Color", pressedColor);
+		ImGui::ColorPicker3("Pressed Color", &pressedColor);
 	}
-	if (selectedEditable)
+	if (focusedEditable)
 	{
-		ImGui::ColorPicker3("Selected Color", selectedColor);
+		ImGui::ColorPicker3("Focused Color", &focusedColor);
 	}
 	if (disabledEditable)
 	{
-		ImGui::ColorPicker3("Disabled Color", disabledColor);
+		ImGui::ColorPicker3("Disabled Color", &disabledColor);
+	}
+	if (selectedEditable)
+	{
+		ImGui::ColorPicker3("Selected Color", &selectedColor);
 	}
 
-	ImGui::SliderFloat("Color Multiplier", &multiplier, 1, 5);
-	ImGui::InputFloat("Fade Duration", &fadeDuration);
 	ImGui::InputFloat("Min Value", &minValue);
 	ImGui::InputFloat("Max Value", &maxValue);
 	ImGui::SliderFloat("Value", &value, minValue, maxValue);

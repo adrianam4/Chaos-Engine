@@ -16,6 +16,5 @@ public:
 
 private:
 	Color color;
-	State state;
 	std::string text;
 };

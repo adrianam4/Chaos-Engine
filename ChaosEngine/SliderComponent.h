@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "Color.h"
 
 class SDL_Rect;
 class SDL_Color;
@@ -24,9 +25,12 @@ public:
 	bool completed;
 	float barProgres;
 private:
-	SDL_Color color;
-	State state;
+	Color disabledColor = White;
+	Color pressedColor = Red;
+	Color focusedColor = Blue;
+	Color normalColor = Green;
+	Color selectedColor = Black;
+
 	std::string text;
-	SDL_Rect slider;
 	bool drawRect;
 };

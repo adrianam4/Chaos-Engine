@@ -23,7 +23,7 @@ public:
 	Color pressedColor = Red;
 	Color focusedColor = Blue;
 	Color normalColor = Green;
+	Color selectedColor = Black;
 
-	State state;
 	std::string text;
 };

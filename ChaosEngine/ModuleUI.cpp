@@ -94,10 +94,13 @@ void Shader::CheckCompileErrors(GLuint shader, std::string type)
 ModuleUI::ModuleUI(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	focusedGameObject = nullptr;
+	UIGameObjectSelected = nullptr;
 }
 
 ModuleUI::~ModuleUI()
 {
+	focusedGameObject = nullptr;
+	UIGameObjectSelected = nullptr;
 }
 
 bool ModuleUI::Start()
@@ -291,6 +294,7 @@ update_status ModuleUI::PreUpdate(float dt)
 				}
 			}
 			focusedGameObject = hitObjs[nearObj];
+			UIGameObjectSelected = nullptr;
 			hitObjs.clear();
 		}
 		else
@@ -306,9 +310,28 @@ update_status ModuleUI::Update(float dt)
 
 	/*if (App->gameMode)
 	{*/
-	for (int i = 0; i < App->scene->gameObjects.size(); i++)
+	if (!UIGameObjects.empty() && App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 	{
-		GameObject* go = App->scene->gameObjects[i];
+		if (!UIGameObjectSelected)
+			UIGameObjectSelected = UIGameObjects[0];
+		else
+		{
+			if (nextUIGameObject != UIGameObjects.size())
+			{
+				UIGameObjectSelected = UIGameObjects[nextUIGameObject];
+				nextUIGameObject++;
+			}
+			else
+			{
+				UIGameObjectSelected = UIGameObjects[0];
+				nextUIGameObject = 1;
+			}
+		}
+	}
+
+	for (int i = 0; i < UIGameObjects.size(); i++)
+	{
+		GameObject* go = UIGameObjects[i];
 
 		int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
 		int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
@@ -330,7 +353,6 @@ update_status ModuleUI::Update(float dt)
 			color.x = auxiliar->textColor.r;
 			color.y = auxiliar->textColor.g;
 			color.z = auxiliar->textColor.b;
-
 		}
 			
 		if (slider != -1)

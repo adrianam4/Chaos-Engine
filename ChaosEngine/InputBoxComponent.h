@@ -41,13 +41,21 @@ public:
 	void Update() override;
 	void Draw() override;
 	void OnEditor(int i) override;
+	void OnClick() override;
 	float2 FromWorldToScreen();
 
 public:
 	Text aux;
-	Color color = White;
+
+	Color disabledColor = White;
+	Color pressedColor = Red;
+	Color focusedColor = Blue;
+	Color normalColor = Green;
+	Color selectedColor = Black;
+
+	Color color = normalColor;
 	Color textColor = Blue;
-	State state;
+
 	char text[32] = "Default";
 	float fontScale;
 	bool drawRect;
