@@ -64,37 +64,19 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Chaos_Engine\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="ButtonComponent.cpp">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClCompile>
     <ClCompile Include="CameraComponent.cpp">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="CheckBoxComponent.cpp">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ImageComponent.cpp">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClCompile>
     <ClCompile Include="TransformComponent.cpp">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Transform2DComponent.cpp">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="SliderComponent.cpp">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="MeshComponent.cpp">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="MaterialComponent.cpp">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="InputBoxComponent.cpp">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
@@ -241,6 +223,24 @@
     <ClCompile Include="MathGeoLib\include\Algorithm\Random\LCG.cpp">
       <Filter>Chaos_Engine\External\MathGeoLib</Filter>
     </ClCompile>
+    <ClCompile Include="ButtonComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="CheckBoxComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="InputBoxComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="SliderComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform2DComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileSystem.h">
@@ -306,37 +306,19 @@
     <ClInclude Include="GameObject.h">
       <Filter>Chaos_Engine\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="ButtonComponent.h">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClInclude>
     <ClInclude Include="CameraComponent.h">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="CheckBoxComponent.h">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="Component.h">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ImageComponent.h">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClInclude>
     <ClInclude Include="TransformComponent.h">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform2DComponent.h">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="SliderComponent.h">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="MeshComponent.h">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="MaterialComponent.h">
-      <Filter>Chaos_Engine\GameObjects\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="InputBoxComponent.h">
       <Filter>Chaos_Engine\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui_impl_opengl3.h">
@@ -573,6 +555,24 @@
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h">
       <Filter>Chaos_Engine\External\MathGeoLib</Filter>
     </ClInclude>
+    <ClInclude Include="ButtonComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="CheckBoxComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="InputBoxComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SliderComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform2DComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Chaos_Engine">
@@ -610,6 +610,9 @@
     </Filter>
     <Filter Include="Chaos_Engine\External\MathGeoLib">
       <UniqueIdentifier>{4d63b008-ae4f-45de-9159-2429b8d13e8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Chaos_Engine\GameObjects\Components\UI">
+      <UniqueIdentifier>{1253cebe-acf6-44a9-b5f6-2521ed43a9a1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
