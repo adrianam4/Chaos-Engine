@@ -1,6 +1,8 @@
 #include "InputBoxComponent.h"
 #include "SDL.h"
 #include "Application.h"
+#include "ModuleCamera3D.h"
+#include "CameraComponent.h"
 
 InputBoxComponent::InputBoxComponent(int id, char* text)
 {
@@ -20,23 +22,10 @@ InputBoxComponent::~InputBoxComponent()
 
 void InputBoxComponent::Update()
 {
-	if (App->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN)
-	{
-		if (drawRect == false)
-		{
-			drawRect = true;
-		}
-		else
-		{
-			drawRect = false;
-		}
-	}
+	aux.SetOnlyPosition(float2(FromWorldToScreen().x, FromWorldToScreen().y));
 
 	if (state != State::DISABLED)
 	{
-		int mouseX = App->input->GetMouseX();
-		int mouseY = App->input->GetMouseY();
-
 		// Check collision between mouse and button bounds
 		if (App->userInterface->focusedGameObject == owner)
 		{
@@ -103,4 +92,12 @@ void InputBoxComponent::OnEditor(int i)
 	ImGui::InputText("Text", text, IM_ARRAYSIZE(text));
 	ImGui::DragFloat("Font Size", &fontScale,0.1,0,10);
 	aux.setOnlyText(text);
+}
+
+float2 InputBoxComponent::FromWorldToScreen()
+{
+	ComponentTransform2D* transform = owner->getTransform2D();
+	float4 worldPosition = { transform->position.x, transform->position.y, transform->position.z, 1 };
+	float4 screenPos = App->camera->GameCam->frustum.ProjectionMatrix() * App->camera->GameCam->frustum.ViewMatrix() * worldPosition;
+	return { 0, 0 }; // Mal
 }
