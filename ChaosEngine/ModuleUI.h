@@ -64,4 +64,5 @@ public:
     std::vector<GameObject*> UIGameObjects;
     GameObject* UIGameObjectSelected;
     uint nextUIGameObject = 1;
+    float3 hitPoint;
 };
