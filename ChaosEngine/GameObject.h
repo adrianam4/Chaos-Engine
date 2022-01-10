@@ -9,12 +9,14 @@
 #include"Importer.h"
 #include"TransformComponent.h"
 #include "Transform2DComponent.h"
-#include "ButtonComponent.h"
-#include "ImageComponent.h"
-#include "CheckBoxComponent.h"
 #include "Resource.h"
 
 class theBuffer;
+class ButtonComponent;
+class ImageComponent;
+class CheckboxComponent;
+class InputBoxComponent;
+class SliderComponent;
 
 class GameObject
 {
@@ -55,6 +57,8 @@ public:
 	ButtonComponent* GetButtonComponent(GameObject* go);
 	ImageComponent* GetImageComponent(GameObject* go);
 	CheckboxComponent* GetCheckboxComponent(GameObject* go);
+	InputBoxComponent* GetInputboxComponent(GameObject* go);
+	SliderComponent* GetSliderComponent(GameObject* go);
 	float3 trans;
 	float3 sca;
 	Quat rot;

@@ -2,16 +2,13 @@
 
 #include "SDL.h"
 #include "Component.h"
-
-class SDL_Rect;
-class SDL_Color;
-class SDL_Texture;
+#include "Color.h"
 
 class InputBoxComponent : public Component
 {
 public:
 
-	InputBoxComponent(int id, const char* text);
+	InputBoxComponent(int id, char* text);
 	virtual ~InputBoxComponent();
 
 	void Update() override;
@@ -19,8 +16,10 @@ public:
 	void OnEditor(int i) override;
 
 public:
-	SDL_Color color;
+	Color color = White;
+	Color textColor = Blue;
 	State state;
-	std::string text;
+	char text[32] = "Default";
+	float fontScale;
 	bool drawRect;
 };

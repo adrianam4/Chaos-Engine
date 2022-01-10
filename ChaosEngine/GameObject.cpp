@@ -217,6 +217,26 @@ CheckboxComponent* GameObject::GetCheckboxComponent(GameObject* go)
 		return nullptr;
 }
 
+InputBoxComponent* GameObject::GetInputboxComponent(GameObject* go)
+{
+	int comp = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
+
+	if (comp != -1)
+		return (InputBoxComponent*)go->components[comp];
+	else
+		return nullptr;
+}
+
+SliderComponent* GameObject::GetSliderComponent(GameObject* go)
+{
+	int comp = go->SearchComponent(go, ComponentType::UI_SLIDER);
+
+	if (comp != -1)
+		return (SliderComponent*)go->components[comp];
+	else
+		return nullptr;
+}
+
 int GameObject::SearchComponent(GameObject* gameObject, ComponentType type)
 {
 	for (int i = 0; i < gameObject->components.size(); i++)

@@ -2,13 +2,17 @@
 #include "Application.h"
 #include "ModuleUI.h"
 #include "CameraComponent.h"
+#include "ButtonComponent.h"
+#include "ImageComponent.h"
+#include "InputBoxComponent.h"
+#include "SliderComponent.h"
+#include "CheckBoxComponent.h"
 #include <stack>
 #include <ft2build.h>
 
 #include <GL/gl.h>
 
 #include FT_FREETYPE_H 
-
 
 Shader::Shader()
 {
@@ -299,6 +303,7 @@ update_status ModuleUI::PreUpdate(float dt)
 update_status ModuleUI::Update(float dt)
 {
 	// Update All UI Components
+
 	/*if (App->gameMode)
 	{*/
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
@@ -336,7 +341,7 @@ update_status ModuleUI::PostUpdate(float dt)
 	glPushMatrix();
 
 	App->viewportBuffer->Bind(App->camera->editorCam);
-	RenderText("Aroca", 0, 0, 1.f, float3(1.f, 0.f, 0.f));
+	RenderText(textExample, 0, 0, scale, color);
 
 	glEnable(GL_DEPTH_TEST);
 	glPopMatrix();

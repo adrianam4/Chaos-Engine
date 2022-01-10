@@ -21,6 +21,8 @@
 #include "Component.h"
 #include "ButtonComponent.h"
 #include "ImageComponent.h"
+#include "InputBoxComponent.h"
+#include "SliderComponent.h"
 #include "CheckBoxComponent.h"
 #include "FileDialog.h"
 #include"MeshComponent.h"
@@ -882,11 +884,15 @@ void ModuleEditor::DrawPrimitives()
 						ButtonComponent* currentButton = nullptr;
 						ImageComponent* currentImage = nullptr;
 						CheckboxComponent* currentCheckbox = nullptr;
+						SliderComponent* currentSlider = nullptr;
+						InputBoxComponent* currentInputbox = nullptr;
 						currentButton = App->scene->gameObjects[i]->GetButtonComponent(App->scene->gameObjects[i]);
 						currentImage = App->scene->gameObjects[i]->GetImageComponent(App->scene->gameObjects[i]);
 						currentCheckbox = App->scene->gameObjects[i]->GetCheckboxComponent(App->scene->gameObjects[i]);
+						currentSlider = App->scene->gameObjects[i]->GetSliderComponent(App->scene->gameObjects[i]);
+						currentInputbox = App->scene->gameObjects[i]->GetInputboxComponent(App->scene->gameObjects[i]);
 
-						if (currentButton == nullptr && currentImage == nullptr && currentCheckbox == nullptr)
+						if (currentButton == nullptr && currentImage == nullptr && currentCheckbox == nullptr && currentSlider == nullptr && currentInputbox == nullptr)
 						{
 							planes[k]->DrawPlane();
 						}
@@ -1453,10 +1459,14 @@ update_status ModuleEditor::Update(float dt)
 					int lastComponent = App->scene->gameObjects.size() - 1;
 					objectSelected = App->scene->gameObjects[lastComponent];
 
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX, "Empty"));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(-90, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX, "Empty"));
+					objectSelected->components[2]->owner = objectSelected;
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
+					objectSelected->components[3]->owner = objectSelected;
 
 					App->editor->AddLog("Input Box Created\n");
 				}

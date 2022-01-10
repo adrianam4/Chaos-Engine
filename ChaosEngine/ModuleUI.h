@@ -58,4 +58,7 @@ public:
 	float3 corners[8];
 	std::vector<GameObject*> hitObjs;
 	GameObject* focusedGameObject;
+    std::string textExample = "Default";
+    float3 color = { 255,255,255 };
+    float scale = 1;
 };
