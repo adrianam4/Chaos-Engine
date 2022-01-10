@@ -13,7 +13,7 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_opengl3.h"
 #include "ImGuizmo.h"
-#include"Fonts.h"
+
 #include "DevIL/include/il.h"
 #include "DevIL/include/ilu.h"
 #include "DevIL/include/ilut.h"
@@ -153,7 +153,7 @@ bool ModuleRenderer3D::Init()
 
 	// Projection matrix for
 	OnResize(SCREEN_WIDTH, SCREEN_HEIGHT);
-	Shader* sha=new Shader("text.vs", "text.fs");
+	/*Shader* sha=new Shader("text.vs", "text.fs");
 	shader= sha;
 	float4 projection = { 0.0f, static_cast<float>(App->window->width), 0.0f, static_cast<float>(App->window->height) };
 	shader->use();
@@ -174,7 +174,7 @@ bool ModuleRenderer3D::Init()
 	if (FT_New_Face(ft, font_name.c_str(), 0, &face)) {
 		        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 		        return -1;
-	}
+	}*/
 	return ret;
 }
 
@@ -301,7 +301,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 			/*glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);*/
 
-			RenderText((*shader), "This is sample text", 50.0f, 50.0f, 3.0f, float3(1, 0.8f, 0.2f));
+			//RenderText((*shader), "This is sample text", 50.0f, 50.0f, 3.0f, float3(1, 0.8f, 0.2f));
 
 			/*glMatrixMode(GL_PROJECTION);
 			glLoadIdentity();
