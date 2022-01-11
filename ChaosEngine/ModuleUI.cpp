@@ -267,8 +267,6 @@ update_status ModuleUI::PreUpdate(float dt)
 					if (go->SearchComponent(go, ComponentType::UI_BUTTON) != -1 || go->SearchComponent(go, ComponentType::UI_CHECKBOX) != -1 || go->SearchComponent(go, ComponentType::UI_IMAGE) != -1 ||
 						go->SearchComponent(go, ComponentType::UI_INPUTBOX) != -1 || go->SearchComponent(go, ComponentType::UI_SLIDER) != -1)
 					{
-						hitPoint = myRay.GetPoint(1);
-						Component* p = go->components[go->SearchComponent(go, ComponentType::UI_SLIDER)];
 						hitObjs.push_back(go);
 					}
 				}

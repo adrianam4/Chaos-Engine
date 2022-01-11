@@ -61,20 +61,7 @@ void SliderComponent::Update()
 		}
 	}
 
-	Component* co = owner->components[0];
-	co->position;
-
-	if ((App->userInterface->hitPoint.x > 0 - 5) && (App->userInterface->hitPoint.x < 0 + 5))
-	{
-		barProgres = App->userInterface->hitPoint.x / (0 + 5);
-		if (barProgres < 0) {
-			barProgres = 0;
-		}
-		else if (barProgres > 1) {
-			barProgres = 1;
-		}
-	}
-
+	barProgres += 0.001;
 	if (!completed) {
 
 

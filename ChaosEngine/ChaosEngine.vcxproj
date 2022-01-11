@@ -68,7 +68,7 @@
       <SDLCheck>false</SDLCheck>
       <ExceptionHandling>false</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(ProjectDir)Assimp\include;$(ProjectDir)Glew\include;$(ProjectDir)PhysFS\include;%(AdditionalIncludeDirectories);$(ProjectDir)MathGeoLib\include;$(ProjectDir)DevIL\include;$(ProjectDir)ImGui;$(ProjectDir)SDL\include;$(ProjectDir);$(ProjectDir)freetype-2.10.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Assimp\include;$(ProjectDir)Glew\include;$(ProjectDir)PhysFS\include;%(AdditionalIncludeDirectories);$(ProjectDir)MathGeoLib\include;$(ProjectDir)DevIL\include;$(ProjectDir)ImGui;$(ProjectDir)SDL\include;$(ProjectDir);$(ProjectDir)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);WINDOWS_IGNORE_PACKING_MISMATCH;GLEW_STATIC;USE_IMGUI_API</PreprocessorDefinitions>
     </ClCompile>
     <Link>
@@ -77,7 +77,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <SubSystem>Windows</SubSystem>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalLibraryDirectories>$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;$(ProjectDir)PhysFS\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib;$(ProjectDir)DevIL\lib;$(ProjectDir)imgui;$(ProjectDir)SDL\libx86;$(ProjectDir)freetype-2.10.0\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)Assimp\x86-Release;$(ProjectDir)Glew\libx86;$(ProjectDir)PhysFS\libx86;%(AdditionalLibraryDirectories);$(ProjectDir)MathGeoLib\lib;$(ProjectDir)DevIL\lib;$(ProjectDir)imgui;$(ProjectDir)SDL\libx86;$(ProjectDir)freetype\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>glew32s.lib;assimp-vc142-mt.lib;physfs.lib;DevIL.lib;ILU.lib;ILUT.lib;freetype.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
