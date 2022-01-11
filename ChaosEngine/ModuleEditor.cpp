@@ -899,28 +899,6 @@ void ModuleEditor::DrawPrimitives()
 					}
 				}
 			}
-			// Draw All UI Components
-			for (int i = 0; i < App->scene->gameObjects.size(); i++)
-			{
-				GameObject* go = App->scene->gameObjects[i];
-
-				int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
-				int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
-				int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
-				int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
-				int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
-
-				if (button != -1)
-					go->components[button]->Draw();
-				if (checkbox != -1)
-					go->components[checkbox]->Draw();
-				if (image != -1)
-					go->components[image]->Draw();
-				if (inputbox != -1)
-					go->components[inputbox]->Draw();
-				if (slider != -1)
-					go->components[slider]->Draw();
-			}
 		}
 	}
 }
@@ -1414,7 +1392,7 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Crosshair.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
 
-					//App->userInterface->UIGameObjects.push_back(objectSelected);
+					App->userInterface->UIGameObjects.push_back(objectSelected);
 
 					App->editor->AddLog("Image Created\n");
 				}

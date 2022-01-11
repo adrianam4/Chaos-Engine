@@ -42,7 +42,7 @@ public:
 	void Draw() override;
 	void OnEditor(int i) override;
 	void OnClick() override;
-	float2 FromWorldToScreen();
+	float2 GetParentPosition();
 
 public:
 	Text aux;

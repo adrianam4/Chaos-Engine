@@ -22,7 +22,7 @@ InputBoxComponent::~InputBoxComponent()
 
 void InputBoxComponent::Update()
 {
-	aux.SetOnlyPosition(float2(FromWorldToScreen().x, FromWorldToScreen().y));
+	aux.SetOnlyPosition(float2(GetParentPosition().x, GetParentPosition().y));
 
 	if (state != State::DISABLED)
 	{
@@ -151,10 +151,8 @@ void InputBoxComponent::OnClick()
 {
 }
 
-float2 InputBoxComponent::FromWorldToScreen()
+float2 InputBoxComponent::GetParentPosition()
 {
 	ComponentTransform2D* transform = owner->getTransform2D();
-	float4 worldPosition = { transform->position.x, transform->position.y, transform->position.z, 1 };
-	float4 screenPos = App->camera->GameCam->frustum.ProjectionMatrix() * App->camera->GameCam->frustum.ViewMatrix() * worldPosition;
-	return { 0, 0 }; // Mal
+	return { transform->position.x, transform->position.y }; // Mal
 }

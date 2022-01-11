@@ -373,9 +373,22 @@ update_status ModuleUI::PostUpdate(float dt)
 
 	App->viewportBuffer->Bind(App->camera->GameCam);
 
-	for (int i = 0; i < App->scene->gameObjects.size(); i++)
+	Frustum frustum;
+	frustum.pos = App->camera->GameCam->frustum.pos;
+	frustum.front = App->camera->GameCam->frustum.front; //COGED EL FRONT DE LA CAMARA DE JUEGO
+	frustum.up = App->camera->GameCam->frustum.up; //COGED EL UP DE LA CAMARA DE JUEGO
+	frustum.type = OrthographicFrustum;
+	frustum.orthographicHeight = App->camera->GameCam->size.y;//PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
+	frustum.orthographicWidth = App->camera->GameCam->size.x;//PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
+	frustum.nearPlaneDistance = 0.1;
+	frustum.farPlaneDistance = 1000000.f;
+
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixf(frustum.ProjectionMatrix().Transposed().ptr());
+
+	for (int i = 0; i < UIGameObjects.size(); i++)
 	{
-		GameObject* go = App->scene->gameObjects[i];
+		GameObject* go = UIGameObjects[i];
 
 		int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
 		int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
@@ -383,22 +396,16 @@ update_status ModuleUI::PostUpdate(float dt)
 		int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
 		int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
 
-		if (button != -1)
-			go->components[button]->Update();
-		if (checkbox != -1)
-			go->components[checkbox]->Update();
-		if (image != -1)
-			go->components[image]->Update();
+		if (button != -1) go->components[button]->Draw();
+		if (checkbox != -1) go->components[checkbox]->Draw();
+		if (image != -1) go->components[image]->Draw();
 		if (inputbox != -1)
 		{
-
+			go->components[inputbox]->Draw();
 			InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
-			
 			RenderText(auxiliar->aux.textt, auxiliar->aux.X, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
 		}
-
-		if (slider != -1)
-			go->components[slider]->Update();
+		if (slider != -1) go->components[slider]->Draw();
 	}
 
 	glEnable(GL_DEPTH_TEST);
