@@ -103,7 +103,7 @@ void ModuleViewportFrameBuffer::Bind(ComponentCamera* camera)
 {
 	float aspectRatio = camera->size.x / camera->size.y;
 	glBindFramebuffer(GL_FRAMEBUFFER, camera->frameBuffer);
-	glViewport(0, 0, camera->size.x, camera->size.y / 1.77 * aspectRatio);
+	glViewport(0, 0, camera->size.x, camera->size.y/* / 1.77 * aspectRatio*/);
 }
 
 void ModuleViewportFrameBuffer::UnBind()

@@ -24,24 +24,41 @@ void ButtonComponent::Update()
 
 	if (state != State::DISABLED)
 	{
-		if (App->userInterface->focusedGameObject == owner)
+		float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
+		float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };
+		float4 viewport = App->editor->viewport;
+		float2 fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y };
+
+		ComponentTransform2D* transform2D = owner->getTransform2D();
+
+		if (mousePos.x > viewport.x && mousePos.x < viewport.x + viewport.z && mousePos.y > viewport.y && mousePos.y < viewport.y + viewport.w)
 		{
-			state = State::FOCUSED;
 
-			if (state != State::FOCUSED && state != State::PRESSED)
-			{
-				/*app->audio->PlayFx(focusedFX);*/
-			}
+			float posXMin = ((viewport.z / 2) + (transform2D->position.x)) - (transform2D->buttonWidth / 2);
+			float posXMax = ((viewport.z / 2) + (transform2D->position.x)) + (transform2D->buttonWidth / 2);
 
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
-			{
-				state = State::PRESSED;
-			}
+			float posYMin = ((viewport.w / 2) + (transform2D->position.y)) - (transform2D->buttonHeight / 2);
+			float posYMax = ((viewport.w / 2) + (transform2D->position.y)) + (transform2D->buttonHeight / 2);
 
-			// If mouse button pressed -> Generate event!
-			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-			{
-				OnClick();
+			if (fMousePos.x > posXMin && fMousePos.x < posXMax && fMousePos.y > posYMin && fMousePos.y < posYMax) {
+
+				state = State::FOCUSED;
+
+				if (state != State::FOCUSED && state != State::PRESSED)
+				{
+					/*app->audio->PlayFx(focusedFX);*/
+				}
+
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
+				{
+					state = State::PRESSED;
+				}
+
+				// If mouse button pressed -> Generate event!
+				if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+				{
+					OnClick();
+				}
 			}
 		}
 		else state = State::NORMAL;
