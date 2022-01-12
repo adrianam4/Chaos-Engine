@@ -153,13 +153,13 @@ bool ModuleEditor::Start()
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
 	FBXimporter importer;
-	//importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
+	importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
 	App->editor->objectSelected = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20, true));
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(-1, 2.5, -14), &float3(1, 1, 1), &float3(0, 0, 0)));
 	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 	objectSelected = App->scene->gameObjects[lastComponent];
@@ -1368,8 +1368,8 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1,1), &float3(-90, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
-					objectSelected->components[3]->owner = objectSelected;
+					/*objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
+					objectSelected->components[3]->owner = objectSelected;*/
 
 					App->userInterface->UIGameObjects.push_back(objectSelected);
 
@@ -1385,7 +1385,7 @@ update_status ModuleEditor::Update(float dt)
 
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image"));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
 					objectSelected->components[1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(-90, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
@@ -1448,12 +1448,12 @@ update_status ModuleEditor::Update(float dt)
 
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(-90, 0, 0)));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX, "Empty"));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX, "Introduce your name..."));
 					objectSelected->components[2]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
-					objectSelected->components[3]->owner = objectSelected;
+					/*objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
+					objectSelected->components[3]->owner = objectSelected;*/
 
 					App->userInterface->UIGameObjects.push_back(objectSelected);
 

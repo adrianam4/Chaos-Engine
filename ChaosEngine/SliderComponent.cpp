@@ -2,7 +2,7 @@
 #include "SDL.h"
 #include "SliderComponent.h"
 
-SliderComponent::SliderComponent(int id, const char* text)
+SliderComponent::SliderComponent(int id, std::string text)
 {
 	name = "Slider Component";
 	type = ComponentType::UI_SLIDER;

@@ -2,7 +2,7 @@
 #include "SDL.h"
 #include "CheckboxComponent.h"
 
-CheckboxComponent::CheckboxComponent(int id, const char* text)
+CheckboxComponent::CheckboxComponent(int id, std::string text)
 {
 	name = "CheckBox Component";
 	type = ComponentType::UI_CHECKBOX;

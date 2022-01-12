@@ -374,14 +374,14 @@ update_status ModuleUI::PostUpdate(float dt)
 	App->viewportBuffer->Bind(App->camera->GameCam);
 
 	Frustum frustum;
-	frustum.pos = App->camera->GameCam->frustum.pos;
-	frustum.front = App->camera->GameCam->frustum.front; //COGED EL FRONT DE LA CAMARA DE JUEGO
-	frustum.up = App->camera->GameCam->frustum.up; //COGED EL UP DE LA CAMARA DE JUEGO
+	frustum.pos = float3::zero;
+	frustum.front = float3::unitZ; //COGED EL FRONT DE LA CAMARA DE JUEGO
+	frustum.up = float3::unitY; //COGED EL UP DE LA CAMARA DE JUEGO
 	frustum.type = OrthographicFrustum;
-	frustum.orthographicHeight = App->camera->GameCam->size.y;//PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
-	frustum.orthographicWidth = App->camera->GameCam->size.x;//PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
+	frustum.orthographicHeight = App->camera->GameCam->size.y; //PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
+	frustum.orthographicWidth = App->camera->GameCam->size.x; //PONER EL TAMAÑO DEL VIEWPORT DONDE QUERAIS PINTAR
 	frustum.nearPlaneDistance = 0.1;
-	frustum.farPlaneDistance = 1000000.f;
+	frustum.farPlaneDistance = 1000.f;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(frustum.ProjectionMatrix().Transposed().ptr());
@@ -403,7 +403,7 @@ update_status ModuleUI::PostUpdate(float dt)
 		{
 			go->components[inputbox]->Draw();
 			InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
-			RenderText(auxiliar->aux.textt, auxiliar->aux.X, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
+			//RenderText(auxiliar->aux.textt, auxiliar->aux.X, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
 		}
 		if (slider != -1) go->components[slider]->Draw();
 	}

@@ -6,7 +6,7 @@ ImageComponent::ImageComponent(int id, std::string text)
 {
 	name = "Image Component";
 	type = ComponentType::UI_IMAGE;
-	this->text = text;
+	this->text = "Image Component";
 	state = State::NORMAL;
 	color = White;
 }

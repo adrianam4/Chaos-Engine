@@ -4,15 +4,13 @@
 #include "ModuleCamera3D.h"
 #include "CameraComponent.h"
 
-InputBoxComponent::InputBoxComponent(int id, char* text)
+InputBoxComponent::InputBoxComponent(int id, std::string _text)
 {
 	name = "InputBox Component";
 	type = ComponentType::UI_INPUTBOX;
-	//this->text = text;
-	text = "Ejemplo";
 	drawRect = false;
 	state = State::NORMAL;
-	aux.setText("Default", 0, 0, 0.5, { 255,255,255 });
+	aux.setText(_text, 0, 0, 0.5, { 255,255,255 });
 }
 
 InputBoxComponent::~InputBoxComponent()

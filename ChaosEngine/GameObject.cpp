@@ -44,13 +44,13 @@ Component* GameObject::CreateUIComponent(ComponentType type, std::string text)
 		component = new ImageComponent(2, text);
 		break;
 	case ComponentType::UI_CHECKBOX:
-		component = new CheckboxComponent(3, "a");
+		component = new CheckboxComponent(3, text);
 		break;
 	case ComponentType::UI_SLIDER:
-		component = new SliderComponent(4, "b");
+		component = new SliderComponent(4, text);
 		break;
 	case ComponentType::UI_INPUTBOX:
-		component = new InputBoxComponent(5, "c");
+		component = new InputBoxComponent(5, text);
 		break;
 	default:
 		break;

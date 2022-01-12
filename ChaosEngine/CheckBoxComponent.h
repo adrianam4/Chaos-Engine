@@ -7,7 +7,7 @@ class CheckboxComponent : public Component
 {
 public:
 
-	CheckboxComponent(int id, const char* text);
+	CheckboxComponent(int id, std::string text);
 	virtual ~CheckboxComponent();
 
 	void Update() override;
