@@ -27,9 +27,9 @@ int Primitives::TransformMatrix()
 		{
 			if (App->scene->gameObjects[i]->matrix != nullptr) 
 			{
-				glPushMatrix();
+				/*glPushMatrix();
 				glMultMatrixf(App->scene->gameObjects[i]->matrix);
-				found = true;
+				found = true;*/
 				return i;
 			}
 
@@ -822,17 +822,21 @@ MyPlane::MyPlane(float3 pos, float3 sca) : Primitives()
 
 	type = PrimitivesTypes::PRIMITIVE_MYPLANE3D;
 
-	vertices.push_back({ (1 + pos.x) * sca.x ,pos.y,(1 + pos.z) * sca.z });
+	/*vertices.push_back({ (1 + pos.x) * sca.x ,pos.y,(1 + pos.z) * sca.z });
 	vertices.push_back({ (1 + pos.x) * sca.x ,pos.y, (pos.z - 1) * sca.z });
 	vertices.push_back({ (pos.x - 1) * sca.x ,pos.y,(pos.z - 1) * sca.z });
-	vertices.push_back({ (pos.x - 1) * sca.x ,pos.y,(1 + pos.z) * sca.z });
+	vertices.push_back({ (pos.x - 1) * sca.x ,pos.y,(1 + pos.z) * sca.z });*/
+	vertices.push_back({ -0.5,-0.5,0 });
+	vertices.push_back({ 0.5,-0.5,0 });
+	vertices.push_back({ -0.5,0.5,0 });
+	vertices.push_back({ 0.5,0.5,0 });
 
-	indices.push_back(3);
 	indices.push_back(0);
 	indices.push_back(1);
-	indices.push_back(3);
-	indices.push_back(1);
 	indices.push_back(2);
+	indices.push_back(2);
+	indices.push_back(1);
+	indices.push_back(3);
 
 	texCoords.push_back(1);
 	texCoords.push_back(0);
@@ -892,7 +896,10 @@ void MyPlane::DrawPlane()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	// TODO: 2D en lugar de 3D para UI
 	int i = TransformMatrix();
+
+	
 
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
@@ -904,11 +911,19 @@ void MyPlane::DrawPlane()
 	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
+	//TODO : No hacerlo cada frame
 	aabb.SetNegativeInfinity();
 	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
 
+	ComponentTransform2D* auxTrans = App->scene->gameObjects[i]->getTransform2D();
+	glPushMatrix();
+	float4x4 aux = float4x4::FromTRS(float3(0, 0, 0), Quat::identity, float3(auxTrans->scale.x, auxTrans->scale.y, 1));
+	glMultMatrixf(aux.Transposed().ptr());
+
 	//Draw
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, 0);
+
+	glPopMatrix();
 
 	//UnBind Buffers
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -920,8 +935,9 @@ void MyPlane::DrawPlane()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	if (found && App->scene->gameObjects[i]->matrix != nullptr)
-		glPopMatrix();
+	
+	/*if (found && App->scene->gameObjects[i]->matrix != nullptr)
+		glPopMatrix();*/
 }
 
 

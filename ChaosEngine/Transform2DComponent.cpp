@@ -215,9 +215,7 @@ void ComponentTransform2D::OnEditor(int i)
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
-		scale.x = generalScale;
-		scale.y = generalScale;
-		
+		scale.x = scale.y = scale.z = generalScale;
 	}
 	ImGui::Spacing();
 	if (ImGui::DragFloat("Scale X", &scale.x, 0.1f, 0.0f, 1000.0f))

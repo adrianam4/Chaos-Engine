@@ -35,7 +35,7 @@ class InputBoxComponent : public Component
 {
 public:
 
-	InputBoxComponent(int id, char* text);
+	InputBoxComponent(int id, std::string text);
 	virtual ~InputBoxComponent();
 
 	void Update() override;
@@ -56,7 +56,7 @@ public:
 	Color color = normalColor;
 	Color textColor = Blue;
 
-	char text[32] = "Default";
-	float fontScale;
+	char text[32] = "Introduce your name...";
+	float fontScale = 1;
 	bool drawRect;
 };

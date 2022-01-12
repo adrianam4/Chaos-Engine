@@ -11,7 +11,7 @@ class SliderComponent : public Component
 {
 public:
 
-	SliderComponent(int id, const char* text);
+	SliderComponent(int id, std::string text);
 	virtual ~SliderComponent();
 
 	void Update() override;
