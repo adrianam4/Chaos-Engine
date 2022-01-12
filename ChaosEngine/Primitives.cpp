@@ -22,19 +22,38 @@ int Primitives::TransformMatrix()
 {
 	for (int i = 0; i < App->scene->gameObjects.size(); i++)
 	{
-		
 		if (App->scene->gameObjects[i]->id == id)
 		{
 			if (App->scene->gameObjects[i]->matrix != nullptr) 
 			{
-				/*glPushMatrix();
+				glPushMatrix();
 				glMultMatrixf(App->scene->gameObjects[i]->matrix);
-				found = true;*/
+				found = true;
 				return i;
 			}
 
 		}
 	}
+}
+
+int Primitives::TransformMatrix2D()
+{
+	for (int i = 0; i < App->userInterface->UIGameObjects.size(); i++)
+	{
+		GameObject* go = App->userInterface->UIGameObjects[i];
+		if (go->id == id)
+		{
+			if (go->matrix != nullptr)
+			{
+				//glPushMatrix();
+				//glMultMatrixf(go->matrix);
+				//found = true;
+				return i;
+			}
+
+		}
+	}
+	return 0;
 }
 
 
@@ -838,13 +857,13 @@ MyPlane::MyPlane(float3 pos, float3 sca) : Primitives()
 	indices.push_back(1);
 	indices.push_back(3);
 
-	texCoords.push_back(1);
 	texCoords.push_back(0);
 	texCoords.push_back(1);
 	texCoords.push_back(1);
-	texCoords.push_back(0);
 	texCoords.push_back(1);
 	texCoords.push_back(0);
+	texCoords.push_back(0);
+	texCoords.push_back(1);
 	texCoords.push_back(0);
 
 	App->scene->gameObjects[App->scene->gameObjects.size() - 1]->rot.w = 0;
@@ -896,10 +915,7 @@ void MyPlane::DrawPlane()
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
-	// TODO: 2D en lugar de 3D para UI
 	int i = TransformMatrix();
-
-	
 
 	//Buffers
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
@@ -911,13 +927,50 @@ void MyPlane::DrawPlane()
 	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 
-	//TODO : No hacerlo cada frame
-	aabb.SetNegativeInfinity();
-	aabb.Enclose((float3*)vertices.data(), (size_t)vertices.size());
+	//Draw
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT, 0);
 
-	ComponentTransform2D* auxTrans = App->scene->gameObjects[i]->getTransform2D();
+	//UnBind Buffers
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_TEXTURE_COORD_ARRAY, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	//Disable states
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	if (found && App->scene->gameObjects[i]->matrix != nullptr)
+		glPopMatrix();
+}
+
+void MyPlane::DrawPlane2D()
+{
+	if (wireframe)
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	else
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	//Enable states
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+	// TODO: 2D en lugar de 3D para UI
+	int i = TransformMatrix2D();
+
+	//Buffers
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Vertex
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, TBO); // TexCoords
+	glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+
+	glBindTexture(GL_TEXTURE_2D, aTextureId); // Textures and Indices
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+	ComponentTransform2D* auxTrans = App->userInterface->UIGameObjects[i]->getTransform2D();
 	glPushMatrix();
-	float4x4 aux = float4x4::FromTRS(float3(0, 0, 0), Quat::identity, float3(auxTrans->scale.x, auxTrans->scale.y, 1));
+	float4x4 aux = float4x4::FromTRS(float3(auxTrans->position.x, auxTrans->position.y, auxTrans->position.z), auxTrans->rotationQuat, float3(auxTrans->scale.x, auxTrans->scale.y, 1));
 	glMultMatrixf(aux.Transposed().ptr());
 
 	//Draw
@@ -934,10 +987,6 @@ void MyPlane::DrawPlane()
 	//Disable states
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-	
-	/*if (found && App->scene->gameObjects[i]->matrix != nullptr)
-		glPopMatrix();*/
 }
 
 

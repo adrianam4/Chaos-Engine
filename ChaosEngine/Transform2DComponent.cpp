@@ -20,8 +20,8 @@ ComponentTransform2D::ComponentTransform2D(GameObject* theObject, float3 pos, fl
 	rotationEuler = rot;
 	generalScale = 1.0f;
 
-	buttonWidth = scale.x * 10;
-	buttonHeight = scale.z * 10;
+	buttonWidth = scale.x;
+	buttonHeight = scale.y;
 
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
@@ -32,8 +32,8 @@ ComponentTransform2D::ComponentTransform2D(GameObject* theObject, float3 pos, fl
 
 	name = "Transform2D Component";
 
-	ComponentType t = getComponentType();
-	CreateAABB(ComponentType::MESH, theObject, true);
+	//ComponentType t = getComponentType();
+	//CreateAABB(ComponentType::MESH, theObject, true);
 }
 ComponentTransform2D::ComponentTransform2D(float3 pos, float3 sca, float3 rot)
 {
@@ -47,8 +47,8 @@ ComponentTransform2D::ComponentTransform2D(float3 pos, float3 sca, float3 rot)
 	rotationEuler = rot;
 	generalScale = 1.0f;
 
-	buttonWidth = scale.x * 10;
-	buttonHeight = scale.z * 10;
+	buttonWidth = scale.x;
+	buttonHeight = scale.y;
 
 	rotationQuat = FromEulerToQuat(rotationEuler);
 
@@ -60,7 +60,7 @@ ComponentTransform2D::ComponentTransform2D(float3 pos, float3 sca, float3 rot)
 
 	name = "Transform2D Component";
 
-	CreateAABB(ComponentType::PLANE, App->scene->gameObjects[App->scene->gameObjects.size() - 1], true);
+	//CreateAABB(ComponentType::PLANE, App->scene->gameObjects[App->scene->gameObjects.size() - 1], true);
 }
 
 ComponentType ComponentTransform2D::getComponentType()
@@ -104,7 +104,7 @@ void ComponentTransform2D::Update(bool releaseMouse)
 	transMatrix = transMatrix.Transposed();
 	App->editor->objectSelected->matrix = transMatrix.ptr();
 
-	if (releaseMouse)
+	/*if (releaseMouse)
 	{
 		UINT isCamera = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::CAMERA);
 
@@ -129,7 +129,7 @@ void ComponentTransform2D::Update(bool releaseMouse)
 	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
 	{
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
-	}
+	}*/
 
 	//float4x4 aux1;
 
@@ -162,22 +162,22 @@ void ComponentTransform2D::OnEditor(int i)
 	lastGeneralScale = generalScale;
 
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Size");
-	if (ImGui::DragFloat("Width", &buttonWidth, 0.5f, 0, 10000))
+	if (ImGui::DragFloat("Width", &buttonWidth, 0.5f, 0, 1000000))
 	{
 		bool release = false;
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
-		scale.x = buttonWidth / 10;
-		scale.z = buttonHeight / 10;
+		scale.x = buttonWidth;
+		scale.y = buttonHeight;
 		Update(release);
 	}
-	if (ImGui::DragFloat("Height", &buttonHeight, 0.5f, 0, 10000))
+	if (ImGui::DragFloat("Height", &buttonHeight, 0.5f, 0, 1000000))
 	{
 		bool release = false;
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
-		scale.x = buttonWidth / 10;
-		scale.z = buttonHeight / 10;
+		scale.x = buttonWidth;
+		scale.y = buttonHeight;
 		Update(release);
 	}
 
@@ -208,44 +208,44 @@ void ComponentTransform2D::OnEditor(int i)
 		Update(release);
 	}
 	
-	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Scale");
-	if (ImGui::DragFloat("General Scale", &generalScale, 0.1f, 0.0f, 1000.0f))
-	{
-		bool release = false;
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-			release = true;
-		Update(release);
-		scale.x = scale.y = scale.z = generalScale;
-	}
-	ImGui::Spacing();
-	if (ImGui::DragFloat("Scale X", &scale.x, 0.1f, 0.0f, 1000.0f))
-	{
-		bool release = false;
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-			release = true;
-		buttonWidth = scale.x * 10;
-		buttonHeight = scale.z * 10;
-		Update(release);
-	}
-	if (ImGui::DragFloat("Scale Y", &scale.y, 0.1f, 0.0f, 1000.0f))
-	{
-		bool release = false;
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-			release = true;
-		Update(release);
-	}
-	if (ImGui::DragFloat("Scale Z", &scale.z, 0.1f, 0.0f, 1000.0f))
-	{
-		bool release = false;
-		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
-			release = true;
-		buttonWidth = scale.x * 10;
-		buttonHeight = scale.z * 10;
-		Update(release);
-	}
+	//ImGui::TextColored(ImVec4(0, 0, 255, 255), "Scale");
+	//if (ImGui::DragFloat("General Scale", &generalScale, 0.1f, 0.0f, 1000.0f))
+	//{
+	//	bool release = false;
+	//	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	//		release = true;
+	//	Update(release);
+	//	scale.x = scale.y = scale.z = generalScale;
+	//}
+	//ImGui::Spacing();
+	//if (ImGui::DragFloat("Scale X", &scale.x, 0.1f, 0.0f, 1000.0f))
+	//{
+	//	bool release = false;
+	//	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	//		release = true;
+	//	buttonWidth = scale.x;
+	//	buttonHeight = scale.z;
+	//	Update(release);
+	//}
+	//if (ImGui::DragFloat("Scale Y", &scale.y, 0.1f, 0.0f, 1000.0f))
+	//{
+	//	bool release = false;
+	//	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	//		release = true;
+	//	Update(release);
+	//}
+	//if (ImGui::DragFloat("Scale Z", &scale.z, 0.1f, 0.0f, 1000.0f))
+	//{
+	//	bool release = false;
+	//	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
+	//		release = true;
+	//	buttonWidth = scale.x;
+	//	buttonHeight = scale.z;
+	//	Update(release);
+	//}
 	
 	ImGui::TextColored(ImVec4(0, 0, 255, 255), "Rotation");
-	if (ImGui::DragFloat("Rotation X", &rotationEuler.x, 0.5f))
+	/*if (ImGui::DragFloat("Rotation X", &rotationEuler.x, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)
 			wasNull = true;
@@ -280,7 +280,7 @@ void ComponentTransform2D::OnEditor(int i)
 		if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			release = true;
 		Update(release);
-	}
+	}*/
 	if (ImGui::DragFloat("Rotation Z", &rotationEuler.z, 0.5f))
 	{
 		if (App->camera->GameCam == nullptr)

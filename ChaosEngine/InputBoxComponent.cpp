@@ -66,7 +66,7 @@ void InputBoxComponent::Draw()
 
 	glColor4f(color.r, color.g, color.b, color.a);
 
-	planeToDraw->DrawPlane();
+	planeToDraw->DrawPlane2D();
 
 	glDisable(GL_ALPHA_TEST);
 	glColor3f(255, 255, 255);
@@ -141,7 +141,7 @@ void InputBoxComponent::OnEditor(int i)
 	}
 
 	ImGui::InputText("Text", text, IM_ARRAYSIZE(text));
-	ImGui::DragFloat("Font Size", &fontScale,0.1,0,10);
+	ImGui::DragFloat("Font Size", &aux.Scale,0.1,0,10);
 	aux.setOnlyText(text);
 }
 
