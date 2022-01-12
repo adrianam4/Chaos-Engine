@@ -385,6 +385,8 @@ update_status ModuleUI::PostUpdate(float dt)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixf(frustum.ProjectionMatrix().Transposed().ptr());
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	for (int i = 0; i < UIGameObjects.size(); i++)
 	{
@@ -403,7 +405,7 @@ update_status ModuleUI::PostUpdate(float dt)
 		{
 			go->components[inputbox]->Draw();
 			InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
-			//RenderText(auxiliar->aux.textt, auxiliar->aux.X, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
+			RenderText(auxiliar->aux.textt, auxiliar->aux.X - 120, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
 		}
 		if (slider != -1) go->components[slider]->Draw();
 	}

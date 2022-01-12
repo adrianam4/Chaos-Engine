@@ -39,6 +39,7 @@ public:
 	float3 scale;
 	uint id;
 	int TransformMatrix();
+	int TransformMatrix2D();
 	int TransformMatrixAABB();
 	bool found;
 	bool wireframe = false;
@@ -182,6 +183,7 @@ public:
 	MyPlane(float3 pos, float3 sca);
 	~MyPlane();
 	void DrawPlane();
+	void DrawPlane2D();
 	std::vector<float3> getVertex()override;
 
 public:

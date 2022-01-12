@@ -33,7 +33,7 @@ void ImageComponent::Draw()
 
 	glColor4f(color.r, color.g, color.b, color.a);
 
-	planeToDraw->DrawPlane();
+	planeToDraw->DrawPlane2D();
 
 	glDisable(GL_ALPHA_TEST);
 	glColor3f(255, 255, 255);
