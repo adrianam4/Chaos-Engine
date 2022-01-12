@@ -67,7 +67,7 @@ update_status ModuleCamera3D::Update(float dt)
 	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
 		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
+		int dy = App->input->GetMouseYMotion();
 
 		float sensitivity = 0.25f;
 
