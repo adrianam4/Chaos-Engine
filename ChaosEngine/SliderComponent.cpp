@@ -61,31 +61,49 @@ void SliderComponent::Update()
 		}
 	}
 
-	barProgres += 0.001;
-	if (!completed) {
+	//barProgres += 0.001;
+	if (state == State::PRESSED) {
+		float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
+		float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };
+		float4 viewport = App->editor->viewport;
+		float2 fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y };
 
 
-		if (barProgres < 0.5f)
+		ComponentTransform2D* transform2D = owner->getTransform2D();
+		float posXMin = ((viewport.z / 2) + (transform2D->position.x)) - (transform2D->buttonWidth / 2);
+		float posXMax = ((viewport.z / 2) + (transform2D->position.x)) + (transform2D->buttonWidth / 2);
+
+		if (fMousePos.x > posXMin && fMousePos.x < posXMax)
 		{
-			thePlane->texCoords[4] = (0.5 - barProgres);
-			thePlane->texCoords[6] = (0.5 - barProgres);
-		}
-		else if (barProgres >= 1) {
-			completed = true;
-		}
-		else if (barProgres >= 0.5f) {
+			float thePos = fMousePos.x - posXMin;
+			float total = posXMax - posXMin;
 
-			float aux = barProgres - 0.5;
-			thePlane->texCoords[0] = (1 - aux);
-			thePlane->texCoords[2] = (1 - aux);
+
+			barProgres = thePos / total;
+
+
+
+			if (barProgres < 0.5f)
+			{
+				/*thePlane->texCoords[0] = 1;
+				thePlane->texCoords[6] = 1;*/
+				thePlane->texCoords[0] = (0.5 - barProgres);
+				thePlane->texCoords[4] = (0.5 - barProgres);
+			}
+			else if (barProgres >= 0.5f) {
+
+				float aux = barProgres - 0.5;
+				thePlane->texCoords[2] = (1 - aux);
+				thePlane->texCoords[6] = (1 - aux);
+			}
+			glDeleteBuffers(thePlane->texCoords.size() * sizeof(GLfloat), &thePlane->TBO);
+
+			glGenBuffers(1, &thePlane->TBO);
+			glBindBuffer(GL_ARRAY_BUFFER, thePlane->TBO);
+			glBufferData(GL_ARRAY_BUFFER, thePlane->texCoords.size() * sizeof(GLfloat), thePlane->texCoords.data(), GL_STATIC_DRAW);
+
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-		glDeleteBuffers(thePlane->texCoords.size() * sizeof(GLfloat), &thePlane->TBO);
-
-		glGenBuffers(1, &thePlane->TBO);
-		glBindBuffer(GL_ARRAY_BUFFER, thePlane->TBO);
-		glBufferData(GL_ARRAY_BUFFER, thePlane->texCoords.size() * sizeof(GLfloat), thePlane->texCoords.data(), GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 }
 
