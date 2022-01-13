@@ -85,6 +85,7 @@ public:
 	bool advance = false;
 	bool showSaveOnExitMenu;
 	bool showTextureMenu = false;
+	bool temporary = false;
 
 	ImTextureID folderIcon;
 	ImTextureID playIcon;

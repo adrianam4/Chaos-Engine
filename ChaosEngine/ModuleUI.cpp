@@ -260,8 +260,8 @@ update_status ModuleUI::PreUpdate(float dt)
 			float posXMin = ((viewport.z / 2) + (transform2D->position.x)) - (transform2D->buttonWidth / 2);
 			float posXMax = ((viewport.z / 2) + (transform2D->position.x)) + (transform2D->buttonWidth / 2);
 
-			float posYMin = ((viewport.w / 2) + (transform2D->position.y)) - (transform2D->buttonHeight / 2);
-			float posYMax = ((viewport.w / 2) + (transform2D->position.y)) + (transform2D->buttonHeight / 2);
+			float posYMin = ((viewport.w / 2) + (-transform2D->position.y)) - (transform2D->buttonHeight / 2);
+			float posYMax = ((viewport.w / 2) + (-transform2D->position.y)) + (transform2D->buttonHeight / 2);
 
 			if (fMousePos.x > posXMin && fMousePos.x < posXMax && fMousePos.y > posYMin && fMousePos.y < posYMax)
 			{

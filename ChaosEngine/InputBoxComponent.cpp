@@ -10,7 +10,7 @@ InputBoxComponent::InputBoxComponent(int id, std::string _text)
 	type = ComponentType::UI_INPUTBOX;
 	drawRect = false;
 	state = State::NORMAL;
-	aux.setText(_text, 0, 0, 0.5, { 255,255,255 });
+	aux.setText(_text, 5, 5, 0.5, { 255,255,255 });
 }
 
 InputBoxComponent::~InputBoxComponent()
