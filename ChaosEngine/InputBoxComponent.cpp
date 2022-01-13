@@ -33,7 +33,7 @@ void InputBoxComponent::Update()
 			{
 				state = State::PRESSED;
 				color = pressedColor;
-				//NotifyObserver();
+				OnClick();
 			}
 		}
 		else
@@ -51,6 +51,338 @@ void InputBoxComponent::Update()
 	}
 	else
 		color = disabledColor;
+
+	if (textEditable)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN && strlen(text) > 0)
+		{
+			text[strlen(text) - 1] = '\0';
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'Q';
+			else cadenaTemporal[0] = ' ';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_Q) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'Q';
+			else cadenaTemporal[0] = 'q';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'W';
+			else cadenaTemporal[0] = 'w';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_E) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'E';
+			else cadenaTemporal[0] = 'e';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'R';
+			else cadenaTemporal[0] = 'r';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_T) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'T';
+			else cadenaTemporal[0] = 't';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_Y) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'Y';
+			else cadenaTemporal[0] = 'y';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'U';
+			else cadenaTemporal[0] = 'u';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_I) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'I';
+			else cadenaTemporal[0] = 'i';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_O) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'O';
+			else cadenaTemporal[0] = 'o';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_P) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'P';
+			else cadenaTemporal[0] = 'p';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_A) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'A';
+			else cadenaTemporal[0] = 'a';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'S';
+			else cadenaTemporal[0] = 's';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_D) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'D';
+			else cadenaTemporal[0] = 'd';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_F) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'F';
+			else cadenaTemporal[0] = 'f';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_G) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'G';
+			else cadenaTemporal[0] = 'g';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'H';
+			else cadenaTemporal[0] = 'h';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_J) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'J';
+			else cadenaTemporal[0] = 'j';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_K) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'K';
+			else cadenaTemporal[0] = 'k';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'L';
+			else cadenaTemporal[0] = 'l';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_Z) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'Z';
+			else cadenaTemporal[0] = 'z';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_X) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'X';
+			else cadenaTemporal[0] = 'x';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_C) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'C';
+			else cadenaTemporal[0] = 'c';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_V) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'V';
+			else cadenaTemporal[0] = 'v';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_B) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'B';
+			else cadenaTemporal[0] = 'b';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_N) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'N';
+			else cadenaTemporal[0] = 'n';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_M) == KEY_DOWN)
+		{
+			char cadenaTemporal[2];
+			if (GetKeyState(VK_CAPITAL) & 0x0001 != 0) cadenaTemporal[0] = 'M';
+			else cadenaTemporal[0] = 'm';
+			cadenaTemporal[1] = '\0';
+			strcat(text, cadenaTemporal);
+			aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '0';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '1';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '2';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '3';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_4) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '4';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_5) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '5';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_6) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '6';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_7) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '7';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_8) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '8';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_9) == KEY_DOWN)
+		{
+		char cadenaTemporal[2];
+		cadenaTemporal[0] = '9';
+		cadenaTemporal[1] = '\0';
+		strcat(text, cadenaTemporal);
+		aux.setOnlyText(text);
+		}
+		else if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) textEditable = false;
+	}
 }
 
 void InputBoxComponent::Draw()
@@ -147,6 +479,7 @@ void InputBoxComponent::OnEditor(int i)
 
 void InputBoxComponent::OnClick()
 {
+	textEditable = true;
 }
 
 float2 InputBoxComponent::GetParentPosition()

@@ -153,7 +153,7 @@ bool ModuleEditor::Start()
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
 	FBXimporter importer;
-	//importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
+	importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
@@ -168,7 +168,7 @@ bool ModuleEditor::Start()
 
 	if (temporary = true)
 	{
-		/*static int buttons = 1;
+		static int buttons = 1;
 		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, buttons, "Button "));
 		buttons++;
 		int lastComponent = App->scene->gameObjects.size() - 1;
@@ -207,11 +207,11 @@ bool ModuleEditor::Start()
 		objectSelected->components[0]->owner = objectSelected;
 		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
 		objectSelected->components[1]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 100), &float3(950, 600, 1), &float3(0, 0, 0)));
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 100), &float3(2000, 2000, 1), &float3(0, 0, 0)));
 		objectSelected->components[2]->owner = objectSelected;
 		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
 		objectSelected->components[3]->owner = objectSelected;
-		App->userInterface->UIGameObjects.push_back(objectSelected);*/
+		App->userInterface->UIGameObjects.push_back(objectSelected);
 
 	}
 

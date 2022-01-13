@@ -298,8 +298,8 @@ update_status ModuleUI::Update(float dt)
 {
 	// Update All UI Components
 
-	/*if (App->gameMode)
-	{*/
+	if (App->gameMode)
+	{
 	if (!UIGameObjects.empty() && App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 	{
 		if (!UIGameObjectSelected)
@@ -348,7 +348,7 @@ update_status ModuleUI::Update(float dt)
 		if (slider != -1)
 			go->components[slider]->Update();
 	}
-	//}
+	}
 	
 	return UPDATE_CONTINUE;
 }

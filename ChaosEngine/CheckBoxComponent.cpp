@@ -174,6 +174,7 @@ void CheckboxComponent::OnClick()
 
 	App->resources->LoadResource(newResource->GetUID(), owner);
 	owner->components[owner->components.size() - 1]->owner = owner;*/
+
 	checked = !checked;
 
 	if (App->editor->objectSelected != nullptr)

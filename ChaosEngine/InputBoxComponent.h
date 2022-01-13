@@ -30,7 +30,8 @@ public:
 	Color color = normalColor;
 	Color textColor = White;
 
-	char text[32] = "Introduce your name...";
+	char text[64] = "Introduce your name...";
 	float fontScale = 1;
 	bool drawRect;
+	bool textEditable = false;
 };
