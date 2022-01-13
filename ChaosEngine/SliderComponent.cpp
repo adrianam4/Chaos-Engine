@@ -1,6 +1,8 @@
 #include "Application.h"
 #include "SDL.h"
 #include "SliderComponent.h"
+#include "ModuleCamera3D.h"
+#include "CameraComponent.h"
 
 SliderComponent::SliderComponent(int id, std::string _text)
 {
@@ -8,7 +10,7 @@ SliderComponent::SliderComponent(int id, std::string _text)
 	type = ComponentType::UI_SLIDER;
 	value = 0;
 	minValue = 0;
-	maxValue = 100;
+	maxValue = 180;
 	drawRect = false;
 	state = State::NORMAL;
 	barProgres = 0.0f;
@@ -83,6 +85,15 @@ void SliderComponent::Update()
 
 			barProgres = thePos / total;
 
+			if (state == State::PRESSED)
+			{
+				App->camera->GameCam->horizontalFov = maxValue * barProgres;
+
+				App->camera->GameCam->frustum.horizontalFov = math::DegToRad(App->camera->GameCam->horizontalFov); // Convert from deg to rads (All maths works with rads but user will see the info in degs)
+				App->camera->GameCam->frustum.verticalFov = 2 * Atan((Tan(App->camera->GameCam->frustum.horizontalFov / 2)) * ((float)SCREEN_HEIGHT / (float)SCREEN_WIDTH));
+				App->camera->GameCam->changeViewMatrix();
+				App->renderer3D->OnResize((float)SCREEN_WIDTH, (float)SCREEN_HEIGHT);
+			}
 
 
 			if (barProgres < 0.5f)
@@ -107,6 +118,8 @@ void SliderComponent::Update()
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 	}
+
+
 }
 
 void SliderComponent::Draw()

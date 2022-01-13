@@ -243,6 +243,16 @@ void ModuleUI::RenderText(std::string text, float x, float y, float scale, float
 	shader->StopUse();
 }
 
+void ModuleUI::DeleteUIGameObjects()
+{
+	UIGameObjectSelected = nullptr;
+	for (uint i = 0; i < UIGameObjects.size(); i++)
+	{
+		UIGameObjects.erase(UIGameObjects.begin() + i);
+		delete (*(UIGameObjects.begin() + i));
+	}
+}
+
 update_status ModuleUI::PreUpdate(float dt)
 {
 	float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };

@@ -50,6 +50,7 @@ public:
 
 	bool CleanUp();
 	void RenderText(std::string text, float x, float y, float scale, float3 color);
+    void DeleteUIGameObjects();
 public:
     std::map<char, Character> characters;
     Shader* shader{ nullptr }; //TODO:Clean

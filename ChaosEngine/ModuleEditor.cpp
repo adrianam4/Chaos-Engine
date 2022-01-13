@@ -166,55 +166,6 @@ bool ModuleEditor::Start()
 	App->camera->camArray[0]->isTheMainCamera = true;
 	App->camera->GameCam = App->camera->camArray[0];
 
-	/*if (temporary = true)
-	{
-		static int buttons = 1;
-		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, buttons, "Button "));
-		buttons++;
-		int lastComponent = App->scene->gameObjects.size() - 1;
-		objectSelected = App->scene->gameObjects[lastComponent];
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-		objectSelected->components[0]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON, "Button"));
-		objectSelected->components[1]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, -100, -100), &float3(250, 100, 1), &float3(0, 0, 0)));
-		objectSelected->components[2]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
-		objectSelected->components[3]->owner = objectSelected;
-		App->userInterface->UIGameObjects.push_back(objectSelected);
-
-		static int inputboxes = 1;
-		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, inputboxes, "Input Box "));
-		inputboxes++;
-		lastComponent = App->scene->gameObjects.size() - 1;
-		objectSelected = App->scene->gameObjects[lastComponent];
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-		objectSelected->components[0]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, -100), &float3(350, 100, 1), &float3(0, 0, 0)));
-		objectSelected->components[1]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX, "Introduce your name..."));
-		objectSelected->components[2]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
-		objectSelected->components[3]->owner = objectSelected;
-		App->userInterface->UIGameObjects.push_back(objectSelected);
-
-		static int images = 1;
-		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
-		images++;
-		lastComponent = App->scene->gameObjects.size() - 1;
-		objectSelected = App->scene->gameObjects[lastComponent];
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-		objectSelected->components[0]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
-		objectSelected->components[1]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 100), &float3(2000, 2000, 1), &float3(0, 0, 0)));
-		objectSelected->components[2]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
-		objectSelected->components[3]->owner = objectSelected;
-		App->userInterface->UIGameObjects.push_back(objectSelected);
-
-	}*/
-
 	isActive = true;
 	isActive2 = true;
 	isActive3 = true;
@@ -1077,12 +1028,6 @@ void ModuleEditor::DOptionsmenu(ComponentType type)
 // Update: draw background
 update_status ModuleEditor::Update(float dt)
 {
-
-	if (App->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN)
-	{
-		temporary = true;
-	}
-
 	if (App->camera->camArray.size() == 0) {
 		App->camera->GameCam = nullptr;
 	}
@@ -2366,7 +2311,7 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::CloseCurrentPopup();
 		ImGui::Begin("About", &showAboutWindow);
 
-		ImGui::Text("Chaos Engine v0.8");
+		ImGui::Text("Chaos Engine v1.0");
 		ImGui::Separator();
 		ImGui::Text("A trully amazing 3D Game Engine.");
 		ImGui::Text("Created by David Lira, Adrian Aroca and Unai Diaz for the Game Engines subject.");
@@ -2802,6 +2747,67 @@ update_status ModuleEditor::Update(float dt)
 			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
 			App->gameMode = true;
 
+			static int buttons = 1;
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, buttons, "Button "));
+			buttons++;
+			int lastComponent = App->scene->gameObjects.size() - 1;
+			objectSelected = App->scene->gameObjects[lastComponent];
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			objectSelected->components[0]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON, "Button"));
+			objectSelected->components[1]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, -100, -100), &float3(250, 100, 1), &float3(0, 0, 0)));
+			objectSelected->components[2]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
+			objectSelected->components[3]->owner = objectSelected;
+			App->userInterface->UIGameObjects.push_back(objectSelected);
+
+			static int inputboxes = 1;
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, inputboxes, "Input Box "));
+			inputboxes++;
+			lastComponent = App->scene->gameObjects.size() - 1;
+			objectSelected = App->scene->gameObjects[lastComponent];
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			objectSelected->components[0]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, -100), &float3(350, 100, 1), &float3(0, 0, 0)));
+			objectSelected->components[1]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX, "Introduce your name..."));
+			objectSelected->components[2]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
+			objectSelected->components[3]->owner = objectSelected;
+			App->userInterface->UIGameObjects.push_back(objectSelected);
+
+			static int images = 1;
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
+			images++;
+			lastComponent = App->scene->gameObjects.size() - 1;
+			objectSelected = App->scene->gameObjects[lastComponent];
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			objectSelected->components[0]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
+			objectSelected->components[1]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 100), &float3(2000, 2000, 1), &float3(0, 0, 0)));
+			objectSelected->components[2]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
+			objectSelected->components[3]->owner = objectSelected;
+			App->userInterface->UIGameObjects.push_back(objectSelected);
+
+			static int sliders = 1;
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, sliders, "Slider "));
+			sliders++;
+			lastComponent = App->scene->gameObjects.size() - 1;
+			objectSelected = App->scene->gameObjects[lastComponent];
+
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			objectSelected->components[0]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 100, 0), &float3(300, 100, 1), &float3(0, 0, 0)));
+			objectSelected->components[1]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Empty"));
+			objectSelected->components[2]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/bar.dds", true));
+			objectSelected->components[3]->owner = objectSelected;
+			App->userInterface->UIGameObjects.push_back(objectSelected);
+
 		}
 		if (App->gameMode == true)
 		{
@@ -2830,6 +2836,39 @@ update_status ModuleEditor::Update(float dt)
 
 			}
 			ImGui::SameLine();
+
+			if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+			{
+				static int images = 1;
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
+				images++;
+				int lastComponent = App->scene->gameObjects.size() - 1;
+				objectSelected = App->scene->gameObjects[lastComponent];
+				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				objectSelected->components[0]->owner = objectSelected;
+				objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
+				objectSelected->components[1]->owner = objectSelected;
+				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(600, 450, 1), &float3(0, 0, 0)));
+				objectSelected->components[2]->owner = objectSelected;
+				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
+				objectSelected->components[3]->owner = objectSelected;
+				App->userInterface->UIGameObjects.push_back(objectSelected);
+
+				static int checkboxes = 1;
+				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, checkboxes, "Check Box "));
+				checkboxes++;
+				lastComponent = App->scene->gameObjects.size() - 1;
+				objectSelected = App->scene->gameObjects[lastComponent];
+				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+				objectSelected->components[0]->owner = objectSelected;
+				objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Checkbox"));
+				objectSelected->components[1]->owner = objectSelected;
+				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, -100), &float3(100, 100, 1), &float3(0, 0, 0)));
+				objectSelected->components[2]->owner = objectSelected;
+				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxFalse.dds", true));
+				objectSelected->components[3]->owner = objectSelected;
+				App->userInterface->UIGameObjects.push_back(objectSelected);
+			}
 		}
 
 		ImGui::End();

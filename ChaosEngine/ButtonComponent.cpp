@@ -194,6 +194,6 @@ void ButtonComponent::FadeUI()
 	}
 	iters++;
 
-	if (iters > 400)
+	if (iters > 300)
 		fadeUI = false;
 }
