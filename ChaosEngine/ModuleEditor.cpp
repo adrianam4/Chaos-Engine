@@ -1413,7 +1413,7 @@ update_status ModuleEditor::Update(float dt)
 
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 					objectSelected->components[0]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Checkbox"));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "V-Sync"));
 					objectSelected->components[1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(300, 100, 1), &float3(0, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
@@ -1436,7 +1436,7 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(300, 100, 1), &float3(0, 0, 0)));
 					objectSelected->components[1]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Empty"));
+					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Camera FOV"));
 					objectSelected->components[2]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/bar.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
@@ -2742,10 +2742,13 @@ update_status ModuleEditor::Update(float dt)
 			}
 		}
 		ImGui::SameLine();
+
 		if (ImGui::ImageButton(playIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 			App->playGameTime = !App->playGameTime;
 			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
 			App->gameMode = true;
+
+			App->userInterface->DeleteUIGameObjects();
 
 			static int buttons = 1;
 			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, buttons, "Button "));
@@ -2754,7 +2757,7 @@ update_status ModuleEditor::Update(float dt)
 			objectSelected = App->scene->gameObjects[lastComponent];
 			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 			objectSelected->components[0]->owner = objectSelected;
-			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON, "Button"));
+			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON, "Start"));
 			objectSelected->components[1]->owner = objectSelected;
 			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, -100, -100), &float3(250, 100, 1), &float3(0, 0, 0)));
 			objectSelected->components[2]->owner = objectSelected;
@@ -2791,23 +2794,6 @@ update_status ModuleEditor::Update(float dt)
 			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
 			objectSelected->components[3]->owner = objectSelected;
 			App->userInterface->UIGameObjects.push_back(objectSelected);
-
-			static int sliders = 1;
-			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, sliders, "Slider "));
-			sliders++;
-			lastComponent = App->scene->gameObjects.size() - 1;
-			objectSelected = App->scene->gameObjects[lastComponent];
-
-			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-			objectSelected->components[0]->owner = objectSelected;
-			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 100, 0), &float3(300, 100, 1), &float3(0, 0, 0)));
-			objectSelected->components[1]->owner = objectSelected;
-			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Empty"));
-			objectSelected->components[2]->owner = objectSelected;
-			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/bar.dds", true));
-			objectSelected->components[3]->owner = objectSelected;
-			App->userInterface->UIGameObjects.push_back(objectSelected);
-
 		}
 		if (App->gameMode == true)
 		{
@@ -2836,42 +2822,60 @@ update_status ModuleEditor::Update(float dt)
 
 			}
 			ImGui::SameLine();
-
-			if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-			{
-				static int images = 1;
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
-				images++;
-				int lastComponent = App->scene->gameObjects.size() - 1;
-				objectSelected = App->scene->gameObjects[lastComponent];
-				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-				objectSelected->components[0]->owner = objectSelected;
-				objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
-				objectSelected->components[1]->owner = objectSelected;
-				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(600, 450, 1), &float3(0, 0, 0)));
-				objectSelected->components[2]->owner = objectSelected;
-				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
-				objectSelected->components[3]->owner = objectSelected;
-				App->userInterface->UIGameObjects.push_back(objectSelected);
-
-				static int checkboxes = 1;
-				App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, checkboxes, "Check Box "));
-				checkboxes++;
-				lastComponent = App->scene->gameObjects.size() - 1;
-				objectSelected = App->scene->gameObjects[lastComponent];
-				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-				objectSelected->components[0]->owner = objectSelected;
-				objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Checkbox"));
-				objectSelected->components[1]->owner = objectSelected;
-				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, -100), &float3(100, 100, 1), &float3(0, 0, 0)));
-				objectSelected->components[2]->owner = objectSelected;
-				objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxFalse.dds", true));
-				objectSelected->components[3]->owner = objectSelected;
-				App->userInterface->UIGameObjects.push_back(objectSelected);
-			}
 		}
 
 		ImGui::End();
+	}
+
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		App->userInterface->DeleteUIGameObjects();
+
+		static int images = 1;
+		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
+		images++;
+		int lastComponent = App->scene->gameObjects.size() - 1;
+		objectSelected = App->scene->gameObjects[lastComponent];
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+		objectSelected->components[0]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
+		objectSelected->components[1]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(600, 450, 1), &float3(0, 0, 0)));
+		objectSelected->components[2]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
+		objectSelected->components[3]->owner = objectSelected;
+		App->userInterface->UIGameObjects.push_back(objectSelected);
+
+		static int checkboxes = 1;
+		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, checkboxes, "Check Box "));
+		checkboxes++;
+		lastComponent = App->scene->gameObjects.size() - 1;
+		objectSelected = App->scene->gameObjects[lastComponent];
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+		objectSelected->components[0]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Checkbox"));
+		objectSelected->components[1]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 100, -101), &float3(300, 100, 1), &float3(0, 0, 0)));
+		objectSelected->components[2]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/TextCheckboxFalse.dds", true));
+		objectSelected->components[3]->owner = objectSelected;
+		App->userInterface->UIGameObjects.push_back(objectSelected);
+
+		static int sliders = 1;
+		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, sliders, "Slider "));
+		sliders++;
+		lastComponent = App->scene->gameObjects.size() - 1;
+		objectSelected = App->scene->gameObjects[lastComponent];
+
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+		objectSelected->components[0]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, -5, -102), &float3(300, 100, 1), &float3(0, 0, 0)));
+		objectSelected->components[1]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Camera FOV"));
+		objectSelected->components[2]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/bar.dds", true));
+		objectSelected->components[3]->owner = objectSelected;
+		App->userInterface->UIGameObjects.push_back(objectSelected);
 	}
 
 	if (showSaveOnExitMenu)

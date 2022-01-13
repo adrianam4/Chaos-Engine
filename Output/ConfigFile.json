@@ -5,8 +5,8 @@
     "Height": 720,
     "Brightness": 0,
     "Fullscreen": false,
-    "Resizable": true,
+    "Resizable": false,
     "Borderless": false,
-    "Dekstop": false,
+    "Dekstop": true,
     "AABB": false
 }

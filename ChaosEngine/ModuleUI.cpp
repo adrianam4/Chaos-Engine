@@ -243,16 +243,6 @@ void ModuleUI::RenderText(std::string text, float x, float y, float scale, float
 	shader->StopUse();
 }
 
-void ModuleUI::DeleteUIGameObjects()
-{
-	UIGameObjectSelected = nullptr;
-	for (uint i = 0; i < UIGameObjects.size(); i++)
-	{
-		UIGameObjects.erase(UIGameObjects.begin() + i);
-		delete (*(UIGameObjects.begin() + i));
-	}
-}
-
 update_status ModuleUI::PreUpdate(float dt)
 {
 	float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
@@ -533,4 +523,39 @@ update_status ModuleUI::PostUpdate(float dt)
 bool ModuleUI::CleanUp()
 {
 	return true;
+}
+
+void ModuleUI::DeleteUIGameObjects()
+{
+	int UIGameObjectsQuantity = UIGameObjects.size();
+
+	for (int a = UIGameObjectsQuantity -1 ; a >= 0; a--)
+	{
+		App->editor->objectSelected = UIGameObjects[a];
+		int i;
+		int id = App->editor->objectSelected->id;
+		for (i = 0; i < App->scene->gameObjects.size(); i++)
+		{
+			if (id == App->scene->gameObjects[i]->id)
+			{
+				App->editor->objectSelected = nullptr;
+
+
+				for (int i = 0; i < App->userInterface->UIGameObjects.size(); i++)
+				{
+					if (App->userInterface->UIGameObjects[i]->id == id)
+					{
+						App->userInterface->UIGameObjects.erase(App->userInterface->UIGameObjects.begin() + i);
+						break;
+					}
+				}
+
+				delete (*(App->scene->gameObjects.begin() + i));
+				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
+				break;
+			}
+		}
+	}
+
+	UIGameObjectSelected = nullptr;
 }

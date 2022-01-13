@@ -209,7 +209,7 @@ update_status ModuleRenderer3D::PreUpdate(float dt)
 	static bool texture;
 
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
-		depth = !depth;
+		//depth = !depth;
 
 	if (depth)
 	{
