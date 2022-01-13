@@ -242,54 +242,44 @@ void ModuleUI::RenderText(std::string text, float x, float y, float scale, float
 	glBindTexture(GL_TEXTURE_2D, 0);
 	shader->StopUse();
 }
+
 update_status ModuleUI::PreUpdate(float dt)
 {
 	float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
 	float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };
 	float4 viewport = App->editor->viewport;
+	float2 fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y };
 
 	if (mousePos.x > viewport.x && mousePos.x < viewport.x + viewport.z && mousePos.y > viewport.y && mousePos.y < viewport.y + viewport.w)
 	{
-		float2 fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y };
-		float normalized_x = Lerp(-1, 1, fMousePos.x / viewport.z);
-		float normalized_y = Lerp(1, -1, fMousePos.y / viewport.w);
-
-		App->camera->GameCam->frustum.GetCornerPoints(&corners[0]);
-		myRay = App->camera->GameCam->frustum.UnProjectLineSegment(normalized_x, normalized_y);
-
-		for (int i = 0; i < App->scene->gameObjects.size(); i++)
+		for (int i = 0; i < UIGameObjects.size(); i++)
 		{
-			GameObject* go = App->scene->gameObjects[i];
-			for (int j = 0; j < go->boundingBoxes.size(); j++)
+			GameObject* go = UIGameObjects[i];
+			ComponentTransform2D* transform2D = go->getTransform2D();
+
+			float posXMin = ((viewport.z / 2) + (transform2D->position.x)) - (transform2D->buttonWidth / 2);
+			float posXMax = ((viewport.z / 2) + (transform2D->position.x)) + (transform2D->buttonWidth / 2);
+
+			float posYMin = ((viewport.w / 2) + (transform2D->position.y)) - (transform2D->buttonHeight / 2);
+			float posYMax = ((viewport.w / 2) + (transform2D->position.y)) + (transform2D->buttonHeight / 2);
+
+			if (fMousePos.x > posXMin && fMousePos.x < posXMax && fMousePos.y > posYMin && fMousePos.y < posYMax)
 			{
-				if (bool hit = myRay.Intersects(*go->aabb[j]))
-				{
-					if (go->SearchComponent(go, ComponentType::UI_BUTTON) != -1 || go->SearchComponent(go, ComponentType::UI_CHECKBOX) != -1 || go->SearchComponent(go, ComponentType::UI_IMAGE) != -1 ||
-						go->SearchComponent(go, ComponentType::UI_INPUTBOX) != -1 || go->SearchComponent(go, ComponentType::UI_SLIDER) != -1)
-					{
-						hitObjs.push_back(go);
-					}
-				}
+				hitObjs.push_back(go);
 			}
 		}
 
 		if (hitObjs.size() > 0)
 		{
 			std::vector<float> distance;
-			float nearDist = 500.0f;
+			float nearestDistance = 100000.0f;
 			int nearObj = 0;
 			for (int i = 0; i < hitObjs.size(); ++i)
 			{
-				int myComp = hitObjs[i]->SearchComponent(hitObjs[i], ComponentType::TRANSFORM2D);
-				float3 distnceVec = hitObjs[i]->components[myComp]->position - App->camera->GameCam->frustum.pos;
-				float finalDistance = math::Sqrt((distnceVec.x * distnceVec.x) + (distnceVec.y * distnceVec.y) + (distnceVec.z * distnceVec.z));
-				distance.push_back(finalDistance);
-			}
-			for (int i = 0; i < distance.size(); i++)
-			{
-				if (distance[i] < nearDist)
+				distance.push_back(hitObjs[i]->getTransform2D()->position.z);
+				if (distance[i] < nearestDistance)
 				{
-					nearDist = distance[i];
+					nearestDistance = distance[i];
 					nearObj = i;
 				}
 			}
