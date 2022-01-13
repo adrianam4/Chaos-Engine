@@ -416,16 +416,30 @@ update_status ModuleUI::PostUpdate(float dt)
 			int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
 			int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
 
-			if (button != -1) go->components[button]->Draw();
-			if (checkbox != -1) go->components[checkbox]->Draw();
-			if (image != -1) go->components[image]->Draw();
+			if (button != -1)
+			{
+				go->components[button]->Draw();
+				ButtonComponent* auxiliar = go->GetButtonComponent(go);
+				RenderText(auxiliar->buttonText.textt, auxiliar->buttonText.X - 120, auxiliar->buttonText.Y, auxiliar->buttonText.Scale, auxiliar->buttonText.Color);
+			}
+			if (checkbox != -1)
+			{
+				go->components[checkbox]->Draw();
+			}
+			if (image != -1)
+			{
+				go->components[image]->Draw();
+			}
 			if (inputbox != -1)
 			{
 				go->components[inputbox]->Draw();
 				InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
 				RenderText(auxiliar->aux.textt, auxiliar->aux.X - 120, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
 			}
-			if (slider != -1) go->components[slider]->Draw();
+			if (slider != -1)
+			{
+				go->components[slider]->Draw();
+			}
 		}
 
 		orderedGameObjects.clear();
@@ -443,16 +457,30 @@ update_status ModuleUI::PostUpdate(float dt)
 			int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
 			int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
 
-			if (button != -1) go->components[button]->Draw();
-			if (checkbox != -1) go->components[checkbox]->Draw();
-			if (image != -1) go->components[image]->Draw();
+			if (button != -1)
+			{
+				go->components[button]->Draw();
+				ButtonComponent* auxiliar = go->GetButtonComponent(go);
+				RenderText(auxiliar->buttonText.textt, auxiliar->buttonText.X - 120, auxiliar->buttonText.Y, auxiliar->buttonText.Scale, auxiliar->buttonText.Color);
+			}
+			if (checkbox != -1)
+			{
+				go->components[checkbox]->Draw();
+			}
+			if (image != -1)
+			{
+				go->components[image]->Draw();
+			}
 			if (inputbox != -1)
 			{
 				go->components[inputbox]->Draw();
 				InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
 				RenderText(auxiliar->aux.textt, auxiliar->aux.X - 120, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
 			}
-			if (slider != -1) go->components[slider]->Draw();
+			if (slider != -1)
+			{
+				go->components[slider]->Draw();
+			}
 		}
 	}
 	

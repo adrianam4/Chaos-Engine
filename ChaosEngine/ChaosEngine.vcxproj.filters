@@ -573,6 +573,9 @@
     <ClInclude Include="Transform2DComponent.h">
       <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Chaos_Engine">

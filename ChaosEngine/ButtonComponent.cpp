@@ -2,21 +2,22 @@
 #include "SDL.h"
 #include "ButtonComponent.h"
 
-ButtonComponent::ButtonComponent(int id, std::string text)
+ButtonComponent::ButtonComponent(int id, std::string _text)
 {
 	name = "Button Component";
 	type = ComponentType::UI_BUTTON;
-	this->text = text;
 	state = State::NORMAL;
+	buttonText.setText(_text, 5, 5, 0.5, { 255,255,255 });
 }
 
 ButtonComponent::~ButtonComponent()
 {
-	text.clear();
 }
 
 void ButtonComponent::Update()
 {
+	buttonText.SetOnlyPosition(float2(GetParentPosition().x, GetParentPosition().y));
+
 	if (!active)
 		state = State::DISABLED;
 	else
@@ -104,6 +105,7 @@ void ButtonComponent::OnEditor(int i)
 	static bool focusedEditable = false;
 	static bool disabledEditable = false;
 	static bool selectedEditable = false;
+	static bool textColorEditable = false;
 
 	ImGui::Checkbox("Interactable", &active);
 
@@ -127,6 +129,14 @@ void ButtonComponent::OnEditor(int i)
 	if (ImGui::ColorButton("Selected Color", ImVec4(selectedColor.r, selectedColor.g, selectedColor.b, selectedColor.a)))
 		selectedEditable = !selectedEditable;
 
+	ImGui::Separator();
+
+	ImGui::Text("Text Color"); ImGui::SameLine();
+	if (ImGui::ColorButton("Text Color", ImVec4(textColor.r, textColor.g, textColor.b, textColor.a)))
+		textColorEditable = !textColorEditable;
+
+	buttonText.setOnlyColor({ textColor.r, textColor.g, textColor.b });
+
 	if (normalEditable)
 	{
 		ImGui::ColorPicker3("Normal Color", &normalColor);
@@ -147,12 +157,26 @@ void ButtonComponent::OnEditor(int i)
 	{
 		ImGui::ColorPicker3("Selected Color", &selectedColor);
 	}
+	if (textColorEditable)
+	{
+		ImGui::ColorPicker3("Text Color", &textColor);
+	}
 	
 	ImGui::SliderFloat("Color Multiplier", &multiplier, 1, 5);
 	ImGui::InputFloat("Fade Duration", &fadeDuration);
+
+	ImGui::InputText("Text", text, IM_ARRAYSIZE(text));
+	ImGui::DragFloat("Font Size", &buttonText.Scale, 0.1, 0, 10);
+	buttonText.setOnlyText(text);
 }
 
 void ButtonComponent::OnClick()
 {
 	
+}
+
+float2 ButtonComponent::GetParentPosition()
+{
+	ComponentTransform2D* transform = owner->getTransform2D();
+	return { transform->position.x, transform->position.y };
 }
