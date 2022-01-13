@@ -153,7 +153,7 @@ bool ModuleEditor::Start()
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
 
 	FBXimporter importer;
-	importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
+	//importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
 
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
@@ -168,7 +168,7 @@ bool ModuleEditor::Start()
 
 	if (temporary = true)
 	{
-		static int buttons = 1;
+		/*static int buttons = 1;
 		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, buttons, "Button "));
 		buttons++;
 		int lastComponent = App->scene->gameObjects.size() - 1;
@@ -211,7 +211,7 @@ bool ModuleEditor::Start()
 		objectSelected->components[2]->owner = objectSelected;
 		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
 		objectSelected->components[3]->owner = objectSelected;
-		App->userInterface->UIGameObjects.push_back(objectSelected);
+		App->userInterface->UIGameObjects.push_back(objectSelected);*/
 
 	}
 
@@ -1158,9 +1158,17 @@ update_status ModuleEditor::Update(float dt)
 						//App->scene->gameObjects.erase(App->scene->gameObjects[i]->childrens.begin()+a);
 
 					}
+					for (uint i = 0; i < App->userInterface->UIGameObjects.size(); i++)
+					{
+						if (App->userInterface->UIGameObjects[i]->id == id)
+						{
+							App->userInterface->UIGameObjects.erase(App->userInterface->UIGameObjects.begin() + i);
+							break;
+						}
+					}
+
 					delete (*(App->scene->gameObjects.begin() + i));
 					App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
-
 					break;
 				}
 			}
@@ -1464,7 +1472,7 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[1]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(300, 300, 1), &float3(0, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxTrue.dds", true));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxFalse.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
 
 					App->userInterface->UIGameObjects.push_back(objectSelected);

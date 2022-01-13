@@ -20,9 +20,11 @@ public:
 	void OnClick() override;
 
 	float2 GetParentPosition();
+	void FadeUI();
 
 public:
 	Text buttonText;
+	bool fadeUI = false;
 
 	Color disabledColor = White;
 	Color pressedColor = Red;

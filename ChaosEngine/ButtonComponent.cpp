@@ -53,6 +53,8 @@ void ButtonComponent::Update()
 				OnClick();
 		}
 	}
+
+	if (fadeUI) FadeUI();
 }
 
 void ButtonComponent::Draw()
@@ -172,11 +174,26 @@ void ButtonComponent::OnEditor(int i)
 
 void ButtonComponent::OnClick()
 {
-	
+	fadeUI = true;
 }
 
 float2 ButtonComponent::GetParentPosition()
 {
 	ComponentTransform2D* transform = owner->getTransform2D();
 	return { transform->position.x, transform->position.y };
+}
+
+void ButtonComponent::FadeUI()
+{
+	static uint iters = 0;
+
+	for (uint i = 0; i < App->userInterface->UIGameObjects.size(); i++)
+	{
+		GameObject* go = App->userInterface->UIGameObjects[i];
+		go->getTransform2D()->position.y -= 5;
+	}
+	iters++;
+
+	if (iters > 300)
+		fadeUI = false;
 }

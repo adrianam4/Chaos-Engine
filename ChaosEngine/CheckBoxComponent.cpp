@@ -156,7 +156,7 @@ void CheckboxComponent::OnEditor(int i)
 
 void CheckboxComponent::OnClick()
 {
-	checked = !checked;
+	/*checked = !checked;
 
 	Resource* newResource = nullptr; 
 
@@ -173,6 +173,31 @@ void CheckboxComponent::OnClick()
 		newResource = App->resources->GetResource(App->resources->Find("Assets/Textures/CheckboxFalse.png"));
 
 	App->resources->LoadResource(newResource->GetUID(), owner);
-	owner->components[owner->components.size() - 1]->owner = owner;
+	owner->components[owner->components.size() - 1]->owner = owner;*/
+	checked = !checked;
+
+	if (App->editor->objectSelected != nullptr)
+	{
+		int oldMaterialId;
+		oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
+		if (oldMaterialId != -1)
+		{
+			App->editor->objectSelected->components.erase(App->editor->objectSelected->components.begin() + oldMaterialId);
+		}
+
+		else
+		{
+			if (checked)
+			{
+				App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxTrue.dds", true);
+			}
+			else
+			{
+				App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxFalse.dds", true);
+			}
+
+			App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+		}
+	}
 }
 
