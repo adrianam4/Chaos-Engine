@@ -198,20 +198,20 @@ bool ModuleEditor::Start()
 		objectSelected->components[3]->owner = objectSelected;
 		App->userInterface->UIGameObjects.push_back(objectSelected);
 
-		//static int images = 1;
-		//App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
-		//images++;
-		//lastComponent = App->scene->gameObjects.size() - 1;
-		//objectSelected = App->scene->gameObjects[lastComponent];
-		//objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
-		//objectSelected->components[0]->owner = objectSelected;
-		//objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
-		//objectSelected->components[1]->owner = objectSelected;
-		//objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 100), &float3(950, 600, 1), &float3(0, 0, 0)));
-		//objectSelected->components[2]->owner = objectSelected;
-		//objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
-		//objectSelected->components[3]->owner = objectSelected;
-		//App->userInterface->UIGameObjects.push_back(objectSelected);
+		static int images = 1;
+		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
+		images++;
+		lastComponent = App->scene->gameObjects.size() - 1;
+		objectSelected = App->scene->gameObjects[lastComponent];
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+		objectSelected->components[0]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
+		objectSelected->components[1]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 100), &float3(950, 600, 1), &float3(0, 0, 0)));
+		objectSelected->components[2]->owner = objectSelected;
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
+		objectSelected->components[3]->owner = objectSelected;
+		App->userInterface->UIGameObjects.push_back(objectSelected);
 
 	}
 

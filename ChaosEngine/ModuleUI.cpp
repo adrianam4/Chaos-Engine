@@ -378,28 +378,84 @@ update_status ModuleUI::PostUpdate(float dt)
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	std::vector<GameObject*> orderedGameObjects;
+	std::vector<uint> orderedIndices;
+
 	for (int i = 0; i < UIGameObjects.size(); i++)
 	{
-		GameObject* go = UIGameObjects[i];
-
-		int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
-		int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
-		int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
-		int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
-		int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
-
-		if (button != -1) go->components[button]->Draw();
-		if (checkbox != -1) go->components[checkbox]->Draw();
-		if (image != -1) go->components[image]->Draw();
-		if (inputbox != -1)
-		{
-			go->components[inputbox]->Draw();
-			InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
-			RenderText(auxiliar->aux.textt, auxiliar->aux.X - 120, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
-		}
-		if (slider != -1) go->components[slider]->Draw();
+		orderedIndices.push_back(i);
 	}
 
+	if (UIGameObjects.size() > 1)
+	{
+		for (int i = 0; i < (UIGameObjects.size() - 1); i++)
+		{
+			for (int j = 0; j < (UIGameObjects.size() - i - 1); j++)
+			{
+				if (UIGameObjects[j]->getTransform2D()->position.z <= UIGameObjects[j + 1]->getTransform2D()->position.z)
+				{
+					uint temp = j;
+					orderedIndices[j] = orderedIndices[j + 1];
+					orderedIndices[j + 1] = temp;
+				}
+			}
+		}
+
+		for (int i = 0; i < orderedIndices.size(); i++)
+		{
+			orderedGameObjects.push_back(UIGameObjects[orderedIndices[i]]);
+		}
+
+		for (int i = 0; i < orderedGameObjects.size(); i++)
+		{
+			GameObject* go = orderedGameObjects[i];
+
+			int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
+			int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
+			int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
+			int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
+			int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
+
+			if (button != -1) go->components[button]->Draw();
+			if (checkbox != -1) go->components[checkbox]->Draw();
+			if (image != -1) go->components[image]->Draw();
+			if (inputbox != -1)
+			{
+				go->components[inputbox]->Draw();
+				InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
+				RenderText(auxiliar->aux.textt, auxiliar->aux.X - 120, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
+			}
+			if (slider != -1) go->components[slider]->Draw();
+		}
+
+		orderedGameObjects.clear();
+		orderedIndices.clear();
+	}
+	else
+	{
+		for (int i = 0; i < UIGameObjects.size(); i++)
+		{
+			GameObject* go = UIGameObjects[i];
+
+			int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
+			int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
+			int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
+			int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
+			int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
+
+			if (button != -1) go->components[button]->Draw();
+			if (checkbox != -1) go->components[checkbox]->Draw();
+			if (image != -1) go->components[image]->Draw();
+			if (inputbox != -1)
+			{
+				go->components[inputbox]->Draw();
+				InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
+				RenderText(auxiliar->aux.textt, auxiliar->aux.X - 120, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
+			}
+			if (slider != -1) go->components[slider]->Draw();
+		}
+	}
+	
 	glEnable(GL_DEPTH_TEST);
 	glPopMatrix();
 	App->viewportBuffer->UnBind();
