@@ -339,7 +339,14 @@ update_status ModuleUI::Update(float dt)
 			color.z = auxiliar->textColor.b;
 		}
 		if (checkbox != -1)
+		{
 			go->components[checkbox]->Update();
+			CheckboxComponent* auxiliar = go->GetCheckboxComponent(go);
+			textExample = auxiliar->text;
+			color.x = auxiliar->textColor.r;
+			color.y = auxiliar->textColor.g;
+			color.z = auxiliar->textColor.b;
+		}
 		if (image != -1)
 			go->components[image]->Update();
 		if (inputbox != -1) 
@@ -353,7 +360,14 @@ update_status ModuleUI::Update(float dt)
 		}
 			
 		if (slider != -1)
+		{
 			go->components[slider]->Update();
+			SliderComponent* auxiliar = go->GetSliderComponent(go);
+			textExample = auxiliar->text;
+			color.x = auxiliar->textColor.r;
+			color.y = auxiliar->textColor.g;
+			color.z = auxiliar->textColor.b;
+		}
 	}
 	//}
 	
@@ -432,6 +446,8 @@ update_status ModuleUI::PostUpdate(float dt)
 			if (checkbox != -1)
 			{
 				go->components[checkbox]->Draw();
+				CheckboxComponent* auxiliar = go->GetCheckboxComponent(go);
+				RenderText(auxiliar->checkboxText.textt, auxiliar->checkboxText.X, auxiliar->checkboxText.Y, auxiliar->checkboxText.Scale, auxiliar->checkboxText.Color);
 			}
 			if (image != -1)
 			{
@@ -446,6 +462,8 @@ update_status ModuleUI::PostUpdate(float dt)
 			if (slider != -1)
 			{
 				go->components[slider]->Draw();
+				SliderComponent* auxiliar = go->GetSliderComponent(go);
+				RenderText(auxiliar->sliderText.textt, auxiliar->sliderText.X, auxiliar->sliderText.Y, auxiliar->sliderText.Scale, auxiliar->sliderText.Color);
 			}
 		}
 
@@ -468,11 +486,13 @@ update_status ModuleUI::PostUpdate(float dt)
 			{
 				go->components[button]->Draw();
 				ButtonComponent* auxiliar = go->GetButtonComponent(go);
-				RenderText(auxiliar->buttonText.textt, auxiliar->buttonText.X - 120, auxiliar->buttonText.Y, auxiliar->buttonText.Scale, auxiliar->buttonText.Color);
+				RenderText(auxiliar->buttonText.textt, auxiliar->buttonText.X, auxiliar->buttonText.Y, auxiliar->buttonText.Scale, auxiliar->buttonText.Color);
 			}
 			if (checkbox != -1)
 			{
 				go->components[checkbox]->Draw();
+				CheckboxComponent* auxiliar = go->GetCheckboxComponent(go);
+				RenderText(auxiliar->checkboxText.textt, auxiliar->checkboxText.X, auxiliar->checkboxText.Y, auxiliar->checkboxText.Scale, auxiliar->checkboxText.Color);
 			}
 			if (image != -1)
 			{
@@ -482,11 +502,13 @@ update_status ModuleUI::PostUpdate(float dt)
 			{
 				go->components[inputbox]->Draw();
 				InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
-				RenderText(auxiliar->aux.textt, auxiliar->aux.X - 120, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
+				RenderText(auxiliar->aux.textt, auxiliar->aux.X, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
 			}
 			if (slider != -1)
 			{
 				go->components[slider]->Draw();
+				SliderComponent* auxiliar = go->GetSliderComponent(go);
+				RenderText(auxiliar->sliderText.textt, auxiliar->sliderText.X, auxiliar->sliderText.Y, auxiliar->sliderText.Scale, auxiliar->sliderText.Color);
 			}
 		}
 	}

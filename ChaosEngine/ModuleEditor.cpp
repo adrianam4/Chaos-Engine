@@ -166,7 +166,7 @@ bool ModuleEditor::Start()
 	App->camera->camArray[0]->isTheMainCamera = true;
 	App->camera->GameCam = App->camera->camArray[0];
 
-	if (temporary = true)
+	/*if (temporary = true)
 	{
 		static int buttons = 1;
 		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, buttons, "Button "));
@@ -213,7 +213,7 @@ bool ModuleEditor::Start()
 		objectSelected->components[3]->owner = objectSelected;
 		App->userInterface->UIGameObjects.push_back(objectSelected);
 
-	}
+	}*/
 
 	isActive = true;
 	isActive2 = true;
@@ -1470,9 +1470,9 @@ update_status ModuleEditor::Update(float dt)
 					objectSelected->components[0]->owner = objectSelected;
 					objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Checkbox"));
 					objectSelected->components[1]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(300, 300, 1), &float3(0, 0, 0)));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 0), &float3(300, 100, 1), &float3(0, 0, 0)));
 					objectSelected->components[2]->owner = objectSelected;
-					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxFalse.dds", true));
+					objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/TextCheckboxFalse.dds", true));
 					objectSelected->components[3]->owner = objectSelected;
 
 					App->userInterface->UIGameObjects.push_back(objectSelected);

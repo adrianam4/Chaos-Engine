@@ -33,6 +33,6 @@ public:
 	Color selectedColor = Black;
 
 	Color textColor = White;
-	char text[32] = "Button";
+	char text[64] = "Button";
 	float fontScale = 1;
 };

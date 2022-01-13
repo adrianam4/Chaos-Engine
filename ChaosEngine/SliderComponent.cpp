@@ -2,11 +2,10 @@
 #include "SDL.h"
 #include "SliderComponent.h"
 
-SliderComponent::SliderComponent(int id, std::string text)
+SliderComponent::SliderComponent(int id, std::string _text)
 {
 	name = "Slider Component";
 	type = ComponentType::UI_SLIDER;
-	this->text = text;
 	value = 0;
 	minValue = 0;
 	maxValue = 100;
@@ -15,15 +14,18 @@ SliderComponent::SliderComponent(int id, std::string text)
 	barProgres = 0.0f;
 	completed = false;
 	thePlane = App->editor->planes[App->editor->planes.size() - 1];
+	sliderText.setText(_text, 5, 5, 0.5, { 255,255,255 });
 }
 
 SliderComponent::~SliderComponent()
 {
-	text.clear();
+	
 }
 
 void SliderComponent::Update()
 {
+	sliderText.SetOnlyPosition(float2(GetParentPosition().x, GetParentPosition().y));
+
 	if (!active)
 		state = State::DISABLED;
 	else
@@ -153,6 +155,7 @@ void SliderComponent::OnEditor(int i)
 	static bool focusedEditable = false;
 	static bool disabledEditable = false;
 	static bool selectedEditable = false;
+	static bool textColorEditable = false;
 
 	ImGui::Checkbox("Interactable", &active);
 
@@ -176,6 +179,14 @@ void SliderComponent::OnEditor(int i)
 	if (ImGui::ColorButton("Selected Color", ImVec4(selectedColor.r, selectedColor.g, selectedColor.b, selectedColor.a)))
 		selectedEditable = !selectedEditable;
 
+	ImGui::Separator();
+
+	ImGui::Text("Text Color"); ImGui::SameLine();
+	if (ImGui::ColorButton("Text Color", ImVec4(textColor.r, textColor.g, textColor.b, textColor.a)))
+		textColorEditable = !textColorEditable;
+
+	sliderText.setOnlyColor({ textColor.r, textColor.g, textColor.b });
+
 	if (normalEditable)
 	{
 		ImGui::ColorPicker3("Normal Color", &normalColor);
@@ -196,8 +207,22 @@ void SliderComponent::OnEditor(int i)
 	{
 		ImGui::ColorPicker3("Selected Color", &selectedColor);
 	}
+	if (textColorEditable)
+	{
+		ImGui::ColorPicker3("Text Color", &textColor);
+	}
 
 	ImGui::InputFloat("Min Value", &minValue);
 	ImGui::InputFloat("Max Value", &maxValue);
 	ImGui::SliderFloat("Value", &value, minValue, maxValue);
+
+	ImGui::InputText("Text", text, IM_ARRAYSIZE(text));
+	ImGui::DragFloat("Font Size", &sliderText.Scale, 0.1, 0, 10);
+	sliderText.setOnlyText(text);
+}
+
+float2 SliderComponent::GetParentPosition()
+{
+	ComponentTransform2D* transform = owner->getTransform2D();
+	return { transform->position.x - (strlen(text) * 12 * sliderText.Scale), transform->position.y - 5 };
 }

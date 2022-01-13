@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "Color.h"
+#include "Text.h"
 
 class CheckboxComponent : public Component
 {
@@ -14,6 +15,7 @@ public:
 	void Draw() override;
 	void OnEditor(int i) override;
 	void OnClick() override;
+	float2 GetParentPosition();
 
 public:
 	Color disabledColor = White;
@@ -22,6 +24,10 @@ public:
 	Color normalColor = Green;
 	Color selectedColor = Black;
 
-	std::string text;
 	bool checked;
+
+	Text checkboxText;
+	Color textColor = White;
+	char text[64] = "V-Sync";
+	float fontScale = 0.5;
 };

@@ -2,22 +2,24 @@
 #include "SDL.h"
 #include "CheckboxComponent.h"
 
-CheckboxComponent::CheckboxComponent(int id, std::string text)
+CheckboxComponent::CheckboxComponent(int id, std::string _text)
 {
 	name = "CheckBox Component";
 	type = ComponentType::UI_CHECKBOX;
-	this->text = text;
 	state = State::NORMAL;
 	checked = false;
+	checkboxText.setText(_text, 5, 5, 0.5, { 255,255,255 });
 }
 
 CheckboxComponent::~CheckboxComponent()
 {
-	text.clear();
+
 }
 
 void CheckboxComponent::Update()
 {
+	checkboxText.SetOnlyPosition(float2(GetParentPosition().x, GetParentPosition().y));
+
 	if (!active)
 		state = State::DISABLED;
 	else
@@ -106,6 +108,7 @@ void CheckboxComponent::OnEditor(int i)
 	static bool focusedEditable = false;
 	static bool disabledEditable = false;
 	static bool selectedEditable = false;
+	static bool textColorEditable = false;
 
 	ImGui::Checkbox("Interactable", &active);
 
@@ -129,6 +132,14 @@ void CheckboxComponent::OnEditor(int i)
 	if (ImGui::ColorButton("Selected Color", ImVec4(selectedColor.r, selectedColor.g, selectedColor.b, selectedColor.a)))
 		selectedEditable = !selectedEditable;
 
+	ImGui::Separator();
+
+	ImGui::Text("Text Color"); ImGui::SameLine();
+	if (ImGui::ColorButton("Text Color", ImVec4(textColor.r, textColor.g, textColor.b, textColor.a)))
+		textColorEditable = !textColorEditable;
+
+	checkboxText.setOnlyColor({ textColor.r, textColor.g, textColor.b });
+
 	if (normalEditable)
 	{
 		ImGui::ColorPicker3("Normal Color", &normalColor);
@@ -149,9 +160,16 @@ void CheckboxComponent::OnEditor(int i)
 	{
 		ImGui::ColorPicker3("Selected Color", &selectedColor);
 	}
+	if (textColorEditable)
+	{
+		ImGui::ColorPicker3("Text Color", &textColor);
+	}
 
 	ImGui::SliderFloat("Color Multiplier", &multiplier, 1, 5);
 	ImGui::InputFloat("Fade Duration", &fadeDuration);
+	ImGui::InputText("Text", text, IM_ARRAYSIZE(text));
+	ImGui::DragFloat("Font Size", &checkboxText.Scale, 0.1, 0, 10);
+	checkboxText.setOnlyText(text);
 }
 
 void CheckboxComponent::OnClick()
@@ -177,28 +195,36 @@ void CheckboxComponent::OnClick()
 
 	checked = !checked;
 
-	if (App->editor->objectSelected != nullptr)
+	if (owner != nullptr)
 	{
+		App->editor->objectSelected = owner;
+
 		int oldMaterialId;
-		oldMaterialId = App->editor->objectSelected->SearchComponent(App->editor->objectSelected, ComponentType::MATERIAL);
+		oldMaterialId = owner->SearchComponent(owner, ComponentType::MATERIAL);
 		if (oldMaterialId != -1)
 		{
-			App->editor->objectSelected->components.erase(App->editor->objectSelected->components.begin() + oldMaterialId);
+			owner->components.erase(owner->components.begin() + oldMaterialId);
 		}
 
 		else
 		{
 			if (checked)
 			{
-				App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxTrue.dds", true);
+				owner->CreateComponent(ComponentType::MATERIAL, "Library/Textures/TextCheckboxTrue.dds", true);
 			}
 			else
 			{
-				App->editor->objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/CheckboxFalse.dds", true);
+				owner->CreateComponent(ComponentType::MATERIAL, "Library/Textures/TextCheckboxFalse.dds", true);
 			}
 
-			App->editor->objectSelected->components[App->editor->objectSelected->components.size() - 1]->owner = App->editor->objectSelected;
+			owner->components[owner->components.size() - 1]->owner = owner;
 		}
 	}
+}
+
+float2 CheckboxComponent::GetParentPosition()
+{
+	ComponentTransform2D* transform = owner->getTransform2D();
+	return { transform->position.x - (strlen(text) * 12 * checkboxText.Scale) - (transform->scale.x / 4), transform->position.y - 5 };
 }
 
