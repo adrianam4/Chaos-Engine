@@ -485,5 +485,5 @@ void InputBoxComponent::OnClick()
 float2 InputBoxComponent::GetParentPosition()
 {
 	ComponentTransform2D* transform = owner->getTransform2D();
-	return { transform->position.x, transform->position.y };
+	return { transform->position.x - (strlen(text) * 6), transform->position.y - 5};
 }

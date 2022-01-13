@@ -298,8 +298,8 @@ update_status ModuleUI::Update(float dt)
 {
 	// Update All UI Components
 
-	if (App->gameMode)
-	{
+	//if (App->gameMode)
+	//{
 	if (!UIGameObjects.empty() && App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 	{
 		if (!UIGameObjectSelected)
@@ -330,7 +330,14 @@ update_status ModuleUI::Update(float dt)
 		int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
 
 		if (button != -1)
+		{
 			go->components[button]->Update();
+			ButtonComponent* auxiliar = go->GetButtonComponent(go);
+			textExample = auxiliar->text;
+			color.x = auxiliar->textColor.r;
+			color.y = auxiliar->textColor.g;
+			color.z = auxiliar->textColor.b;
+		}
 		if (checkbox != -1)
 			go->components[checkbox]->Update();
 		if (image != -1)
@@ -348,7 +355,7 @@ update_status ModuleUI::Update(float dt)
 		if (slider != -1)
 			go->components[slider]->Update();
 	}
-	}
+	//}
 	
 	return UPDATE_CONTINUE;
 }
@@ -420,7 +427,7 @@ update_status ModuleUI::PostUpdate(float dt)
 			{
 				go->components[button]->Draw();
 				ButtonComponent* auxiliar = go->GetButtonComponent(go);
-				RenderText(auxiliar->buttonText.textt, auxiliar->buttonText.X - 120, auxiliar->buttonText.Y, auxiliar->buttonText.Scale, auxiliar->buttonText.Color);
+				RenderText(auxiliar->buttonText.textt, auxiliar->buttonText.X, auxiliar->buttonText.Y, auxiliar->buttonText.Scale, auxiliar->buttonText.Color);
 			}
 			if (checkbox != -1)
 			{
@@ -434,7 +441,7 @@ update_status ModuleUI::PostUpdate(float dt)
 			{
 				go->components[inputbox]->Draw();
 				InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
-				RenderText(auxiliar->aux.textt, auxiliar->aux.X - 120, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
+				RenderText(auxiliar->aux.textt, auxiliar->aux.X, auxiliar->aux.Y, auxiliar->aux.Scale, auxiliar->aux.Color);
 			}
 			if (slider != -1)
 			{

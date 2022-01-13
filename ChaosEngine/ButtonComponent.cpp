@@ -180,7 +180,7 @@ void ButtonComponent::OnClick()
 float2 ButtonComponent::GetParentPosition()
 {
 	ComponentTransform2D* transform = owner->getTransform2D();
-	return { transform->position.x, transform->position.y };
+	return { transform->position.x - (strlen(text) * 12 * buttonText.Scale), transform->position.y - 5 };
 }
 
 void ButtonComponent::FadeUI()
@@ -194,6 +194,6 @@ void ButtonComponent::FadeUI()
 	}
 	iters++;
 
-	if (iters > 300)
+	if (iters > 400)
 		fadeUI = false;
 }
