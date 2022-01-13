@@ -179,14 +179,14 @@ void ComponentTransform::Update(bool releaseMouse)
 				App->editor->objectSelected->childrens[a]->components[b]->transmat = App->editor->objectSelected->childrens[a]->components[b]->transmat.Transposed();
 				App->editor->objectSelected->childrens[a]->matrix = App->editor->objectSelected->childrens[a]->components[b]->transmat.ptr();
 
-				lastScale = scale;
-				lastPosition = position;
-				lastRotation = rotationEuler;
-				lastGeneralScale = generalScale;
+				
 			}
 		}
 	}
-
+	lastScale = scale;
+	lastPosition = position;
+	lastRotation = rotationEuler;
+	lastGeneralScale = generalScale;
 	for (int i = 0; i < App->editor->objectSelected->boundingBoxes.size(); i++)
 	{
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();

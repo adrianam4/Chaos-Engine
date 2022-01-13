@@ -6,6 +6,7 @@
 #include "MaterialComponent.h"
 #include "CameraComponent.h"
 #include "ButtonComponent.h"
+#include "CanvasComponent.h"
 #include "ImageComponent.h"
 #include "CheckBoxComponent.h"
 #include "SliderComponent.h"
@@ -51,6 +52,9 @@ Component* GameObject::CreateUIComponent(ComponentType type, std::string text)
 		break;
 	case ComponentType::UI_INPUTBOX:
 		component = new InputBoxComponent(5, text);
+		break;
+	case ComponentType::UI_CANVAS:
+		component = new CanvasComponent(6, text);
 		break;
 	default:
 		break;

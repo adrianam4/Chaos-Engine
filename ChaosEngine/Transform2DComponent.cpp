@@ -131,25 +131,36 @@ void ComponentTransform2D::Update(bool releaseMouse)
 		App->editor->objectSelected->boundingBoxes[i]->matrix = transMatrix.ptr();
 	}*/
 
-	//float4x4 aux1;
-
-	/*for (int a = 0; a < App->editor->objectSelected->childrens.size(); a++) {
-		for (int b = 0; b < App->editor->objectSelected->childrens[a]->components.size(); b++) {
-			if (App->editor->objectSelected->childrens[a]->components[b]->type == ComponentType::TRANSFORM)
+	float4x4 aux1;
+	for (int a = 0; a < owner->childrens.size(); a++) {
+		for (int b = 0; b < owner->childrens[a]->components.size(); b++) {
+			if ((owner->childrens[a]->components[b]->type == ComponentType::TRANSFORM2D))
 			{
-				App->editor->objectSelected->childrens[a]->components[b]->scale += (scale - lastScale);
-				App->editor->objectSelected->childrens[a]->components[b]->position += (position - lastPosition);
-				App->editor->objectSelected->childrens[a]->components[b]->rotationEuler += (rotationEuler - lastRotation);
-				App->editor->objectSelected->childrens[a]->components[b]->rotationQuat = FromEulerToQuat(App->editor->objectSelected->childrens[a]->components[b]->rotationEuler);
+				//owner->childrens[a]->components[b]->scale += (scale - lastScale);
+				owner->childrens[a]->components[b]->position += (position - lastPosition);
+				//owner->childrens[a]->components[b]->rotationEuler += (rotationEuler - lastRotation);
+				//owner->childrens[a]->components[b]->rotationQuat = FromEulerToQuat(owner->childrens[a]->components[b]->rotationEuler);
 
-				App->editor->objectSelected->childrens[a]->components[b]->transmat = aux1.FromTRS(App->editor->objectSelected->childrens[a]->components[b]->position, App->editor->objectSelected->childrens[a]->components[b]->rotationQuat, App->editor->objectSelected->childrens[a]->components[b]->scale);
-				App->editor->objectSelected->childrens[a]->components[b]->transmat = App->editor->objectSelected->childrens[a]->components[b]->transmat.Transposed();
-				App->editor->objectSelected->childrens[a]->matrix = App->editor->objectSelected->childrens[a]->components[b]->transmat.ptr();
+				owner->childrens[a]->components[b]->transmat = aux1.FromTRS(owner->childrens[a]->components[b]->position, owner->childrens[a]->components[b]->rotationQuat, owner->childrens[a]->components[b]->scale);
+				owner->childrens[a]->components[b]->transmat = owner->childrens[a]->components[b]->transmat.Transposed();
+				owner->childrens[a]->matrix = owner->childrens[a]->components[b]->transmat.ptr();
+
+
 			}
 		}
-	}*/
+	}
+	lastScale = scale;
+	lastPosition = position;
+	lastRotation = rotationEuler;
+	lastGeneralScale = generalScale;
 }
-
+void ComponentTransform2D::setLast() 
+{
+	lastScale = scale;
+	lastPosition = position;
+	lastRotation = rotationEuler;
+	lastGeneralScale = generalScale;
+}
 void ComponentTransform2D::Disable()
 {
 }

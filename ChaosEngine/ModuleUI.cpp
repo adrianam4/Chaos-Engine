@@ -9,7 +9,7 @@
 #include "CheckBoxComponent.h"
 #include <stack>
 #include <ft2build.h>
-
+#include"CanvasComponent.h"
 #include <GL/gl.h>
 
 #include FT_FREETYPE_H 
@@ -248,7 +248,7 @@ update_status ModuleUI::PreUpdate(float dt)
 	float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
 	float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };
 	float4 viewport = App->editor->viewport;
-	float2 fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y };
+	fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y };
 
 	if (mousePos.x > viewport.x && mousePos.x < viewport.x + viewport.z && mousePos.y > viewport.y && mousePos.y < viewport.y + viewport.w)
 	{
@@ -328,7 +328,7 @@ update_status ModuleUI::Update(float dt)
 		int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
 		int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
 		int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
-
+		int canvas = go->SearchComponent(go, ComponentType::UI_CANVAS);
 		if (button != -1)
 		{
 			go->components[button]->Update();
@@ -367,6 +367,10 @@ update_status ModuleUI::Update(float dt)
 			color.x = auxiliar->textColor.r;
 			color.y = auxiliar->textColor.g;
 			color.z = auxiliar->textColor.b;
+		}
+		if (canvas != -1)
+		{
+			go->components[canvas]->Update();
 		}
 	}
 	//}
@@ -436,7 +440,7 @@ update_status ModuleUI::PostUpdate(float dt)
 			int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
 			int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
 			int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
-
+			int canvas = go->SearchComponent(go, ComponentType::UI_CANVAS);
 			if (button != -1)
 			{
 				go->components[button]->Draw();
@@ -464,6 +468,10 @@ update_status ModuleUI::PostUpdate(float dt)
 				go->components[slider]->Draw();
 				SliderComponent* auxiliar = go->GetSliderComponent(go);
 				RenderText(auxiliar->sliderText.textt, auxiliar->sliderText.X, auxiliar->sliderText.Y, auxiliar->sliderText.Scale, auxiliar->sliderText.Color);
+			}
+			if (canvas != -1)
+			{
+				go->components[canvas]->Draw();
 			}
 		}
 
@@ -481,7 +489,7 @@ update_status ModuleUI::PostUpdate(float dt)
 			int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
 			int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
 			int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
-
+			int canvas = go->SearchComponent(go, ComponentType::UI_CANVAS);
 			if (button != -1)
 			{
 				go->components[button]->Draw();
@@ -509,6 +517,10 @@ update_status ModuleUI::PostUpdate(float dt)
 				go->components[slider]->Draw();
 				SliderComponent* auxiliar = go->GetSliderComponent(go);
 				RenderText(auxiliar->sliderText.textt, auxiliar->sliderText.X, auxiliar->sliderText.Y, auxiliar->sliderText.Scale, auxiliar->sliderText.Color);
+			}
+			if (canvas != -1)
+			{
+				go->components[canvas]->Draw();
 			}
 		}
 	}

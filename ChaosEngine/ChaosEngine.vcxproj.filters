@@ -241,6 +241,9 @@
     <ClCompile Include="Transform2DComponent.cpp">
       <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
     </ClCompile>
+    <ClCompile Include="CanvasComponent.cpp">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FileSystem.h">
@@ -575,6 +578,9 @@
     </ClInclude>
     <ClInclude Include="Text.h">
       <Filter>Chaos_Engine\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="CanvasComponent.h">
+      <Filter>Chaos_Engine\GameObjects\Components\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

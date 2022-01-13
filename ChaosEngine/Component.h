@@ -24,6 +24,7 @@ enum class ComponentType
 	UI_CHECKBOX,
 	UI_SLIDER,
 	UI_INPUTBOX,
+	UI_CANVAS,
 	NONE,
 	EMPTY,
 };
