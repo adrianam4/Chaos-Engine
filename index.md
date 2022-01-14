@@ -104,12 +104,12 @@ Moreover, we have created other type of transform component, exclusive for the U
 
 ## Editor Mode
 
-<img width="600" src="Images\Ejemplo1.gif">
+<img width="730" src="Images\Ejemplo1.gif">
 
 
 ## Game Mode
 
-<img width="600" src="Images\Ejemplo2.gif">
+<img width="730" src="Images\Ejemplo2.gif">
 
 
 ### Engine Video Example
