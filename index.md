@@ -20,7 +20,7 @@ Unai Díaz ([unaidiaz](https://github.com/unaidiaz))
 
 <img width="200" src="Images\Unai.jpg">
 
-
+We all have been always working together. So, there isn't anything that any member has made on his own. All have been made by all of us, like a team.
 
 ### Main Core Sub-Systems
 
