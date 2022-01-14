@@ -5,7 +5,6 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 With the last release you can now include UI Components, such as Buutons, Sliders, Input Boxes, Images and Checkboxes!
 
 
-
 ### Team Members
 
 Adrián Aroca ([adrianam4](https://github.com/adrianam4))
@@ -21,6 +20,7 @@ Unai Díaz ([unaidiaz](https://github.com/unaidiaz))
 <img width="200" src="Images\Unai.jpg">
 
 We all have been always working together. So, there isn't anything that any member has made on his own. All have been made by all of us, like a team.
+
 
 ### Main Core Sub-Systems
 
@@ -57,7 +57,6 @@ We all have been always working together. So, there isn't anything that any memb
 - Edit UI Components Text
 
 
-
 ### Controls
 
 - ESC: Exit the Engine
@@ -82,6 +81,7 @@ We all have been always working together. So, there isn't anything that any memb
 - BUTTON (2): Rotation Guizmo
 - BUTTON (3): Scale Guizmo
 
+
 ### Detailed Explanation of our Sub-System (User Interface)
 
 The last assignment that we choose for our Engine, was "User Interface (UI)".
@@ -97,10 +97,22 @@ Talking about the UI Components, we have created the following ones:
 
 Moreover, we have created other type of transform component, exclusive for the UI Components. And this is the Transform2D component. Is very similar to his 3D component. But this one fits better and makes the work easier for managing the UI Elements.
 
+
+##Editor Mode
+
+<img width="600" src="Images\Ejemplo1.gif">
+
+
+##Game Mode
+
+<img width="600" src="Images\Ejemplo2.gif">
+
+
 ### Engine Video Example
 
 <video src="Images\Video.mp4" controls="controls" style="max-width: 730px;">
 </video>
+
 
 ### Repository and Downloads
 
@@ -109,6 +121,7 @@ Moreover, we have created other type of transform component, exclusive for the U
 [Downloads](https://github.com/adrianam4/Chaos-Engine/releases/tag/v.1.0)
 
 [Last Release](https://github.com/adrianam4/Chaos-Engine/releases/download/v.1.0/ChaosEngine_v.1.0.zip)
+
 
 ### License
 
