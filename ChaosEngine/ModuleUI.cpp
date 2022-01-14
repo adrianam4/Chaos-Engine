@@ -5,6 +5,7 @@
 #include "ButtonComponent.h"
 #include "ImageComponent.h"
 #include "InputBoxComponent.h"
+#include "MaterialComponent.h"
 #include "SliderComponent.h"
 #include "CheckBoxComponent.h"
 #include <stack>
@@ -263,7 +264,7 @@ update_status ModuleUI::PreUpdate(float dt)
 			float posYMin = ((viewport.w / 2) + (-transform2D->position.y)) - (transform2D->buttonHeight / 2);
 			float posYMax = ((viewport.w / 2) + (-transform2D->position.y)) + (transform2D->buttonHeight / 2);
 
-			if (fMousePos.x > posXMin && fMousePos.x < posXMax && fMousePos.y > posYMin && fMousePos.y < posYMax)
+			if ((fMousePos.x > posXMin && fMousePos.x < posXMax && fMousePos.y > posYMin && fMousePos.y < posYMax) && go->SearchComponent(go,ComponentType::UI_IMAGE) == -1)
 			{
 				hitObjs.push_back(go);
 			}
@@ -557,13 +558,21 @@ void ModuleUI::DeleteUIGameObjects()
 				{
 					if (App->userInterface->UIGameObjects[i]->id == id)
 					{
-						App->userInterface->UIGameObjects.erase(App->userInterface->UIGameObjects.begin() + i);
+						GameObject* go = App->userInterface->UIGameObjects[i];
+						uint comp = go->SearchComponent(go, ComponentType::UI_IMAGE);
+						if (comp == -1 || (comp != -1 && go->components[comp]->UIid != 10))
+						{
+							ComponentTransform2D* component2d = App->userInterface->UIGameObjects[i]->getTransform2D();
+							component2d->position.x = 70000;
+							component2d->position.z = 70000;
+						}
+						//App->userInterface->UIGameObjects.erase(App->userInterface->UIGameObjects.begin() + i);
 						break;
 					}
 				}
 
-				delete (*(App->scene->gameObjects.begin() + i));
-				App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
+				//delete (*(App->scene->gameObjects.begin() + i));
+				//App->scene->gameObjects.erase(App->scene->gameObjects.begin() + i);
 				break;
 			}
 		}

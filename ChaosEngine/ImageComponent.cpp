@@ -9,6 +9,7 @@ ImageComponent::ImageComponent(int id, std::string text)
 	this->text = "Image Component";
 	state = State::NORMAL;
 	color = White;
+	UIid = id;
 }
 
 ImageComponent::~ImageComponent()

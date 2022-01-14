@@ -9,6 +9,8 @@ CheckboxComponent::CheckboxComponent(int id, std::string _text)
 	state = State::NORMAL;
 	checked = false;
 	checkboxText.setText(_text, 5, 5, 0.5, { 255,255,255 });
+	UIid = id;
+	firstTime = true;
 }
 
 CheckboxComponent::~CheckboxComponent()
@@ -44,7 +46,17 @@ void CheckboxComponent::Update()
 			// If mouse button pressed -> Generate event!
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP)
 			{
-				OnClick();
+				if (firstTime)
+				{
+					OnClick();
+					OnClick();
+					OnClick();
+					firstTime = false;
+				}
+				else
+				{
+					OnClick();
+				}
 			}
 		}
 		else state = State::NORMAL;
@@ -53,7 +65,19 @@ void CheckboxComponent::Update()
 		{
 			state = State::SELECTED;
 			if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
-				OnClick();
+			{
+				if (firstTime)
+				{
+					OnClick();
+					OnClick();
+					OnClick();
+					firstTime = false;
+				}
+				else
+				{
+					OnClick();
+				}
+			}
 		}
 	}
 }
@@ -192,12 +216,30 @@ void CheckboxComponent::OnClick()
 			if (checked)
 			{
 				owner->CreateComponent(ComponentType::MATERIAL, "Library/Textures/TextCheckboxTrue.dds", true);
-				App->maxMs = 1000 / 60;
+				if (UIid == 3) App->maxMs = 1000 / 60;
+				else
+				{
+					for (int i = 0; i < App->userInterface->UIGameObjects.size(); i++)
+					{
+						GameObject* auxGo = App->userInterface->UIGameObjects[i];
+						uint comp = auxGo->SearchComponent(auxGo, ComponentType::UI_IMAGE);
+						if (comp != -1 && auxGo->components[comp]->UIid == 10) auxGo->getTransform2D()->position.x = 0;
+					}
+				}
 			}
 			else
 			{
 				owner->CreateComponent(ComponentType::MATERIAL, "Library/Textures/TextCheckboxFalse.dds", true);
-				App->maxMs = 0;
+				if (UIid == 3) App->maxMs = 0;
+				else
+				{
+					for (int i = 0; i < App->userInterface->UIGameObjects.size(); i++)
+					{
+						GameObject* auxGo = App->userInterface->UIGameObjects[i];
+						uint comp = auxGo->SearchComponent(auxGo, ComponentType::UI_IMAGE);
+						if (comp != -1 && auxGo->components[comp]->UIid == 10) auxGo->getTransform2D()->position.x = 70000;
+					}
+				}
 			}
 
 			owner->components[owner->components.size() - 1]->owner = owner;

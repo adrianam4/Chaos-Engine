@@ -9,8 +9,8 @@ SliderComponent::SliderComponent(int id, std::string _text)
 	name = "Slider Component";
 	type = ComponentType::UI_SLIDER;
 	value = 0;
-	minValue = 0;
-	maxValue = 180;
+	minValue = 70;
+	maxValue = 120;
 	drawRect = false;
 	state = State::NORMAL;
 	barProgres = 0.0f;

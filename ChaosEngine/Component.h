@@ -50,6 +50,7 @@ public:
 	bool drawWireframe = false;
 	GameObject* owner;
 	const char* name;
+	int UIid;
 	std::string modelPath;
 	const char* texturePath;
 	int width;

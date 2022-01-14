@@ -17,6 +17,7 @@ class ImageComponent;
 class CheckboxComponent;
 class InputBoxComponent;
 class SliderComponent;
+class ComponentMaterial;
 
 class GameObject
 {
@@ -59,6 +60,7 @@ public:
 	CheckboxComponent* GetCheckboxComponent(GameObject* go);
 	InputBoxComponent* GetInputboxComponent(GameObject* go);
 	SliderComponent* GetSliderComponent(GameObject* go);
+	ComponentMaterial* GetMaterialComp(GameObject* go);
 	float3 trans;
 	float3 sca;
 	Quat rot;

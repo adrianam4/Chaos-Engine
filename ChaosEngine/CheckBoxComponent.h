@@ -30,4 +30,5 @@ public:
 	Color textColor = White;
 	char text[64] = "V-Sync";
 	float fontScale = 0.5;
+	bool firstTime;
 };

@@ -158,8 +158,8 @@ bool ModuleEditor::Start()
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
 	App->editor->objectSelected = App->scene->gameObjects[lastComponent];
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 75, 1, 20, true));
-	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(-1, 2.5, -14), &float3(1, 1, 1), &float3(0, 0, 0)));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent2(ComponentType::CAMERA, float3(0, 0, 0), 90, 1, 200, true));
+	App->scene->gameObjects[lastComponent]->components.push_back(App->scene->gameObjects[lastComponent]->CreateComponent(ComponentType::TRANSFORM, &float3(-1, 2.5, -14), &float3(1, 1, 1), &float3(5, 0, 0)));
 	App->scene->gameObjects[lastComponent]->components[0]->owner = App->scene->gameObjects[lastComponent];
 	App->scene->gameObjects[lastComponent]->components[1]->owner = App->scene->gameObjects[lastComponent];
 	objectSelected = App->scene->gameObjects[lastComponent];
@@ -393,14 +393,11 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 				}
 			}
 		}
-		else {
+		else 
+		{
 			haveChild = false;
 			iteration = 0;
 		}
-
-
-
-
 
 		//////////////////////////////////////////////////////
 		aux->name = json_object_get_string(json_value_get_object(theObject), "Name");
@@ -2737,6 +2734,7 @@ update_status ModuleEditor::Update(float dt)
 			ImGui::SameLine();
 			if (ImGui::ImageButton(stopIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
 				App->stopGameTime = !App->stopGameTime;
+				App->userInterface->DeleteUIGameObjects();
 				App->editor->AddLog("Game Clock Stops (Stopped at %f)\n", App->gameTimeNum);
 				App->gameMode = false;
 			}
@@ -2748,9 +2746,7 @@ update_status ModuleEditor::Update(float dt)
 			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
 			App->gameMode = true;
 
-
 			App->userInterface->DeleteUIGameObjects();
-
 
 			static int images = 1;
 			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
@@ -2761,16 +2757,26 @@ update_status ModuleEditor::Update(float dt)
 			objectSelected->components[0]->owner = objectSelected;
 			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Image Component"));
 			objectSelected->components[1]->owner = objectSelected;
-			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, 100), &float3(2000, 2000, 1), &float3(0, 0, 0)));
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, -295), &float3(2600, 2000, 1), &float3(0, 0, 0)));
 			objectSelected->components[2]->owner = objectSelected;
-			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background.dds", true));
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Background2.dds", true));
+			objectSelected->components[3]->owner = objectSelected;
+			App->userInterface->UIGameObjects.push_back(objectSelected);
+
+			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, images, "Image "));
+			images++;
+			lastComponent = App->scene->gameObjects.size() - 1;
+			objectSelected = App->scene->gameObjects[lastComponent];
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
+			objectSelected->components[0]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_IMAGE, "Crosshair"));
+			objectSelected->components[1]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, -100), &float3(100, 100, 1), &float3(0, 0, 0)));
+			objectSelected->components[2]->owner = objectSelected;
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Crosshair.dds", true));
 			objectSelected->components[3]->owner = objectSelected;
 			App->userInterface->UIGameObjects.push_back(objectSelected);
 			
-
-			
-
-
 			static int buttons = 1;
 			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, buttons, "Button "));
 			buttons++;
@@ -2780,14 +2786,12 @@ update_status ModuleEditor::Update(float dt)
 			objectSelected->components[0]->owner = objectSelected;
 			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_BUTTON, "Start"));
 			objectSelected->components[1]->owner = objectSelected;
-			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, -100, -100), &float3(250, 100, 1), &float3(0, 0, 0)));
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, -100, -310), &float3(250, 100, 1), &float3(0, 0, 0)));
 			objectSelected->components[2]->owner = objectSelected;
 			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
 			objectSelected->components[3]->owner = objectSelected;
 			App->userInterface->UIGameObjects.push_back(objectSelected);
 			
-
-
 			static int inputboxes = 1;
 			App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, inputboxes, "Input Box "));
 			inputboxes++;
@@ -2795,14 +2799,13 @@ update_status ModuleEditor::Update(float dt)
 			objectSelected = App->scene->gameObjects[lastComponent];
 			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 			objectSelected->components[0]->owner = objectSelected;
-			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, -100), &float3(350, 100, 1), &float3(0, 0, 0)));
+			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 0, -310), &float3(350, 100, 1), &float3(0, 0, 0)));
 			objectSelected->components[1]->owner = objectSelected;
 			objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_INPUTBOX, "Introduce your name..."));
 			objectSelected->components[2]->owner = objectSelected;
 			objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::MATERIAL, "Library/Textures/Button.dds", true));
 			objectSelected->components[3]->owner = objectSelected;
 			App->userInterface->UIGameObjects.push_back(objectSelected);
-
 		}
 		if (App->gameMode == true)
 		{
@@ -2864,7 +2867,7 @@ update_status ModuleEditor::Update(float dt)
 		objectSelected = App->scene->gameObjects[lastComponent];
 		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 		objectSelected->components[0]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "Checkbox"));
+		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_CHECKBOX, "V-Sync"));
 		objectSelected->components[1]->owner = objectSelected;
 		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, 100, -101), &float3(300, 100, 1), &float3(0, 0, 0)));
 		objectSelected->components[2]->owner = objectSelected;
@@ -2872,7 +2875,6 @@ update_status ModuleEditor::Update(float dt)
 		objectSelected->components[3]->owner = objectSelected;
 		App->userInterface->UIGameObjects.push_back(objectSelected);
 		App->scene->gameObjects[parent]->childrens.push_back(App->scene->gameObjects[App->scene->gameObjects.size() - 1]);
-
 
 		static int sliders = 1;
 		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, sliders, "Slider "));
@@ -2882,7 +2884,7 @@ update_status ModuleEditor::Update(float dt)
 
 		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::PLANE, &float3(0, 0, 0), &float3(1, 1, 1), &float3(0, 0, 0)));
 		objectSelected->components[0]->owner = objectSelected;
-		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, -5, -102), &float3(300, 100, 1), &float3(0, 0, 0)));
+		objectSelected->components.push_back(objectSelected->CreateComponent(ComponentType::TRANSFORM2D, &float3(0, -50, -102), &float3(300, 100, 1), &float3(0, 0, 0)));
 		objectSelected->components[1]->owner = objectSelected;
 		objectSelected->components.push_back(objectSelected->CreateUIComponent(ComponentType::UI_SLIDER, "Camera FOV"));
 		objectSelected->components[2]->owner = objectSelected;

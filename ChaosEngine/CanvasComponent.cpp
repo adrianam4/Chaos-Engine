@@ -30,40 +30,16 @@ void CanvasComponent::Update()
 		{
 			state = State::FOCUSED;
 
-			
-
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT)
 			{
 				state = State::PRESSED;
 
 				ComponentTransform2D* aux = owner->getTransform2D();
-				
+				aux->position.x = App->userInterface->fMousePos.x - (App->editor->viewport.z / 2) + (aux->scale.x / 2) - 100;
+				aux->position.y = ((App->userInterface->fMousePos.y - (App->editor->viewport.w / 2)) * -1) - (aux->scale.y / 2) + 100;
 
-				
-				if (App->input->GetMouseXMotion() < 0) {
-					aux->position.x -= 8;
-
-				}
-				else if(App->input->GetMouseXMotion() > 0) {
-					aux->position.x += 8;
-				}
-
-
-				if (App->input->GetMouseYMotion() < 0) {
-					aux->position.y += 8;
-
-				}
-				else if (App->input->GetMouseYMotion() > 0) {
-					aux->position.y-= 8;
-				}
-
-				//aux->setLast();
 				aux->Update(false);
-				
 			}
-
-			
-			
 		}
 		else state = State::NORMAL;
 

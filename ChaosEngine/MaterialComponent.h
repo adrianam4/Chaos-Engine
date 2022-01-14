@@ -22,10 +22,9 @@ public:
 	void OnEditor(int i) override;
 	void Load(const char* path) override;
 	void Save(const char* path) override;
+	void DeleteImage();
 
 private:
-	MaterialImporter importer;
-	GLuint myImageId;
 	bool showCheckerTexture;
 	GLubyte checkerImageData[CHECKERS_HEIGHT][CHECKERS_WIDTH][4];
 	const char* checkerTextPath;
@@ -33,4 +32,7 @@ private:
 	bool isDropped;
 	std::string TexturePathConst;
 	ResourceMatertial* lastResource;
+public:
+	MaterialImporter importer;
+	GLuint myImageId;
 };

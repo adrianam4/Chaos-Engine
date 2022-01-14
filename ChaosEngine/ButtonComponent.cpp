@@ -54,7 +54,8 @@ void ButtonComponent::Update()
 		}
 	}
 
-	if (fadeUI) FadeUI();
+	if (fadeUI) 
+		FadeUI();
 }
 
 void ButtonComponent::Draw()
@@ -190,10 +191,23 @@ void ButtonComponent::FadeUI()
 	for (uint i = 0; i < App->userInterface->UIGameObjects.size(); i++)
 	{
 		GameObject* go = App->userInterface->UIGameObjects[i];
-		go->getTransform2D()->position.y -= 5;
+		uint comp = go->SearchComponent(go, ComponentType::UI_IMAGE);
+		if (comp == -1)
+		{
+			go->getTransform2D()->position.y -= 5;
+			go->getTransform2D()->position.z += 1;
+		}
+		if (comp != -1 && go->components[comp]->UIid != 10)
+		{
+			go->getTransform2D()->position.y -= 5;
+			go->getTransform2D()->position.z += 1;
+		}
 	}
 	iters++;
 
-	if (iters > 300)
+	if (iters > 400)
+	{
 		fadeUI = false;
+		iters = 0;
+	}
 }

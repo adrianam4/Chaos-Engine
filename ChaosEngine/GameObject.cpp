@@ -42,10 +42,14 @@ Component* GameObject::CreateUIComponent(ComponentType type, std::string text)
 		component = new ButtonComponent(1, text);
 		break;
 	case ComponentType::UI_IMAGE:
-		component = new ImageComponent(2, text);
+		if (text == "Crosshair") component = new ImageComponent(10, text);
+		else component = new ImageComponent(2, text);
 		break;
 	case ComponentType::UI_CHECKBOX:
-		component = new CheckboxComponent(3, text);
+		if (text == "V-Sync") 
+			component = new CheckboxComponent(3, text);
+		else 
+			component = new CheckboxComponent(11, text);
 		break;
 	case ComponentType::UI_SLIDER:
 		component = new SliderComponent(4, text);
@@ -237,6 +241,16 @@ SliderComponent* GameObject::GetSliderComponent(GameObject* go)
 
 	if (comp != -1)
 		return (SliderComponent*)go->components[comp];
+	else
+		return nullptr;
+}
+
+ComponentMaterial* GameObject::GetMaterialComp(GameObject* go)
+{
+	int comp = go->SearchComponent(go, ComponentType::MATERIAL);
+
+	if (comp != -1)
+		return (ComponentMaterial*)go->components[comp];
 	else
 		return nullptr;
 }

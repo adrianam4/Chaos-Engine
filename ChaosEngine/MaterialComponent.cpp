@@ -44,6 +44,7 @@ ComponentMaterial::ComponentMaterial(const char* _path, GLuint _imageId, uint _w
 
 ComponentMaterial::~ComponentMaterial()
 {
+	ilDeleteImage(myImageId);
 }
 
 void ComponentMaterial::Enable()
@@ -107,4 +108,9 @@ void ComponentMaterial::Save(const char* path)
 	json_serialize_to_file_pretty(user_data, path);
 
 	App->editor->AddLog("Saved Material Component Data\n");
+}
+
+void ComponentMaterial::DeleteImage()
+{
+	ilDeleteImage(myImageId);
 }

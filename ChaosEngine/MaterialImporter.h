@@ -17,7 +17,7 @@ public:
 	std::vector<int> GetMaterialData();
 	std::string ddsPath;
 
-private:
+public:
 	int w;
 	int h;
 	ILuint imageId;
