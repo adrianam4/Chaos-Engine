@@ -55,6 +55,8 @@ We all have been always working together. So, there isn't anything that any memb
 - Create Input Box
 - Change UI Components Colors, Size, Position, and Rotation
 - Edit UI Components Text
+- State Detection with Mouse Input
+- State Detection with Keyboard Input
 
 
 ### Controls
@@ -80,6 +82,8 @@ We all have been always working together. So, there isn't anything that any memb
 - BUTTON (1): Translation Guizmo
 - BUTTON (2): Rotation Guizmo
 - BUTTON (3): Scale Guizmo
+- TAB: Select the following UI Game Object on Game Mode
+- ENTER: Call OnClick() UI Component Function from the Selected UI Game Object
 
 
 ### Detailed Explanation of our Sub-System (User Interface)
