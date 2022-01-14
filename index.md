@@ -10,15 +10,15 @@ With the last release you can now include UI Components, such as Buutons, Slider
 
 Adrián Aroca ([adrianam4](https://github.com/adrianam4))
 
-<img src="Images\Adrian.jpg">
+<img src="Images\Adrian.jpg | width=300">
 
 David Lira ([davidlira19](https://github.com/davidlira19))
 
-<img src="Images\David.jpg">
+<img src="Images\David.jpg | width=300">
 
 Unai Díaz ([unaidiaz](https://github.com/unaidiaz))
 
-<img src="Images\Unai.jpg">
+<img src="Images\Unai.jpg | width=300">
 
 
 
