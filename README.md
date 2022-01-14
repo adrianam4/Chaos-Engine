@@ -77,3 +77,4 @@ With this last release you can now include UI Components, such as Buutons, Slide
 - All the UI Components can be modified by selecting them on the hierarchy with the inspector window
 - Click on the game camera (hierarchy window) before entering play mode in order to view the scene in the correct angle
 - Press Left Click button on the mouse in order to write on the Text Box component and the Enter Key to stop writing
+- Pressing Play Button or the F1 Key all UI Components will be destroyed and the Demo Components will appear
