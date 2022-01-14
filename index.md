@@ -98,12 +98,12 @@ Talking about the UI Components, we have created the following ones:
 Moreover, we have created other type of transform component, exclusive for the UI Components. And this is the Transform2D component. Is very similar to his 3D component. But this one fits better and makes the work easier for managing the UI Elements.
 
 
-##Editor Mode
+## Editor Mode
 
 <img width="600" src="Images\Ejemplo1.gif">
 
 
-##Game Mode
+## Game Mode
 
 <img width="600" src="Images\Ejemplo2.gif">
 
