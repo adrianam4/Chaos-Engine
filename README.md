@@ -59,6 +59,8 @@ With this last release you can now include UI Components, such as Buutons, Slide
 - BUTTON (1): Translation Guizmo
 - BUTTON (2): Rotation Guizmo
 - BUTTON (3): Scale Guizmo
+- TAB: Select the following UI Game Object on Game Mode
+- ENTER: Call OnClick() UI Component Function from the Selected UI Game Object
 
 
 ## User Interface
@@ -70,6 +72,8 @@ With this last release you can now include UI Components, such as Buutons, Slide
 - Create Input Box
 - Change UI Components Colors, Size, Position, and Rotation
 - Edit UI Components Text
+- State Detection with Mouse Input
+- State Detection with Keyboard Input
 
 
 ## Additional Comments
