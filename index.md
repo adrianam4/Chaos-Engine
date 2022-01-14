@@ -8,19 +8,19 @@ With the last release you can now include UI Components, such as Buutons, Slider
 
 ### Team Members
 
-Adrián Aroca ([adrianam6](https://github.com/adrianam4))
+Adrián Aroca ([adrianam4](https://github.com/adrianam4))
 
-<img src="Web Images\Adrian.jpg">
+<img width="200" src="Images\Adrian.jpg">
 
 David Lira ([davidlira19](https://github.com/davidlira19))
 
-<img src="Web Images\David.jpg">
+<img width="200" src="Images\David.jpg">
 
 Unai Díaz ([unaidiaz](https://github.com/unaidiaz))
 
-<img src="Web Images\Unai.jpg">
+<img width="200" src="Images\Unai.jpg">
 
-
+We all have been always working together. So, there isn't anything that any member has made on his own. All have been made by all of us, like a team.
 
 ### Main Core Sub-Systems
 
@@ -82,13 +82,30 @@ Unai Díaz ([unaidiaz](https://github.com/unaidiaz))
 - BUTTON (2): Rotation Guizmo
 - BUTTON (3): Scale Guizmo
 
+### Detailed Explanation of our Sub-System (User Interface)
 
+The last assignment that we choose for our Engine, was "User Interface (UI)".
+For doing this, we have created a UI Module for managing all the UI Components that we needed to create. Here, we manage the Draw, Update, and other core functionalities that all the UI Components contain.
+
+Talking about the UI Components, we have created the following ones:
+- Canvas: Contais other UI Components inside him, and it acts like a draggable window that moves himself and all their children.
+- Button: Is a standard button that has different States (Disabled, Normal, Selected, Focused, Pressed) and can be pressed and it will descend an action.
+- Slider: Is a standard slider with the same states that the button. It has a value, a min value and a max value, and by dragging inside him, you will change the current value between the min value and the max value.
+- Check Box: Is a standard Check Box with the same states that the button and the slider. It is just a boolean that change his value when it's pressed. This one can be used for activate/deactivate any game option.
+- Input Box: Is a standard Input Box with the same states that all the previous UI Components. When you click over his box, you can edit the text in real time. It could be used to introduce, for example, the name of the player thar will play the game.
+- Image: It's just a simple image that you can add in the UI. Doesn't have any other functionality.
+
+Moreover, we have created other type of transform component, exclusive for the UI Components. And this is the Transform2D component. Is very similar to his 3D component. But this one fits better and makes the work easier for managing the UI Elements.
 
 ### Engine Video Example
 
 
 
-### Reppsitory and Downloads
+### Repository and Downloads
 
 [Repository](https://github.com/adrianam4/Chaos-Engine)
+
 [Downloads](https://github.com/adrianam4/Chaos-Engine/releases/tag/v.1.0)
+
+### License
+
