@@ -1,37 +1,88 @@
-## Welcome to GitHub Pages
+## Introduction
 
-You can use the [editor on GitHub](https://github.com/adrianam4/Chaos-Engine/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+An amazing Engine created by three university students from CITM-UPC for the subject Game Engines. 
+With this engine you can create and transform 3D objects and your imported FBX, load textures and much more!
+With the last release you can now include UI Components, such as Buutons, Sliders, Input Boxes, Images and Checkboxes!
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### Team Members
 
-```markdown
-Syntax highlighted code block
+Adrián Aroca ([adrianam5](https://github.com/adrianam4))
 
-# Header 1
-## Header 2
-### Header 3
+David Lira ([davidlira19](https://github.com/davidlira19))
 
-- Bulleted
-- List
+Unai Díaz ([unaidiaz](https://github.com/unaidiaz))
 
-1. Numbered
-2. List
 
-**Bold** and _Italic_ and `Code` text
 
-[Link](url) and ![Image](src)
-```
+### Main Core Sub-Systems
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+- Free Camera Movement
+- Create primitives (Cube, Pyramid, Cyilinder and Sphere)
+- Load your FBXs (Drag and Drop)
+- Load your Textures (Drag and Drop)
+- Transform objects (Scale, Position and Rotation) with the Inspector Menu
+- Enable/Disable wireframe for the objects
+- Enable/Disable normals for the objects
+- Enable/Disable bounding boxes (AABB) for the objects
+- Configuration Menu with many options such as a Frame Limiter, Window Size Configuration, Input and Hardware Info, etc.
+- View and manage your objects in an Hierarchy
+- A Console that shows your actions on the Engine
+- Import your FBX, Textures and Scenes (Resource Manager)
+- Select Objects by Clicking on them (Mouse Clicking)
+- Game Mode (Time Management)
+- Create Game Cameras and move them
+- Loading Optimization (Frustrum Culling)
+- Live Object Transform (Guizmos)
+- Load and Save your own Scenes (.chaos Format)
+- New Texture Filters
+- Own File Format (Textures and Models)
 
-### Jekyll Themes
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/adrianam4/Chaos-Engine/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### User Interface Sub-Systems
 
-### Support or Contact
+- Create Buttons
+- Create Checkboxes
+- Create Sliders
+- Create Images
+- Create Input Box
+- Change UI Components Colors, Size, Position, and Rotation
+- Edit UI Components Text
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+
+
+### Controls
+
+- ESC: Exit the Engine
+- WASD: Camera Movement
+- Q: Camera Up
+- E: Camera Down
+- F: Focus the Camera Around the Selected Object
+- MOUSE WHEEL: Zoom In / Zoom Out
+- RIGHT MOUSE BUTTON: Camera Orientation
+- LEFT MOUSE BUTTON: Select Object
+- LEFT MOUSE BUTTON + LEFT ALT: Orbit Camera
+- LEFT SHIFT: Duplicates Camera Movement
+- P + Select Object: Makes the First Selected Object Children of the Second One
+- P: Object Selected = NULL
+- SUPR: Deletes Selected Game Object
+- F1: Show Options Window (In Game Mode)
+- F2: Enable/Disable Cull Face
+- F3: Enable/Disable Lightning
+- F4: Enable/Disable Color Material
+- F5: Enable/Disable Textures
+- BUTTON (1): Translation Guizmo
+- BUTTON (2): Rotation Guizmo
+- BUTTON (3): Scale Guizmo
+
+
+
+### Engine Video Example
+
+
+
+### Reppsitory and Downloads
+
+[Repository](https://github.com/adrianam4/Chaos-Engine)
+[Downloads](https://github.com/adrianam4/Chaos-Engine/releases/tag/v.1.0)
