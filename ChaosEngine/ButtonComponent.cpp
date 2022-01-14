@@ -187,25 +187,39 @@ float2 ButtonComponent::GetParentPosition()
 void ButtonComponent::FadeUI()
 {
 	static uint iters = 0;
-
+	float yMult = 5;
+	float zMult = 1;
+	float maxIters = 400;
 	for (uint i = 0; i < App->userInterface->UIGameObjects.size(); i++)
 	{
 		GameObject* go = App->userInterface->UIGameObjects[i];
 		uint comp = go->SearchComponent(go, ComponentType::UI_IMAGE);
+		if (App->maxMs == 1000 / 60)
+		{
+			yMult = 20;
+			zMult = 4;
+			maxIters = 100;
+		}
+		else
+		{
+			yMult = 5;
+			zMult = 1;
+			maxIters = 400;
+		}
 		if (comp == -1)
 		{
-			go->getTransform2D()->position.y -= 5;
-			go->getTransform2D()->position.z += 1;
+			go->getTransform2D()->position.y -= yMult;
+			go->getTransform2D()->position.z += zMult;
 		}
 		if (comp != -1 && go->components[comp]->UIid != 10)
 		{
-			go->getTransform2D()->position.y -= 5;
-			go->getTransform2D()->position.z += 1;
+			go->getTransform2D()->position.y -= yMult;
+			go->getTransform2D()->position.z += zMult;
 		}
 	}
 	iters++;
 
-	if (iters > 400)
+	if (iters > maxIters)
 	{
 		fadeUI = false;
 		iters = 0;
