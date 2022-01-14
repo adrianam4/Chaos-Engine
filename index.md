@@ -8,9 +8,10 @@ With the last release you can now include UI Components, such as Buutons, Slider
 
 ### Team Members
 
-Adrián Aroca ([adrianam5](https://github.com/adrianam4))
+Adrián Aroca ([adrianam6](https://github.com/adrianam4))
 
 David Lira ([davidlira19](https://github.com/davidlira19))
+[image](https://drive.google.com/file/d/1vFeVklg389kIqPbnKciAkX4iUYrmXn4A/view?usp=sharing)
 
 Unai Díaz ([unaidiaz](https://github.com/unaidiaz))
 
