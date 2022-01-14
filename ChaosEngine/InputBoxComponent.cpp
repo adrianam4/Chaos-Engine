@@ -54,6 +54,7 @@ void InputBoxComponent::Update()
 
 	if (textEditable)
 	{
+		normalColor.Set(255, 0, 255, 255);
 		if (App->input->GetKey(SDL_SCANCODE_BACKSPACE) == KEY_DOWN && strlen(text) > 0)
 		{
 			text[strlen(text) - 1] = '\0';
@@ -383,6 +384,7 @@ void InputBoxComponent::Update()
 		}
 		else if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN) textEditable = false;
 	}
+	else normalColor = prevColor;
 }
 
 void InputBoxComponent::Draw()

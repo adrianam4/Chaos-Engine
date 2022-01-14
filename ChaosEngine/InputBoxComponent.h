@@ -29,6 +29,7 @@ public:
 
 	Color color = normalColor;
 	Color textColor = White;
+	Color prevColor = normalColor;
 
 	char text[64] = "Introduce your name...";
 	float fontScale = 1;
