@@ -246,50 +246,53 @@ void ModuleUI::RenderText(std::string text, float x, float y, float scale, float
 
 update_status ModuleUI::PreUpdate(float dt)
 {
-	float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
-	float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };
-	float4 viewport = App->editor->viewport;
-	fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y };
-
-	if (mousePos.x > viewport.x && mousePos.x < viewport.x + viewport.z && mousePos.y > viewport.y && mousePos.y < viewport.y + viewport.w)
+	if (App->gameMode)
 	{
-		for (int i = 0; i < UIGameObjects.size(); i++)
+		float2 mousePos = { (float)App->input->GetMouseX() ,(float)App->input->GetMouseY() };
+		float2 mPos = { ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y };
+		float4 viewport = App->editor->viewport;
+		fMousePos = { mPos.x - viewport.x , mPos.y - viewport.y };
+
+		if (mousePos.x > viewport.x && mousePos.x < viewport.x + viewport.z && mousePos.y > viewport.y && mousePos.y < viewport.y + viewport.w)
 		{
-			GameObject* go = UIGameObjects[i];
-			ComponentTransform2D* transform2D = go->getTransform2D();
-
-			float posXMin = ((viewport.z / 2) + (transform2D->position.x)) - (transform2D->buttonWidth / 2);
-			float posXMax = ((viewport.z / 2) + (transform2D->position.x)) + (transform2D->buttonWidth / 2);
-
-			float posYMin = ((viewport.w / 2) + (-transform2D->position.y)) - (transform2D->buttonHeight / 2);
-			float posYMax = ((viewport.w / 2) + (-transform2D->position.y)) + (transform2D->buttonHeight / 2);
-
-			if ((fMousePos.x > posXMin && fMousePos.x < posXMax && fMousePos.y > posYMin && fMousePos.y < posYMax) && go->SearchComponent(go,ComponentType::UI_IMAGE) == -1)
+			for (int i = 0; i < UIGameObjects.size(); i++)
 			{
-				hitObjs.push_back(go);
-			}
-		}
+				GameObject* go = UIGameObjects[i];
+				ComponentTransform2D* transform2D = go->getTransform2D();
 
-		if (hitObjs.size() > 0)
-		{
-			std::vector<float> distance;
-			float nearestDistance = 100000.0f;
-			int nearObj = 0;
-			for (int i = 0; i < hitObjs.size(); ++i)
-			{
-				distance.push_back(hitObjs[i]->getTransform2D()->position.z);
-				if (distance[i] < nearestDistance)
+				float posXMin = ((viewport.z / 2) + (transform2D->position.x)) - (transform2D->buttonWidth / 2);
+				float posXMax = ((viewport.z / 2) + (transform2D->position.x)) + (transform2D->buttonWidth / 2);
+
+				float posYMin = ((viewport.w / 2) + (-transform2D->position.y)) - (transform2D->buttonHeight / 2);
+				float posYMax = ((viewport.w / 2) + (-transform2D->position.y)) + (transform2D->buttonHeight / 2);
+
+				if ((fMousePos.x > posXMin && fMousePos.x < posXMax && fMousePos.y > posYMin && fMousePos.y < posYMax) && go->SearchComponent(go, ComponentType::UI_IMAGE) == -1)
 				{
-					nearestDistance = distance[i];
-					nearObj = i;
+					hitObjs.push_back(go);
 				}
 			}
-			focusedGameObject = hitObjs[nearObj];
-			UIGameObjectSelected = nullptr;
-			hitObjs.clear();
+
+			if (hitObjs.size() > 0)
+			{
+				std::vector<float> distance;
+				float nearestDistance = 100000.0f;
+				int nearObj = 0;
+				for (int i = 0; i < hitObjs.size(); ++i)
+				{
+					distance.push_back(hitObjs[i]->getTransform2D()->position.z);
+					if (distance[i] < nearestDistance)
+					{
+						nearestDistance = distance[i];
+						nearObj = i;
+					}
+				}
+				focusedGameObject = hitObjs[nearObj];
+				UIGameObjectSelected = nullptr;
+				hitObjs.clear();
+			}
+			else
+				focusedGameObject = nullptr;
 		}
-		else
-			focusedGameObject = nullptr;
 	}
 
 	return UPDATE_CONTINUE;
@@ -299,81 +302,81 @@ update_status ModuleUI::Update(float dt)
 {
 	// Update All UI Components
 
-	//if (App->gameMode)
-	//{
-	if (!UIGameObjects.empty() && App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
-	{
-		if (!UIGameObjectSelected)
-			UIGameObjectSelected = UIGameObjects[0];
-		else
+	/*if (App->gameMode)
+	{*/
+		if (!UIGameObjects.empty() && App->input->GetKey(SDL_SCANCODE_TAB) == KEY_DOWN)
 		{
-			if (nextUIGameObject != UIGameObjects.size())
-			{
-				UIGameObjectSelected = UIGameObjects[nextUIGameObject];
-				nextUIGameObject++;
-			}
+			if (!UIGameObjectSelected)
+				UIGameObjectSelected = UIGameObjects[0];
 			else
 			{
-				UIGameObjectSelected = UIGameObjects[0];
-				nextUIGameObject = 1;
+				if (nextUIGameObject != UIGameObjects.size())
+				{
+					UIGameObjectSelected = UIGameObjects[nextUIGameObject];
+					nextUIGameObject++;
+				}
+				else
+				{
+					UIGameObjectSelected = UIGameObjects[0];
+					nextUIGameObject = 1;
+				}
 			}
 		}
-	}
 
-	for (int i = 0; i < UIGameObjects.size(); i++)
-	{
-		GameObject* go = UIGameObjects[i];
+		for (int i = 0; i < UIGameObjects.size(); i++)
+		{
+			GameObject* go = UIGameObjects[i];
 
-		int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
-		int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
-		int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
-		int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
-		int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
-		int canvas = go->SearchComponent(go, ComponentType::UI_CANVAS);
-		if (button != -1)
-		{
-			go->components[button]->Update();
-			ButtonComponent* auxiliar = go->GetButtonComponent(go);
-			textExample = auxiliar->text;
-			color.x = auxiliar->textColor.r;
-			color.y = auxiliar->textColor.g;
-			color.z = auxiliar->textColor.b;
+			int button = go->SearchComponent(go, ComponentType::UI_BUTTON);
+			int checkbox = go->SearchComponent(go, ComponentType::UI_CHECKBOX);
+			int image = go->SearchComponent(go, ComponentType::UI_IMAGE);
+			int inputbox = go->SearchComponent(go, ComponentType::UI_INPUTBOX);
+			int slider = go->SearchComponent(go, ComponentType::UI_SLIDER);
+			int canvas = go->SearchComponent(go, ComponentType::UI_CANVAS);
+			if (button != -1)
+			{
+				go->components[button]->Update();
+				ButtonComponent* auxiliar = go->GetButtonComponent(go);
+				textExample = auxiliar->text;
+				color.x = auxiliar->textColor.r;
+				color.y = auxiliar->textColor.g;
+				color.z = auxiliar->textColor.b;
+			}
+			if (checkbox != -1)
+			{
+				go->components[checkbox]->Update();
+				CheckboxComponent* auxiliar = go->GetCheckboxComponent(go);
+				textExample = auxiliar->text;
+				color.x = auxiliar->textColor.r;
+				color.y = auxiliar->textColor.g;
+				color.z = auxiliar->textColor.b;
+			}
+			if (image != -1)
+				go->components[image]->Update();
+			if (inputbox != -1)
+			{
+				go->components[inputbox]->Update();
+				InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
+				textExample = auxiliar->text;
+				color.x = auxiliar->textColor.r;
+				color.y = auxiliar->textColor.g;
+				color.z = auxiliar->textColor.b;
+			}
+
+			if (slider != -1)
+			{
+				go->components[slider]->Update();
+				SliderComponent* auxiliar = go->GetSliderComponent(go);
+				textExample = auxiliar->text;
+				color.x = auxiliar->textColor.r;
+				color.y = auxiliar->textColor.g;
+				color.z = auxiliar->textColor.b;
+			}
+			if (canvas != -1)
+			{
+				go->components[canvas]->Update();
+			}
 		}
-		if (checkbox != -1)
-		{
-			go->components[checkbox]->Update();
-			CheckboxComponent* auxiliar = go->GetCheckboxComponent(go);
-			textExample = auxiliar->text;
-			color.x = auxiliar->textColor.r;
-			color.y = auxiliar->textColor.g;
-			color.z = auxiliar->textColor.b;
-		}
-		if (image != -1)
-			go->components[image]->Update();
-		if (inputbox != -1) 
-		{
-			go->components[inputbox]->Update();
-			InputBoxComponent* auxiliar = go->GetInputboxComponent(go);
-			textExample = auxiliar->text;
-			color.x = auxiliar->textColor.r;
-			color.y = auxiliar->textColor.g;
-			color.z = auxiliar->textColor.b;
-		}
-			
-		if (slider != -1)
-		{
-			go->components[slider]->Update();
-			SliderComponent* auxiliar = go->GetSliderComponent(go);
-			textExample = auxiliar->text;
-			color.x = auxiliar->textColor.r;
-			color.y = auxiliar->textColor.g;
-			color.z = auxiliar->textColor.b;
-		}
-		if (canvas != -1)
-		{
-			go->components[canvas]->Update();
-		}
-	}
 	//}
 	
 	return UPDATE_CONTINUE;

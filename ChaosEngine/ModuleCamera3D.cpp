@@ -142,7 +142,7 @@ update_status ModuleCamera3D::Update(float dt)
 		editorCam->frustum.pos = float3(editorCam->position.x, editorCam->position.y, editorCam->position.z);
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F))
+	if (App->input->GetKey(SDL_SCANCODE_F) && !App->gameMode)
 	{
 		if (App->editor->objectSelected == NULL)
 		{

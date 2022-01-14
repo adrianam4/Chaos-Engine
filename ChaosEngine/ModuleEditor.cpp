@@ -151,10 +151,7 @@ bool ModuleEditor::Start()
 	speedDownIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/SpeedDown.png"));
 	speedUpIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/SpeedUp.png"));
 	stopIcon = App->resources->LoadIcons(App->resources->Find("Assets/Textures/Stop.png"));
-
-	FBXimporter importer;
-	importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
-
+	
 	App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, 1, "Game Camera "));
 	int lastComponent = App->scene->gameObjects.size() - 1;
 	App->editor->objectSelected = App->scene->gameObjects[lastComponent];
@@ -165,6 +162,9 @@ bool ModuleEditor::Start()
 	objectSelected = App->scene->gameObjects[lastComponent];
 	App->camera->camArray[0]->isTheMainCamera = true;
 	App->camera->GameCam = App->camera->camArray[0];
+
+	FBXimporter importer;
+	importer.SpecialreadFromFBX("Assets/Models/Street.fbx", "Library/Models/", nullptr);
 
 	isActive = true;
 	isActive2 = true;
@@ -403,11 +403,10 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 		aux->name = json_object_get_string(json_value_get_object(theObject), "Name");
 		int auxType;
 
-
-
 		Component* e;
 		auxType = json_object_dotget_number(json_value_get_object(theObject), "Components.Mesh.Type");
-		if (auxType == 2) {
+		if (auxType == 2) 
+		{
 			const char* modelPath = json_object_dotget_string(json_value_get_object(theObject), "Components.Mesh.Path");
 			FBXimporter importer;
 			Mesh* i = importer.readFile(modelPath);
@@ -441,7 +440,8 @@ int ModuleEditor::loadSpecialObject(int object, const char* direction)
 		aux->components.push_back(e);
 		e->setOwner();
 
-		if (toAABB) {
+		if (toAABB) 
+		{
 			e->CreateAABB(ComponentType::MESH, aux, true);
 			toAABB = false;
 		}
@@ -1951,12 +1951,13 @@ update_status ModuleEditor::Update(float dt)
 		if (objectSelected && objectToChildren)
 		{
 			int a;
-			for (a = 0; a < App->scene->gameObjects.size(); a++) {
-				if (App->scene->gameObjects[a] == objectToChildren) {
+			for (a = 0; a < App->scene->gameObjects.size(); a++) 
+			{
+				if (App->scene->gameObjects[a] == objectToChildren) 
+				{
 					break;
 				}
 			}
-
 
 			objectSelected->childrens.push_back(objectToChildren);
 			objectToChildren->isChild = true;
@@ -1964,7 +1965,8 @@ update_status ModuleEditor::Update(float dt)
 			objectToChildren = nullptr;
 			objectSelected = nullptr;
 		}
-		else {
+		else 
+		{
 			objectToChildren = nullptr;
 			objectSelected = nullptr;
 		}
@@ -2741,7 +2743,9 @@ update_status ModuleEditor::Update(float dt)
 		}
 		ImGui::SameLine();
 
-		if (ImGui::ImageButton(playIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) {
+		if (ImGui::ImageButton(playIcon, ImVec2(40, 40), ImVec2(0, 0), ImVec2(1, 1), -1)) 
+		{
+			F1activated = false;
 			App->playGameTime = !App->playGameTime;
 			App->editor->AddLog("Game Clock Starts (Started at %f)\n", App->gameTimeNum);
 			App->gameMode = true;
@@ -2839,10 +2843,10 @@ update_status ModuleEditor::Update(float dt)
 		ImGui::End();
 	}
 
-	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN && !F1activated)
 	{
 		App->userInterface->DeleteUIGameObjects();
-
+		F1activated = true;
 		int parent;
 		static int Canvas = 1;
 		App->scene->gameObjects.push_back(App->scene->CreateGameObject(false, Canvas, "Canvas "));
