@@ -107,6 +107,8 @@ Moreover, we have created other type of transform component, exclusive for the U
 
 [Downloads](https://github.com/adrianam4/Chaos-Engine/releases/tag/v.1.0)
 
+[Last Release](https://github.com/adrianam4/Chaos-Engine/releases/download/v.1.0/ChaosEngine_v.1.0.zip)
+
 ### License
 
 MIT License
