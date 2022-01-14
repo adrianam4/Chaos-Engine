@@ -2,6 +2,7 @@
 
 An amazing Engine created by [David Lira](https://github.com/davidlira19), [Adrián Aroca](https://github.com/adrianam4) and [Unai Díaz](https://github.com/unaidiaz), three university students from CITM-UPC for the subject Game Engines. 
 With this engine you can create and transform 3D objects and your imported FBX, load textures and much more!
+With this last release you can now include UI Components, such as Buutons, Sliders, Input Boxes, Images and Checkboxes!
 
 
 ## Github Accounts:
@@ -50,7 +51,7 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - P + Select Object: Makes the First Selected Object Children of the Second One
 - P: Object Selected = NULL
 - SUPR: Deletes Selected Game Object
-- F1: Enable/Disable Deph Test
+- F1: Show Options Window (In Game Mode)
 - F2: Enable/Disable Cull Face
 - F3: Enable/Disable Lightning
 - F4: Enable/Disable Color Material
@@ -60,15 +61,17 @@ With this engine you can create and transform 3D objects and your imported FBX, 
 - BUTTON (3): Scale Guizmo
 
 
+## User Interface
+
+- Create Buttons
+- Create Checkboxes
+- Create Sliders
+- Create Images
+- Create Input Box
+- Change UI Components Colors, Size, Position, and Rotation
+- Edit UI Components Text
+
+
 ## Additional Comments
 
-- You need to keep pressing the P key to assign one Children to the Father
-- Mouse Picking can fail because of the AABBs (Change positions when the object rotates/scales) (We don't have Space Partitioning)
-- If you import an external texture you need to go to the Material Component (Inspector Window) and activate/deactivate the checker texture
-- While the camera orbits there is a visual problem (It doesn't affect the engine)
-- External FBX cannot be deleted on the Hierarchy Window
-
-
-## Important Note
-
-- We used the ModuleFrameBuffer.ccp and ModuleFrameBuffer.h from the provided engine (https://github.com/solidajenjo/Engine3D) in order to make the Window Docking/Viewport!!!!!
+- All the UI Components can be modified by selecting them on the hierarchy with the inspector window
