@@ -8,7 +8,7 @@ With the last release you can now include UI Components, such as Buutons, Slider
 
 ### Team Members
 
-Adrián Aroca ([adrianam6](https://github.com/adrianam4))
+Adrián Aroca ([adrianam4](https://github.com/adrianam4))
 
 <img src="Images\Adrian.jpg">
 
@@ -91,4 +91,5 @@ Unai Díaz ([unaidiaz](https://github.com/unaidiaz))
 ### Reppsitory and Downloads
 
 [Repository](https://github.com/adrianam4/Chaos-Engine)
+
 [Downloads](https://github.com/adrianam4/Chaos-Engine/releases/tag/v.1.0)
